@@ -1,14 +1,13 @@
 import * as Yup from 'yup';
-import "yup-phone";
 import { useState } from 'react';
-import { useNavigate, Link as RouterLink} from 'react-router-dom';
-import { styled, useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { login } from 'src/store/api/auth';
+import { otpVerify } from 'src/store/api/auth';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, Container, Typography, Card } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -16,6 +15,7 @@ import Page from '../../../components/Page';
 // components
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
+import { useEffect } from 'react';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -45,23 +45,30 @@ const HeaderStyle = styled('div')(({ theme }) => ({
   margin: '2rem 2rem .6rem 2rem'
 }));
 
-export default function Login() {
+export default function OtpVerify() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const theme = useTheme();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    phone: Yup.string().phone().required().required('Phone number is required'),
-    name: Yup.string().required('Name required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    otp: Yup.string().required('Otp is required')
   });
 
+  const { user } = useSelector((state) => ({ ...state.auth }));
+
+  useEffect(() => {
+    if(user !== null){
+      console.log(user)
+      setValue("id", user.data.id)
+      setValue("otp", user.data.otp)
+    }else{
+      navigate('/login')
+    }
+  }, [user])
+
   const defaultValues = {
-    name: '',
-    email: '',
-    phone: '',
+    otp: '',
   };
 
   const methods = useForm({
@@ -72,10 +79,12 @@ export default function Login() {
   const {
     handleSubmit,
     formState: { isSubmitting },
+    setValue
   } = methods;
 
   const onSubmit = (formValue) => {
-    dispatch(login({formValue, navigate}))
+    formValue.id = user.data.id
+    dispatch(otpVerify({formValue, navigate}))
   };
 
   return (
@@ -86,7 +95,7 @@ export default function Login() {
             <PaperStyle>
               <HeaderStyle>
                 <Typography variant="h4">
-                  Sign up for Crime report
+                  Otp Verification
                 </Typography>
                 <Typography variant="p">
                   Lorem ipsum dolor sit amet consectetur. Aenean senectus id vel egestas ipsum mollis.
@@ -94,25 +103,14 @@ export default function Login() {
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={3}>
-                  <RHFTextField name="name" label="Name" />
-                  <RHFTextField name="email" label="E-mail Address" />
-                  <RHFTextField name="phone" label="Phone Number" />
+                  <RHFTextField name="otp" label="Phone Otp" />
                 </Stack>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-                    Send Otp
+                    Login
                   </LoadingButton>
                 </Stack>
               </FormProvider>
-              <Typography variant="body2" sx={{ mb: 3, textAlign: 'center' }}>
-                Have an account?{' '}
-                <Link variant="subtitle2" to="/login" component={RouterLink} style={{
-                    color: theme.palette.secondary.main,
-                    textDecorationColor: theme.palette.secondary.main,
-                  }}>
-                  Login
-                </Link>
-              </Typography>
             </PaperStyle>
           </ContentStyle>
         </Container>

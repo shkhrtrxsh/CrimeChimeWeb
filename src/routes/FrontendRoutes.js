@@ -3,6 +3,7 @@ import Home from 'src/pages/Frontend/Home'
 import MyGoogleMap from 'src/pages/Frontend/MyGoogleMap'
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
+import OtpVerify from '../pages/Auth/OtpVerify';
 
 const FrontendRoutes = [
     {
@@ -20,6 +21,10 @@ const FrontendRoutes = [
     {
         path: '/register',
         element: <Register />
+    },
+    {
+        path: '/auth/verify',
+        element: <OtpVerify />
     },
 ]
 

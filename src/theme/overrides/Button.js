@@ -5,8 +5,14 @@ export default function Button(theme) {
     MuiButton: {
       styleOverrides: {
         root: {
+          borderRadius : '.3rem',
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.common.black,
           '&:hover': {
             boxShadow: 'none',
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.common.black,
+            boxShadow: theme.customShadows.z12,
           },
         },
         sizeLarge: {
@@ -14,7 +20,7 @@ export default function Button(theme) {
         },
         containedInherit: {
           color: theme.palette.grey[800],
-          boxShadow: theme.customShadows.z8,
+          boxShadow: theme.customShadows.z1,
           '&:hover': {
             backgroundColor: theme.palette.grey[400],
           },

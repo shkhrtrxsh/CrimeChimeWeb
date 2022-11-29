@@ -4,13 +4,15 @@ import { toast } from "react-toastify";
 
 
 export const login = createAsyncThunk(
-    "auth/login",
+    "auth/login",    
     async ({ formValue, navigate }, { rejectWithValue }) => {
+
+      console.log(formValue);
       try {
         const response = await API.post("/auth/login", formValue);
         if(response.data.status === 200){
-          toast.success("Login Successfully");
-          navigate("/dashboard");
+          toast.success("Otp Send");
+          navigate("/auth/verify");
           return response.data;
         }
         toast.error("Email Address and Password is invalid");
@@ -21,14 +23,35 @@ export const login = createAsyncThunk(
     }
 );
 
+export const otpVerify = createAsyncThunk(
+  "auth/otp-verify",
+  
+  async ({ formValue, navigate }, { rejectWithValue }) => {
+
+    console.log(formValue);
+    try {
+      const response = await API.post("/auth/otp-verify", formValue);
+      if(response.data.status === 200){
+        toast.success("Login Successfully");
+        navigate("/dashboard");
+        return response.data;
+      }
+      toast.error("Email Address and Password is invalid");
+
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const register = createAsyncThunk(
   "auth/register",
   async ({ formValue, navigate }, { rejectWithValue }) => {
     try {
       const response = await API.post("/auth/register", formValue);
       if(response.data.status === 200){
-        toast.success("Register Successfully");
-        navigate("/dashboard");
+        toast.success("Otp Send");
+          navigate("/login/otp-verify");
         return response.data;
       }
       toast.error("Email Address and Password is invalid");

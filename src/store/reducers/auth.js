@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login, register } from '../api/auth'
+import { login, register, otpVerify } from '../api/auth'
 
 const initialState = {
     user: null,
@@ -19,8 +19,7 @@ export const auth = createSlice({
         },
         [login.fulfilled]: (state, action) => {
           state.loading = false;
-          localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
-          localStorage.setItem("_token", action.payload.access_token);
+          console.log(action.payload)
           state.user = action.payload;
           console.log('fulfilled')
         },
@@ -37,12 +36,28 @@ export const auth = createSlice({
         },
         [register.fulfilled]: (state, action) => {
           state.loading = false;
+          state.user = action.payload;
+          console.log('fulfilled')
+        },
+        [register.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+          console.log('rejected')
+        },
+
+        // otpverify Api
+        [otpVerify.pending]: (state, action) => {
+          state.loading = true;
+          console.log('pending')
+        },
+        [otpVerify.fulfilled]: (state, action) => {
+          state.loading = false;
           localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
           localStorage.setItem("_token", action.payload.access_token);
           state.user = action.payload;
           console.log('fulfilled')
         },
-        [register.rejected]: (state, action) => {
+        [otpVerify.rejected]: (state, action) => {
           state.loading = false;
           state.error = action.payload.message;
           console.log('rejected')

@@ -7,7 +7,7 @@ import AppLayout from '../layouts/AppLayout';
 //
 import Blog from '../pages/Blog';
 import User from '../pages/User';
-import Login from '../pages/Auth/Login';
+import Login from '../pages/Auth/Login/index-old';
 import NotFound from '../pages/Error/Page404';
 import Register from '../pages/Auth/Register';
 import Products from '../pages/Products';

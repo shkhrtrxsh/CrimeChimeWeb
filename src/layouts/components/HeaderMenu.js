@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import { NavLink } from "react-router-dom";
-import { styled } from '@mui/material/styles';
+import { styled, useTheme, theme } from '@mui/material/styles';
 import { Box, Drawer, Button, IconButton } from '@mui/material';
 import Iconify from 'src/components/Iconify';
 import useResponsive from '../../hooks/useResponsive';
+import { IsAuth, User } from 'src/helpers/RouteHelper';
+import palette from 'src/theme/palette';
+import { logout } from 'src/store/api/auth';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 const LinkButton = styled(NavLink)(({ theme }) => ({
@@ -40,57 +45,99 @@ const LinkDrawerButton = styled(NavLink)(({ theme }) => ({
     }
 }));
 
+const btnStyle = {
+    background:palette.secondary.main,
+    color:palette.primary.main,
+    paddingLeft:'16px',
+    paddingRight:'16px',
+    borderRadius: '.3rem'
+}
 
 const menus = [
     {
         title:"Home",
         url:"/",
-        style:1
+        style:1,
+        is_auth:2 // auth or non auth
     },
     {
         title:"Register",
         url:"/register",
-        style:1
+        style:1,
+        is_auth:0
     },
     {
         title:"Login",
         url:"/login",
-        style:2
+        style:2,
+        is_auth:0
     },
-    // {
-    //     title:"About Me",
-    //     url:"about-me"
-    // },
-    // {
-    //     title:"Contact Me",
-    //     url:"contact-me"
-    // },
+    {
+        title:"Logout",
+        url:"/logout",
+        style:2,
+        is_auth:1
+    }
 ] 
 
 export default function HeaderMenu(props) {
 
     const [drawerState, setDrawerState] = useState(false);
     const isDesktop = useResponsive('up', 'lg');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const theme = useTheme()
+    const isAuth = IsAuth();
+    const user = User()
 
     const handleDrawerOpen = () => {
         setDrawerState(true);
-      };
+    };
     
-      const handleDrawerClose = () => {
+    const handleDrawerClose = () => {
         setDrawerState(false);
-      };
+    };
+
+    const logoutSession = () => {
+        dispatch(logout({navigate}))
+    }
+    
 
     return (
         isDesktop ?
-        menus && menus.map((menu, index) => (
-            <LinkButton 
-            to={menu.url}
-            key={index}
-            activeclassname="active"
-            >
-                {menu.title}
-            </LinkButton>
-        ))
+            <>
+                <LinkButton 
+                    to="/"
+                    activeclassname="active"
+                >
+                    Home
+                </LinkButton>
+                { isAuth == 0 ?
+                <>
+                    <LinkButton 
+                        to="/register"
+                        activeclassname="active"                        
+                    >
+                        Register
+                    </LinkButton>
+                    <LinkButton 
+                        to="/login"
+                        activeclassname="active"
+                        style={btnStyle}
+                    >
+                        Login
+                    </LinkButton>
+                </>
+                :
+                    <Button 
+                        onClick={logoutSession}
+                        activeclassname="active"
+                        style={btnStyle}
+                    >
+                        Logout
+                    </Button>
+                }
+            </>
         :
         <>
             <IconButton onClick={handleDrawerOpen} sx={{ mr: 1, color: 'text.primary', display: { lg: 'none' } }}>
