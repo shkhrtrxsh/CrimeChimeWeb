@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { login } from 'src/store/api/auth';
+import { register } from 'src/store/api/auth';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, Container, Typography, Card } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -75,7 +75,8 @@ export default function Login() {
   } = methods;
 
   const onSubmit = (formValue) => {
-    dispatch(login({formValue, navigate}))
+    console.log(formValue)
+    dispatch(register({formValue, navigate}))
   };
 
   return (

@@ -27,8 +27,6 @@ export const otpVerify = createAsyncThunk(
   "auth/otp-verify",
   
   async ({ formValue, navigate }, { rejectWithValue }) => {
-
-    console.log(formValue);
     try {
       const response = await API.post("/auth/otp-verify", formValue);
       if(response.data.status === 200){
@@ -51,7 +49,7 @@ export const register = createAsyncThunk(
       const response = await API.post("/auth/register", formValue);
       if(response.data.status === 200){
         toast.success("Otp Send");
-          navigate("/login/otp-verify");
+        navigate("/auth/verify");
         return response.data;
       }
       toast.error("Email Address and Password is invalid");
