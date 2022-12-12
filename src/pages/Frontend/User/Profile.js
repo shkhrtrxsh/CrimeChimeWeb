@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import "yup-phone";
 import { useState } from 'react';
@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { SaveButton } from 'src/components/Button'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { register } from 'src/store/api/auth';
+import { showAuthUser } from 'src/store/api/user';
 import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Paper, Button, Box, Container, Stack, Grid, Avatar, Typography, IconButton } from '@mui/material'
 import UserSideName from './components/UserSideNav';
@@ -29,12 +29,15 @@ const HeadTypography = styled(Typography)(({ theme }) => ({
     // textAlign: 'right',
     marginRight: '20px',
     fontWeight: '600',
-    fontSize: '1.2rem !important'
+    fontSize: '1rem !important',
+    [theme.breakpoints.down('md')]: {
+        width: '80px',
+    }
 }));
 
 const BodyTypography = styled(Typography)(({ theme }) => ({
     fontWeight: '500',
-    fontSize: '1.2rem !important'
+    fontSize: '1rem !important'
 }));
 
 const EditButton = styled(Button)(({ theme }) => ({
@@ -42,8 +45,26 @@ const EditButton = styled(Button)(({ theme }) => ({
     right: '30px'
 }));
 
+const IconButtonStyle = styled(IconButton)(({ theme }) => ({
+    position: 'absolute !important',
+    color: theme.palette.primary.main,
+    border: `1px solid ${theme.palette.primary.main}`,
+    background: theme.palette.secondary.main,
+    fontSize: '1.2rem',
+    '&:hover':{
+        background: theme.palette.secondary.main
+    }
+}));
+
 const Profile = () => {  
     const theme = useTheme()
+    const dispatch = useDispatch()
+
+    const { user } = useSelector((state) => ({ ...state.user }));
+
+    useEffect(() => {
+        dispatch(showAuthUser({}))
+    }, [])
 
     return (
         <Page>
@@ -56,74 +77,109 @@ const Profile = () => {
                     </Grid>
                     <Grid item md={9}>
                         <Grid container spacing={3}>
-                            <Grid item md={3} sx={{
+                            <Grid item md={3} xs={12} sx={{
                                 position: 'relative'
                             }}>
                                 <Avatar
                                     alt="Remy Sharp"
                                     src={UserDemo}
-                                    sx={{ width: 200, height: 200 }}
+                                    sx={{ 
+                                        width: '100%', height: 'auto',
+                                        [theme.breakpoints.down('md')]: {
+                                            width: '150px',
+                                            height: '150px',
+                                            margin: 'auto',
+                                        } 
+                                    }}
                                 />
-                                <IconButton aria-label="edit" sx={{
-                                    position: 'absolute !important',
-                                    right: '25px',
-                                    bottom: 0,
-                                    color: theme.palette.primary.main,
-                                    border: `1px solid ${theme.palette.primary.main}`,
-                                    background: theme.palette.secondary.main,
-                                    '&:hover':{
-                                        background: theme.palette.secondary.main
-                                    }
+                                <IconButtonStyle 
+                                    aria-label="edit" 
+                                    component={RouterLink}
+                                    to='/profile/edit'
+                                    sx={{
+                                        right: '5px',
+                                        bottom: '15px',
+                                        [theme.breakpoints.down('md')]: {
+                                            left:'120px',
+                                            right:0,
+                                            bottom:0,
+                                            margin:'auto',
+                                            width:'45px',
+                                        } 
                                 }}>
                                     <EditIcon />
-                                </IconButton>
+                                </IconButtonStyle>
                             </Grid>
-                            <Grid item md={9}>
+                            <Grid item md={9} xs={12}>
                                 <Paper sx={{
                                     padding :'30px',
                                     position: 'relative'
                                 }}>
-                                    <EditButton variant="outlined" startIcon={<EditIcon />}>
-                                        Edit
-                                    </EditButton>
+                                    <IconButtonStyle 
+                                        aria-label="edit"
+                                        component={RouterLink}
+                                        to='/profile/edit' 
+                                        sx={{
+                                                right: '15px',
+                                                top: '15px',
+                                        }}
+                                    >
+                                        <EditIcon />
+                                    </IconButtonStyle>
                                     <InfoBox>
                                         <HeadTypography variant="h5" component="h5">Name: </HeadTypography>
-                                        <BodyTypography variant="h5" component="h5">Govind Singh Tomar</BodyTypography>
+                                        <BodyTypography variant="h5" component="h5">{ user && user.name }</BodyTypography>
                                     </InfoBox>
                                     <InfoBox>
                                         <HeadTypography variant="h5" component="h5">Email: </HeadTypography>
-                                        <BodyTypography variant="h5" component="h5">govindtomar01@gmail.com</BodyTypography>
+                                        <BodyTypography variant="h5" component="h5">{ user && user.email }</BodyTypography>
                                     </InfoBox>
                                     <InfoBox>
                                         <HeadTypography variant="h5" component="h5">Phone: </HeadTypography>
-                                        <BodyTypography variant="h5" component="h5">8989131933</BodyTypography>
+                                        <BodyTypography variant="h5" component="h5">{ user && user.phone }</BodyTypography>
                                     </InfoBox> 
                                 </Paper>                                                               
                             </Grid>
                         </Grid>
                         <Grid container spacing={3}>
-                            <Grid item md={12}>
+                            <Grid item md={12} xs={12}>
                                 <Paper sx={{
                                     padding :'30px',
                                     marginTop: '30px',
                                     position: 'relative'
                                 }}>
-                                    <EditButton variant="outlined" startIcon={<EditIcon />}>
-                                        Edit
-                                    </EditButton>
+                                    <IconButtonStyle 
+                                        aria-label="edit" 
+                                        component={RouterLink}
+                                        to='/profile/address-edit'
+                                        sx={{
+                                                right: '15px',
+                                                top: '15px',
+                                        }}
+                                    >
+                                        <EditIcon />
+                                    </IconButtonStyle>
                                     <Typography variant="h4" component="h2">My Address</Typography>
                                     <InfoBox>
-                                        <HeadTypography variant="h5" component="h5">Name: </HeadTypography>
-                                        <BodyTypography variant="h5" component="h5">Govind Singh Tomar</BodyTypography>
+                                        <HeadTypography variant="h5" component="h5">Address: </HeadTypography>
+                                        <BodyTypography variant="h5" component="h5">899 Lux Vinay Nagar</BodyTypography>
                                     </InfoBox>
                                     <InfoBox>
-                                        <HeadTypography variant="h5" component="h5">Email: </HeadTypography>
-                                        <BodyTypography variant="h5" component="h5">govindtomar01@gmail.com</BodyTypography>
+                                        <HeadTypography variant="h5" component="h5">City: </HeadTypography>
+                                        <BodyTypography variant="h5" component="h5">Indore</BodyTypography>
                                     </InfoBox>
                                     <InfoBox>
-                                        <HeadTypography variant="h5" component="h5">Phone: </HeadTypography>
-                                        <BodyTypography variant="h5" component="h5">8989131933</BodyTypography>
+                                        <HeadTypography variant="h5" component="h5">State: </HeadTypography>
+                                        <BodyTypography variant="h5" component="h5">Madhya Pradesh</BodyTypography>
                                     </InfoBox> 
+                                    <InfoBox>
+                                        <HeadTypography variant="h5" component="h5">Country: </HeadTypography>
+                                        <BodyTypography variant="h5" component="h5">India</BodyTypography>
+                                    </InfoBox>
+                                    <InfoBox>
+                                        <HeadTypography variant="h5" component="h5">Pin Code: </HeadTypography>
+                                        <BodyTypography variant="h5" component="h5">898898</BodyTypography>
+                                    </InfoBox>
                                 </Paper>                                                               
                             </Grid>
                         </Grid>

@@ -5,7 +5,8 @@ import {
   userStatus, 
   deleteUser, 
   showUser, 
-  editUser
+  editUser,
+  showAuthUser
 } from '../api/user'
 
 const initialState = {
@@ -59,6 +60,19 @@ export const user = createSlice({
           state.user = action.payload.data;
         },
         [showUser.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+
+        // Show User Api
+        [showAuthUser.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [showAuthUser.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.user = action.payload.data;
+        },
+        [showAuthUser.rejected]: (state, action) => {
           state.loading = false;
           state.error = action.payload.message;
         },

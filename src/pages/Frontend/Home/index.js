@@ -1,7 +1,8 @@
 import React from 'react';
 import { alpha, styled } from '@mui/material/styles';
 import { Paper, Button } from '@mui/material'
-import Map from './Map';
+import HomeMap from './HomeMap';
+// import MyGoogleMap from '../MyGoogleMap';
 
 
 
@@ -14,7 +15,7 @@ const Home = () => {
 
     return (
         <PaperStyle>
-            <Map />
+            <HomeMap />
         </PaperStyle>
     );
 }

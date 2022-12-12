@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import "yup-phone";
 import { useState } from 'react';
@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { SaveButton } from 'src/components/Button'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { register } from 'src/store/api/auth';
+import { showAuthUser, updateUser } from 'src/store/api/user';
 import { alpha, styled, useTheme } from '@mui/material/styles';
 import { Paper, Button, Box, Container, Stack, Grid } from '@mui/material'
 import UserSideName from './components/UserSideNav';
@@ -26,6 +26,8 @@ const EditProfile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const theme = useTheme();
+
+    const { user } = useSelector((state) => ({ ...state.user }));
   
     const LoginSchema = Yup.object().shape({
       phone: Yup.string().phone().required().required('Phone number is required'),
@@ -47,12 +49,22 @@ const EditProfile = () => {
     const {
       handleSubmit,
       formState: { isSubmitting },
+      setValue
     } = methods;
   
     const onSubmit = (formValue) => {
       console.log(formValue)
-      dispatch(register({formValue, navigate}))
+      dispatch(updateUser({formValue, navigate}))
     };
+
+    useEffect(() => {
+        dispatch(showAuthUser({}))
+        if(user != null){
+            setValue('name', user.name)
+            setValue('email', user.email)
+            setValue('phone', user.phone)
+        }
+    }, [showAuthUser])
   
 
     return (
@@ -74,7 +86,7 @@ const EditProfile = () => {
                                     <RHFTextField name="email" label="E-mail Address" />
                                 </Grid>
                                 <Grid item xs={9}>
-                                    <RHFTextField name="phone" label="Phone Number" />
+                                    <RHFTextField name="phone" label="Phone Number" disabled/>
                                 </Grid>
                                 <Grid item xs={7}>
                                     <SaveButton type="submit">

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import GoogleMapReact from 'google-map-react';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import AutoComplete from './AutoComplate';
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+const containerStyle = {
+  width: '100%',
+  height: '80vh'
+};
 
-export default function MyGoogleMap(){
-  const defaultProps = {
-    center: {
-      lat: 10.99835602,
-      lng: 77.01502627
-    },
-    zoom: 11
-  };
+const center = {
+  lat: -3.745,
+  lng: -38.523
+};
+
+const MyGoogleMap = () => {
+
   const [position, setPosition] = useState({
     latitude : 0,
     longitude : 0
@@ -23,44 +26,41 @@ export default function MyGoogleMap(){
   function showPosition(position) {
     //  return position.coords.latitude + position.coords.longitude;
      setPosition({
-        latitude : position.coords.latitude,
-        longitude : position.coords.longitude
+      lat : position.coords.latitude,
+      lng : position.coords.longitude
      })
   }
 
   navigator.geolocation.getCurrentPosition(showPosition)
+  
 
   // console.log(position)
-  //  useEffect(() => {
-
+   useEffect(() => {
+    if(oldPosition.latitude !== position.latitude && oldPosition.longitude !== position.longitude){      
+      setOldPosition(position)
+      console.log(position)
+    }
+    // dispatch(googleMapSearchLocation({}))
     
-    
-  //   if(oldPosition.latitude !== position.latitude && oldPosition.longitude !== position.longitude){
-  //     setOldPosition(position)
-  //     console.log(position)
-  //   }
+   }, [position])
 
-  //  }, [position])
+    return (
+      <AutoComplete />
+      // <LoadScript
+      //   googleMapsApiKey="AIzaSyApoj80RTzWkAIc_eswUmPogeoufErlNaw"
+      // >
+      //   <GoogleMap
+      //     mapContainerStyle={containerStyle}
+      //     center={position}
+      //     zoom={10}
+      //   >
 
-  return (
-    // Important! Always set the container height explicitly
-    <div style={{ height: '100vh', width: '100%' }}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: "AIzaSyApoj80RTzWkAIc_eswUmPogeoufErlNaw" }}
-        defaultCenter={defaultProps.center}
-        defaultZoom={defaultProps.zoom}
-      >
-        <AnyReactComponent
-          lat={position.latitude}
-          lng={position.longitude}
-          text="My Marker is the best"
-        />
-        <AnyReactComponent
-          lat={59.255413}
-          lng={25.337844}
-          text="My Marker is the best"
-        />
-      </GoogleMapReact>
-    </div>
-  );
+      //     <Marker 
+      //       position={position}
+      //     />
+      //   </GoogleMap>
+      // </LoadScript>
+    )
 }
+
+export default MyGoogleMap;
