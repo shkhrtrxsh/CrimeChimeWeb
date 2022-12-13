@@ -4,6 +4,7 @@ import MyGoogleMap from 'src/pages/Frontend/MyGoogleMap'
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import OtpVerify from '../pages/Auth/OtpVerify';
+import ViewReport from 'src/pages/Frontend/ViewReport';
 
 const FrontendRoutes = [
     {
@@ -25,6 +26,10 @@ const FrontendRoutes = [
     {
         path: '/auth/verify',
         element: <OtpVerify />
+    },
+    {
+        path: '/report',
+        element: <ViewReport />
     },
 ]
 

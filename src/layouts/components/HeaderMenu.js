@@ -129,6 +129,13 @@ export default function HeaderMenu(props) {
                     </LinkButton>
                 </>
                 :
+                <>
+                    <LinkButton 
+                        to="/profile"
+                        activeclassname="active"                        
+                    >
+                        Profile
+                    </LinkButton>
                     <Button 
                         onClick={logoutSession}
                         activeclassname="active"
@@ -136,6 +143,7 @@ export default function HeaderMenu(props) {
                     >
                         Logout
                     </Button>
+                    </>
                 }
             </>
         :

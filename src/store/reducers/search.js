@@ -1,12 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { 
-  searchLocation, 
-  getRoles, 
-  roleStatus, 
-  deleteRole, 
-  showRole, 
-  editRole
-} from '../api/role'
+  searchLocation,
+  googleMapSearchLocation
+} from '../api/search'
 
 const initialState = {
     search_location: null,
@@ -17,7 +13,7 @@ const initialState = {
     loading: false,
 }
 
-export const role = createSlice({
+export const search = createSlice({
     name: 'role',
     initialState ,
     extraReducers: {
@@ -32,9 +28,21 @@ export const role = createSlice({
         [searchLocation.rejected]: (state, action) => {
           state.loading = false;
           state.error = action.payload.message;
-        },   
+        },
+
+        [googleMapSearchLocation.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [googleMapSearchLocation.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.search_location = action.payload;
+        },
+        [googleMapSearchLocation.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },     
         
     }
 })
 
-export default role.reducer;
+export default search.reducer;

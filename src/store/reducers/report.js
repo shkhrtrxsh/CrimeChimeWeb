@@ -1,0 +1,158 @@
+import { createSlice } from '@reduxjs/toolkit';
+import { 
+  addReport, 
+  getReports, 
+  reportStatus, 
+  deleteReport, 
+  showReport, 
+  editReport,
+  getCrimes,
+  getSpecificCrimesById,
+  getReportByArea
+} from '../api/report'
+
+const initialState = {
+    reports: null,
+    report: null,
+    crime_list:null,
+    specific_crime_list : null,    
+    error: "",
+    loading: false,
+}
+
+export const report = createSlice({
+    name: 'report',
+    initialState ,
+    extraReducers: {
+        // Report Add Api
+        [addReport.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [addReport.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.report = action.payload;
+        },
+        [addReport.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+
+        // Get Report Api
+        [getReports.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [getReports.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.reports = action.payload;
+        },
+        [getReports.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+
+        // Show Report Api
+        [showReport.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [showReport.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.report = action.payload.data;
+        },
+        [showReport.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+
+        // Edit Report Api
+        [editReport.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [editReport.fulfilled]: (state, action) => {
+          state.loading = false;
+          // state.report = action.payload.data;
+        },
+        [editReport.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+
+        // Change Report Status Api
+        [reportStatus.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [reportStatus.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.reports.data.forEach((report, index) => {
+            if(report.id === action.payload.data.id){
+              state.reports.data[index].status = action.payload.data.status;
+            }
+          })
+        },
+        [reportStatus.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+
+        // Delete Report Api
+        [deleteReport.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [deleteReport.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.reports.data.forEach((report, index) => {
+            if(report.id === action.payload.data.id){
+              state.reports.data.splice(index, 1)
+            }
+          })
+        },
+        [deleteReport.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+
+
+        // Show Report Api
+        [getCrimes.pending]: (state, action) => {
+            state.loading = true;
+        },
+        [getCrimes.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.crime_list = action.payload;
+            console.log(action.payload)
+        },
+        [getCrimes.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload.message;
+        },
+
+        
+        // Show Report Api
+        [getSpecificCrimesById.pending]: (state, action) => {
+            state.loading = true;
+        },
+        [getSpecificCrimesById.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.specific_crime_list = action.payload;
+        },
+        [getSpecificCrimesById.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload.message;
+        },
+
+        // Get Report Api
+        [getReportByArea.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [getReportByArea.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.reports = action.payload;
+        },
+        [getReportByArea.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+        
+    }
+})
+
+export default report.reducer;

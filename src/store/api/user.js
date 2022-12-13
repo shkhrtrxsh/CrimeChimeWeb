@@ -39,6 +39,23 @@ export const editUser = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  "user/update",
+  async ({ formValue, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await API.put("/user/update", formValue);
+      if(response.data.status === 200){
+        toast.success(response.data.message);
+        navigate("/profile");
+        return response.data;
+      }
+      toast.error("Something wrong in user");
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const getUsers = createAsyncThunk(
   "user",
   async ({param}, { rejectWithValue }) => {
@@ -58,6 +75,20 @@ export const showUser = createAsyncThunk(
   async ({ id, by }, { rejectWithValue }) => {
     try {
       const response = await API.get(`/user/${id}?by=${by}`);
+      if(response.data.status === 200){
+        return response.data;
+      }
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const showAuthUser = createAsyncThunk(
+  "user/show/auth",
+  async ({}, { rejectWithValue}) => {
+    try {
+      const response = await API.get(`/user/auth`);
       if(response.data.status === 200){
         return response.data;
       }
@@ -91,6 +122,24 @@ export const userStatus = createAsyncThunk(
       const response = await API.post("/user/status", formValue);
       if(response.data.status === 200){
         toast.success(response.data.message);
+        return response.data;
+      }
+      toast.error("Something wrong in user");
+
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const updateUserAddress = createAsyncThunk(
+  "user/update-address",
+  async ({ value, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await API.put("/user/update-address", value);
+      if(response.data.status === 200){
+        toast.success(response.data.message);
+        // navigate("/profile");
         return response.data;
       }
       toast.error("Something wrong in user");

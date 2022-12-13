@@ -21,7 +21,7 @@ export default function FormProvider({ children, onSubmit, methods }) {
         margin:'2rem 0'
       }}>
         <Form {...methods}>
-          <form onSubmit={onSubmit}>{children}</form>
+          <form onSubmit={onSubmit} encType="multipart/form-data">{children}</form>
         </Form>
       </Container>
     </Card>
