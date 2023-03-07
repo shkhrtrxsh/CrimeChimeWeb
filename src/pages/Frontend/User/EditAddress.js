@@ -1,28 +1,19 @@
 import React, {useEffect} from 'react';
-import * as Yup from 'yup';
-import "yup-phone";
 import { useState } from 'react';
-import { useNavigate, Link as RouterLink} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { GoogleMap, Marker} from '@react-google-maps/api';
-// form
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { SaveButton } from 'src/components/Button'
+import axios from 'axios';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUserAddress, showAuthUser } from 'src/store/api/user';
-import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Paper, Button, Box, Container, Stack, Grid, Card } from '@mui/material'
+import { Container, Grid, Card } from '@mui/material'
 import UserSideName from './components/UserSideNav';
 import Page from '../../../components/Page';
-import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
-import { DRAWER_WIDTH, APPBAR_MOBILE, APPBAR_DESKTOP} from 'src/constants/theme'
+import { APPBAR_DESKTOP} from 'src/constants/theme'
+import { mapSettings, CurrentLocationCoordinates } from 'src/helpers/LocationHelper';
 
-const PaperStyle = styled(Paper)(({ theme }) => ({
-
-}));
-  
 const containerStyle = {
     width: '100%',
     height: `calc(100vh - ${APPBAR_DESKTOP * 5}px)`
@@ -33,7 +24,7 @@ const EditAddress = () => {
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const theme = useTheme();
+    const [formattedAddress, setFormattedAddress] =useState(null)
     const [value, setValue] = useState({
         latitude : 0,
         longitude : 0,
@@ -46,12 +37,14 @@ const EditAddress = () => {
         dispatch(showAuthUser({}))
     }, [])
 
+    const dPosition = CurrentLocationCoordinates()
+
     const [position , setPosition] = useState({
-        lat: 0,
-        lng: 0
+        lat: dPosition.lat,
+        lng: dPosition.lng
     })
 
-    const googleAutoComplete = (latitude, longitude, place_id, address) => {
+    const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
         setValue({
             latitude : latitude,
             longitude : longitude,
@@ -59,8 +52,6 @@ const EditAddress = () => {
             address : address
         })
 
-        console.log(address)
-        
         setPosition({
             lat: latitude,
             lng: longitude
@@ -69,8 +60,7 @@ const EditAddress = () => {
     }
 
     useEffect(()=> {
-        console.log(user)
-        if(user !== null){
+        if(user !== null && user.latitude !== null  && user.longitude !== null){
             setTimeout(function(){
                 setPosition({
                     lat: Number(user.latitude),
@@ -92,29 +82,37 @@ const EditAddress = () => {
                 latitude: e.latLng.lat(),
                 longitude: e.latLng.lng()
             }))
+
+            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${e.latLng.lat()},${e.latLng.lng()}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`).then(response => {
+                console.log(response.data.results) 
+                setFormattedAddress(response.data.results[0].formatted_address)
+                setValue(prev => ({
+                    ...prev,
+                    'google_place_id': response.data.results[0].place_id,
+                    'address': response.data.results[0].formatted_address
+                }))
+            })
         }
     }
   
 
     return (
-        <Page>
+        <Page title="Edit Address">
             <Container sx={{
-                marginTop: '40px'
+                marginTop: '20px'
             }}>
                 <Grid container spacing={3}>
-                    <Grid item xs={3}>
-                        <UserSideName />
-                    </Grid>
-                    <Grid item xs={9}>
+                    <UserSideName />
+                    <Grid item md={9} xs={12}>
                         <Card sx={{
                             padding: '1.3rem'
                         }}>
                             <Grid container spacing={4}>
-                                <Grid item xs={9}>
-                                    <GoogleAutoComplete googleAutoComplete={googleAutoComplete} value={user && user.address} />
+                                <Grid item md={9} xs={12}>
+                                    <GoogleAutoComplete googleAutoComplete={googleAutoComplete} formattedAddress={formattedAddress} />
                                 </Grid>
-                                <Grid item xs={3}>
-                                    <SaveButton onClick={saveAddress}>
+                                <Grid item md={3} xs={12}>
+                                    <SaveButton onClick={saveAddress} sx={{width:"100%"}}>
                                         Save
                                     </SaveButton>
                                 </Grid>
@@ -124,9 +122,7 @@ const EditAddress = () => {
                                         mapContainerStyle={containerStyle}
                                         center={position}
                                         zoom={10}
-                                        options={{
-                                            fullscreenControl: false,
-                                        }}
+                                        options={mapSettings}
                                     >
                                         <Marker
                                             position={position}

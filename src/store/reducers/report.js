@@ -8,11 +8,17 @@ import {
   editReport,
   getCrimes,
   getSpecificCrimesById,
-  getReportByArea
+  getReportByArea,
+  getMyReport
 } from '../api/report'
 
 const initialState = {
-    reports: null,
+    reports: {
+      data : null,
+      total : 1,
+      per_page : 1,
+      current_page : 1
+    },
     report: null,
     crime_list:null,
     specific_crime_list : null,    
@@ -148,6 +154,19 @@ export const report = createSlice({
           state.reports = action.payload;
         },
         [getReportByArea.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+
+        // Get Report Api
+        [getMyReport.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [getMyReport.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.reports = action.payload;
+        },
+        [getMyReport.rejected]: (state, action) => {
           state.loading = false;
           state.error = action.payload.message;
         },

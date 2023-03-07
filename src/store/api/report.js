@@ -7,13 +7,12 @@ export const addReport = createAsyncThunk(
     "report/add",
     async ({ formValue, navigate }, { rejectWithValue }) => {
       try {
-        console.log(formValue)
         const response = await API.post("/report", formValue, {headers: {
             'content-type': 'multipart/form-data',
           }});
         if(response.data.status === 200){
           toast.success(response.data.message);
-        //   navigate("/report/"+formValue.report_module_id);
+          navigate("/report?target=single&id="+response.data.data.id);
           return response.data;
         }
         toast.error("Something wrong in report");
@@ -46,7 +45,7 @@ export const getReports = createAsyncThunk(
   "report",
   async ({param, id}, { rejectWithValue }) => {
     try {
-      const response = await API.get(`/report/${id}?${param}`);
+      const response = await API.get(`/report?${param}`);
       if(response.data.status === 200){
         return response.data.data;
       }
@@ -156,6 +155,20 @@ export const getReportByArea = createAsyncThunk(
   async ({query}, { rejectWithValue }) => {
     try {
       const response = await API.get(`/report/area?${query}`);
+      if(response.data.status === 200){
+        return response.data.data;
+      }
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const getMyReport = createAsyncThunk(
+  "report/my",
+  async ({query}, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`/report/my`);
       if(response.data.status === 200){
         return response.data.data;
       }

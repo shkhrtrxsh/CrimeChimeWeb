@@ -9,17 +9,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { editUser, showUser } from 'src/store/api/user';
 import { getRoles } from 'src/store/api/role';
 import { slugConvertor } from 'src/helpers/StringHelper';
-import Iconify from 'src/components/Iconify';
 import BreadcrumbNavigator from 'src/components/BreadcrumbNavigator'
 // @mui
-import {  
-  Card, 
-  Container,
-  Typography,
-  Button,
+import {
   Grid,
-  IconButton, 
-  InputAdornment,
   InputLabel,
   Select,
   Box,
@@ -31,10 +24,9 @@ import {
   Chip
 } from '@mui/material';
 // components
-import { FormProvider, RHFTextField, RHFCheckbox } from 'src/components/hook-form';
+import { FormProvider, RHFTextField, } from 'src/components/hook-form';
 import { useEffect, useState } from 'react';
 import { SaveButton } from 'src/components/Button'
-import { INNER_CONTAINER_HEIGHT } from 'src/constants/theme'
 // ----------------------------------------------------------------------
 
 export default function EditUser() {
@@ -42,7 +34,6 @@ export default function EditUser() {
   const navigate = useNavigate();
   const params = useParams();
   const [userRole, setUserRole] = useState([]);
-  const [showPassword, setShowPassword] = useState(false);
   const { user } = useSelector((state) => ({ ...state.user }));
   const { roles } = useSelector((state) => ({ ...state.role }));
 

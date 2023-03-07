@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import "yup-phone";
-import { useState } from 'react';
-import { useNavigate, Link as RouterLink} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,28 +9,22 @@ import { SaveButton } from 'src/components/Button'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { showAuthUser, updateUser } from 'src/store/api/user';
-import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Paper, Button, Box, Container, Stack, Grid } from '@mui/material'
+import { Container, Grid } from '@mui/material'
 import UserSideName from './components/UserSideNav';
 import Page from '../../../components/Page';
-import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
-
-const PaperStyle = styled(Paper)(({ theme }) => ({
-
-}));
-  
+import { FormProvider, RHFTextField } from '../../../components/hook-form';
+import AvatarUpload from 'src/components/AvatarUpload';
 
 const EditProfile = () => {  
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const theme = useTheme();
 
     const { user } = useSelector((state) => ({ ...state.user }));
   
     const LoginSchema = Yup.object().shape({
       phone: Yup.string().phone().required().required('Phone number is required'),
-      name: Yup.string().required('Name required'),
+      name: Yup.string().required('Username is required'),
       email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     });
   
@@ -39,6 +32,7 @@ const EditProfile = () => {
       name: '',
       email: '',
       phone: '',
+      files: ''
     };
   
     const methods = useForm({
@@ -53,42 +47,49 @@ const EditProfile = () => {
     } = methods;
   
     const onSubmit = (formValue) => {
-      console.log(formValue)
       dispatch(updateUser({formValue, navigate}))
     };
 
     useEffect(() => {
         dispatch(showAuthUser({}))
+    }, [])
+
+    useEffect(() => {
         if(user != null){
             setValue('name', user.name)
             setValue('email', user.email)
             setValue('phone', user.phone)
         }
-    }, [showAuthUser])
+    }, [user])
+
+    const addFileHandler = (files) => {
+        setValue('files', files)
+    }
   
 
     return (
-        <Page>
+        <Page title="Edit Profile">
             <Container sx={{
-                marginTop: '40px'
+                marginTop: '20px'
             }}>
                 <Grid container spacing={3}>
-                    <Grid item xs={3}>
-                        <UserSideName />
-                    </Grid>
-                    <Grid item xs={9}>
+                    <UserSideName />
+                    <Grid item md={9} xs={12}>
                         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                             <Grid container spacing={4}>
-                                <Grid item xs={9}>
-                                    <RHFTextField name="name" label="Name" />
+                                <Grid item md={9} xs={12}>
+                                    <AvatarUpload addFiles={addFileHandler} preview={user && process.env.REACT_APP_API_URL + '/' + user.avatar}/>
                                 </Grid>
-                                <Grid item xs={9}>
+                                <Grid item md={9} xs={12}>
+                                    <RHFTextField name="name" label="Username" />
+                                </Grid>
+                                <Grid item md={9} xs={12}>
                                     <RHFTextField name="email" label="E-mail Address" />
                                 </Grid>
-                                <Grid item xs={9}>
+                                <Grid item md={9} xs={12}>
                                     <RHFTextField name="phone" label="Phone Number" disabled/>
                                 </Grid>
-                                <Grid item xs={7}>
+                                <Grid item md={7} xs={12}>
                                     <SaveButton type="submit">
                                         Save
                                     </SaveButton>

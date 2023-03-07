@@ -7,15 +7,14 @@ import { styled, useTheme } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { register } from 'src/store/api/auth';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, Container, Typography, Card } from '@mui/material';
+import { Link, Stack, Container, Typography, Card } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Page from '../../../components/Page';
-// components
-import Iconify from '../../../components/Iconify';
-import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
+
+import { FormProvider, RHFTextField } from '../../../components/hook-form';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -50,10 +49,9 @@ export default function Login() {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const LoginSchema = Yup.object().shape({
-    phone: Yup.string().phone().required().required('Phone number is required'),
+    phone: Yup.string().matches("^[0-9]*$", 'Phone number is not valid').required('Phone number is required').min(10, "Phone number is not valid")
+    .max(10, "Phone number is not valid"),
     name: Yup.string().required('Name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
   });
@@ -75,12 +73,11 @@ export default function Login() {
   } = methods;
 
   const onSubmit = (formValue) => {
-    console.log(formValue)
     dispatch(register({formValue, navigate}))
   };
 
   return (
-    <Page title="Login">
+    <Page title="Register">
       <RootStyle>
         <Container maxWidth="sm">
           <ContentStyle>
@@ -90,26 +87,29 @@ export default function Login() {
                   Sign up for Crime report
                 </Typography>
                 <Typography variant="p">
-                  Lorem ipsum dolor sit amet consectetur. Aenean senectus id vel egestas ipsum mollis.
+                  Your details are kept anonymous and will NEVER be disclosed.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={3}>
                   <RHFTextField name="name" label="Name" />
                   <RHFTextField name="email" label="E-mail Address" />
-                  <RHFTextField name="phone" label="Phone Number" />
+                  <RHFTextField 
+                    name="phone" 
+                    label="Phone Number"
+                  />
                 </Stack>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-                    Send Otp
+                    Send OTP
                   </LoadingButton>
                 </Stack>
               </FormProvider>
               <Typography variant="body2" sx={{ mb: 3, textAlign: 'center' }}>
                 Have an account?{' '}
                 <Link variant="subtitle2" to="/login" component={RouterLink} style={{
-                    color: theme.palette.secondary.main,
-                    textDecorationColor: theme.palette.secondary.main,
+                    color: theme.palette.primary.main,
+                    textDecorationColor: theme.palette.primary.main,
                   }}>
                   Login
                 </Link>

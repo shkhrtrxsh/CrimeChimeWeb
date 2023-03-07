@@ -1,21 +1,19 @@
 import * as Yup from 'yup';
 import "yup-phone";
-import { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from 'src/store/api/auth';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, Container, Typography, Card } from '@mui/material';
+import { Link, Stack, Container, Typography, Card } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Page from '../../../components/Page';
-// components
-import Iconify from '../../../components/Iconify';
-import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
+
+import { FormProvider, RHFTextField } from '../../../components/hook-form';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -27,7 +25,6 @@ const RootStyle = styled('div')(({ theme }) => ({
 const ContentStyle = styled('div')(({ theme }) => ({
   maxWidth: 480,
   margin: 'auto',
-  // minHeight: '100vh',
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
@@ -50,12 +47,9 @@ export default function Login() {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const LoginSchema = Yup.object().shape({
-    phone: Yup.string()
-    .phone()
-    .required().required('Phone number is required'),
+    phone: Yup.string().matches("^[0-9]*$", 'Phone number is not valid').required('Phone number is required').min(10, "Phone number is not valid")
+    .max(10, "Phone number is not valid"),
   });
 
   const defaultValues = {
@@ -87,24 +81,27 @@ export default function Login() {
                   Sign in
                 </Typography>
                 <Typography variant="p">
-                  Lorem ipsum dolor sit amet consectetur. Aenean senectus id vel egestas ipsum mollis.
+                  Your details are kept anonymous and will NEVER be disclosed.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={3}>
-                  <RHFTextField name="phone" label="Phone Number" />
+                  <RHFTextField 
+                    name="phone" 
+                    label="Phone Number"
+                  />
                 </Stack>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-                    Send Otp
+                    Send OTP
                   </LoadingButton>
                 </Stack>
               </FormProvider>
               <Typography variant="body2" sx={{ mb: 3, textAlign: 'center' }}>
                 Don't have an account?{' '}
                 <Link variant="subtitle2" to="/register" component={RouterLink} style={{
-                    color: theme.palette.secondary.main,
-                    textDecorationColor: theme.palette.secondary.main,
+                    color: theme.palette.primary.main,
+                    textDecorationColor: theme.palette.primary.main,
                   }}>
                   Register
                 </Link>

@@ -13,7 +13,7 @@ export const addUser = createAsyncThunk(
           navigate("/user");
           return response.data;
         }
-        toast.error("Something wrong in user");
+        toast.error("Something went wrong");
 
       } catch (err) {
         return rejectWithValue(err.response.data);
@@ -32,7 +32,7 @@ export const editUser = createAsyncThunk(
         navigate("/user");
         return response.data;
       }
-      toast.error("Something wrong in user");
+      toast.error("Something went wrong");
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
@@ -43,13 +43,15 @@ export const updateUser = createAsyncThunk(
   "user/update",
   async ({ formValue, navigate }, { rejectWithValue }) => {
     try {
-      const response = await API.put("/user/update", formValue);
+      const response = await API.post("/user/update", formValue, {headers: {
+        'content-type': 'multipart/form-data',
+      }});
       if(response.data.status === 200){
         toast.success(response.data.message);
         navigate("/profile");
         return response.data;
       }
-      toast.error("Something wrong in user");
+      toast.error("Something went wrong");
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
@@ -107,7 +109,7 @@ export const deleteUser = createAsyncThunk(
         toast.success(response.data.message);
         return response.data;
       }
-      toast.error("Something wrong in user");
+      toast.error("Something went wrong");
 
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -124,7 +126,7 @@ export const userStatus = createAsyncThunk(
         toast.success(response.data.message);
         return response.data;
       }
-      toast.error("Something wrong in user");
+      toast.error("Something went wrong");
 
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -142,8 +144,23 @@ export const updateUserAddress = createAsyncThunk(
         // navigate("/profile");
         return response.data;
       }
-      toast.error("Something wrong in user");
+      toast.error("Something went wrong");
 
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+
+export const dashboard = createAsyncThunk(
+  "dashboard",
+  async ({}, { rejectWithValue}) => {
+    try {
+      const response = await API.get(`/dashboard`);
+      if(response.data.status === 200){
+        return response.data;
+      }
     } catch (err) {
       return rejectWithValue(err.response.data);
     }

@@ -6,7 +6,8 @@ import {
   deleteUser, 
   showUser, 
   editUser,
-  showAuthUser
+  showAuthUser,
+  dashboard
 } from '../api/user'
 
 const initialState = {
@@ -120,6 +121,20 @@ export const user = createSlice({
           })
         },
         [deleteUser.rejected]: (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message;
+        },
+
+
+        //dashboard Api
+        [dashboard.pending]: (state, action) => {
+          state.loading = true;
+        },
+        [dashboard.fulfilled]: (state, action) => {
+          state.loading = false;
+          state.user = action.payload.data;
+        },
+        [dashboard.rejected]: (state, action) => {
           state.loading = false;
           state.error = action.payload.message;
         },

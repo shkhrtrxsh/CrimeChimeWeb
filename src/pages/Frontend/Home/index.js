@@ -1,22 +1,13 @@
 import React from 'react';
-import { alpha, styled } from '@mui/material/styles';
-import { Paper, Button } from '@mui/material'
 import HomeMap from './HomeMap';
-// import MyGoogleMap from '../MyGoogleMap';
-
-
-
-const PaperStyle = styled(Paper)(({ theme }) => ({
-
-}));
-  
+import Page from 'src/components/Page';
 
 const Home = () => {    
 
     return (
-        <PaperStyle>
+        <Page title="Home">
             <HomeMap />
-        </PaperStyle>
+        </Page>
     );
 }
 

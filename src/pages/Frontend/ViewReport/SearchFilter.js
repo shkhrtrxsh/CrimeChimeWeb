@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
     Drawer,
-    Button,
     Paper,
     Stack,
     InputLabel,
@@ -10,18 +9,26 @@ import {
     ListItemIcon,
     FormControl,
     ListItemText,
-    Typography
+    Typography,
+    Box,
+    Fab,
+    Button
 } from '@mui/material';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
-import { alpha, styled, useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { addReport, getCrimes, getSpecificCrimesById } from 'src/store/api/report';
+import { getCrimes, getSpecificCrimesById } from 'src/store/api/report';
 import { SaveButton } from 'src/components/Button';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { APPBAR_DESKTOP } from 'src/constants/theme'
+import AddIcon from '@mui/icons-material/Add';
+import useResponsive from 'src/hooks/useResponsive';
 
 const OuterPaperStyle = styled(Paper)(({ theme }) => ({
-    width: '500px',
+    [theme.breakpoints.up('sm')]: {
+        width: '500px',
+    },
     paddingLeft: '30px',
     paddingRight: '30px',
     paddingTop: '60px'
@@ -42,58 +49,93 @@ const CrimeFormControl = styled(FormControl)(({ theme }) => ({
     }
 }));
 
-export default function SearchFilter() {
+const BoxButtonStyle = styled(Box)(({ theme }) => ({
+    position: 'absolute',
+    right: '15px',
+    top: APPBAR_DESKTOP + 15 + 'px',
+    '& .MuiButtonBase-root.MuiFab-root': {
+        marginRight: '10px'
+    }
+}));
+
+export default function SearchFilter(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const theme = useTheme();
     const [state, setState] = React.useState(false);
     const [crime, setCrime] = useState('');
     const [specificCrime, setSpecificCrime] = useState('');
-    const [longitude, setLongitude] = useState(0);
-    const [latitude, setLatitude] = useState(0);
     const [address, setAddress] = useState('');
     const [searchParams] = useSearchParams();
+    const [viewport, setViewport] = useState(null)
+    const isDesktop = useResponsive('up', 'md');
+    const [position, setPosition] = useState({
+        lat:0,
+        lng:0,
+    });
 
     const { crime_list } = useSelector((state) => ({ ...state.report }));
     const { specific_crime_list } = useSelector((state) => ({ ...state.report }));
 
     const toggleDrawer = (event) => {
         setState(event);
-    };
-
-
-    useEffect(() => {
         dispatch(getCrimes({}))
 
-        if(searchParams.get('crime')  !== null){
+        if (searchParams.get('crime') !== null) {
             setCrime(searchParams.get('crime'))
         }
-        if(searchParams.get('specific-crime') !== null){
+        if (searchParams.get('specific-crime') !== null) {
             setSpecificCrime(searchParams.get('specific-crime'))
         }
+    };
 
-    }, [])
+    // place.geometry.viewport.Ia.hi
+    // place.geometry.viewport.Ia.lo
+    // place.geometry.viewport.Wa.hi
+    // place.geometry.viewport.Wa.lo
 
     useEffect(() => {
         let id = crime === '' ? 1 : crime;
         dispatch(getSpecificCrimesById({ id }))
         setSpecificCrime('')
-        
+
     }, [crime])
 
-    const googleAutoComplete = (latitude, longitude, place_id, address) => {
-        setLatitude(latitude)
-        setLongitude(longitude)
+    const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
+        setPosition({
+            lat:latitude,
+            lng:longitude
+        })
         setAddress(address)
+        if (viewport !== null) {
+            setViewport(viewport.geometry.viewport)
+        }
     }
 
     const filterSearchHandler = () => {
-        console.log('heloooo');
-        navigate(`/report?location=${address}&latitude=${latitude}&longitude=${longitude}&crime=${crime}&specific-crime=${specificCrime}`, { replace: true })
+        let url = '';
+
+        if (viewport !== null) {
+            url += `iahi=${viewport.Ia.hi}&ialo=${viewport.Ia.lo}&wahi=${viewport.Wa.hi}&walo=${viewport.Wa.lo}&`
+        }
+        if (crime !== null) {
+            url += `crime=${crime}&`
+        }
+        if (specificCrime !== null) {
+            url += `specific-crime=${specificCrime}&`
+        }
+        if (address !== null) {
+            url += `location=${address}&`
+        }
+        console.log('url', url)
+        navigate(`/report?${url}`, { replace: true })
+        setState(false)
+        
+        if(position.lat !== 0 && position.lng !== 0){
+            props.viewportPosition(position)
+        }        
     }
 
     const crimeHandle = (e) => {
-        console.log(e.target.value)
         setCrime(e.target.value)
     }
 
@@ -101,16 +143,40 @@ export default function SearchFilter() {
         setSpecificCrime(e.target.value)
     }
 
+    const clearSearchHandler = () => {
+        setCrime('')
+        setSpecificCrime('')
+        setAddress('')
+        navigate(`/report`, { replace: true })
+    }
+
     return (
         <React.Fragment>
-            <Button onClick={() => toggleDrawer(true)} sx={{
-                    position: 'absolute',
-                    top: '80px',
-                    right: 0,
-                    zIndex: 9
-            }}>
-                <MenuIcon />
-            </Button>
+            <BoxButtonStyle>
+                <Fab
+                    size="medium"
+                    color="primary"
+                    aria-label="add report"
+                    to="/report/add"
+                    component={Link}
+                    variant={isDesktop ? 'extended' : 'circular'}
+                >
+                    <AddIcon />
+                    {isDesktop &&
+                        <Typography component='h6'>Report Crime</Typography>
+                    }
+
+                </Fab>
+                <Fab
+                    size="medium"
+                    color="primary"
+                    aria-label="reported crimes"
+                    onClick={() => toggleDrawer(true)}
+                >
+                    <MenuIcon />
+                </Fab>
+            </BoxButtonStyle>
+
             <Drawer
                 anchor="right"
                 open={state}
@@ -119,11 +185,11 @@ export default function SearchFilter() {
                 <OuterPaperStyle>
                     <Stack spacing={3}>
                         <Typography variant="h4" component="h4" sx={{
-                            marginBottom:"20px"
+                            marginBottom: "20px"
                         }}>
                             Filter your report
                         </Typography>
-                        <GoogleAutoComplete googleAutoComplete={googleAutoComplete} />
+                        <GoogleAutoComplete googleAutoComplete={googleAutoComplete} oldAddress={address} />
 
                         <CrimeFormControl sx={{ m: 1, minWidth: 80 }}>
                             <InputLabel id="demo-simple-select-autowidth-label">Select Crime Type</InputLabel>
@@ -162,15 +228,31 @@ export default function SearchFilter() {
                                 ))}
                             </Select>
                         </FormControl>
-                        <SaveButton 
-                            sx={{
-                                with:'100%',
-                                marginTop: '30px'
-                            }}
-                            onClick={filterSearchHandler}
+                        <Stack direction="row" spacing={2} sx={{marginTop:'30px !important'}}>
+                            <Button
+                                sx={{
+                                    width: '100%',
+                                }}
+                                onClick={filterSearchHandler}
+                                size="large"
                             >
-                            Search
-                        </SaveButton>
+                                Search
+                            </Button>
+                            <Button
+                                sx={{
+                                    width: '40%',
+                                    background: '#fff',
+                                    "&:hover":{
+                                        background: 'transparent'
+                                    }
+                                }}
+                                onClick={clearSearchHandler}
+                                size="large"
+                                variant='outlined'
+                            >
+                                Clear
+                            </Button>
+                        </Stack>
                     </Stack>
                 </OuterPaperStyle>
 

@@ -3,35 +3,33 @@ import Dashboard from '../pages/Backend/Dashboard';
 import AddUser from '../pages/Backend/User/AddUser'
 import User from '../pages/Backend/User/User'
 import EditUser from '../pages/Backend/User/EditUser'
+import ShowUser from '../pages/Backend/User/ShowUser'
 //Role
-import AddRole from '../pages/Backend/RolePermission/Role/AddRole'
-import Role from '../pages/Backend/RolePermission/Role/Role'
-import EditRole from 'src/pages/Backend/RolePermission/Role/EditRole';
-//Permission
-import AddPermission from '../pages/Backend/RolePermission/Permission/AddPermission'
-import Permission from '../pages/Backend/RolePermission/Permission/Permission'
-import EditPermission from 'src/pages/Backend/RolePermission/Permission/EditPermission';
-//Permission Module
-import PermissionModule from '../pages/Backend/RolePermission/PermissionModule/PermissionModule'
-import AddPermissionModule from '../pages/Backend/RolePermission/PermissionModule/AddPermissionModule'
-import EditPermissionModule from '../pages/Backend/RolePermission/PermissionModule/EditPermissionModule'
-//Role Permission
-import RolePermission from 'src/pages/Backend/Permission/RolePermission';
+import AddRole from '../pages/Backend/Role/AddRole'
+import Role from '../pages/Backend/Role/Role'
+import EditRole from 'src/pages/Backend/Role/EditRole';
+//Report
+import Report from '../pages/Backend/Report/Report'
+
 
 
 const BackendPrivateRoutes = [
-    {
-        path: 'user/add',
-        element: <AddUser />,
-    },
+    // {
+    //     path: 'user/add',
+    //     element: <AddUser />,
+    // },
     {
         path: 'user',
         element: <User />,
     },
     {
-        path: 'user/:id/edit', 
-        element: <EditUser />
+        path: 'user/:id',
+        element: <ShowUser />,
     },
+    // {
+    //     path: 'user/:id/edit', 
+    //     element: <EditUser />
+    // },
     {
         path: 'dashboard',
         element: <Dashboard />
@@ -49,32 +47,8 @@ const BackendPrivateRoutes = [
         element: <EditRole />
     },
     {
-        path: 'role-permission/:slug', 
-        element: <RolePermission />
-    },
-    {
-        path: 'permission/add/:id',
-        element: <AddPermission />,
-    },
-    {
-        path: 'permission/:id',
-        element: <Permission />,
-    },
-    {
-        path: 'permission/:id/edit/:pid', 
-        element: <EditPermission />
-    },
-    {
-        path: 'permission-module',
-        element: <PermissionModule />,
-    },
-    {
-        path: 'permission-module/add',
-        element: <AddPermissionModule />,
-    },
-    {
-        path: 'permission-module/:id/edit',
-        element: <EditPermissionModule />,
+        path: 'reports', 
+        element: <Report />
     },
 ]
 

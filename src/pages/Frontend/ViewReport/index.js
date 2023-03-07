@@ -1,23 +1,13 @@
 import React from 'react';
-import { alpha, styled } from '@mui/material/styles';
-import { 
-    Paper, 
-    Button, 
-    Stack, 
-    Container } from '@mui/material'
 import ViewReportMap from './ViewReportMap';
-
-
-
-const PaperStyle = styled(Paper)(({ theme }) => ({
-
-}));
-  
+import Page from '../../../components/Page';
 
 const ViewReport = () => {    
 
     return (
-        <ViewReportMap />
+        <Page title="Crime Report">
+            <ViewReportMap />
+        </Page>
     );
 }
 

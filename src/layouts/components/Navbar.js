@@ -1,16 +1,12 @@
 import PropTypes from 'prop-types';
 // material
-import { alpha, styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton, Container } from '@mui/material';
-import { DRAWER_WIDTH, APPBAR_MOBILE, APPBAR_DESKTOP, WEB_WIDTH} from 'src/constants/theme'
-// components
-import Iconify from '../../components/Iconify';
-//
-import Searchbar from './Searchbar';
-import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
-import NotificationsPopover from './NotificationsPopover';
+import { styled } from '@mui/material/styles';
+import { Box, Stack, AppBar, Toolbar, Container } from '@mui/material';
+import { APPBAR_MOBILE, APPBAR_DESKTOP, WEB_WIDTH} from 'src/constants/theme'
+import { Link } from 'react-router-dom';
+
 import HeaderMenu from './HeaderMenu';
+import Logo from 'src/assets/logo/Crime-Chime-Logo.png'
 
 // ----------------------------------------------------------------------
 
@@ -20,9 +16,6 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
   WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
   backgroundColor: theme.palette.common.primary,
   boxShadow: theme.shadows[4],
-  // [theme.breakpoints.up('lg')]: {
-  //   width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  // },
 }));
 
 const ContainerStyle = styled(Container)(({ theme }) => ({
@@ -36,9 +29,17 @@ const ContainerStyle = styled(Container)(({ theme }) => ({
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   minHeight: APPBAR_MOBILE,
-  [theme.breakpoints.up('lg')]: {
+  padding: theme.spacing(0, 0),
+  [theme.breakpoints.up('md')]: {
     minHeight: APPBAR_DESKTOP,
     padding: theme.spacing(0, 2),
+  },
+}));
+
+const LogoImg = styled('img')(({ theme }) => ({
+  height: APPBAR_DESKTOP - 25,
+  [theme.breakpoints.down('md')]: {
+    height: APPBAR_MOBILE - 30,
   },
 }));
 
@@ -53,18 +54,14 @@ export default function Navbar({ onOpenSidebar }) {
     <RootStyle>
       <ContainerStyle>
       <ToolbarStyle>
-        <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary', display: { lg: 'none' } }}>
-          <Iconify icon="eva:menu-2-fill" />
-        </IconButton>
-
-        {/* <Searchbar /> */}
+        <Link to="/">
+          <LogoImg src={Logo} />
+        </Link>
+        
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <HeaderMenu />
-          {/* <LanguagePopover /> */}
-          {/* <NotificationsPopover /> */}
-          {/* <AccountPopover /> */}
         </Stack>
       </ToolbarStyle>
       </ContainerStyle>
