@@ -1,10 +1,8 @@
-import { Navigate, useRoutes } from 'react-router-dom';
 import Home from 'src/pages/Frontend/Home'
-import MyGoogleMap from 'src/pages/Frontend/MyGoogleMap'
+import ViewReport from 'src/pages/Frontend/ViewReport';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import OtpVerify from '../pages/Auth/OtpVerify';
-import ViewReport from 'src/pages/Frontend/ViewReport';
 
 const FrontendRoutes = [
     {
@@ -12,8 +10,8 @@ const FrontendRoutes = [
         element: <Home />
     },
     {
-        path: '/map',
-        element: <MyGoogleMap />
+        path: '/report',
+        element: <ViewReport />
     },
     {
         path: '/login',
@@ -26,10 +24,6 @@ const FrontendRoutes = [
     {
         path: '/auth/verify',
         element: <OtpVerify />
-    },
-    {
-        path: '/report',
-        element: <ViewReport />
     },
 ]
 

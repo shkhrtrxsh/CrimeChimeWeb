@@ -1,34 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { GoogleMap, Marker} from '@react-google-maps/api';
-import { alpha, styled, useTheme } from '@mui/material/styles';
+import React, { useState, useEffect } from 'react';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import { styled, useTheme } from '@mui/material/styles';
 import {
     Stack,
-    Container,
     Typography,
-    Card,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    ListItemIcon,
-    ListItemText
+    Drawer,
+    Paper
 } from '@mui/material';
-import { useNavigate, Link as RouterLink, useSearchParams} from 'react-router-dom';
-// form
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useSearchParams } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getReportByArea } from 'src/store/api/report';
-import * as Yup from 'yup';
-import "yup-phone";
+import { CurrentLocationCoordinates } from 'src/helpers/LocationHelper';
 
-import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
-import { SaveButton } from 'src/components/Button';
-import { DRAWER_WIDTH, APPBAR_MOBILE, APPBAR_DESKTOP} from 'src/constants/theme'
-import UploadImage from 'src/components/UploadImage';
-import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
+import { APPBAR_DESKTOP } from 'src/constants/theme'
 import SearchFilter from './SearchFilter';
+import { mapSettings } from 'src/helpers/LocationHelper';
+import { Box } from '@mui/system';
 
 
 
@@ -37,123 +25,174 @@ const containerStyle = {
     height: `calc(100vh - ${APPBAR_DESKTOP}px)`
 };
 
-const PaperStyle = styled(Card)(({ theme }) => ({
-    // padding:'.5rem',
+const OuterPaperStyle = styled(Paper)(({ theme }) => ({
+    [theme.breakpoints.up('sm')]: {
+        width: '500px',
+    },
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    paddingTop: '60px'
+}));
+
+const ImageList = styled('img')(({ theme }) => ({
+    width:'47%',
+    margin: '1% 1.5%',
+    display: 'inline-block',
     boxShadow: `${theme.shadows[3]} !important`,
     borderRadius: Number(theme.shape.borderRadius),
-    '& .MuiPaper-root.MuiPaper-elevation': {
-        boxShadow: 'none'
-    }
 }));
 
-const ImageIcon = styled('img')(({ theme }) => ({
-    width: '25px'
-}));
-
-const CrimeFormControl = styled(FormControl)(({ theme }) => ({
-    '& .MuiSelect-select.MuiSelect-outlined': {
-        // padding: '10.5px 14px'
-    },
-    '& .MuiSelect-select.MuiSelect-outlined .MuiListItemIcon-root': {
-        float: 'left',
-        minWidth: '40px',
-        marginTop: '5px'
-    }
-}));
-
-const ContentStyle = styled('div')(({ theme }) => ({
-    width: 480,
-    margin: 'auto',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-}));
-
-const HeaderStyle = styled('div')(({ theme }) => ({
-    margin: '2rem 2rem .6rem 2rem'
-}));
-
-
-const ViewReportMap = () => {
+const ViewReportMap = (props) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const theme = useTheme();
-
-    const [position, setPosition] = useState({
-        lat: -34.0497003659375,
-        lng: 18.4950855953125
+    const [detailToggleState, setDetailToggleState] = useState(false);
+    const [reportDetail, setReportDetail] = useState(null);
+    const [newViewport, setNewViewport] = useState({
+        lat:0,
+        lng:0
     })
 
-    const [currentLocation, setCurrentLocation] = useState({
-        lat: 1,
-        lng: 1
-    })
+    const detailToggleDrawer = (event) => {
+        setDetailToggleState(event);
+    };
 
-    // function showPosition(position) {
-    //     setCurrentLocation({
-    //         lat: position.coords.latitude,
-    //         lng: position.coords.longitude
-    //     })
-    // }
-    // navigator.geolocation.getCurrentPosition(showPosition)
+    let position = CurrentLocationCoordinates()
 
-    // useEffect(() => {
-    //     if(position.lat === 0 && position.lng === 0){
-    //         setTimeout(function(){
-    //             setPosition(currentLocation)
-    //             console.log(position)
-    //         },2000)
-            
-    //     }
-    // }, [currentLocation])
+    
 
     const { reports } = useSelector((state) => ({ ...state.report }));
 
     useEffect(() => {
         let query = '';
-        if(searchParams.get('location') !== null){
-            query += `location=${searchParams.get('location')}&`
+        if (searchParams.get('id')) {
+            query += `id=${searchParams.get('id')}`
+        } else {
+            if (searchParams.get('iahi') !== null && searchParams.get('iahi') !== "") {
+                query += `iahi=${searchParams.get('iahi')}&`
+            }
+            if (searchParams.get('ialo') !== null && searchParams.get('ialo') !== "") {
+                query += `ialo=${searchParams.get('ialo')}&`
+            }
+            if (searchParams.get('wahi') !== null && searchParams.get('wahi') !== "") {
+                query += `wahi=${searchParams.get('wahi')}&`
+            }
+            if (searchParams.get('walo') !== null && searchParams.get('walo') !== "") {
+                query += `walo=${searchParams.get('walo')}&`
+            }
+            if (searchParams.get('location') !== null && searchParams.get('location') !== "") {
+                query += `location=${searchParams.get('location')}&`
+            }
+            if (searchParams.get('crime') !== null && searchParams.get('crime') !== "") {
+                query += `crime=${searchParams.get('crime')}&`
+            }
+            if (searchParams.get('specific-crime') !== null && searchParams.get('specific-crime') !== "") {
+                query += `specific-crime=${searchParams.get('specific-crime')}`
+            }
+            
         }
-        if(searchParams.get('latitude')  !== null){
-            query += `latitude=${searchParams.get('latitude')}&`
-        }
-        if(searchParams.get('longitude')  !== null){
-            query += `longitude=${searchParams.get('longitude')}&`
-        }
-        if(searchParams.get('crime')  !== null){
-            query += `crime=${searchParams.get('crime')}&`
-        }
-        if(searchParams.get('specific-crime') !== null){
-            query += `specific-crime=${searchParams.get('specific-crime')}`
-        }
-        dispatch(getReportByArea({query}))
-
+        dispatch(getReportByArea({ query }))
+        
     }, [searchParams])
+
+    useEffect(() => {
+        if (searchParams.get('target') === 'single' && reports.data !== null && reports.data.length !== 0) {
+            setNewViewport({
+                lat : Number(reports.data[0].latitude),
+                lng : Number(reports.data[0].longitude)
+            })
+        }
+    }, [reports])
+
+    const reportDetails = (report) => {
+        setReportDetail(report)
+        setDetailToggleState(true)
+    }
+
+    const viewportPosition = (pos) => {
+        setNewViewport({
+            lat:pos.lat,
+            lng:pos.lng
+        })
+    }
+
+    const printDate = (created_at) => {
+        let objectDate = new Date(created_at);
+        return objectDate.getDate() + '/' + objectDate.getMonth() + '/' + objectDate.getFullYear()
+    }
 
     return (
         <>
-            <SearchFilter />
+            <Drawer
+                anchor="left"
+                open={detailToggleState}
+                onClose={() => detailToggleDrawer(false)}
+                sx={{ "& .MuiDrawer-paper" : {
+                    
+                    [theme.breakpoints.down('md')]: {
+                        width:'85%',
+                    },
+                }}}
+            >
+                <OuterPaperStyle>
+                    <Stack spacing={3}>
+                        <Typography component="h4" color="text.secondary">Address: </Typography>
+                        <Typography variant="h5" component="h5" sx={{marginTop:'0px !important'}}>
+                            { reportDetail && reportDetail.location }
+                        </Typography>
+                        <Box>
+                            <img style={{
+                                width: '50px',
+                                paddingRight: '8px',
+                                paddingTop: '4px',
+                                float: 'left'
+                            }}
+                                src={reportDetail && process.env.REACT_APP_API_URL + '/' + reportDetail.crime.icon_3d} />
+                            <Typography variant="h6" component="h6">
+                                {reportDetail && reportDetail.crime.name}
+                            </Typography>
+                            <Typography variant="body2" color="text.primary">
+                                {reportDetail && reportDetail.specific_crime.name}
+                            </Typography>
+                        </Box>
+                        <Typography component="h4" color="text.secondary">Description: <span style={{color: "#999999", fontSize: "13px", float: "right"}}>{reportDetail && printDate(reportDetail.created_at)}</span></Typography>
+                        <Typography variant="body2" sx={{marginTop:'0px !important'}}>                            
+                            {reportDetail && reportDetail.description}
+                        </Typography>
+                        <Box>
+                            <Typography component="h4" color="text.secondary">Images & Attachments: </Typography>
+                            {reportDetail ? reportDetail.report_images.map((image, index) => (
+                                <ImageList src={reportDetail && process.env.REACT_APP_API_URL + '/' + image.path} key={index} />
+                            )) : 
+                                <ImageList src={process.env.REACT_APP_API_URL + '/assets/image/no-image.jpg'} />
+                            }                            
+                        </Box>
+                    </Stack>
+                </OuterPaperStyle>
+            </Drawer>
+
+            <SearchFilter viewportPosition={viewportPosition} />
+            
             <GoogleMap
                 mapContainerStyle={containerStyle}
-                center={position}
-                zoom={5}
-                options={{
-                    fullscreenControl: false,
-                }}                
+                center={newViewport.lng == 0 ? position : newViewport}
+                zoom={7}
+                options={mapSettings}
             >
-                {reports && reports.map((report, index) => (
+                {reports.data && reports.data.map((report, index) => (
                     <Marker key={index}
                         position={{
                             lat: Number(report.latitude),
                             lng: Number(report.longitude)
                         }}
-                        // label={process.env.REACT_APP_API_URL+'/'+report.crime.icon_3d}
-                        icon={process.env.REACT_APP_API_URL+'/'+report.crime.icon_3d}
-                        
+                        icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
+                        onClick={() => { reportDetails(report) }}
+                        // onMouseOver={() => {console.log('mouse over')}}
+                        // onMouseDown={() => {console.log('mouse down')}}
+
                     />
                 ))}
-                
+
             </GoogleMap>
         </>
     )

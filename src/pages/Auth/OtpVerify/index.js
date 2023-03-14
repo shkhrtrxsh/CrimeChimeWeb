@@ -9,12 +9,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { otpVerify } from 'src/store/api/auth';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, Container, Typography, Card } from '@mui/material';
+import { Stack, Container, Typography, Card } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Page from '../../../components/Page';
-// components
-import Iconify from '../../../components/Iconify';
-import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
+
+import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { useEffect } from 'react';
 // ----------------------------------------------------------------------
 
@@ -27,7 +26,6 @@ const RootStyle = styled('div')(({ theme }) => ({
 const ContentStyle = styled('div')(({ theme }) => ({
   maxWidth: 480,
   margin: 'auto',
-  // minHeight: '100vh',
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
@@ -49,8 +47,6 @@ export default function OtpVerify() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const LoginSchema = Yup.object().shape({
     otp: Yup.string().required('Otp is required')
   });
@@ -59,7 +55,6 @@ export default function OtpVerify() {
 
   useEffect(() => {
     if(user !== null){
-      console.log(user)
       setValue("id", user.data.id)
       setValue("otp", user.data.otp)
     }else{
@@ -88,7 +83,7 @@ export default function OtpVerify() {
   };
 
   return (
-    <Page title="Login">
+    <Page title="Otp Verify">
       <RootStyle>
         <Container maxWidth="sm">
           <ContentStyle>
@@ -98,7 +93,7 @@ export default function OtpVerify() {
                   Otp Verification
                 </Typography>
                 <Typography variant="p">
-                  Lorem ipsum dolor sit amet consectetur. Aenean senectus id vel egestas ipsum mollis.
+                  Please enter the OTP send to your mobile number to login.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

@@ -10,6 +10,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import {useJsApiLoader } from '@react-google-maps/api';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import './style.css'
 
 // ----------------------------------------------------------------------
@@ -19,12 +21,16 @@ export default function App() {
   const [libraries] = useState(['places'])
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyApoj80RTzWkAIc_eswUmPogeoufErlNaw",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries: libraries,
   })
 
     if (!isLoaded) {
-        return 'is loaded'
+        return (
+          <Box sx={{ display: 'flex', marginTop: '40vh' }}>
+            <CircularProgress sx={{ margin:'auto'}} />
+          </Box>
+        )
     }
 
   return (

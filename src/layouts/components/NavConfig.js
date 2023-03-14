@@ -17,30 +17,14 @@ const navConfig = [
     icon: getIcon('eva:people-fill'),
   },
   {
-    title:'Role Permission',
+    title: 'role',
+    path: '/role',
     icon: getIcon('eva:lock-fill'),
-    children:[
-      {
-        title: 'role',
-        path: '/role',
-        icon: getIcon('eva:lock-fill'),
-      },
-      {
-        title: 'Permission Module',
-        path: '/permission-module',
-        icon: getIcon('eva:person-add-fill'),
-      },
-    ],    
   },
   {
-    title: 'service',
-    path: '/service',
-    icon: getIcon('eva:shopping-bag-fill'),
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: getIcon('eva:alert-triangle-fill'),
+    title: 'Reported Crime',
+    path: '/reports',
+    icon: getIcon('eva:lock-fill'),
   },
 ];
 

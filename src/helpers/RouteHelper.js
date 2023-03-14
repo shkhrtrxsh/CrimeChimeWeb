@@ -26,3 +26,10 @@ export const RoutePermissions = () => {
     return profile.data.routes
   }  
 }
+
+export const IsAdmin = () => {
+  const profile = JSON.parse(localStorage.getItem("profile"))
+  if(profile != null){
+    return profile.data.roles[0].id
+  }  
+}

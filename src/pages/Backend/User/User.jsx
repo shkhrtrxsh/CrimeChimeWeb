@@ -93,7 +93,7 @@ export default function User() {
     <Fragment>
       <BreadcrumbNavigator
         currentPage="User List" 
-        rightButton={{name: "add user", link: "/user/add"}} 
+        // rightButton={{name: "add user", link: "/user/add"}} 
       />
       <Card>
         <SearchInTable searchByParam={setSearchByParam} />
@@ -103,7 +103,7 @@ export default function User() {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell align="left">E-mail</TableCell>
-                {/* <TableCell align="left">Mobile</TableCell> */}
+                <TableCell align="left">Phone</TableCell>
                 <TableCell align="left">Roles</TableCell>
                 <TableCell align="left">Status</TableCell>
                 <TableCell align="right">Action</TableCell>
@@ -114,7 +114,7 @@ export default function User() {
                 <TableRow key={user.id}>
                   <TableCell component="th" scope="row">{user.name}</TableCell>
                   <TableCell align="left">{user.email}</TableCell>
-                  {/* <TableCell align="left">{user.mobile}</TableCell> */}
+                  <TableCell align="left">{user.phone}</TableCell>
                   <TableCell align="left">
                   { user.roles && user.roles.map((role, index) => (
                     <ActiveInactiveButton 
@@ -136,8 +136,7 @@ export default function User() {
                   </TableCell>                
                   <TableCell align="right">
                     <ActionOptions 
-                      delete_id={user.id} 
-                      edit_url={`/user/${user.id}/edit`}
+                      delete_id={user.id}
                       show_url={'/user/'+user.id} 
                       deleteAction={deleteOptionAction}
                     />

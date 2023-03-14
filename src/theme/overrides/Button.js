@@ -9,7 +9,6 @@ export default function Button(theme) {
           backgroundColor: theme.palette.secondary.main,
           color: theme.palette.common.black,
           '&:hover': {
-            boxShadow: 'none',
             backgroundColor: theme.palette.secondary.main,
             color: theme.palette.common.black,
             boxShadow: theme.customShadows.z12,

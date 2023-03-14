@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { GoogleMap, Marker} from '@react-google-maps/api';
-import { alpha, styled, useTheme } from '@mui/material/styles';
+import React, { useState, useEffect } from 'react';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import { styled } from '@mui/material/styles';
+import axios from 'axios';
 import {
     Stack,
     Container,
@@ -11,9 +12,10 @@ import {
     Select,
     MenuItem,
     ListItemIcon,
-    ListItemText
+    ListItemText,
+    Grid
 } from '@mui/material';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -23,12 +25,12 @@ import { addReport, getCrimes, getSpecificCrimesById } from 'src/store/api/repor
 import * as Yup from 'yup';
 import "yup-phone";
 
-import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
+import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { SaveButton } from 'src/components/Button';
-import { DRAWER_WIDTH, APPBAR_MOBILE, APPBAR_DESKTOP} from 'src/constants/theme'
+import { APPBAR_DESKTOP } from 'src/constants/theme'
 import UploadImage from 'src/components/UploadImage';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
-
+import { positionLatitude, positionLongitude, mapSettings, CurrentLocationCoordinates } from 'src/helpers/LocationHelper';
 
 
 const containerStyle = {
@@ -40,6 +42,10 @@ const PaperStyle = styled(Card)(({ theme }) => ({
     // padding:'.5rem',
     boxShadow: `${theme.shadows[3]} !important`,
     borderRadius: Number(theme.shape.borderRadius),
+    [theme.breakpoints.up('sm')]: {
+        height: `calc(100vh - ${APPBAR_DESKTOP}px)`,
+        overflowY: "auto",
+    },
     '& .MuiPaper-root.MuiPaper-elevation': {
         boxShadow: 'none'
     }
@@ -50,9 +56,6 @@ const ImageIcon = styled('img')(({ theme }) => ({
 }));
 
 const CrimeFormControl = styled(FormControl)(({ theme }) => ({
-    '& .MuiSelect-select.MuiSelect-outlined': {
-        // padding: '10.5px 14px'
-    },
     '& .MuiSelect-select.MuiSelect-outlined .MuiListItemIcon-root': {
         float: 'left',
         minWidth: '40px',
@@ -61,7 +64,6 @@ const CrimeFormControl = styled(FormControl)(({ theme }) => ({
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
-    width: 480,
     margin: 'auto',
     display: 'flex',
     justifyContent: 'center',
@@ -77,8 +79,9 @@ const AddReportMap = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const theme = useTheme();
-    
+    const clc = CurrentLocationCoordinates()
+    const [formattedAddress, setFormattedAddress] =useState(null)
+
     const [crime, setCrime] = useState('');
     const [specificCrime, setSpecificCrime] = useState('');
 
@@ -92,23 +95,19 @@ const AddReportMap = () => {
     useEffect(() => {
         let id = crime === '' ? 1 : crime;
         setSpecificCrime('');
-        dispatch(getSpecificCrimesById({id}))
+        dispatch(getSpecificCrimesById({ id }))
     }, [crime])
 
-    // const [map, setMap] = useState(/** @type google.maps.Map */(null))
     const [position, setPosition] = useState({
-        lat: 0,
-        lng: 0
+        lat: clc.lat,
+        lng: clc.lng
     })
 
-    const googleAutoComplete = (latitude, longitude, place_id, address) => {
-        console.log(latitude, longitude, place_id, address)
+    const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
         setValue('latitude', latitude);
         setValue('longitude', longitude);
         setValue('google_place_id', place_id);
         setValue('location', address);
-
-        console.log(address)
 
         setPosition({
             lat: latitude,
@@ -137,8 +136,8 @@ const AddReportMap = () => {
         google_place_id: '',
         crime: '',
         specific_crime: '',
-        files:{},
-        description:''
+        files: {},
+        description: ''
     };
 
     const methods = useForm({
@@ -155,45 +154,52 @@ const AddReportMap = () => {
     const onSubmit = (formValue) => {
         formValue.crime = crime
         formValue.specific_crime = specificCrime
+        console.log(formValue);
         dispatch(addReport({ formValue, navigate }))
     };
 
     const markerDragEnd = (e) => {
+        console.log(e)
         if (e !== null) {
             setValue('latitude', e.latLng.lat());
             setValue('longitude', e.latLng.lng());
+
+            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${e.latLng.lat()},${e.latLng.lng()}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`).then(response => {
+                console.log(response.data.results) 
+                setFormattedAddress(response.data.results[0].formatted_address)
+                setValue('google_place_id', response.data.results[0].place_id);
+                setValue('location', response.data.results[0].formatted_address);
+            })
         }
-        console.log(e.latLng.lat())
-        console.log(e.latLng.lng())
     }
 
     return (
-        <Container>
-            <Stack direction="row" spacing={2}>
+        <Grid container>
+            <Grid item md={4} xs={12}>
                 <ContentStyle>
                     <PaperStyle>
                         <HeaderStyle>
                             <Typography variant="h4">
-                                Add Crime Report
+                                Report now
                             </Typography>
                         </HeaderStyle>
                         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                             <Stack spacing={3}>
-                                <GoogleAutoComplete googleAutoComplete={googleAutoComplete} />
+                                <GoogleAutoComplete googleAutoComplete={googleAutoComplete} formattedAddress={formattedAddress} />
                                 <CrimeFormControl sx={{ m: 1, minWidth: 80 }}>
                                     <InputLabel id="demo-simple-select-autowidth-label">Select Crime Type</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-autowidth-label"
                                         id="demo-simple-select-autowidth"
                                         value={crime}
-                                        onChange={(value) => {setCrime(value.target.value)}}
+                                        onChange={(value) => { setCrime(value.target.value) }}
                                         fullWidth
                                         label="Select Crime Type"
                                     >
-                                        { crime_list && crime_list.map((crime, index) => (
-                                            <MenuItem value={crime.id} key={index}>                                                
+                                        {crime_list && crime_list.map((crime, index) => (
+                                            <MenuItem value={crime.id} key={index}>
                                                 <ListItemIcon>
-                                                    <ImageIcon src={process.env.REACT_APP_API_URL +'/'+ crime.icon} />
+                                                    <ImageIcon src={process.env.REACT_APP_API_URL + '/' + crime.icon_3d} />
                                                 </ListItemIcon>
                                                 <ListItemText>{crime.name}</ListItemText>
                                             </MenuItem>
@@ -206,11 +212,11 @@ const AddReportMap = () => {
                                         labelId="demo-simple-select-autowidth-label"
                                         id="demo-simple-select-autowidth"
                                         value={specificCrime}
-                                        onChange={(value) => {setSpecificCrime(value.target.value)}}
+                                        onChange={(value) => { setSpecificCrime(value.target.value) }}
                                         fullWidth
                                         label="Select Specific Crime"
                                     >
-                                        { specific_crime_list && specific_crime_list.map((crime, index) => (
+                                        {specific_crime_list && specific_crime_list.map((crime, index) => (
                                             <MenuItem value={crime.id} key={index}>
                                                 {crime.name}
                                             </MenuItem>
@@ -224,19 +230,19 @@ const AddReportMap = () => {
                             </Stack>
                             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
                                 <SaveButton fullWidth type="submit">
-                                    Save
+                                    Report
                                 </SaveButton>
                             </Stack>
                         </FormProvider>
                     </PaperStyle>
                 </ContentStyle>
+            </Grid>
+            <Grid item md={8} xs={12}>
                 <GoogleMap
                     mapContainerStyle={containerStyle}
                     center={position}
                     zoom={10}
-                    options={{
-                        fullscreenControl: false,
-                    }}
+                    options={mapSettings}
                 >
                     <Marker
                         position={position}
@@ -244,9 +250,8 @@ const AddReportMap = () => {
                         onDragEnd={markerDragEnd}
                     />
                 </GoogleMap>
-
-            </Stack>
-        </Container>
+            </Grid>
+        </Grid>
     )
 }
 

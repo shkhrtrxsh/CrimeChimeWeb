@@ -13,11 +13,7 @@ import { slugConvertor } from 'src/helpers/StringHelper';
 import Iconify from 'src/components/Iconify';
 
 // @mui
-import {  
-  Stack, 
-  Container,
-  Typography,
-  Button,
+import {
   Grid,
   IconButton, 
   InputAdornment,
@@ -30,13 +26,11 @@ import {
   ListItemText,
   Checkbox,
   Chip
-  
-
 } from '@mui/material';
 // components
 import BreadcrumbNavigator from 'src/components/BreadcrumbNavigator'
 
-import { FormProvider, RHFTextField, RHFCheckbox } from 'src/components/hook-form';
+import { FormProvider, RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function AddUser() {
@@ -61,12 +55,10 @@ export default function AddUser() {
     const {
       target: { value },
     } = event;
-    console.log(value)
     setUserRole(
       // On autofill we get a the stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
-    console.log(value)
   };
 
   const defaultValues = {

@@ -11,11 +11,11 @@ export const login = createAsyncThunk(
       try {
         const response = await API.post("/auth/login", formValue);
         if(response.data.status === 200){
-          toast.success("Otp Send");
+          toast.success("OTP Send");
           navigate("/auth/verify");
           return response.data;
         }
-        toast.error("Email Address and Password is invalid");
+        toast.error("Your account does not exist. Please register to report a crime.");
 
       } catch (err) {
         return rejectWithValue(err.response.data);
@@ -31,10 +31,10 @@ export const otpVerify = createAsyncThunk(
       const response = await API.post("/auth/otp-verify", formValue);
       if(response.data.status === 200){
         toast.success("Login Successfully");
-        navigate("/dashboard");
+        navigate("/");
         return response.data;
       }
-      toast.error("Email Address and Password is invalid");
+      toast.error("Your account does not exist. Please register to report a crime.");
 
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -48,11 +48,11 @@ export const register = createAsyncThunk(
     try {
       const response = await API.post("/auth/register", formValue);
       if(response.data.status === 200){
-        toast.success("Otp Send");
+        toast.success("OTP Send");
         navigate("/auth/verify");
         return response.data;
       }
-      toast.error("Email Address and Password is invalid");
+      toast.error("Something went wrong");
 
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -68,10 +68,10 @@ export const logout = createAsyncThunk(
       if(response.data.status === 200){
         toast.success(response.data.message);
         localStorage.clear();
-        navigate("/dashboard");
+        navigate("/");
         return response.data;
       }
-      toast.error("Email Address and Password is invalid");
+      toast.error("Your account did not logout successfully");
 
     } catch (err) {
       return rejectWithValue(err.response.data);
