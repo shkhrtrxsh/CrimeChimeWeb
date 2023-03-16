@@ -22,7 +22,16 @@ const MyReport = () => {
     useEffect(() => {
         dispatch(getMyReport({}))
     }, [])
+    const videoExtensions = ['.mpg', '.mp2', '.mpeg', '.mpe', '.mpv', '.mp4'] //you can add more extensions
+    let vistatus
 
+    const isVideo = (v) => {
+        videoExtensions.map((e) => {
+          vistatus = v.includes(e);
+        })
+      
+        return vistatus
+    };
 
 
     return (
@@ -37,11 +46,15 @@ const MyReport = () => {
                             {reports.data && reports.data.map((report, index) => (
                                 <Grid item md={6} xs={12} key={index}>
                                     <Card>
+                                    {report.report_image.path !== '' && report.report_image.path.toString().endsWith("png") || report.report_image.path.toString().endsWith("jpg") || report.report_image.path.toString().endsWith("jpeg")? (
                                         <CardMedia
                                             component="img"
                                             alt="green iguana"
                                             image={report.report_image ? process.env.REACT_APP_API_URL + '/' + report.report_image.path : process.env.REACT_APP_API_URL + '/assets/image/no-image.jpg'}
-                                        />
+                                        />) : (
+                                            <video className="VideoInput_video" width="100%" height="auto" controls src={report.report_image ? process.env.REACT_APP_API_URL + '/' + report.report_image.path : 'no video'} />
+                                        )
+                                    }
                                         <CardContent>
                                             <Typography gutterBottom variant="h5" component="div">
                                                 {report.location}

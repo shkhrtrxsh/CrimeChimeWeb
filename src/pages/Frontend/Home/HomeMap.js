@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { Fragment, useEffect} from 'react';
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import { Link } from 'react-router-dom';
 import { APPBAR_DESKTOP } from 'src/constants/theme'
 import { Box, Typography, Fab, Modal, Button } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import TableViewIcon from '@mui/icons-material/TableView';
+
 import AddIcon from '@mui/icons-material/Add';
 import { CurrentLocationCoordinates, mapSettings } from 'src/helpers/LocationHelper';
 import useResponsive from 'src/hooks/useResponsive';
 import { styled, useTheme } from '@mui/material/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { getReports, deleteReport, reportStatus} from 'src/store/api/report';
+import {SearchInTable} from 'src/components/Table';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ActiveInactiveButton } from 'src/components/Button';
+import { fDateTime } from 'src/utils/formatTime';
+
+import { 
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TablePagination,
+    TableHead,
+    TableRow,
+    Paper, 
+    Card,
+  } from '@mui/material';
+  import { getSearchQueryParams, setSearchQueryParams, recordPerPage } from 'src/helpers/SearchHelper';
 
 const containerStyle = {
     width: '100%',
@@ -32,25 +54,127 @@ const MapDivStyle = styled('div')(({ theme }) => ({
 }));
 
 
+
 const HomeMap = () => {
     const position = CurrentLocationCoordinates()
     const isDesktop = useResponsive('up', 'md');
     const [open, setOpen] = React.useState(true);
     const theme = useTheme()
+    const { reports } = useSelector((state) => ({ ...state.report }));
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const dispatch = useDispatch();
 
     const handleClose = () => setOpen(false);
+    const [hidden, setHidden] = React.useState(true);
+    const [displayPopUp, setDisplayPopUp] = React.useState(true);
+
+    const closePopUp = () => {
+        // setting key "seenPopUp" with value true into localStorage
+        localStorage.setItem("seenPopUp", true);
+        // setting state to false to not display pop-up
+        setDisplayPopUp(false);
+    };
+    useEffect(() => {
+        let returningUser = localStorage.getItem("seenPopUp");
+        setDisplayPopUp(!returningUser);
+    
+    }, []);
+    useEffect(() => {
+        const param = getSearchQueryParams(searchParams)
+        dispatch(getReports({param}))
+    },[searchParams]);
+
+    const setSearchByParam = (param) => {
+        navigate(`/reportshome?${param}`)
+    }
+    const handlePageChange = (event, onPage) => {
+        let param = setSearchQueryParams(searchParams, onPage)
+        navigate(`/reportshome?${param}`)
+    }
+    
+    const handleChangeRowsPerPage = (event) => {
+        let param = setSearchQueryParams(searchParams, 0, event.target.value)
+        navigate(`/reportshome?${param}`)
+    }
+    const reportDetails = (report) => {
+        navigate(`/reportscrime?target=single&id=${report.id}`)
+    }
 
     return (
         <>
+        {localStorage.getItem("_token") ?
+            <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'390px'}} onClick={() => setHidden(s => !s)}>
+                {!hidden ? <Fab
+                    size="medium"
+                    color="primary"
+                    aria-label="view report"
+                    title="Map view" 
+                    variant={isDesktop ? 'extended' : 'circular'}
+                    >
+                    <LocationOnIcon />
+                    {isDesktop &&
+                        <Typography component='h6'></Typography>
+                    }
+                </Fab>: <Fab
+                    size="medium"
+                    color="primary"
+                    aria-label="view report"
+                    title="Table view" 
+                    variant={isDesktop ? 'extended' : 'circular'}
+                    >
+                    <TableViewIcon />
+                    {isDesktop &&
+                        <Typography component='h6'></Typography>
+                    }
+                </Fab>}
+            </BoxButtonStyle>:''
+        }
+            <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'340px'}}>
+                <Fab
+                    size="medium"
+                    color="primary"
+                    aria-label="add report"
+                    title="add report"
+                    to="/report/add"
+                    component={Link}
+                    variant={isDesktop ? 'extended' : 'circular'}
+                >
+                    <AddIcon />
+                    {isDesktop &&
+                        <Typography component='h6'></Typography>
+                    }
+                </Fab>
+            </BoxButtonStyle>
+            <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'290px'}}>
+
+                <Fab
+                    size="medium"
+                    color="primary"
+                    aria-label="reported crimes"
+                    title="view crimes"
+                    to="/report"
+                    component={Link}
+                    variant={isDesktop ? 'extended' : 'circular'}
+                >
+                    <VisibilityIcon />
+                    {isDesktop &&
+                        <Typography component='h6' sx={{ marginLeft: '3px' }}></Typography>
+                    }
+                </Fab>
+                
+            </BoxButtonStyle>
             <Box sx={{
                 background: theme.palette.secondary.main,
                 textAlign: 'center',
                 padding: '40px'
-            }}>
+                }}>
                 <Typography variant='h5'>
                     Advertisment
                 </Typography>
+                
             </Box>
+            
             <Box sx={{ display: 'flex' }}>
                 <Box sx={{
                     background: theme.palette.secondary.main,
@@ -66,52 +190,89 @@ const HomeMap = () => {
                     </Typography>
                 </Box>
                 <MapDivStyle>
-                    <BoxButtonStyle>
-                        <Fab
-                            size="medium"
-                            color="primary"
-                            aria-label="add report"
-                            to="/report/add"
-                            component={Link}
-                            variant={isDesktop ? 'extended' : 'circular'}
+                    
+                    {!hidden ?(
+                        <Card>
+                            <SearchInTable searchByParam={setSearchByParam} />
+                                <TableContainer component={Paper}>
+                                    <Table aria-label="simple table">
+                                        <TableHead>
+                                        <TableRow>
+                                            <TableCell>Location</TableCell>
+                                            <TableCell align="left">Crime</TableCell>
+                                            <TableCell align="left">Specific Crime</TableCell>
+                                            <TableCell align="left">Reporter</TableCell>
+                                            <TableCell align="left">Status</TableCell>
+                                            <TableCell align="left">Created At</TableCell>
+                                            {/* <TableCell align="right">Action</TableCell> */}
+                                        </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                        {reports.data && reports.data.map((report) => (
+                                            <TableRow key={report.id}>
+                                            <TableCell component="th" scope="row">{report.location}</TableCell>
+                                            <TableCell align="left">{report.crime.name}</TableCell>
+                                            <TableCell align="left">{report.specific_crime.name}</TableCell>  
+                                            <TableCell align="left">{report.user.name}</TableCell>                  
+                                            <TableCell align="left">
+                                                <ActiveInactiveButton 
+                                                
+                                                status={report.status}
+                                                >
+                                                {report.status ? "Active" : "Inactive"}
+                                                </ActiveInactiveButton>
+                                            </TableCell>
+                                            <TableCell align="left">{fDateTime(report.created_at)}</TableCell>
+                                            
+                                            </TableRow>
+                                        ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                                <TablePagination
+                                    rowsPerPageOptions={recordPerPage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                    component="div"
+                                    count={reports.total}
+                                    rowsPerPage={reports.per_page}
+                                    page={reports.current_page - 1}
+                                    onPageChange={handlePageChange}
+                                />
+                        </Card>
+                        )
+                        : (
+                            <GoogleMap
+                            mapContainerStyle={containerStyle}
+                            center={position}
+                            zoom={10}
+                            options={mapSettings}
                         >
-                            <AddIcon />
-                            {isDesktop &&
-                                <Typography component='h6'>Report Crime</Typography>
-                            }
-                        </Fab>
-                        <Fab
-                            size="medium"
-                            color="primary"
-                            aria-label="reported crimes"
-                            to="/report"
-                            component={Link}
-                            variant={isDesktop ? 'extended' : 'circular'}
-                        >
-                            <VisibilityIcon />
-                            {isDesktop &&
-                                <Typography component='h6' sx={{ marginLeft: '3px' }}>View Crime</Typography>
-                            }
-                        </Fab>
-                    </BoxButtonStyle>
-                    <GoogleMap
-                        mapContainerStyle={containerStyle}
-                        center={position}
-                        zoom={10}
-                        options={mapSettings}
-                    >
-                        <Marker
-                            position={position}
-                        />
-                    </GoogleMap>
+                            {localStorage.getItem("_token") && reports.data && reports.data.map((report, index) => (
+                                <Marker key={index}
+                                    position={{
+                                        lat: Number(report.latitude),
+                                        lng: Number(report.longitude)
+                                    }}
+                                    icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
+                                    onClick={() => { reportDetails(report) }}
+                                    // onMouseOver={() => {console.log('mouse over')}}
+                                    // onMouseDown={() => {console.log('mouse down')}}
+
+                                />
+                            ))} 
+                            
+                        </GoogleMap>
+                        )
+                    }
                 </MapDivStyle>
             </Box>
-            <Modal
+            {displayPopUp && (<Modal
                 keepMounted
                 open={open}
+                onClose={closePopUp}
                 aria-labelledby="keep-mounted-modal-title"
                 aria-describedby="keep-mounted-modal-description"
-            >
+                >
                 <Box sx={{
                     position: 'absolute',
                     top: '50%',
@@ -138,11 +299,11 @@ const HomeMap = () => {
                             margin: "auto",
                             display: "block"
                         }}
-                        onClick={handleClose}
+                        onClick={closePopUp}
                     >I understand</Button>
                     </Box>
                 </Box>
-            </Modal>
+            </Modal>)}
         </>
     )
 }

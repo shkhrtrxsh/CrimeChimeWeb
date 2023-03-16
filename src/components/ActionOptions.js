@@ -25,7 +25,7 @@ const ActionOptions = (props) => {
     status: false, 
     id: null 
   });
-  const {delete_id, edit_url, show_url, extra_url} = props;
+  const {delete_id, edit_url, show_url, extra_url, add_note} = props;
 
   useEffect(() => {
     props.deleteAction(openDialog)
@@ -79,6 +79,17 @@ const ActionOptions = (props) => {
         </LinkToEdit>
       </MenuItem>
       : '' }
+
+        {add_note !== undefined ? 
+        <MenuItem sx={{ color: 'text.secondary' }}>
+            <LinkToEdit to={add_note}>
+            <ListItemIcon>
+                <Iconify icon="clarity:plus-line" sx={{fontSize : 22}} />
+            </ListItemIcon>
+            <ListItemText primary="Add Note" primaryTypographyProps={{ variant: 'body2' }} />
+            </LinkToEdit>
+        </MenuItem>
+        : '' }
 
       {extra_url !== undefined ? 
         <MenuItem sx={{ color: 'text.secondary' }}>

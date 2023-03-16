@@ -10,6 +10,7 @@ import Role from '../pages/Backend/Role/Role'
 import EditRole from 'src/pages/Backend/Role/EditRole';
 //Report
 import Report from '../pages/Backend/Report/Report'
+import Addnote from '../pages/Backend/Report/Addnote';
 
 
 
@@ -49,6 +50,10 @@ const BackendPrivateRoutes = [
     {
         path: 'reports', 
         element: <Report />
+    },
+    {
+        path: 'add_not/:id',
+        element: <Addnote />
     },
 ]
 

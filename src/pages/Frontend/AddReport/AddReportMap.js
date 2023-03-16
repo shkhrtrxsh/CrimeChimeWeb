@@ -29,6 +29,7 @@ import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { SaveButton } from 'src/components/Button';
 import { APPBAR_DESKTOP } from 'src/constants/theme'
 import UploadImage from 'src/components/UploadImage';
+import UploadVideo from 'src/components/UploadVideo';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { positionLatitude, positionLongitude, mapSettings, CurrentLocationCoordinates } from 'src/helpers/LocationHelper';
 
@@ -120,6 +121,10 @@ const AddReportMap = () => {
         setValue('files', files)
     }
 
+    const addvFileHandler = (vfiles) => {
+        setValue('vfiles', vfiles)
+    }
+
     const LoginSchema = Yup.object().shape({
         location: Yup.string().required('Crime location is required'),
         // position: Yup.string().required('Position is required'),
@@ -137,6 +142,7 @@ const AddReportMap = () => {
         crime: '',
         specific_crime: '',
         files: {},
+        vfiles: {},
         description: ''
     };
 
@@ -225,6 +231,8 @@ const AddReportMap = () => {
                                 </FormControl>
                                 <FormControl>
                                     <UploadImage addFiles={addFileHandler} />
+                                    <UploadVideo addFiles={addvFileHandler} />
+
                                 </FormControl>
                                 <RHFTextField name="description" label="Enter Description" multiline />
                             </Stack>

@@ -17,6 +17,26 @@ import { APPBAR_DESKTOP } from 'src/constants/theme'
 import SearchFilter from './SearchFilter';
 import { mapSettings } from 'src/helpers/LocationHelper';
 import { Box } from '@mui/system';
+import {SearchInTable} from 'src/components/Table';
+import { useNavigate } from 'react-router-dom';
+import { ActiveInactiveButton } from 'src/components/Button';
+import { fDateTime } from 'src/utils/formatTime';
+import useResponsive from 'src/hooks/useResponsive';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import TableViewIcon from '@mui/icons-material/TableView';
+
+import { 
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TablePagination,
+    TableHead,
+    TableRow,
+    Card,
+    Fab,
+  } from '@mui/material';
+  import { getSearchQueryParams, setSearchQueryParams, recordPerPage } from 'src/helpers/SearchHelper';
 
 
 
@@ -52,15 +72,35 @@ const ViewReportMap = (props) => {
         lat:0,
         lng:0
     })
+    const navigate = useNavigate();
 
+    const setSearchByParam = (param) => {
+        navigate(`/reportscrime?${param}`)
+    }
+    const handlePageChange = (event, onPage) => {
+        let param = setSearchQueryParams(searchParams, onPage)
+        navigate(`/reportscrime?${param}`)
+    }
+    
+    const handleChangeRowsPerPage = (event) => {
+        let param = setSearchQueryParams(searchParams, 0, event.target.value)
+        navigate(`/reportscrime?${param}`)
+    }
     const detailToggleDrawer = (event) => {
         setDetailToggleState(event);
     };
 
     let position = CurrentLocationCoordinates()
 
+    const BoxButtonStyle = styled(Box)(({ theme }) => ({
+        position: 'absolute',
+        right: '15px',
+        top: APPBAR_DESKTOP + 15 + 'px',
+        '& .MuiButtonBase-root.MuiFab-root': {
+            marginRight: '10px'
+        }
+    }));
     
-
     const { reports } = useSelector((state) => ({ ...state.report }));
 
     useEffect(() => {
@@ -87,7 +127,10 @@ const ViewReportMap = (props) => {
                 query += `crime=${searchParams.get('crime')}&`
             }
             if (searchParams.get('specific-crime') !== null && searchParams.get('specific-crime') !== "") {
-                query += `specific-crime=${searchParams.get('specific-crime')}`
+                query += `specific-crime=${searchParams.get('specific-crime')}&`
+            }
+            if (searchParams.get('specific-time') !== null && searchParams.get('specific-time') !== "") {
+                query += `specific-time=${searchParams.get('specific-time')}`
             }
             
         }
@@ -101,6 +144,8 @@ const ViewReportMap = (props) => {
                 lat : Number(reports.data[0].latitude),
                 lng : Number(reports.data[0].longitude)
             })
+            setReportDetail(reports.data[0])
+            setDetailToggleState(true)
         }
     }, [reports])
 
@@ -120,80 +165,175 @@ const ViewReportMap = (props) => {
         let objectDate = new Date(created_at);
         return objectDate.getDate() + '/' + objectDate.getMonth() + '/' + objectDate.getFullYear()
     }
+    const [hidden, setHidden] = React.useState(true);
+    const isDesktop = useResponsive('up', 'md');
 
     return (
         <>
-            <Drawer
-                anchor="left"
-                open={detailToggleState}
-                onClose={() => detailToggleDrawer(false)}
-                sx={{ "& .MuiDrawer-paper" : {
-                    
-                    [theme.breakpoints.down('md')]: {
-                        width:'85%',
-                    },
-                }}}
-            >
-                <OuterPaperStyle>
-                    <Stack spacing={3}>
-                        <Typography component="h4" color="text.secondary">Address: </Typography>
-                        <Typography variant="h5" component="h5" sx={{marginTop:'0px !important'}}>
-                            { reportDetail && reportDetail.location }
-                        </Typography>
-                        <Box>
-                            <img style={{
-                                width: '50px',
-                                paddingRight: '8px',
-                                paddingTop: '4px',
-                                float: 'left'
-                            }}
-                                src={reportDetail && process.env.REACT_APP_API_URL + '/' + reportDetail.crime.icon_3d} />
-                            <Typography variant="h6" component="h6">
-                                {reportDetail && reportDetail.crime.name}
-                            </Typography>
-                            <Typography variant="body2" color="text.primary">
-                                {reportDetail && reportDetail.specific_crime.name}
-                            </Typography>
-                        </Box>
-                        <Typography component="h4" color="text.secondary">Description: <span style={{color: "#999999", fontSize: "13px", float: "right"}}>{reportDetail && printDate(reportDetail.created_at)}</span></Typography>
-                        <Typography variant="body2" sx={{marginTop:'0px !important'}}>                            
-                            {reportDetail && reportDetail.description}
-                        </Typography>
-                        <Box>
-                            <Typography component="h4" color="text.secondary">Images & Attachments: </Typography>
-                            {reportDetail ? reportDetail.report_images.map((image, index) => (
-                                <ImageList src={reportDetail && process.env.REACT_APP_API_URL + '/' + image.path} key={index} />
-                            )) : 
-                                <ImageList src={process.env.REACT_APP_API_URL + '/assets/image/no-image.jpg'} />
-                            }                            
-                        </Box>
-                    </Stack>
-                </OuterPaperStyle>
-            </Drawer>
-
-            <SearchFilter viewportPosition={viewportPosition} />
             
-            <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={newViewport.lng == 0 ? position : newViewport}
-                zoom={7}
-                options={mapSettings}
-            >
-                {reports.data && reports.data.map((report, index) => (
-                    <Marker key={index}
-                        position={{
-                            lat: Number(report.latitude),
-                            lng: Number(report.longitude)
-                        }}
-                        icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
-                        onClick={() => { reportDetails(report) }}
-                        // onMouseOver={() => {console.log('mouse over')}}
-                        // onMouseDown={() => {console.log('mouse down')}}
+            <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'385px'}} onClick={() => setHidden(s => !s)}>
+                {!hidden ? 
+                    <Fab
+                        size="medium"
+                        color="primary"
+                        aria-label="view report"
+                        title="Map view" 
+                        variant={isDesktop ? 'extended' : 'circular'}
+                        >
+                        <LocationOnIcon />
+                        {isDesktop &&
+                            <Typography component='h6'></Typography>
+                        }
+                    </Fab>
+                    : 
+                    <Fab
+                        size="medium"
+                        color="primary"
+                        aria-label="view report"
+                        title="Table view" 
+                        variant={isDesktop ? 'extended' : 'circular'}
+                        >
+                        <TableViewIcon />
+                        {isDesktop &&
+                            <Typography component='h6'></Typography>
+                        }
+                    </Fab>
+                }
+            </BoxButtonStyle>
+            {!hidden ?(
+                        <Card>
+                            <SearchInTable searchByParam={setSearchByParam} />
+                                <TableContainer component={Paper}>
+                                    <Table aria-label="simple table">
+                                        <TableHead>
+                                        <TableRow>
+                                            <TableCell>Location</TableCell>
+                                            <TableCell align="left">Crime</TableCell>
+                                            <TableCell align="left">Specific Crime</TableCell>
+                                            <TableCell align="left">Reporter</TableCell>
+                                            <TableCell align="left">Status</TableCell>
+                                            <TableCell align="left">Created At</TableCell>
+                                            {/* <TableCell align="right">Action</TableCell> */}
+                                        </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                        {reports.data && reports.data.map((report) => (
+                                            <TableRow key={report.id}>
+                                            <TableCell component="th" scope="row">{report.location}</TableCell>
+                                            <TableCell align="left">{report.crime.name}</TableCell>
+                                            <TableCell align="left">{report.specific_crime.name}</TableCell>  
+                                            <TableCell align="left">{report.user.name}</TableCell>                  
+                                            <TableCell align="left">
+                                                <ActiveInactiveButton 
+                                                
+                                                status={report.status}
+                                                >
+                                                {report.status ? "Active" : "Inactive"}
+                                                </ActiveInactiveButton>
+                                            </TableCell>
+                                            <TableCell align="left">{fDateTime(report.created_at)}</TableCell>
+                                            
+                                            </TableRow>
+                                        ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                                <TablePagination
+                                    rowsPerPageOptions={recordPerPage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                    component="div"
+                                    count={reports.total}
+                                    rowsPerPage={reports.per_page}
+                                    page={reports.current_page - 1}
+                                    onPageChange={handlePageChange}
+                                />
+                        </Card>
+                    )
+                    : (
+                        <>
+                        <SearchFilter viewportPosition={viewportPosition} />
+                        
+                        <Drawer
+                            anchor="left"
+                            open={detailToggleState}
+                            onClose={() => detailToggleDrawer(false)}
+                            sx={{ "& .MuiDrawer-paper" : {
+                                
+                                [theme.breakpoints.down('md')]: {
+                                    width:'85%',
+                                },
+                            }}}
+                        >
+                            <OuterPaperStyle>
+                                <Stack spacing={3}>
+                                    <Typography component="h4" color="text.secondary">Address: </Typography>
+                                    <Typography variant="h5" component="h5" sx={{marginTop:'0px !important'}}>
+                                        { reportDetail && reportDetail.location }
+                                    </Typography>
+                                    <Box>
+                                        <img style={{
+                                            width: '50px',
+                                            paddingRight: '8px',
+                                            paddingTop: '4px',
+                                            float: 'left'
+                                        }}
+                                            src={reportDetail && process.env.REACT_APP_API_URL + '/' + reportDetail.crime.icon_3d} />
+                                        <Typography variant="h6" component="h6">
+                                            {reportDetail && reportDetail.crime.name}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.primary">
+                                            {reportDetail && reportDetail.specific_crime.name}
+                                        </Typography>
+                                    </Box>
+                                    <Typography component="h4" color="text.secondary">Description: <span style={{color: "#999999", fontSize: "13px", float: "right"}}>{reportDetail && printDate(reportDetail.created_at)}</span></Typography>
+                                    <Typography variant="body2" sx={{marginTop:'0px !important'}}>                            
+                                        {reportDetail && reportDetail.description}
+                                    </Typography>
+                                    <Box>
+                                        <Typography component="h4" color="text.secondary">Images & Attachments: </Typography>
+                                        {reportDetail ? reportDetail.report_images.map((image, index) => (
+                                            
+                                            image.path !== '' && image.path.toString().endsWith("png") || image.path.toString().endsWith("jpeg") || image.path.toString().endsWith("jpg") ? (
+                                                <ImageList width="100%" src={reportDetail && process.env.REACT_APP_API_URL + '/' + image.path} key={index} />
+                                            ) : (
+                                                <video className="VideoInput_video" width="60%" height="auto" controls src={image.path ? process.env.REACT_APP_API_URL + '/' + image.path : 'no video'} />
+                                            )
+                                            
+                                        )) : 
+                                            <ImageList src={process.env.REACT_APP_API_URL + '/assets/image/no-image.jpg'} />
+                                        }                            
+                                    </Box>
+                                </Stack>
+                            </OuterPaperStyle>
+                        </Drawer>
 
-                    />
-                ))}
+                        <GoogleMap
+                            mapContainerStyle={containerStyle}
+                            center={newViewport.lng == 0 ? position : newViewport}
+                            zoom={7}
+                            options={mapSettings}
+                        >
+                            {reports.data && reports.data.map((report, index) => (
+                                <Marker key={index}
+                                    position={{
+                                        lat: Number(report.latitude),
+                                        lng: Number(report.longitude)
+                                    }}
+                                    icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
+                                    onClick={() => { reportDetails(report) }}
+                                    // onMouseOver={() => {console.log('mouse over')}}
+                                    // onMouseDown={() => {console.log('mouse down')}}
 
-            </GoogleMap>
+                                />
+                            ))}
+
+                        </GoogleMap>
+                        </>
+
+                        
+                    )
+            }
+            
         </>
     )
 }

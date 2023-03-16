@@ -15,7 +15,7 @@ export const addReport = createAsyncThunk(
           navigate("/report?target=single&id="+response.data.data.id);
           return response.data;
         }
-        toast.error("Something wrong in report");
+        toast.error(response.data.message);
 
       } catch (err) {
         return rejectWithValue(err.response.data);
@@ -55,6 +55,20 @@ export const getReports = createAsyncThunk(
   }
 );
 
+export const reportshome = createAsyncThunk(
+  "reportshome",
+  async ({param, id}, { rejectWithValue }) => {
+    try {
+      const response = await API.get(`/report?${param}`);
+      if(response.data.status === 200){
+        return response.data.data;
+      }
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const showReport = createAsyncThunk(
   "report/show",
   async ({ id, by }, { rejectWithValue }) => {
@@ -80,6 +94,51 @@ export const deleteReport = createAsyncThunk(
       }
       toast.error("Something wrong in report");
 
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const get_note = createAsyncThunk(
+  "get_note",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await API.get("/report/get_note/"+id);
+      if(response.data.status === 200){
+        return response.data;
+      }
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const addNote = createAsyncThunk(
+  "add_note",
+  async ({ formValue, id,navigate }, { rejectWithValue }) => {
+    try {
+      
+      const response = await API.post("report/add_not/"+id, formValue);
+      if(response.data.status === 200){
+        toast.success(response.data.message);
+        navigate("/reports");
+        return response.data;
+      }
+      toast.error("Something wrong in report");
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const verifyToken = createAsyncThunk(
+  "verify_token",
+  async ({token }, { rejectWithValue }) => {
+    try {
+      let datatoken = {token: token}
+      const response = await API.post("/auth/verify_token", datatoken);
+      return response.data.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
