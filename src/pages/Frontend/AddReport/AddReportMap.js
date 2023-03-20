@@ -94,7 +94,7 @@ const AddReportMap = () => {
     }, [])
 
     useEffect(() => {
-        let id = crime === '' ? 1 : crime;
+        let id = crime === '' ? 0 : crime;
         setSpecificCrime('');
         dispatch(getSpecificCrimesById({ id }))
     }, [crime])
