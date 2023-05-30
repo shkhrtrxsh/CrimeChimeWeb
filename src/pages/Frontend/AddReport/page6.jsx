@@ -4,6 +4,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import NextButton from 'src/components/Button/NextButton';
 
 
 function Page6() {
@@ -103,11 +104,11 @@ function Page6() {
       </Container>
       <div className=''>
        <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-48 mt-40">
-       <Typography variant="h6">GO BACK</Typography>
+       <NextButton nextLink="/page5" textValue="Back"/>
        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">#3/15</Typography>
+        <Typography variant="h6">#6/16</Typography>
         <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">Next</Typography>
+        <NextButton nextLink="/page7" textValue="Next"/>
         
       </Box>
        <ProgressBar activeStep="3" />

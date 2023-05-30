@@ -6,6 +6,7 @@ import ak from '../../../assets/images/ak.png'
 import pistol from '../../../assets/images/pistol.png'
 import knife from '../../../assets/images/knife.png'
 import others from '../../../assets/images/others.png'
+import NextButton from 'src/components/Button/NextButton';
 
 function Page4() {
   const ProgressBar = ({ activeStep }) => {
@@ -123,11 +124,11 @@ function Page4() {
       </Container>
       <div className=''>
        <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-16 mt-10">
-       <Typography variant="h6">GO BACK</Typography>
+       <NextButton nextLink="/page3" textValue="Back"/>
        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">#3/15</Typography>
+        <Typography variant="h6">#4/16</Typography>
         <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">Next</Typography>
+        <NextButton nextLink="/page5" textValue="Next"/>
         
       </Box>
        <ProgressBar activeStep="3" />

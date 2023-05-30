@@ -3,6 +3,7 @@ import { Container, Typography, Grid, Box , Divider, LinearProgress, Checkbox } 
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
+import NextButton from 'src/components/Button/NextButton';
 
 function Page16() {
   const [value, setValue] = useState(0);
@@ -83,11 +84,10 @@ function Page16() {
       </Container>
       <div className=''>
        <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-20 mt-10">
-       <Typography variant="h6">GO BACK</Typography>
+       <NextButton nextLink="/page15" textValue="Back"/>
        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
         <Typography variant="h6">#16/16</Typography>
         <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">Next</Typography>
         
       </Box>
        <ProgressBar activeStep="16" />
