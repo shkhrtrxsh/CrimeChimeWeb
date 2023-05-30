@@ -21,9 +21,10 @@ const EditProfile = () => {
     const navigate = useNavigate();
 
     const { user } = useSelector((state) => ({ ...state.user }));
+    const phoneRegExp = new RegExp('[0-9]{10}');
   
     const LoginSchema = Yup.object().shape({
-      phone: Yup.string().phone().required().required('Phone number is required'),
+      phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
       name: Yup.string().required('Username is required'),
       email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     });

@@ -7,15 +7,16 @@ import axios from "axios";
 //   baseURL: `${devEnv ? REACT_APP_DEV_API : REACT_APP_PROD_API}`,
 // });
 
-const API = axios.create({baseURL: `${process.env.REACT_APP_API_URL}/api`});
+const API = axios.create({ baseURL: `${process.env.REACT_APP_API_URL}/api` });
+// const API = axios.create({ baseURL: `http://127.0.0.1:8000/api` });
 
 API.interceptors.request.use((req) => {
-  if (localStorage.getItem("_token")) {
-    req.headers.Authorization = `Bearer ${
+    if (localStorage.getItem("_token")) {
+        req.headers.Authorization = `Bearer ${
       localStorage.getItem("_token")
     }`;
-  }
-  return req;
+    }
+    return req;
 });
 
 

@@ -121,7 +121,8 @@ export default function Report() {
                   <TableCell align="right">
                     <ActionOptions 
                       delete_id={report.id}
-                      show_url={'/report?target=single&id='+report.id} 
+                      show_url={'/report?target=single&id='+report.id}
+                      add_note={'/add_not/'+report.id}
                       deleteAction={deleteOptionAction}
                     />
                   </TableCell>

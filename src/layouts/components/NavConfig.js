@@ -16,11 +16,11 @@ const navConfig = [
     path: '/user',
     icon: getIcon('eva:people-fill'),
   },
-  {
-    title: 'role',
-    path: '/role',
-    icon: getIcon('eva:lock-fill'),
-  },
+  // {
+  //   title: 'role',
+  //   path: '/role',
+  //   icon: getIcon('eva:lock-fill'),
+  // },
   {
     title: 'Reported Crime',
     path: '/reports',

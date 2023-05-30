@@ -115,7 +115,7 @@ export default function HeaderMenu(props) {
                             : ''
                         }
                         <LinkButton
-                            to="/report"
+                            to="/reportscrime"
                             activeclassname="active"
                         >
                             View Crime
@@ -187,7 +187,7 @@ export default function HeaderMenu(props) {
                                     User Profile
                                 </LinkDrawerButton>
                                 <LinkDrawerButton
-                                    to="/report"
+                                    to="/reportscrime"
                                     onClick={handleDrawerClose}
                                     activeclassname="active"
                                 >

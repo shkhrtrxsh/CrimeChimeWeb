@@ -64,6 +64,7 @@ export default function SearchFilter(props) {
     const [state, setState] = React.useState(false);
     const [crime, setCrime] = useState('');
     const [specificCrime, setSpecificCrime] = useState('');
+    const [specificTime, setSpecificTime] = useState('');
     const [address, setAddress] = useState('');
     const [searchParams] = useSearchParams();
     const [viewport, setViewport] = useState(null)
@@ -115,13 +116,16 @@ export default function SearchFilter(props) {
         let url = '';
 
         if (viewport !== null) {
-            url += `iahi=${viewport.Ia.hi}&ialo=${viewport.Ia.lo}&wahi=${viewport.Wa.hi}&walo=${viewport.Wa.lo}&`
+            url += `iahi=${viewport.Ja.hi}&ialo=${viewport.Ja.lo}&wahi=${viewport.Va.hi}&walo=${viewport.Va.lo}&`
         }
         if (crime !== null) {
             url += `crime=${crime}&`
         }
         if (specificCrime !== null) {
             url += `specific-crime=${specificCrime}&`
+        }
+        if (specificTime !== null) {
+            url += `specific-time=${specificTime}&`
         }
         if (address !== null) {
             url += `location=${address}&`
@@ -143,9 +147,14 @@ export default function SearchFilter(props) {
         setSpecificCrime(e.target.value)
     }
 
+    const specificTimeHandle = (e) => {
+        setSpecificTime(e.target.value)
+    }
+
     const clearSearchHandler = () => {
         setCrime('')
         setSpecificCrime('')
+        setSpecificTime('')
         setAddress('')
         navigate(`/report`, { replace: true })
     }
@@ -176,12 +185,8 @@ export default function SearchFilter(props) {
                     <MenuIcon />
                 </Fab>
             </BoxButtonStyle>
-
-            <Drawer
-                anchor="right"
-                open={state}
-                onClose={() => toggleDrawer(false)}
-            >
+            
+            <Drawer anchor="right" open={state} onClose={() => toggleDrawer(false)} >
                 <OuterPaperStyle>
                     <Stack spacing={3}>
                         <Typography variant="h4" component="h4" sx={{
@@ -228,6 +233,30 @@ export default function SearchFilter(props) {
                                 ))}
                             </Select>
                         </FormControl>
+
+                        <FormControl sx={{ m: 1, minWidth: 80 }}>
+                            <InputLabel id="demo-simple-select-autowidth-label">Select Time </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-autowidth-label"
+                                id="demo-simple-select-autowidth"
+                                value={specificTime}
+                                onChange={specificTimeHandle}
+                                fullWidth
+                                label="Select Specific Time"
+                            >
+                                <MenuItem value="week" key="1">
+                                    Week
+                                </MenuItem>
+                                <MenuItem value="month" key="2">
+                                    Month
+                                </MenuItem>
+                                <MenuItem value="year" key="3">
+                                    Year
+                                </MenuItem>
+                                
+                            </Select>
+                        </FormControl>
+
                         <Stack direction="row" spacing={2} sx={{marginTop:'30px !important'}}>
                             <Button
                                 sx={{
@@ -255,8 +284,8 @@ export default function SearchFilter(props) {
                         </Stack>
                     </Stack>
                 </OuterPaperStyle>
-
             </Drawer>
+            
         </React.Fragment>
     );
 }

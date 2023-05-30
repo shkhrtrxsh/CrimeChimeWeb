@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useDispatch } from 'react-redux';
 import { login } from 'src/store/api/auth';
+import { verifyToken } from 'src/store/api/report';
 // @mui
 import { Link, Stack, Container, Typography, Card } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -15,12 +16,18 @@ import Page from '../../../components/Page';
 
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 // ----------------------------------------------------------------------
+import React, { useState,useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import axios from 'axios';
+import  API from "../../../config/api";
+import { toast } from "react-toastify";
 
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     display: 'flex',
   },
 }));
+
 
 const ContentStyle = styled('div')(({ theme }) => ({
   maxWidth: 480,
@@ -46,6 +53,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
+  const captchaRef = useRef(null);
 
   const LoginSchema = Yup.object().shape({
     phone: Yup.string().matches("^[0-9]*$", 'Phone number is not valid').required('Phone number is required').min(10, "Phone number is not valid")
@@ -67,7 +75,20 @@ export default function Login() {
   } = methods;
 
   const onSubmit = (formValue) => {
-    dispatch(login({formValue, navigate}))
+      // let token = captchaRef.current.getValue();
+
+      // if(token){
+      //     dispatch(verifyToken({token})).then((response)=>{
+      //     if(response.payload.success == true){
+            
+      //     }else{
+      //       toast.error("Something wrong!");
+      //     }
+      //   })
+      // }else{
+      //   toast.error("Something wrong!");
+      // }
+      dispatch(login({formValue, navigate}))
   };
 
   return (
@@ -90,6 +111,9 @@ export default function Login() {
                     name="phone" 
                     label="Phone Number"
                   />
+                </Stack><br></br>
+                <Stack spacing={3}>
+                {/* <ReCAPTCHA sitekey={process.env.REACT_APP_SITE_KEY} ref={captchaRef}  /> */}
                 </Stack>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>

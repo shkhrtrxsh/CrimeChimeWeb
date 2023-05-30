@@ -29,11 +29,11 @@ const ImageCard = styled(Card)(({ theme }) => ({
 }));
 
 
-const UploadImage = (props) => {
+const UploadVideo = (props) => {
     const dispatch = useDispatch()
-    const [files, setFiles] = useState([])
+    const [vfiles, setFiles] = useState([])
     const { getRootProps, getInputProps } = useDropzone({
-        accept: ".png,.jpg,.jpeg",
+        accept: ".mkv,.mp4",
         onDrop: (acceptedFiles) => {
             let newFile = acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file),
@@ -43,36 +43,30 @@ const UploadImage = (props) => {
     });
 
     function removeImage(index) {
-        setFiles(file => file.filter((s,i)=>(i != index)))
+        setFiles(vfiles => vfiles.filter((s,i)=>(i != index)))
     }
 
     useEffect(() => {
-        props.addFiles(files)
-    }, [files])
+        props.addFiles(vfiles)
+    }, [vfiles])
 
     return (
         <DropzoneStyle>
             <DropzoneUploadCard {...getRootProps()}>
-                <input {...getInputProps()} accept=".png,.jpg,.jpeg" />
+                <input {...getInputProps()} />
                 <p>
-                    Upload your Image
+                    Upload your Video
                 </p>
             </DropzoneUploadCard>
             <Card sx={{ marginTop: '10px' }}>{
-                files.map((file, index) => (
+                vfiles.map((vfiles, index) => (
                     <ImageCard key={index}>
-                        <IconButton
-                            aria-label="delete"
-                            sx={{
-                                position: 'absolute',
-                                right: 0,
-                                top: 0
-                            }}
-                            onClick={() => removeImage(index)}
-                        >
-                            <DeleteIcon />
+                        <DeleteIcon onClick={() => removeImage(index)} />
+                        <IconButton aria-label="delete" sx={{ position: 'absolute', right: 0, top: 0 }} >
                         </IconButton>
-                        <img src={file.preview} style={{ width: '100%', height: "auto" }} />
+
+                        <video className="VideoInput_video" width="100%" height="auto" controls src={vfiles.preview} />
+                        {/* <img src={file.preview} style={{ width: '100%', height: "auto" }} /> */}
                     </ImageCard>
                 ))
             }</Card>
@@ -81,4 +75,4 @@ const UploadImage = (props) => {
 
 }
 
-export default UploadImage;
+export default UploadVideo;
