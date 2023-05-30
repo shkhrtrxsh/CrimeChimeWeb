@@ -13,6 +13,7 @@ import {useJsApiLoader } from '@react-google-maps/api';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import './style.css'
+import { StyledEngineProvider } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -34,11 +35,13 @@ export default function App() {
     }
 
   return (
+    <StyledEngineProvider injectFirst>
     <ThemeProvider>
       <ToastContainer />
       <ScrollToTop />
       <BaseOptionChartStyle />
       <Router />
     </ThemeProvider>
+    </StyledEngineProvider>
   );
 }

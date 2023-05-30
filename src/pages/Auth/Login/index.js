@@ -75,19 +75,20 @@ export default function Login() {
   } = methods;
 
   const onSubmit = (formValue) => {
-      let token = captchaRef.current.getValue();
+      // let token = captchaRef.current.getValue();
 
-      if(token){
-          dispatch(verifyToken({token})).then((response)=>{
-          if(response.payload.success == true){
-            dispatch(login({formValue, navigate}))
-          }else{
-            toast.error("Something wrong!");
-          }
-        })
-      }else{
-        toast.error("Something wrong!");
-      }
+      // if(token){
+      //     dispatch(verifyToken({token})).then((response)=>{
+      //     if(response.payload.success == true){
+            
+      //     }else{
+      //       toast.error("Something wrong!");
+      //     }
+      //   })
+      // }else{
+      //   toast.error("Something wrong!");
+      // }
+      dispatch(login({formValue, navigate}))
   };
 
   return (
@@ -112,7 +113,7 @@ export default function Login() {
                   />
                 </Stack><br></br>
                 <Stack spacing={3}>
-                <ReCAPTCHA sitekey={process.env.REACT_APP_SITE_KEY} ref={captchaRef}  />
+                {/* <ReCAPTCHA sitekey={process.env.REACT_APP_SITE_KEY} ref={captchaRef}  /> */}
                 </Stack>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
