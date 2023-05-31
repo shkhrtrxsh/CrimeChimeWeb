@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import { Container, FormControl, Grid, Box, Typography, Divider, LinearProgress } from '@mui/material';
 import { Container, FormControl, Grid ,Box, Divider, LinearProgress } from '@mui/material';
 
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
@@ -8,17 +7,23 @@ import NextButton from 'src/components/Button/NextButton';
 
 const containerStyle = {
   width: '100%',
-  height: 'calc(80vh - 120px)', // Adjust the height according to your needs
+  height: 'calc(80vh - 120px)' // Adjust the height according to your needs
 };
 
+
+
 const Page2 = () => {
-  const ProgressBar = ({ activeStep }) => {
-    const totalSteps = 15;
-    const progress = (activeStep / totalSteps) * 100;
-
-    return <LinearProgress variant="determinate" value={progress} className="bg-yellow-300 mt-2" />;
-  };
-
+    const ProgressBar = ({ activeStep }) => {
+        const totalSteps = 15;
+        const progress = (activeStep / totalSteps) * 100;
+      
+        return <LinearProgress variant="determinate" value={progress} className=" bg-yellow-300 mt-2" />;
+      };
+    const mapOptions = {
+        draggable: true,
+      };
+      
+      
   const [formattedAddress, setFormattedAddress] = useState('');
 
   const [position, setPosition] = useState({
@@ -29,18 +34,19 @@ const Page2 = () => {
   const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
     setPosition({
       lat: latitude,
-      lng: longitude,
+      lng: longitude
     });
     setFormattedAddress(address);
   };
+  
 
   const markerDragEnd = (e) => {
     if (e !== null) {
       setPosition({
         lat: e.latLng.lat(),
-        lng: e.latLng.lng(),
+        lng: e.latLng.lng()
       });
-
+  
       // Retrieve formatted address using reverse geocoding
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
@@ -50,11 +56,12 @@ const Page2 = () => {
       });
     }
   };
+  
 
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Container maxWidth="sm" className="p-2 m-auto flex flex-col justify-center">
+          <Container maxWidth="sm" className='p-2 m-auto flex flex-col justify-center'>
           <GoogleAutoComplete googleAutoComplete={googleAutoComplete} formattedAddress={formattedAddress} />
 
             <FormControl fullWidth sx={{ mt: 2 }}>
