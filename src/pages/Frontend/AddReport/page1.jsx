@@ -12,6 +12,11 @@ import {
 } from '@mui/material';
 import { DatePicker, TimePicker, LocalizationProvider} from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+<<<<<<< HEAD
+=======
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import TimePicker from '@mui/lab/TimePicker';
+import NextButton from 'src/components/Button/NextButton';
 >>>>>>> 111f4e53dd29a8138265bbca271f1cb80e32db9a
 
 function Page1() {
@@ -101,12 +106,48 @@ function Page1() {
             <Typography variant="h6" component="span">
               Next
             </Typography>
+<<<<<<< HEAD
           </div>
           <ProgressBar activeStep={1} />
         </div>
         <div style={{ width: isMdBreakpoint ? '66.67%' : '100%', height: isMdBreakpoint ? '100vh' : '50vh' }}>
           <div id="map" style={{ width: '100%', height: '100%', display: isMdBreakpoint ? 'block' : 'none' }}></div>
         </div>
+=======
+          </Grid>
+          <Grid item xs={10} sx={{ textAlign: 'center' }}>
+            <DatePicker
+              label="Select Date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </Grid>
+          <Grid item xs={10}>
+            <Typography variant="h4" sx={{ textAlign: 'center' }} className="font-normal mt-5">
+              Select time
+            </Typography>
+          </Grid>
+          <Grid item xs={10} sx={{ textAlign: 'center' }}>
+            <TimePicker
+              label="Select Time"
+              value={selectedTime}
+              onChange={handleTimeChange}
+              renderInput={(params) => <TextField {...params} />}
+              ampm={false}
+            />
+          </Grid>
+        </Grid>
+      </Container>
+      <div className=''>
+       <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-40 mt-28">
+        <Typography variant="h6">#1/16</Typography>
+        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
+        <NextButton nextLink="/page2" textValue="Next"/>
+        
+      </Box>
+       <ProgressBar activeStep="1" />
+>>>>>>> 111f4e53dd29a8138265bbca271f1cb80e32db9a
       </div>
     </LocalizationProvider>
   );
