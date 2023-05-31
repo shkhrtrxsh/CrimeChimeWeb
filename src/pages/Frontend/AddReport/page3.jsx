@@ -8,6 +8,8 @@ import {
   Divider,
   LinearProgress,
   Checkbox,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -19,7 +21,7 @@ function Page3() {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
 
-    return <LinearProgress variant="determinate" value={progress} className="bg-yellow-300 mt-2" />;
+    return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
   const [checked, setChecked] = useState(false);
 
@@ -30,14 +32,15 @@ function Page3() {
     setValue(newValue);
     setChecked(event.target.checked);
   };
-
+  const theme = useTheme();
+  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   useEffect(() => {
     loadGoogleMaps();
   }, []);
 
   const loadGoogleMaps = () => {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyApoj80RTzWkAIc_eswUmPogeoufErlNaw&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
@@ -51,31 +54,24 @@ function Page3() {
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div className="h-[55%] md:flex md:flex-row">
-        <div className="left-side md:w-1/3">
+      <div style={{ height: '55%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'col'}}>
+        <div style={{width: isMdBreakpoint ? '33.33%':'100%'}}>
           <Container maxWidth="sm">
-            <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 5 }}>
+            <Grid container spacing={2} justifyContent="center" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
               <Grid item xs={10}>
-                <Typography variant="h1" sx={{ textAlign: 'center' }} className="font-bold pb-2 text-3xl">
-                  Perpitrators
+                <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
+                  Perpetrators
                 </Typography>
-                <Typography
-                  variant="h2"
-                  sx={{ textAlign: 'center' }}
-                  className="font-bold pb-5 text-sm"
-                >
+                <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
                   (persons who committed the crime)
                 </Typography>
               </Grid>
 
               <div>
-                <Typography
-                  id="number-picker-label"
-                  className="pb-4 text-center text-xl"
-                >
-                  How many perpitrators?
+                <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+                  How many perpetrators?
                 </Typography>
-                <div className="flex flex-row">
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
                   <TextField
                     type="number"
                     value={value}
@@ -89,47 +85,46 @@ function Page3() {
                     }}
                     required
                   />
-                  <Typography className="mx-3 flex items-center">OR</Typography>
-                  <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-                  <Typography className="flex items-center">Unknown</Typography>
+                  <Typography style={{ marginLeft: '8px', marginRight: '8px', display: 'flex', alignItems: 'center' }}>OR</Typography>
+                  <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+                  <Typography style={{ display: 'flex',alignItems: 'center' }}>Unknown</Typography>
                   <Checkbox checked={checked} onChange={handleChange} />
                 </div>
               </div>
 
-              <Grid item xs={10} className="flex justify-center">
-                <PeopleIcon className="h-28 w-28" />
+              <Grid item xs={10} style={{ display: 'flex', justifyContent: 'center' }}>
+                <PeopleIcon style={{ height: '112px', width: '112px' }} />
               </Grid>
-              <Grid item xs={10} sx={{ textAlign: 'center' }}>
+              <Grid item xs={10} style={{ textAlign: 'center' }}>
                 <TextField
                   label="Describe their appearance.."
                   multiline
                   rows={4}
                   variant="outlined"
-                  className="w-full"
+                  style={{ width: '100%' }}
                 />
               </Grid>
             </Grid>
           </Container>
-          <div className=''>
-       <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-16 mt-1">
-        <NextButton nextLink="/page2" textValue="Back"/>
-        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">#3/16</Typography>
-        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <NextButton nextLink="/page4" textValue="Next"/>
-        
-      </Box>
-       <ProgressBar activeStep="3" />
-      </div>
+          <div>
+            <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'end', backgroundColor: '#FFEE58', color: 'black', padding: '12px', marginTop: '64px' }}>
+              <NextButton nextLink="/page2" textValue="Back"/>
+              <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+              <Typography variant="h6">#3/16</Typography>
+              <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+              <NextButton nextLink="/page4" textValue="Next"/>
+            </Box>
+            <ProgressBar activeStep={3} />
+          </div>
         </div>
-        <div className="right-side md:w-2/3 md:h-screen">
-        <div id="map" className='hidden md:block w-full h-[100%]'/>
+        <div style={{ width: isMdBreakpoint ? '66.67%' : '0%', height: isMdBreakpoint ? '91vh' : '0vh' }}>
+          <div id="map" style={{ width: '100%', height: '100%', display: isMdBreakpoint ? 'block' : 'none' }}></div>
         </div>
       </div>
-
-      
     </LocalizationProvider>
   );
 }
 
 export default Page3;
+
+
