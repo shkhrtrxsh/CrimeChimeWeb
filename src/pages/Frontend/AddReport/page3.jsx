@@ -12,6 +12,7 @@ import {
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PeopleIcon from '@mui/icons-material/People';
+import NextButton from 'src/components/Button/NextButton';
 
 function Page3() {
   const ProgressBar = ({ activeStep }) => {
@@ -111,9 +112,11 @@ function Page3() {
           </Container>
           <div className=''>
        <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-16 mt-1">
-        <Typography variant="h6">#3/15</Typography>
+        <NextButton nextLink="/page2" textValue="Back"/>
         <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">Next</Typography>
+        <Typography variant="h6">#3/16</Typography>
+        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
+        <NextButton nextLink="/page4" textValue="Next"/>
         
       </Box>
        <ProgressBar activeStep="3" />

@@ -4,6 +4,7 @@ import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TimePicker from '@mui/lab/TimePicker';
+import NextButton from 'src/components/Button/NextButton';
 
 function Page1() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -85,9 +86,9 @@ function Page1() {
       </Container>
       <div className=''>
        <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-40 mt-28">
-        <Typography variant="h6">#1/15</Typography>
+        <Typography variant="h6">#1/16</Typography>
         <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">Next</Typography>
+        <NextButton nextLink="/page2" textValue="Next"/>
         
       </Box>
        <ProgressBar activeStep="1" />

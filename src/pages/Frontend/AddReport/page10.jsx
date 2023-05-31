@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { Container, Typography, Grid,  TextField, Box , Divider, LinearProgress, Checkbox, Select, MenuItem  } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import NextButton from 'src/components/Button/NextButton';
 
 function Page10() {
   const ProgressBar = ({ activeStep }) => {
@@ -97,11 +98,11 @@ function Page10() {
       </Container>
       <div className=''>
        <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-20 mt-6">
-       <Typography variant="h6">GO BACK</Typography>
+       <NextButton nextLink="/page9" textValue="Back"/>
        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">#10/15</Typography>
+        <Typography variant="h6">#10/16</Typography>
         <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">Next</Typography>
+        <NextButton nextLink="/page11" textValue="Next"/>
         
       </Box>
        <ProgressBar activeStep="10" />

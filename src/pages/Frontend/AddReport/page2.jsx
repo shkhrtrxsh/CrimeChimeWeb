@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import { Container, FormControl, Grid ,Box, Typography, Divider, LinearProgress } from '@mui/material';
+import { Container, FormControl, Grid ,Box, Divider, LinearProgress } from '@mui/material';
 
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
+import NextButton from 'src/components/Button/NextButton';
 
 const containerStyle = {
   width: '100%',
@@ -76,9 +77,9 @@ const Page2 = () => {
             
           </Container><Box
       className="bg-yellow-300 flex justify-center items-end text-black p-3 mt-9 md:mt-10">
-      <Typography variant="h6">GO BACK</Typography>
+      <NextButton nextLink="/page1" textValue="Go Back"/>
       <Divider orientation="vertical" flexItem className='bg-black mx-2' />
-      <Typography variant="h6">CONFIRM PLACE</Typography>
+      <NextButton nextLink="/page3" textValue="Confirm Place"/>
     </Box>
     <ProgressBar activeStep='2' />
         

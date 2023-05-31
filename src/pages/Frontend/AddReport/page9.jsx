@@ -3,6 +3,7 @@ import { Container, Typography, Grid, Box , Divider, LinearProgress, Select, Men
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import NextButton from 'src/components/Button/NextButton';
 
 function Page9() {
   const ProgressBar = ({ activeStep }) => {
@@ -100,11 +101,11 @@ function Page9() {
       </Container>
       <div className=''>
        <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-28 mt-12">
-       <Typography variant="h6">GO BACK</Typography>
+       <NextButton nextLink="/page8" textValue="Back"/>
        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">#9/15</Typography>
+        <Typography variant="h6">#9/16</Typography>
         <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">Next</Typography>
+        <NextButton nextLink="/page10" textValue="Next"/>
         
       </Box>
        <ProgressBar activeStep="9" />

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Grid, Box , Divider, LinearProgress, Checkbox} from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import NextButton from 'src/components/Button/NextButton';
 
 function Page14() {
   const [value, setValue] = useState(0);
@@ -95,11 +96,11 @@ function Page14() {
       </Container>
       <div className=''>
        <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-0 mt-10">
-       <Typography variant="h6">GO BACK</Typography>
+       <NextButton nextLink="/page13" textValue="Back"/>
        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
         <Typography variant="h6">#14/16</Typography>
         <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">Next</Typography>
+        <NextButton nextLink="/page15" textValue="Next"/>
         
       </Box>
        <ProgressBar activeStep="14" />
