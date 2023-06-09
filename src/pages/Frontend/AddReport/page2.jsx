@@ -1,29 +1,22 @@
 import React, { useState } from 'react';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import { Container, FormControl, Grid ,Box, Divider, LinearProgress } from '@mui/material';
-
-import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
+import { Container, FormControl, Grid, Box, Typography, Divider, LinearProgress } from '@mui/material';
 import NextButton from 'src/components/Button/NextButton';
+import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 
 const containerStyle = {
   width: '100%',
-  height: 'calc(80vh - 120px)' // Adjust the height according to your needs
+  height: 'calc(80vh - 120px)', // Adjust the height according to your needs
 };
 
-
-
 const Page2 = () => {
-    const ProgressBar = ({ activeStep }) => {
-        const totalSteps = 15;
-        const progress = (activeStep / totalSteps) * 100;
-      
-        return <LinearProgress variant="determinate" value={progress} className=" bg-yellow-300 mt-2" />;
-      };
-    const mapOptions = {
-        draggable: true,
-      };
-      
-      
+  const ProgressBar = ({ activeStep }) => {
+    const totalSteps = 15;
+    const progress = (activeStep / totalSteps) * 100;
+
+    return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
+  };
+
   const [formattedAddress, setFormattedAddress] = useState('');
 
   const [position, setPosition] = useState({
@@ -34,19 +27,18 @@ const Page2 = () => {
   const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
     setPosition({
       lat: latitude,
-      lng: longitude
+      lng: longitude,
     });
     setFormattedAddress(address);
   };
-  
 
   const markerDragEnd = (e) => {
     if (e !== null) {
       setPosition({
         lat: e.latLng.lat(),
-        lng: e.latLng.lng()
+        lng: e.latLng.lng(),
       });
-  
+
       // Retrieve formatted address using reverse geocoding
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
@@ -56,36 +48,31 @@ const Page2 = () => {
       });
     }
   };
-  
 
   return (
     <Grid container>
       <Grid item xs={12}>
-          <Container maxWidth="sm" className='p-2 m-auto flex flex-col justify-center'>
+        <Container maxWidth="sm" style={{ padding: '8px', margin: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <GoogleAutoComplete googleAutoComplete={googleAutoComplete} formattedAddress={formattedAddress} />
 
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={position}
-                zoom={10}
-                options={mapOptions}
-              >
-                <Marker position={position} draggable={true} onDragEnd={markerDragEnd} />
-              </GoogleMap>
-            </FormControl>
-            
-          </Container><Box
-      className="bg-yellow-300 flex justify-center items-end text-black p-3 mt-9 md:mt-10">
-      <NextButton nextLink="/page1" textValue="Go Back"/>
-      <Divider orientation="vertical" flexItem className='bg-black mx-2' />
-      <NextButton nextLink="/page3" textValue="Confirm Place"/>
-    </Box>
-    <ProgressBar activeStep='2' />
-        
+          <FormControl fullWidth style={{ marginTop: '16px' }}>
+            <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={10}>
+              <Marker position={position} draggable={true} onDragEnd={markerDragEnd} />
+            </GoogleMap>
+          </FormControl>
+        </Container>
+        <Box style={{ backgroundColor: '#FCD34D', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginTop: '36px', marginLeft: 'auto', marginRight: 'auto' }}>
+          <Typography variant="h6" style={{ marginRight: '8px' }}>GO BACK</Typography>
+          <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+          <NextButton nextLink="/page3" textValue="CONFIRM PLACE" />
+        </Box>
+        <ProgressBar activeStep={2} />
       </Grid>
     </Grid>
   );
 };
 
 export default Page2;
+
+
+

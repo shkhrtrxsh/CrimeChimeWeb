@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid, Box , Divider, LinearProgress, Checkbox   } from '@mui/material';
+import { Container, Typography, Grid, Box, Divider, LinearProgress, Checkbox } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import corruption from '../../../assets/images/corruption.png'
+import corruption from '../../../assets/images/corruption.png';
 import NextButton from 'src/components/Button/NextButton';
 
-function Page13() {
+const Page13 = () => {
   const [value, setValue] = useState(0);
 
-  
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
-  
-    return <LinearProgress variant="determinate" value={progress} className=" bg-yellow-300 mt-2" />;
+
+    return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
+
   const [checked, setChecked] = useState(false);
-    
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setChecked(event.target.checked);
   };
+
   useEffect(() => {
     loadGoogleMaps();
   }, []);
@@ -35,66 +35,88 @@ function Page13() {
   };
 
   window.initMap = () => {
-     new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937 , lng: 78.9629 },
+    new window.google.maps.Map(document.getElementById('map'), {
+      center: { lat: 20.5937, lng: 78.9629 },
       zoom: 12,
     });
   };
-    return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div className='h-[55%] md:flex md:flex-row'>
-<div className='left-side md:w-1/3 pt-10'>
-      <Container >
-        <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0}}>
-          <Grid item xs={10} className='pt-5'>
-            <Typography variant="h1" sx={{ textAlign: 'center'  }} className='font-normal pt-1 pb-2 text-3xl'>Bribery</Typography>
-            <div className='flex justify-center'><img src={corruption} className='h-[4rem]' alt="img corr"/></div>
-          </Grid>
-          
-          <div className='pl-5 pt-5'>
-            
-      <div className='flex flex-row justify-start items-center my-4 pl-8'>
-      
-      <Checkbox checked={checked} onChange={handleChange} />
-      <Typography variant="h6" className='font-normal px-10 text-center'>Does not apply</Typography>
-      </div>
-      <div className='flex flex-row justify-start items-center my-4 pl-8'>
-      <Checkbox checked={checked} onChange={handleChange} />
-      <Typography variant="h6" className='font-normal px-10 text-left'>Bribe requested by police officer</Typography>
-      
-      </div>
-      <div className='flex flex-row justify-start items-center my-4 pl-8'>
-      <Checkbox checked={checked} onChange={handleChange} />
-      <Typography variant="h6" className='font-normal px-10 text-left'>Bribe requested by civil servant<br/><span className='text-left text-sm'>(not a police officer)</span></Typography>
-      
-      </div>
-      <div className='flex flex-row justify-start items-center my-4 pl-8'>
-      <Checkbox checked={checked} onChange={handleChange} />
-      <Typography variant="h6" className='font-normal px-10 text-left'>Bribe requested by politician</Typography>
-      
-      </div>
-      
-    </div>
-        </Grid>
-      </Container>
-      <div className=''>
-       <Box className="flex justify-center items-end bg-yellow-300 text-black p-3 md:mt-32 mt-10">
-       <NextButton nextLink="/page12" textValue="Back"/>
-       <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <Typography variant="h6">#13/16</Typography>
-        <Divider orientation="vertical" flexItem className="bg-black mx-2" />
-        <NextButton nextLink="/page14" textValue="Next"/>
-        
-      </Box>
-       <ProgressBar activeStep="13" />
-</div>
-      </div>
-      <div className="right-side md:w-2/3 md:h-screen">
-        <div id="map" className='hidden md:block w-full h-[100%]'/>
-        </div>
-    </div>
-    </LocalizationProvider>
-      
-    )};
 
-export default Page13
+  return (
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', height: '55%' }}>
+        <Box sx={{ pt: { xs: '10px', md: '20px' }, width: {xs:'100%',md:'33.33%' }}}>
+          <Container>
+            <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }}>
+              <Grid item xs={10} className="pt-5">
+              <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
+                  Bribery
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'center', height: '4rem'}}>
+                  <img src={corruption} alt="img corr" />
+                </Box>
+              </Grid>
+
+              <Grid item xs={10} sx={{ pl: 5, pt: 5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
+                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'center' }}>
+                      Does not apply
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
+                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
+                      Bribe requested by police officer
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
+                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
+                      Bribe requested by civil servant
+                      <br />
+                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(not a police officer)</span>
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
+                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
+                      Bribe requested by politician
+                    </Typography>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </Container>
+          <Box>
+          <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFEE58', color: 'black', padding: '12px', marginTop: '100px' }}>
+              <NextButton nextLink="/page12" textValue="Back"/>
+              <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+              <Typography variant="h6">#13/16</Typography>
+              <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+              <NextButton nextLink="/page14" textValue="Next"/>
+            </Box>
+            <ProgressBar activeStep={13}/>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            width: '66.67%',
+            height: '91vh',
+            display: { xs: 'none', md: 'block' },
+          }}
+        >
+          <Box
+            id="map"
+            sx={{
+              width: '100%',
+              height: '100%',
+            }}
+          />
+        </Box>
+      </Box>
+    </LocalizationProvider>
+  );
+};
+
+export default Page13;
