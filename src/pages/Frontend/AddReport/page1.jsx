@@ -10,38 +10,28 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { DatePicker, TimePicker, LocalizationProvider } from '@mui/lab';
+import { DatePicker, TimePicker, LocalizationProvider, DateTimePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import NextButton from 'src/components/Button/NextButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage } from 'src/store/reducers/registerReport';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 function Page1() {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const {datetime} = useSelector(state=>state.reportRegister.data);
+  const dispatch = useDispatch();
+  const [selectedDate, setSelectedDate] = useState(datetime);
+  // const [selectedTime, setSelectedTime] = useState(null);
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
-  const handleTimeChange = (time) => {
-    setSelectedTime(time);
-  };
+  // const handleTimeChange = (time) => {
+  //   setSelectedTime(time);
+  // };
 
   useEffect(() => {
     loadGoogleMaps();
   }, []);
-
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyApoj80RTzWkAIc_eswUmPogeoufErlNaw&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
-
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
 
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
@@ -49,6 +39,10 @@ function Page1() {
 
     return <LinearProgress variant="determinate" value={progress} />;
   };
+
+  const beforeNext = ()=>{
+    dispatch(setPage({datetime:selectedDate}));
+  }
 
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
@@ -66,23 +60,23 @@ function Page1() {
               </Grid>
               <Grid item xs={10}>
                 <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center' }}>
-                  Select date
+                  Select date and time
                 </Typography>
               </Grid>
               <Grid item xs={10} sx={{ textAlign: 'center' }}>
-                <DatePicker
-                  label="Select Date"
+                <DateTimePicker
+                  label="Select Date and Time"
                   value={selectedDate}
                   onChange={handleDateChange}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </Grid>
-              <Grid item xs={10}>
+              {/* <Grid item xs={10}>
                 <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', mt: 5 }}>
                   Select time
                 </Typography>
-              </Grid>
-              <Grid item xs={10} sx={{ textAlign: 'center' }}>
+              </Grid> */}
+              {/* <Grid item xs={10} sx={{ textAlign: 'center' }}>
                 <TimePicker
                   label="Select Time"
                   value={selectedTime}
@@ -90,7 +84,7 @@ function Page1() {
                   renderInput={(params) => <TextField {...params} />}
                   ampm={false}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Container>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', background: '#f6e05e', padding: '20px',  marginTop: '96px' }}>
@@ -98,7 +92,7 @@ function Page1() {
               #1/15
             </Typography>
             <Divider orientation="vertical" flexItem style={{ background: '#000', margin: '0 8px' }} />
-            <NextButton nextLink="/page2" textValue="Next"/> 
+            <NextButton nextLink="/page2" textValue="Next" beforeNext = {beforeNext}/> 
           </div>
           <ProgressBar activeStep={1} />
         </div>

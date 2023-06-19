@@ -7,13 +7,23 @@ import {
   Divider,
   LinearProgress,
   Checkbox,
+  Select,
+  MenuItem,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import NextButton from 'src/components/Button/NextButton';
+import TypoSub from 'src/components/Typography/TypoSub';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage8 } from 'src/store/reducers/registerReport';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 function Page8() {
-  const [value, setValue] = useState(0);
+  const {vehicle_theft} = useSelector(state=>state.reportRegister.data);
+  const [value, setValue] = useState(vehicle_theft==null?4:vehicle_theft);
 
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
@@ -22,31 +32,22 @@ function Page8() {
     return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
 
-  const [checked, setChecked] = useState(false);
 
   const handleChange = (event) => {
-    setChecked(event.target.checked);
+    setValue(event.target.value);
   };
 
   useEffect(() => {
     loadGoogleMaps();
   }, []);
-
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
-
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
-
+  const dispatch = useDispatch(); 
+  const fields=[
+    {value:0,main:"Hijacking",sub:"occupied vehicle was stolen"},
+    {value:1,main:"Attempted Hijacking",sub:"unsuccessful hijacking not stolen"},
+    {value:2,main:"Vehicle Theft",sub:"unoccupied vehicle vehicle was stolen"},
+    {value:3,main:"Attempted Vehicle Theft",sub:"unsuccessful vehicle theft not stolen"},
+    {value:4,main:"Does Not Apply"},
+  ]
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={{ display: 'flex', flexDirection: 'row', height: '55%' }}>
@@ -65,58 +66,19 @@ function Page8() {
               <Box sx={{ pl: 5, pt: 0 }}>
                 <div sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 0 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
-                    <Typography
-                      variant="h6"
-                      sx={{ fontWeight: 'normal', px: 5, textAlign: 'left', '.text-left': { textAlign: 'left' } }}
-                    >
-                      Hijacking
-                      <br />
-                      <span className="text-left text-sm">(occupied vehicle was stolen)</span>
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 0 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
-                    <Typography
-                      variant="h6"
-                      sx={{ fontWeight: 'normal', px: 5, textAlign: 'left', '.text-left': { textAlign: 'left' } }}
-                    >
-                      Attempted Hijacking
-                      <br />
-                      <span className="text-left text-sm">(unsuccessful hijacking not stolen)</span>
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 0 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
-                    <Typography
-                      variant="h6"
-                      sx={{ fontWeight: 'normal', px: 5, textAlign: 'left', '.text-left': { textAlign: 'left' } }}
-                    >
-                      Vehicle Theft
-                      <br />
-                      <span className="text-left text-sm">(unoccupied vehicle vehicle was stolen)</span>
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 0 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
-                    <Typography
-                      variant="h6"
-                      sx={{ fontWeight: 'normal', px: 5, textAlign: 'left', '.text-left': { textAlign: 'left' } }}
-                    >
-                      Attempted Vehicle Theft
-                      <br />
-                      <span className="text-left text-sm">(unsuccessful vehicle theft not stolen)</span>
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 0 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
-                    <Typography
-                      variant="h6"
-                      sx={{ fontWeight: 'normal', px: 5, textAlign: 'left', '.text-left': { textAlign: 'left' } }}
-                    >
-                      Does not apply
-                      <br />
-                    </Typography>
+                <RadioGroup
+                    aria-labelledby="vehicle_theft"
+                    value={value}
+                    name="radio-buttons-group"
+                  >
+                    {fields.map((f,ind)=>{
+                      return(
+                        <FormControlLabel control={<Radio />} value ={f.value} key={ind} label={
+                          <TypoSub mainText={f.main} subText={f.sub}/>
+                        } onChange={handleChange}/>
+                        )
+                          })}
+                      </RadioGroup>
                   </Box>
                 </div>
               </Box>
@@ -128,7 +90,9 @@ function Page8() {
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
               <Typography variant="h6">#8/16</Typography>
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page9" textValue="Next"/>
+              <NextButton nextLink="/page9" textValue="Next" beforeNext={
+                ()=>dispatch(setPage8({vehicle_theft:value}))
+              }/>
             </Box>
             <ProgressBar activeStep={6} />
         </Box>

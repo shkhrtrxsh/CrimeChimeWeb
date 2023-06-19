@@ -8,14 +8,21 @@ import {
   Divider,
   LinearProgress,
   Checkbox,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import NextButton from 'src/components/Button/NextButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage7 } from 'src/store/reducers/registerReport';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 function Page7() {
-  const [value, setValue] = useState(0);
-
+  const {assault,assault_people} = useSelector(state=>state.reportRegister.data);
+  const [value, setValue] = useState(assault||0);
+  const [count, setCount] = useState(assault_people||0);
+  const dispatch = useDispatch();
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
@@ -23,30 +30,14 @@ function Page7() {
     return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
 
-  const [checked, setChecked] = useState(false);
 
   const handleChange = (event) => {
-    setChecked(event.target.checked);
+    setValue(event.target.value);
   };
 
   useEffect(() => {
     loadGoogleMaps();
   }, []);
-
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
-
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -64,42 +55,32 @@ function Page7() {
               </Grid>
 
               <Box sx={{ py: 5 }}>
-                <Typography variant="h6" sx={{ fontWeight: 'normal', px: 1, textAlign: 'center' }}>
-                  was anyone assaulted?
-                </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 8 }}>
-                  <Checkbox checked={checked} onChange={handleChange} />
-                  <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
-                    Unknown
+
+              <Select value={value} onChange={handleChange} sx={{ paddingX: 2,marginBottom:4,width:'95%',maxWidth:'310px' }}>
+                    <MenuItem value={0}>Unknown</MenuItem>
+                    <MenuItem value={1}>Yes</MenuItem>
+                    <MenuItem value={2}>No</MenuItem>
+                </Select>
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3' }}>
+                  <TextField
+                    type="number"
+                    sx={{ px: 1 }}
+                    value={count}
+                    onChange={(e)=>setCount(e.target.value)}
+                    disabled={value===0}
+                    InputProps={{
+                      inputProps: {
+                        min: 1,
+                        max: 10,
+                        step: 1,
+                      },
+                    }}
+                    required
+                  />
+                  <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
+                    If yes How many were assaulted?
                   </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 8 }}>
-                  <Checkbox checked={checked} onChange={handleChange} />
-                  <Typography variant="h6" sx={{ fontWeight: 'normal', pr: 20,pl: 5, textAlign: 'left' }}>
-                    No
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 8 }}>
-                  <Checkbox checked={checked} onChange={handleChange} />
-                  <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'center' }}>
-                    Yes
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 8 }}>
-                  
-                  <Box sx={{ flex: '0 0 42px' }}>
-                    <TextField
-                      type="number"
-                      value={value}
-                      inputProps={{ min: 0 }}
-                      onChange={(event) => setValue(event.target.value)}
-                    />
-                  </Box>
-                  
-                  <Typography variant="h6" sx={{ fontWeight: 'normal', textAlign: 'left', pl: 4 }}>
-                    If yes, how many were assaulted?
-                  </Typography>
-                </Box>
+                </div>
               </Box>
             </Grid>
           </Container>
@@ -108,7 +89,9 @@ function Page7() {
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
               <Typography variant="h6">#7/16</Typography>
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page8" textValue="Next"/>
+              <NextButton nextLink="/page8" textValue="Next" beforeNext={()=>{
+                dispatch(setPage7({assault:value,assault_people:count}));
+              }}/>
             </Box>
             <ProgressBar activeStep={6} />
         </Box>

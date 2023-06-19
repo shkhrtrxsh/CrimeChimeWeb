@@ -3,6 +3,8 @@ import { GoogleMap, Marker } from '@react-google-maps/api';
 import { Container, FormControl, Grid, Box, Typography, Divider, LinearProgress } from '@mui/material';
 import NextButton from 'src/components/Button/NextButton';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage2 } from 'src/store/reducers/registerReport';
 
 const containerStyle = {
   width: '100%',
@@ -10,6 +12,8 @@ const containerStyle = {
 };
 
 const Page2 = () => {
+  const {location,latitude,longitude} = useSelector(state=>state.reportRegister.data);
+  const dispatch = useDispatch();
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
@@ -20,8 +24,8 @@ const Page2 = () => {
   const [formattedAddress, setFormattedAddress] = useState('');
 
   const [position, setPosition] = useState({
-    lat: 20.5937, // Latitude of India
-    lng: 78.9629, // Longitude of India
+    lat: latitude||20.5937, // Latitude of India
+    lng: longitude||78.9629, // Longitude of India
   });
 
   const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
@@ -32,13 +36,17 @@ const Page2 = () => {
     setFormattedAddress(address);
   };
 
+  const beforeNext = ()=>{
+    dispatch(setPage2({location:formattedAddress,latitude:position?.lat||null,longitude:position?.lng||null}));
+  }
+
   const markerDragEnd = (e) => {
     if (e !== null) {
       setPosition({
         lat: e.latLng.lat(),
         lng: e.latLng.lng(),
-      });
-
+      });  
+    
       // Retrieve formatted address using reverse geocoding
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
@@ -62,9 +70,9 @@ const Page2 = () => {
           </FormControl>
         </Container>
         <Box style={{ backgroundColor: '#FCD34D', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginTop: '36px', marginLeft: 'auto', marginRight: 'auto' }}>
-          <Typography variant="h6" style={{ marginRight: '8px' }}>GO BACK</Typography>
+        <NextButton nextLink="/page1" textValue="GO BACK"/>
           <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-          <NextButton nextLink="/page3" textValue="CONFIRM PLACE" />
+          <NextButton nextLink="/page3" textValue="CONFIRM PLACE" beforeNext={beforeNext}/>
         </Box>
         <ProgressBar activeStep={2} />
       </Grid>

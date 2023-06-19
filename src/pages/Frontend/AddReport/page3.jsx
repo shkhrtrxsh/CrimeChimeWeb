@@ -15,22 +15,31 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PeopleIcon from '@mui/icons-material/People';
 import NextButton from 'src/components/Button/NextButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage3 } from 'src/store/reducers/registerReport';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 function Page3() {
+  const {perpetrators,perpetrators_des} = useSelector(state=>state.reportRegister.data);
+  const dispatch = useDispatch();
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
 
     return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
-  const [checked, setChecked] = useState(false);
 
   
-  const [value, setValue] = useState(5);
+  const [value, setValue] = useState(perpetrators);
+  const [description, setDescription] = useState(perpetrators_des||"");
+  const [checked, setChecked] = useState(perpetrators===null?true:false);
+  const handleTextChange = (event)=>{
+    setValue(event.target.value);
+  }
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    setChecked(event.target.checked);
+  const handleChange = (event) => {
+    const checked = event.target.checked;
+    setChecked(checked);
   };
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
@@ -38,20 +47,11 @@ function Page3() {
     loadGoogleMaps();
   }, []);
 
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
+  const beforeNext = ()=>{
+    dispatch(setPage3({perpetrators:value,perpetrators_des:description}));
+  }
 
-  window.initMap = () => {
-     new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937 , lng: 78.9629 },
-      zoom: 12,
-    });
-  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <div style={{ height: '55%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'col'}}>
@@ -74,8 +74,9 @@ function Page3() {
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                   <TextField
                     type="number"
-                    value={value}
-                    onChange={handleChange}
+                    value={value||""}
+                    onChange={handleTextChange}
+                    disabled={checked}
                     InputProps={{
                       inputProps: {
                         min: 1,
@@ -100,6 +101,8 @@ function Page3() {
                   label="Describe their appearance.."
                   multiline
                   rows={4}
+                  value={description}
+                  onChange = {(e)=>setDescription(e.target.value)}
                   variant="outlined"
                   style={{ width: '100%' }}
                 />
@@ -112,7 +115,7 @@ function Page3() {
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
               <Typography variant="h6">#3/16</Typography>
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page4" textValue="Next"/>
+              <NextButton nextLink="/page4" textValue="Next" beforeNext={beforeNext}/>
             </Box>
             <ProgressBar activeStep={3} />
           </div>

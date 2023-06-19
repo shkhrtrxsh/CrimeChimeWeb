@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid, Box, Divider, LinearProgress, Select, MenuItem } from '@mui/material';
+import { Container, Typography, Grid, Box, Divider, LinearProgress, Select, MenuItem, TextField } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import NextButton from 'src/components/Button/NextButton';
+import { setPage9 } from 'src/store/reducers/registerReport';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 function Page9() {
+  const {vehicle_make,vehicle_model,vehicle_colour,vehicle_year} = useSelector(state=>state.reportRegister.data);
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
@@ -13,33 +17,38 @@ function Page9() {
     return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
 
-  const [checked, setChecked] = useState(false);
-  const [value, setValue] = useState(0);
+  const [data,setData] = useState({vehicle_make,vehicle_model,vehicle_colour,vehicle_year});
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    setChecked(event.target.checked);
+  const dispatch = useDispatch();
+
+  const handleChange = (event) => {
+    const {name,value} = event.target;
+    setData({...data,[name]:value});
   };
 
   useEffect(() => {
     loadGoogleMaps();
   }, []);
 
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
-
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
-
+  
+  const fields = [
+    {
+      name:"vehicle_make",
+      label:"MAKE",
+    },
+    {
+      name:"vehicle_model",
+      label:"MODEL",
+    },
+    {
+      name:"vehicle_colour",
+      label:"COLOR",
+    },
+    {
+      name:"vehicle_year",
+      label:"YEAR",
+    },
+  ]
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
      <Box sx={{ display: 'flex', flexDirection: 'row', height: '55%' }}>
@@ -57,62 +66,16 @@ function Page9() {
 
               <Box sx={{ pl: 5, pt: 5 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
-                      MAKE
-                    </Typography>
-                    <Select
-                      value={value}
-                      onChange={handleChange}
-                      sx={{ px: 2, width: '100%', borderRadius: 'none', height: '10' }}
-                    >
-                      <MenuItem value={1}>BMW</MenuItem>
-                      <MenuItem value={2}>MERCEDES</MenuItem>
-                      <MenuItem value={3}>Unknown</MenuItem>
-                    </Select>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
-                      MODEL
-                    </Typography>
-                    <Select
-                      value={value}
-                      onChange={handleChange}
-                      sx={{ px: 2, width: '100%', borderRadius: 'none', height: '10' }}
-                    >
-                      <MenuItem value={1}>Perpetrator used this weapon</MenuItem>
-                      <MenuItem value={2}>Perpetrator didn't use this weapon</MenuItem>
-                      <MenuItem value={3}>Unknown</MenuItem>
-                    </Select>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
-                      COLOUR
-                    </Typography>
-                    <Select
-                      value={value}
-                      onChange={handleChange}
-                      sx={{ px: 2, width: '100%', borderRadius: 'none', height: '10' }}
-                    >
-                      <MenuItem value={1}>RED</MenuItem>
-                      <MenuItem value={2}>BLACK</MenuItem>
-                      <MenuItem value={3}>YELLOW</MenuItem>
-                    </Select>
-                  </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
-                      YEAR
-                    </Typography>
-                    <Select
-                      value={value}
-                      onChange={handleChange}
-                      sx={{ px: 2, width: '100%', borderRadius: 'none', height: '10' }}
-                    >
-                      <MenuItem value={1}>Perpetrator used this weapon</MenuItem>
-                      <MenuItem value={2}>Perpetrator didn't use this weapon</MenuItem>
-                      <MenuItem value={3}>Unknown</MenuItem>
-                    </Select>
-                  </Box>
+                    {fields.map((f,ind)=>{
+                      return(
+                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }} key={ind}>
+                          <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left',width:"93px" }}>
+                            {f.label}
+                          </Typography>
+                          <TextField name={f.name} onChange={handleChange} value={data[f.name]} required/>
+                        </Box>
+                      )
+                  })}
                 </Box>
               </Box>
             </Grid>
@@ -123,7 +86,7 @@ function Page9() {
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
               <Typography variant="h6">#9/16</Typography>
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page10" textValue="Next"/>
+              <NextButton nextLink="/page10" textValue="Next" beforeNext={()=>dispatch(setPage9(data))}/>
             </Box>
             <ProgressBar activeStep={9} />
         </Box>

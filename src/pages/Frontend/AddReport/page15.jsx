@@ -3,19 +3,14 @@ import { Container, Typography, Grid, TextField, Box, Divider, LinearProgress, B
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import NextButton from 'src/components/Button/NextButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFile, setPage15 } from 'src/store/reducers/registerReport';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 const Page15 = () => {
-  const [value, setValue] = useState(0);
-
-  const handleIncrement = () => {
-    setValue(parseInt(value, 10) + 1);
-  };
-
-  const handleDecrement = () => {
-    if (value > 0) {
-      setValue(value - 1);
-    }
-  };
+  const {files=null,fileName=null,description=null} = useSelector(state=>state.reportRegister.data);
+  const dispatch = useDispatch();
+  const [value, setValue] = useState({files,fileName,description}||{});
 
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 16;
@@ -24,39 +19,19 @@ const Page15 = () => {
     return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
 
-  const [checked, setChecked] = useState(false);
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      // Do something with the file, such as displaying it or uploading it.
-      console.log(file);
+    const files = event.target.files[0];
+    const fileName = files.name;
+    if (files) {
+      setValue({files:URL.createObjectURL(files),fileName});
     }
   };
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    setChecked(event.target.checked);
-  };
 
   useEffect(() => {
     loadGoogleMaps();
   }, []);
-
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
-
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -71,8 +46,9 @@ const Page15 = () => {
               </Grid>
 
               <Grid item xs={10} sx={{ pl: 5, pt: 5 }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Box sx={{ p: 5, display: 'flex', justifyContent: 'center' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' ,alignItems:"center"}}>
+                {value?.fileName&&<Typography>{value?.fileName}</Typography>}
+                  <Box sx={{ p: 5,pt:2, display: 'flex', justifyContent: 'center' }}>
                     <input
                       accept="image/*, video/*"
                       id="file-input"
@@ -83,11 +59,12 @@ const Page15 = () => {
                     <label htmlFor="file-input">
                       <Button component="span" variant="contained" sx={{backgroundColor: '#FFEE58'}}>
                         Upload image or video
+                        <input type="file" hidden />
                       </Button>
                     </label>
                   </Box>
                   <Box sx={{ p: 5, display: 'flex', justifyContent: 'center' }}>
-                    <TextField label="Describe the crime.." multiline rows={8} variant="outlined" sx={{ borderRadius: 'none' }} />
+                    <TextField label="Describe the crime.." multiline rows={8} variant="outlined" sx={{ borderRadius: 'none' }} value={value?.description||""} onChange={(e)=>setValue({...value,description:e.target.value})}/>
                   </Box>
                 </Box>
               </Grid>
@@ -99,7 +76,7 @@ const Page15 = () => {
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
               <Typography variant="h6">#15/16</Typography>
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page16" textValue="Next"/>
+              <NextButton nextLink="/page16" textValue="Next" beforeNext={()=>dispatch(setPage15({...value}))}/>
             </Box>
             <ProgressBar activeStep={15}/>
           </Box>

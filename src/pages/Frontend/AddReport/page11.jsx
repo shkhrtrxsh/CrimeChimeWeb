@@ -3,8 +3,16 @@ import { Container, Typography, Grid, Box, Divider, LinearProgress, Checkbox, Se
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import NextButton from 'src/components/Button/NextButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage11 } from 'src/store/reducers/registerReport';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 function Page11() {
+  const {robbery,robbery_type} = useSelector(state=>state.reportRegister.data);
+  const [checked, setChecked] = useState(robbery);
+  const [value, setValue] = useState(robbery_type);
+  const dispatch = useDispatch();
+
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
@@ -12,33 +20,14 @@ function Page11() {
     return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
 
-  const [checked, setChecked] = useState(false);
-  const [value, setValue] = useState('');
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-    setChecked(event.target.checked);
+  const handleChange = (v) => {
+    setChecked(v);
   };
 
   useEffect(() => {
     loadGoogleMaps();
   }, []);
-
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
-
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
-
+  
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={{ display: 'flex', flexDirection: 'row', height: '55%' }}>
@@ -57,13 +46,13 @@ function Page11() {
               <Box sx={{ pl: 8, pt: 5 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked===0} onChange={()=>handleChange(0)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Does not apply
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked===1} onChange={()=>handleChange(1)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                     Attempted Robbery
                       <br />
@@ -71,7 +60,7 @@ function Page11() {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked===2} onChange={()=>handleChange(2)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Robbery
                       <br />
@@ -84,7 +73,7 @@ function Page11() {
                     </Typography>
                     <Select
                       value={value}
-                      onChange={handleChange}
+                      onChange={(e)=>setValue(e.target.value)}
                       sx={{ px: 2, width: '50%', borderRadius: 'none', height: '10' }}
                     >
                       <MenuItem value="bicycle">Bicycle</MenuItem>
@@ -114,7 +103,7 @@ function Page11() {
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
               <Typography variant="h6">#11/16</Typography>
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page12" textValue="Next"/>
+              <NextButton nextLink="/page12" textValue="Next" beforeNext={()=>dispatch(setPage11({robbery:checked,robbery_type:value}))}/>
             </Box>
             <ProgressBar activeStep={9} />
         </Box>

@@ -4,10 +4,13 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import corruption from '../../../assets/images/corruption.png';
 import NextButton from 'src/components/Button/NextButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage12, setPage13 } from 'src/store/reducers/registerReport';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 const Page13 = () => {
-  const [value, setValue] = useState(0);
-
+  const {bribery} = useSelector(state=>state.reportRegister.data);
+  const dispatch = useDispatch();
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
@@ -15,31 +18,15 @@ const Page13 = () => {
     return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
 
-  const [checked, setChecked] = useState(false);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    setChecked(event.target.checked);
+  const [checked, setChecked] = useState(bribery);
+  
+  const handleChange = (event) => {
+    setChecked(event.target.value);
   };
 
   useEffect(() => {
     loadGoogleMaps();
   }, []);
-
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
-
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -59,19 +46,19 @@ const Page13 = () => {
               <Grid item xs={10} sx={{ pl: 5, pt: 5 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="0"} value={0} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'center' }}>
                       Does not apply
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="1"} value={1} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Bribe requested by police officer
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="2"} value={2} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Bribe requested by civil servant
                       <br />
@@ -79,7 +66,7 @@ const Page13 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="3"} value={3} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Bribe requested by politician
                     </Typography>
@@ -94,7 +81,7 @@ const Page13 = () => {
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
               <Typography variant="h6">#13/16</Typography>
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page14" textValue="Next"/>
+              <NextButton nextLink="/page14" textValue="Next" beforeNext={()=>dispatch(setPage13({bribery:checked}))}/>
             </Box>
             <ProgressBar activeStep={13}/>
           </Box>

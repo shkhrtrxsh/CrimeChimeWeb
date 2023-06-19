@@ -4,12 +4,15 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import NextButton from 'src/components/Button/NextButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage11, setPage12 } from 'src/store/reducers/registerReport';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 const Page12 = () => {
-  const [value, setValue] = useState(0);
-
-  
-
+  const {kidnapping,kidnapping_people} = useSelector(state=>state.reportRegister.data);
+  const [value, setValue] = useState(kidnapping_people);
+  const [checked, setChecked] = useState(kidnapping);  
+  const dispatch = useDispatch();
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 16;
     const progress = (activeStep / totalSteps) * 100;
@@ -17,30 +20,15 @@ const Page12 = () => {
     return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
 
-  const [checked, setChecked] = useState(false);
 
   const handleChange = (event) => {
-    setChecked(event.target.checked);
+    if(event.target?.checked)setChecked(event.target.value);
+    else setValue(event.target.value);
   };
 
   useEffect(() => {
     loadGoogleMaps();
   }, []);
-
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
-
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -57,13 +45,13 @@ const Page12 = () => {
               <Grid item xs={10} sx={{ pl: 5, pt: 5 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="0"} value={0} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Does not apply
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="1"} value={1} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', pl:5, textAlign: 'left' }}>
                       Attempted kidnapping
                       <br />
@@ -75,10 +63,10 @@ const Page12 = () => {
                       
                       <TextField
                         type="number"
-                        value={value}
+                        value={value||""}
                         inputProps={{ min: 0 }}
                         onChange={(event) => setValue(event.target.value)}
-                        sx={{ width: '42px' }}
+                        sx={{ width: '60px' }}
                       />
                       <Typography variant="h6" sx={{ fontWeight: 'normal', textAlign: 'left', pl: 4 }}>
                         How many were kidnapped?
@@ -95,7 +83,7 @@ const Page12 = () => {
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
               <Typography variant="h6">#12/16</Typography>
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page13" textValue="Next"/>
+              <NextButton nextLink="/page13" textValue="Next" beforeNext={()=>dispatch(setPage12({kidnapping:checked,kidnapping_people:value}))}/>
             </Box>
             <ProgressBar activeStep={9}/>
           </Box>

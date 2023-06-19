@@ -3,51 +3,29 @@ import { Container, Typography, Grid, Box, Divider, LinearProgress, Checkbox } f
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import NextButton from 'src/components/Button/NextButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage14 } from 'src/store/reducers/registerReport';
+import { loadGoogleMaps } from 'src/utils/googleMap';
 
 const Page14 = () => {
-  const [value, setValue] = useState(0);
-
-  const handleIncrement = () => {
-    setValue(parseInt(value, 10) + 1);
-  };
-
-  const handleDecrement = () => {
-    if (value > 0) {
-      setValue(value - 1);
-    }
-  };
-
+  const {various} = useSelector(state=>state.reportRegister.data);
+  const dispatch = useDispatch();
   const ProgressBar = ({ activeStep }) => {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
     return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
   };
 
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(various);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    setChecked(event.target.checked);
+  const handleChange = (event) => {
+    setChecked(event.target.value);
   };
 
   useEffect(() => {
     loadGoogleMaps();
   }, []);
 
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
-
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -67,13 +45,13 @@ const Page14 = () => {
               <Grid item xs={10} sx={{ pl: 5, pt: 0 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="0"} value={0} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Crime occurred at ATM
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="1"} value={1} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be drug-related
                       <br />
@@ -81,13 +59,13 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="2"} value={2} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be gang-related
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="3"} value={3} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Arson was involved
                       <br />
@@ -95,7 +73,7 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="4"} value={4} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Vandalism was involved
                       <br />
@@ -103,7 +81,7 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
-                    <Checkbox checked={checked} onChange={handleChange} />
+                    <Checkbox checked={checked==="5"} value={5} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Social unrest
                     </Typography>
@@ -118,7 +96,7 @@ const Page14 = () => {
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
               <Typography variant="h6">#14/16</Typography>
               <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page15" textValue="Next"/>
+              <NextButton nextLink="/page15" textValue="Next" beforeNext={()=>dispatch(setPage14({various:checked}))}/>
             </Box>
             <ProgressBar activeStep={14}/>
           </Box>
