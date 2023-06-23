@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Autocomplete } from '@react-google-maps/api';
-import { positionLatitude, positionLongitude } from 'src/helpers/LocationHelper';
+import { positionLatitude as lat, positionLongitude as lng } from 'src/helpers/LocationHelper';
 import axios from 'axios';
 import {
     TextField,
 } from '@mui/material';
-
+import { useSelector } from 'react-redux';
 
 const GoogleAutoComplete = (props) => {
-
+    const {latitude:positionLatitude,longitude:positionLongitude} = useSelector(state=>state.reportRegister.data);
     const [autocomplete, setAutocomplete] = useState(null);
     const [placeId, setPlaceId] = useState(null);
     const [address, setAddress] = useState(null);
@@ -30,7 +30,7 @@ const GoogleAutoComplete = (props) => {
             lng: position.coords.longitude
         })
     }
-    navigator.geolocation.getCurrentPosition(showPosition)
+    //navigator.geolocation.getCurrentPosition(showPosition)
 
     const searchLocation = useRef()
 
@@ -87,7 +87,6 @@ const GoogleAutoComplete = (props) => {
     const InputValueHandler = (e) => {
             setInputValue(e.target.value)
             console.log(e.target.value)
-        
     }
 
 
@@ -101,6 +100,11 @@ const GoogleAutoComplete = (props) => {
                 label="Search Location"
                 variant="outlined"
                 fullWidth
+                InputProps={{
+                    sx: {
+                      bgcolor: 'white',
+                    },
+                  }}
                 ref={searchLocation}
                 value={inputValue}
                 onChange={InputValueHandler}
