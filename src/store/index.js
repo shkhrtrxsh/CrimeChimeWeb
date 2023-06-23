@@ -6,6 +6,7 @@ import permissionReducer from './reducers/permission'
 import permissionModuleReducer from './reducers/permission-module'
 import searchReducer from './reducers/permission-module'
 import reportReducer from './reducers/report'
+import { registerReportReducer } from './reducers/registerReport'
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     permission: permissionReducer,
     permissionModule: permissionModuleReducer, 
     search: searchReducer,
-    report: reportReducer
+    report: reportReducer,
+    reportRegister:registerReportReducer
   },
 })
