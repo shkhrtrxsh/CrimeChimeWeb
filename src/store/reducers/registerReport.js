@@ -5,6 +5,7 @@ const initialState = {
     beforeNext:null,
     beforeBack:null,
     zoom:12,
+    lock:false,
     data:{
         location:null,
         longitude:null,
@@ -13,34 +14,34 @@ const initialState = {
         google_place_id:null,
         specific_crime:null,
         description:null,
-        perpetrators:null,
+        perpetrators:-1,
         perpetrators_des:null,
-        weapons:null,
-        fully_auto_weapons:null,
-        semi_auto_weapons:null,
-        knife_weapons:null,
-        other_weapons:null,
-        murders:null,
+        weapons:0,
+        fully_auto_weapons:0,
+        semi_auto_weapons:0,
+        knife_weapons:0,
+        other_weapons:0,
+        murders:"3",
         murders_people:null,
-        rape:null,
+        rape:"0",
         rape_people:null,
-        assault:null,
+        assault:"0",
         assault_people:null,
-        vehicle_theft:null,
+        vehicle_theft:"4",
         vehicle_make:null,
         vehicle_model:null,
         vehicle_colour:null,
         vehicle_year:null,
-        burglary:null,
-        burglary_type:null,
-        robbery:null,
-        robbery_type:null,
-        kidnapping:null,
+        burglary:0,
+        burglary_type:"other",
+        robbery:0,
+        robbery_type:"other",
+        kidnapping:"0",
         kidnapping_people:null,
-        bribery:null,
+        bribery:"0",
         various:null,
-        police_reporting:null,
-        reported_to_the_police:null,
+        police_reporting:2,
+        reported_to_the_police:2,
         police_case_num:null,
         fileName:null,
         datetime:null,
@@ -52,6 +53,9 @@ const registerReport = createSlice({
   name: "registerReport",
   initialState,
   reducers: {
+    setLock:(state,action)=>{
+        state.lock=action.payload;
+    },
     setProgressBar:(state,action)=>{
         const {activeStep,beforeNext,beforeBack=null} = action.payload;
         state={...state,activeStep,beforeNext,beforeBack};
@@ -128,6 +132,6 @@ const registerReport = createSlice({
 }
 });
 
-export const {setZoom,setPage,setPage2,setPage3,setPage4,setPage5,setPage6,setPage7,setPage8,setPage9,setPage10,setPage11,setPage12,setPage13,setPage14,setPage15,setPage16,setProgressBar} =registerReport.actions;
+export const {setLock,setZoom,setPage,setPage2,setPage3,setPage4,setPage5,setPage6,setPage7,setPage8,setPage9,setPage10,setPage11,setPage12,setPage13,setPage14,setPage15,setPage16,setProgressBar} =registerReport.actions;
 
 export const registerReportReducer = registerReport.reducer;
