@@ -13,19 +13,27 @@ import {
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage } from 'src/store/reducers/registerReport';
+import { setLock, setPage } from 'src/store/reducers/registerReport';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 function Page7() {
   const {assault:value,assault_people:count} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
+  const [error,setError] = useState("");
 
   const setValue=(assault)=>dispatch(setPage({assault}));
   const setCount=(assault_people)=>dispatch(setPage({assault_people}));
 
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    const value = event.target.value
+    if(value==="0"||value==="2"){
+      dispatch(setLock(false))
+      setCount(null);
+    }else{
+      setCount(1);
+    }
+    setValue(value);
   };
 
   return (
@@ -56,13 +64,23 @@ function Page7() {
                     control={<Checkbox checked={value==="2"} value={2} onChange={handleChange} />}
                     label="No"
                   />
-                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', mt:3 }}>
                   <TextField
                     type="number"
-                    sx={{ px: 1 }}
+                    sx={{ px: 1,width:100 }}
                     value={count}
-                    onChange={(e)=>setCount(e.target.value)}
-                    disabled={value===0}
+                    onChange={(e)=>{
+                      const count=e.target.value;
+                      if(!count||count<=0){
+                        dispatch(setLock(true))
+                        setError("*required")
+                      }else{
+                        dispatch(setLock(false))
+                        setError("")
+                      }
+                      setCount(count);
+                    }}
+                    disabled={value==="0"||value==="2"}
                     InputProps={{
                       inputProps: {
                         min: 1,
@@ -70,12 +88,13 @@ function Page7() {
                         step: 1,
                       },
                     }}
-                    required
+                    error={error?true:false}
+                    helperText={error}
                   />
                   <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
                     If so, How many were Assaulted
                   </Typography>
-                </div>
+                </Box>
 
                 </Box>
               </Box>

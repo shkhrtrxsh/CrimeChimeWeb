@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef} from 'react';
 import { Container, Typography, Grid, Box , Divider, LinearProgress, Checkbox, Select, MenuItem,useMediaQuery,
   useTheme,
-  TextField, } from '@mui/material';
+  TextField,
+  FormHelperText, } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import ak from '../../../assets/images/ak.png'
@@ -10,14 +11,26 @@ import knife from '../../../assets/images/knife.png'
 import others from '../../../assets/images/others.png'
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage, setPage4 } from 'src/store/reducers/registerReport';
+import { setLock, setPage, setPage4 } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 function Page4() {
   const data = useSelector(state=>state.reportRegister.data);
   const {weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons}=data;
+  const [error, setError] = useState("")
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+    const weaponSum=fully_auto_weapons+semi_auto_weapons+knife_weapons+other_weapons;
+    if(weaponSum<=0&&weapons===-1){
+      setError("*Weapons count should be atleast one");
+      dispatch(setLock(true));
+    }else{
+      setError("");
+      dispatch(setLock(false));
+    }
+  },[weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons])
 
   const handleChange = (event) => {
     dispatch(setPage({weapons:event.target.value}));
@@ -27,8 +40,6 @@ function Page4() {
     dispatch(setPage({[name]:value}));
   }
   
-  const theme = useTheme();
-  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
     const fields=[
       {
@@ -82,22 +93,25 @@ function Page4() {
                 </Typography>
               </Grid>
               <div>
-                <Select value={weapons} onChange={handleChange} sx={{ paddingX: 2,marginBottom:4,width:'95%',maxWidth:'310px' }}>
+                <Select value={weapons} onChange={handleChange} sx={{ paddingX: 2,width:'95%',maxWidth:'310px' }} error={error?true:false}>
                     <MenuItem value={-1}>Perpetrator used weapons</MenuItem>
                     <MenuItem value={1}>Perpetrator didn't use weapon</MenuItem>
                     <MenuItem value={0}>Unknown</MenuItem>
                 </Select>
-                {fields.map((f,ind)=>{
-                  return(
-                  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3',width:"100%" }} key={ind}>
-                    <TextField type="number" inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} id="outlined-basic" variant="outlined" sx={{width:"80px"}} margin="normal" disabled={weapons>=0} onChange={handleCount} name={f.name} value={data[f.name]||""}/>
-                    <Typography sx={{ fontWeight: 'normal',fontSize:'16px', paddingX: 2, textAlign: 'left' }}>
-                      {f.label}
-                    </Typography>
-                    <img src={f.imageSrc} style={{ width: '40px', height: '40px' }} alt={f.imageAlt} />
-                  </div>
-                  )
-                })}
+                {error&&<FormHelperText sx={{color:'red',ml:2}}>{error}</FormHelperText>}
+                <Box component={"ul"} sx={{mt:4}}>
+                  {fields.map((f,ind)=>{
+                    return(
+                    <li style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3',width:"100%" }} key={ind}>
+                      <TextField type="number" inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} id="outlined-basic" variant="outlined" sx={{width:"80px"}} margin="normal" disabled={weapons>=0} onChange={handleCount} name={f.name} value={data[f.name]||""}/>
+                      <Typography sx={{ fontWeight: 'normal',fontSize:'16px', paddingX: 2, textAlign: 'left' }}>
+                        {f.label}
+                      </Typography>
+                      <img src={f.imageSrc} style={{ width: '40px', height: '40px' }} alt={f.imageAlt} />
+                    </li>
+                    )
+                  })}
+                </Box>
                 
                
               </div>
