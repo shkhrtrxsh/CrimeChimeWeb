@@ -1,0 +1,43 @@
+import { useTheme } from '@emotion/react';
+import { Box, Divider, LinearProgress, Typography, useMediaQuery } from '@mui/material'
+import React from 'react'
+import NextButton from 'src/components/Button/NextButton'
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { loadGoogleMaps } from 'src/utils/googleMap';
+const Progress = ({ activeStep }) => {
+    const totalSteps = 15;
+    const progress = (activeStep / totalSteps) * 100;
+
+    return <LinearProgress variant="determinate" value={progress} />;
+  };
+
+const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,backLink=null,setActiveStep,cancelState}) => {
+  const [cancel,setCancel] = cancelState||[];
+  const theme = useTheme();
+  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
+  return (
+    <Box sx={{height:"100%",display: 'flex', justifyContent: 'center', alignItems: 'end',width:"100%"}}>
+        <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'end', backgroundColor: '#ffe600', color: 'black', padding: '12px',width:"100%" }}>
+
+            {backLink?<NextButton beforeNext={()=>setActiveStep(activeStep-1)} textValue="GO BACK"/>:null}
+
+            <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+
+            <Typography variant="h6">#{activeStep}/16</Typography>
+
+            <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+
+            <NextButton textValue="NEXT" beforeNext={()=>setActiveStep(activeStep+1)} />
+            {!isMdBreakpoint&&
+              <Box sx={{display:'flex',mx:3,justifyContent:'center',alignItems:'center'}} onClick={()=>{setCancel(false);}}>
+                <LocationOnIcon/>
+                <Typography sx={{cursor:"pointer"}} variant="h6">View Map</Typography>
+              </Box>
+            }
+        </Box>
+        <Progress activeStep={activeStep} />
+    </Box>
+  )
+}
+
+export default ProgressBar
