@@ -1,4 +1,5 @@
-import { format, formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow, parseISO } from 'date-fns';
+import {utcToZonedTime} from 'date-fns-tz'
 
 // ----------------------------------------------------------------------
 
@@ -18,4 +19,10 @@ export function fToNow(date) {
   return formatDistanceToNow(new Date(date), {
     addSuffix: true,
   });
+}
+
+export function splitISODatetime(datetime){
+  const date = format(datetime, 'yyyy-MM-dd');
+  const time = format(utcToZonedTime(datetime, "UTC"), 'HH:mm:ss.SSS');
+  return {date,time}
 }

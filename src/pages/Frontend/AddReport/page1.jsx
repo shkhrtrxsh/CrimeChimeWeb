@@ -5,58 +5,47 @@ import {
   Grid,
   TextField,
   Box,
-  Divider,
-  LinearProgress,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { DatePicker, TimePicker, LocalizationProvider } from '@mui/lab';
+import { DatePicker, TimePicker, LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import NextButton from 'src/components/Button/NextButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPage } from 'src/store/reducers/registerReport';
+import ProgressBar from 'src/layouts/Report/ProgressBar';
+import { splitISODatetime, splitLocaleDatetime } from 'src/utils/formatTime';
 
 function Page1() {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-  const handleTimeChange = (time) => {
-    setSelectedTime(time);
-  };
+  const {datetime} = useSelector(state=>state.reportRegister.data);
+  //const {date,time} = datetime===null?{date:null,time:null}:splitLocaleDatetime()
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    loadGoogleMaps();
-  }, []);
+  useEffect(()=>{
+    if(datetime===null){
+      dispatch(setPage({datetime:new Date(Date.now()).toISOString()}))
+    }
+  },[])
 
-  const loadGoogleMaps = () => {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyApoj80RTzWkAIc_eswUmPogeoufErlNaw&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  };
+  const changeDate = (e)=>{
+    const {date,time} = splitISODatetime(e);
+    const newTime = datetime===null?time:splitISODatetime(e)?.time
+    dispatch(setPage({datetime:date+"T"+newTime+"Z"}));
+  }
 
-  window.initMap = () => {
-    new window.google.maps.Map(document.getElementById('map'), {
-      center: { lat: 20.5937, lng: 78.9629 },
-      zoom: 12,
-    });
-  };
-
-  const ProgressBar = ({ activeStep }) => {
-    const totalSteps = 15;
-    const progress = (activeStep / totalSteps) * 100;
-
-    return <LinearProgress variant="determinate" value={progress} />;
-  };
+  const changeTime = (e)=>{
+    const {date,time} = splitISODatetime(e);
+    const newDate = datetime===null?date:splitISODatetime(e)?.date
+    dispatch(setPage({datetime:newDate+"T"+time+"Z"}));
+  }
 
   const theme = useTheme();
-  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
+  const dateNow = new Date(Date.now());
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div style={{ height: '55%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
-        <div style={{ width: isMdBreakpoint ? '33.33%' : '100%' }}>
+      {/* <div style={{ height: '100%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
+        <div style={{ width: isMdBreakpoint ? '33.33%' : '100%',display:'flex',flexDirection:'column' }}> */}
           <Container maxWidth="sm" style={{ padding: theme.spacing(5, 0) }}>
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={10}>
@@ -64,6 +53,7 @@ function Page1() {
                   Report Crime
                 </Typography>
               </Grid>
+
               <Grid item xs={10}>
                 <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center' }}>
                   Select date
@@ -72,40 +62,36 @@ function Page1() {
               <Grid item xs={10} sx={{ textAlign: 'center' }}>
                 <DatePicker
                   label="Select Date"
-                  value={selectedDate}
-                  onChange={handleDateChange}
+                  value={datetime}
+                  onChange={changeDate}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </Grid>
+
               <Grid item xs={10}>
-                <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', mt: 5 }}>
+                <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center' }}>
                   Select time
                 </Typography>
               </Grid>
               <Grid item xs={10} sx={{ textAlign: 'center' }}>
                 <TimePicker
                   label="Select Time"
-                  value={selectedTime}
-                  onChange={handleTimeChange}
+                  value={datetime}
+                  onChange={changeTime}
+                  maxTime={dateNow}
                   renderInput={(params) => <TextField {...params} />}
-                  ampm={false}
                 />
               </Grid>
-            </Grid>
+            </Grid>          
           </Container>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', background: '#f6e05e', padding: '20px',  marginTop: '96px' }}>
-            <Typography variant="h6" component="span">
-              #1/15
-            </Typography>
-            <Divider orientation="vertical" flexItem style={{ background: '#000', margin: '0 8px' }} />
-            <NextButton nextLink="/page2" textValue="Next"/> 
-          </div>
-          <ProgressBar activeStep={1} />
-        </div>
+          {/* <Box sx={{flexGrow:1}}>
+            <ProgressBar activeStep={1} nextLink="/report/page2"/>
+          </Box> */}
+        {/* </div>
         <div style={{ width: isMdBreakpoint ? '66.67%' : '100%', height: isMdBreakpoint ? '91vh' : '0vh' }}>
           <div id="map" style={{ width: '100%', height: '100%', display: isMdBreakpoint ? 'block' : 'none' }}></div>
         </div>
-      </div>
+      </div> */}
     </LocalizationProvider>
   );
 }
