@@ -6,7 +6,7 @@ const NextButton = ({nextLink,beforeNext=null,afterNext=null,textValue}) => {
     const navigate = useNavigate();
     const next = ()=>{
         beforeNext &&beforeNext();
-        navigate(nextLink);
+        nextLink&&navigate(nextLink);
         afterNext &&afterNext();
     }
     return (
