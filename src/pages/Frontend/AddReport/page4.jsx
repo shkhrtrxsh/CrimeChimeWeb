@@ -5,7 +5,7 @@ import { Container, Typography, Grid, Box , Divider, LinearProgress, Checkbox, S
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import ak from '../../../assets/images/ak.png'
-import pistol from '../../../assets/images/pistol.jpg'
+import pistol from '../../../assets/images/ak.png'
 import knife from '../../../assets/images/knife.png'
 import others from '../../../assets/images/others.png'
 import NextButton from 'src/components/Button/NextButton';

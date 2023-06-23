@@ -3,7 +3,6 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage} from 'src/store/reducers/registerReport';
-import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 const Page14 = () => {
   const {various:checked} = useSelector(state=>state.reportRegister.data);
