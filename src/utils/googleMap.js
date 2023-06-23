@@ -1,4 +1,4 @@
-import { setPage } from "src/store/reducers/registerReport";
+import { setPage, setZoom } from "src/store/reducers/registerReport";
 
 export const isWithinSAfrica = (latitude,longitude)=>{
     // Create a polygon representing the boundaries of South Africa
@@ -34,7 +34,8 @@ export const getLocationCoords = async () => {
   }
 };
 
-export const loadGoogleMaps = (dispatch,lng,lat) => {
+export const loadGoogleMaps = (dispatch,lng,lat,zoom=12) => {
+  const SatelliteTransition=15;
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&callback=initMap`;
     script.async = true;
@@ -45,12 +46,18 @@ export const loadGoogleMaps = (dispatch,lng,lat) => {
      
       const map = new window.google.maps.Map(document.getElementById('map'), {
         center: { lat: latitude, lng: longitude },
-        zoom: 12,
+        zoom,
+        mapTypeId:zoom>SatelliteTransition?"satellite":"roadmap"
       });
       new window.google.maps.Marker({
         position: { lat: latitude, lng: longitude }, // Latitude and longitude of the marker
         map:map,
         title: "Crime Location Marker", // Optional title for the marker
+      });
+      map.addListener("zoom_changed", () => {
+        const zoomLevel = map.getZoom();
+        dispatch(setZoom(zoomLevel));
+        map.setMapTypeId(zoomLevel>SatelliteTransition?"satellite":"roadmap");
       });
       if(lng===null||lat===null){
         dispatch(setPage({latitude,longitude}))
