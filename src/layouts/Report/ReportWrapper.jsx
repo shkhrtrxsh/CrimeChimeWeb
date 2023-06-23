@@ -3,10 +3,10 @@ import { Outlet, useLocation } from 'react-router-dom'
 import ProgressBar from './ProgressBar'
 import { Box, Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { loadGoogleMaps } from 'src/utils/googleMap';
-import GoogleMap from 'src/components/GoogleMap/GoogleMap';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setPage13, setPage2, setPage3 } from 'src/store/reducers/registerReport';
 import Page1 from '../../pages/Frontend/AddReport/page1'
+import Duplicate from '../../pages/Frontend/AddReport/duplicate'
 import Page2 from '../../pages/Frontend/AddReport/page2'
 import Page3 from '../../pages/Frontend/AddReport/page3'
 import Page4 from '../../pages/Frontend/AddReport/page4'
@@ -26,7 +26,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import PageSubmit from 'src/pages/Frontend/AddReport/pageSubmit';
 const ReportPageRouter = ({selectActive=1,setSelectActive})=>{
     const ReportPages=[
-        <Page1/>,<Page2 setSelectActive={setSelectActive}/>,<Page3/>,<Page4/>,<Page5/>,<Page6/>,<Page7/>,<Page8 />,<Page9/>,<Page10/>,<Page11/>,<Page12/>,<Page13/>,<Page14/>,<Page15/>,<Page16 setSelectActive={setSelectActive}/>
+        <Page1/>,<Page2 setSelectActive={setSelectActive}/>,<Duplicate/>,<Page3/>,<Page4/>,<Page5/>,<Page6/>,<Page7/>,<Page8/>,<Page9/>,<Page10/>,<Page11/>,<Page12/>,<Page13/>,<Page14/>,<Page15/>,<Page16 setSelectActive={setSelectActive}/>
     ]
     return ReportPages[selectActive-1];
 }
