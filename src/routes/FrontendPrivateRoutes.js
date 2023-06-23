@@ -3,6 +3,7 @@ import Profile from "src/pages/Frontend/User/Profile";
 import EditProfile from "src/pages/Frontend/User/EditProfile";
 import EditAddress from "src/pages/Frontend/User/EditAddress";
 import MyReport from "src/pages/Frontend/User/MyReport";
+import ReportWrapper from "src/layouts/Report/ReportWrapper";
 
 const FrontendPrivateRoutes = [
     {
@@ -24,6 +25,9 @@ const FrontendPrivateRoutes = [
     {
         path: '/my-report',
         element: <MyReport />
+    },
+    {   path:'/reportCrime',
+        element:<ReportWrapper/>,
     },
 ]
 
