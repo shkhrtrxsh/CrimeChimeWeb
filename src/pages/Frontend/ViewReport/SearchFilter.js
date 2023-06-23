@@ -166,7 +166,7 @@ export default function SearchFilter(props) {
                     size="medium"
                     color="primary"
                     aria-label="add report"
-                    to="/report/add"
+                    to="/report/reportCrime"
                     component={Link}
                     variant={isDesktop ? 'extended' : 'circular'}
                 >
