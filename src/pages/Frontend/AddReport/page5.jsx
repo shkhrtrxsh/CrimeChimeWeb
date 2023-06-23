@@ -7,42 +7,27 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage5 } from 'src/store/reducers/registerReport';
+import { setPage } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
+import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 function Page5() {
-  const {murders,murders_people} = useSelector(state=>state.reportRegister.data);
-  const ProgressBar = ({ activeStep }) => {
-    const totalSteps = 15;
-    const progress = (activeStep / totalSteps) * 100;
-
-    return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
-  };
-
-  const [count, setCount] = useState(murders_people);
-  const [value, setValue] = useState(murders);
+  const {murders:count,murders_people:value} = useSelector(state=>state.reportRegister.data);
 
   const dispatch = useDispatch();
 
-  const beforeNext = ()=>{
-    dispatch(setPage5({murders:value,murders_people:count}));
-  }
+  const setCount=(murders)=>dispatch(setPage({murders}));
+  const setValue=(murders_people)=>dispatch(setPage({murders_people}));
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
-
-  useEffect(() => {
-    loadGoogleMaps();
-  }, []);
 
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <div style={{ display: 'flex', flexDirection: 'row', height: '55%' }}>
-        <div style={{ width: isMdBreakpoint? '33.33%': '100%' }}>
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingTop: '40px' }}>
               <Grid item xs={10} >
@@ -83,21 +68,6 @@ function Page5() {
               </div>
             </Grid>
           </Container>
-          <div>
-          <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'end', backgroundColor: '#FFEE58', color: 'black', padding: '12px', marginTop: '100px' }}>
-              <NextButton nextLink="/page4" textValue="Back"/>
-              <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <Typography variant="h6">#5/16</Typography>
-              <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page6" textValue="Next" beforeNext={beforeNext}/>
-            </Box>
-            <ProgressBar activeStep={5} />
-          </div>
-        </div>
-        <div style={{ width: isMdBreakpoint ? '66.67%' : '0%', height: isMdBreakpoint ? '91vh' : '0vh' }}>
-          <div id="map" style={{ width: '100%', height: '100%', display: isMdBreakpoint ? 'block' : 'none' }}></div>
-        </div>
-      </div>
     </LocalizationProvider>
   );
 }

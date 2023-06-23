@@ -5,47 +5,34 @@ import {
   Grid,
   TextField,
   Box,
-  Divider,
-  LinearProgress,
-  Checkbox,
   Select,
   MenuItem,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage7 } from 'src/store/reducers/registerReport';
-import { loadGoogleMaps } from 'src/utils/googleMap';
+import { setPage } from 'src/store/reducers/registerReport';
+import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 function Page7() {
-  const {assault,assault_people} = useSelector(state=>state.reportRegister.data);
-  const [value, setValue] = useState(assault||0);
-  const [count, setCount] = useState(assault_people||0);
+  const {assault:value,assault_people:count} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
-  const ProgressBar = ({ activeStep }) => {
-    const totalSteps = 15;
-    const progress = (activeStep / totalSteps) * 100;
 
-    return <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'yellow.300', mt: 0.5 }} />;
-  };
+  const setValue=(assault)=>dispatch(setPage({assault}));
+  const setCount=(assault_people)=>dispatch(setPage({assault_people}));
 
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
-  useEffect(() => {
-    loadGoogleMaps();
-  }, []);
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', height: '55%' }}>
-        <Box sx={{ pt: { xs: '10px', md: '20px' }, width: {xs:'100%',md:'33.33%' }}}>
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }}>
-              <Grid item xs={10} sx={{ pt: 5 }}>
+              <Grid item xs={10} sx={{ pt: 5,mt:5 }}>
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Assault
                 </Typography>
@@ -54,13 +41,21 @@ function Page7() {
                 </Typography>
               </Grid>
 
-              <Box sx={{ py: 5 }}>
 
-              <Select value={value} onChange={handleChange} sx={{ paddingX: 2,marginBottom:4,width:'95%',maxWidth:'310px' }}>
-                    <MenuItem value={0}>Unknown</MenuItem>
-                    <MenuItem value={1}>Yes</MenuItem>
-                    <MenuItem value={2}>No</MenuItem>
-                </Select>
+              <Box sx={{ py: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'COLUMN', justifyContent: 'center', my: 4, pl: 4 }}>
+                <FormControlLabel
+                    control={<Checkbox checked={value==="0"} value={0} onChange={handleChange} />}
+                    label="Unknown"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={value==="1"} value={1} onChange={handleChange} />}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={value==="2"} value={2} onChange={handleChange} />}
+                    label="No"
+                  />
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3' }}>
                   <TextField
                     type="number"
@@ -78,39 +73,14 @@ function Page7() {
                     required
                   />
                   <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
-                    If yes How many were assaulted?
+                    If so, How many were Assaulted
                   </Typography>
                 </div>
+
+                </Box>
               </Box>
             </Grid>
           </Container>
-          <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFEE58', color: 'black', padding: '12px', marginTop: '16px' }}>
-              <NextButton nextLink="/page6" textValue="Back"/>
-              <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <Typography variant="h6">#7/16</Typography>
-              <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-              <NextButton nextLink="/page8" textValue="Next" beforeNext={()=>{
-                dispatch(setPage7({assault:value,assault_people:count}));
-              }}/>
-            </Box>
-            <ProgressBar activeStep={6} />
-        </Box>
-        <Box
-          sx={{
-            width: '66.67%',
-            height: '91vh',
-            display: { xs: 'none', md: 'block' },
-          }}
-        >
-          <Box
-            id="map"
-            sx={{
-              width: '100%',
-              height: '100%',
-            }}
-          />
-        </Box>
-      </Box>
     </LocalizationProvider>
   );
 }
