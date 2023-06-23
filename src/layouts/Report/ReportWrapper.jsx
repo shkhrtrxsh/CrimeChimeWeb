@@ -26,14 +26,15 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import PageSubmit from 'src/pages/Frontend/AddReport/pageSubmit';
 const ReportPageRouter = ({selectActive=1,setSelectActive})=>{
     const ReportPages=[
-        <Page1/>,<Page2 setSelectActive={setSelectActive}/>,<Page3/>,<Page4/>,<Page5/>,<Page6/>,<Page7/>,<Page8/>,<Page9/>,<Page10/>,<Page11/>,<Page12/>,<Page13/>,<Page14/>,<Page15/>,<Page16 setSelectActive={setSelectActive}/>
+        <Page1/>,<Page2 setSelectActive={setSelectActive}/>,<Page3/>,<Page4/>,<Page5/>,<Page6/>,<Page7/>,<Page8 />,<Page9/>,<Page10/>,<Page11/>,<Page12/>,<Page13/>,<Page14/>,<Page15/>,<Page16 setSelectActive={setSelectActive}/>
     ]
     return ReportPages[selectActive-1];
 }
 
 const ReportWrapper = () => {
-    const data = useSelector(state=>state.reportRegister.data);
-    const {longitude,latitude} = data;
+    const register = useSelector(state=>state.reportRegister);
+    const {data,zoom,lock} = register;
+    const {longitude,latitude,vehicle_theft} = data;
     const [cancel,setCancel] = useState(true);
     const [selectActive, setSelectActive] = useState(1);
     const dispatch = useDispatch();
@@ -41,8 +42,18 @@ const ReportWrapper = () => {
     const pathname = location.pathname;
     console.log(pathname)
     useEffect(() => {
-      loadGoogleMaps(dispatch,longitude,latitude);  
+      loadGoogleMaps(dispatch,longitude,latitude,zoom);  
     }, [selectActive,dispatch,cancel]);
+
+    const setActiveStep = (oldStep,newStep)=>{
+        if(oldStep===8||oldStep===10){
+            if(newStep===9&&vehicle_theft==="4"){
+                setSelectActive(oldStep===8?10:8);
+                return;
+            }
+        }
+        setSelectActive(newStep);
+    }
 
     const theme = useTheme();
     const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
@@ -58,14 +69,14 @@ const ReportWrapper = () => {
                     <Box sx={{ width: '100%', height: "100%",flexGrow:1,backgroundColor:"#ffe600" }}>
                         <Box sx={{display:"flex",flexDirection:"row-reverse",my:2}} onClick={()=>setCancel(true)}>
                             <CancelIcon sx={{ml:1,mr:3}}/>
-                            <Typography >close</Typography>
+                            <Typography>close</Typography>
                         </Box>
                         <Box id="map" sx={{ width: '100%', height: '100%'}}>
                         </Box>
                     </Box>
                 }
                 <Box sx={{flexGrow:1,height:"min-content"}}>
-                    <ProgressBar activeStep={selectActive} setActiveStep={setSelectActive} backLink={selectActive-1} nextLink="/report/page2" cancelState={[cancel,setCancel]}/>
+                    <ProgressBar activeStep={selectActive} setActiveStep={setActiveStep} backLink={selectActive-1} nextLink="/report/page2" cancelState={[cancel,setCancel]} lock={lock}/>
                 </Box>
             </div>
             <div style={{ width: isMdBreakpoint ? '66.67%' : '100%', height: isMdBreakpoint ? '91vh' : '0vh' }}>

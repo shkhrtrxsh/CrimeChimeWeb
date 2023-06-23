@@ -11,7 +11,7 @@ const Progress = ({ activeStep }) => {
     return <LinearProgress variant="determinate" value={progress} />;
   };
 
-const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,backLink=null,setActiveStep,cancelState}) => {
+const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,backLink=null,setActiveStep,cancelState,lock}) => {
   const [cancel,setCancel] = cancelState||[];
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
@@ -19,7 +19,7 @@ const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,b
     <Box sx={{height:"100%",display: 'flex', justifyContent: 'center', alignItems: 'end',width:"100%"}}>
         <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'end', backgroundColor: '#ffe600', color: 'black', padding: '12px',width:"100%" }}>
 
-            {backLink?<NextButton beforeNext={()=>setActiveStep(activeStep-1)} textValue="GO BACK"/>:null}
+            {backLink?<NextButton beforeNext={lock?null:()=>setActiveStep(activeStep,activeStep-1)} textValue="GO BACK"/>:null}
 
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
 
@@ -27,7 +27,7 @@ const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,b
 
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
 
-            <NextButton textValue="NEXT" beforeNext={()=>setActiveStep(activeStep+1)} />
+            <NextButton textValue="NEXT" beforeNext={lock?null:()=>setActiveStep(activeStep,activeStep+1)} />
             {!isMdBreakpoint&&
               <Box sx={{display:'flex',mx:3,justifyContent:'center',alignItems:'center'}} onClick={()=>{setCancel(false);}}>
                 <LocationOnIcon/>
