@@ -67,7 +67,7 @@ const Page15 = () => {
                   <video id="video" controls ref={source} width="300px" height="150px" style={{ display: 'none' }}>
                     <source src="" type="video/mp4"/>
                   </video>
-                  <img src="" alt="crime" style={{ display: 'none' }} ref={canvas}/>
+                  <img src="" alt="crime" style={{ display: 'none',width:"300px",height:"150px",maxWidth:"300px",maxHeight:"300px" }} ref={canvas}/>
                   <Box sx={{ p: 5, display: 'flex', justifyContent: 'center' }}>
                     <TextField label="Describe the crime.." multiline rows={8} variant="outlined" sx={{ borderRadius: 'none' }} value={value?.description||""} onChange={(e)=>setValue({...value,description:e.target.value})}/>
                   </Box>

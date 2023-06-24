@@ -11,7 +11,7 @@ const Progress = ({ activeStep }) => {
     return <LinearProgress variant="determinate" value={progress} />;
   };
 
-const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,backLink=null,setActiveStep,cancelState,lock}) => {
+const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,backLink=null,setActiveStep,cancelState,lock,submit}) => {
   const [cancel,setCancel] = cancelState||[];
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
@@ -23,11 +23,11 @@ const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,b
 
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
 
-            <Typography variant="h6">#{activeStep}/16</Typography>
+            <Typography variant="h6">#{activeStep}/17</Typography>
 
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
 
-            <NextButton textValue="NEXT" beforeNext={lock?null:()=>setActiveStep(activeStep,activeStep+1)} />
+            <NextButton textValue={submit?"SUBMIT":"NEXT"} beforeNext={lock?null:()=>{beforeNext?beforeNext():setActiveStep(activeStep,activeStep+1)}} />
             {!isMdBreakpoint&&
               <Box sx={{display:'flex',mx:3,justifyContent:'center',alignItems:'center'}} onClick={()=>{setCancel(false);}}>
                 <LocationOnIcon/>

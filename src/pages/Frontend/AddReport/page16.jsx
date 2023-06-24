@@ -9,7 +9,8 @@ import { objectToFormData } from 'src/utils/formatObject';
 import API from 'src/config/api';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 
-const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
+export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
+  const [disable, setDisable] = useState(false)
   return(
     <Dialog
         open={open}
@@ -27,8 +28,11 @@ const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>{confirm?"OK":"Cancel"}</Button>
-          {!confirm&&<Button onClick={onClickEvent} autoFocus>
+          <Button disabled={disable} onClick={handleClose}>{confirm?"OK":"Cancel"}</Button>
+          {!confirm&&<Button disabled={disable} onClick={()=>{
+            setDisable(true);
+            onClickEvent();
+            setDisable(false);}} autoFocus>
             OK
           </Button>}
         </DialogActions>
@@ -36,13 +40,12 @@ const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
   )
 }
 
-const Page16 = () => {
-  const value = useSelector(state=>state.reportRegister.data);
+const Page16 = ({selectActive,setActiveStep}) => {
+  const register = useSelector(state=>state.reportRegister);
+  const {data:value,lock}=register;
   const {police_reporting,reported_to_the_police,police_case_num}=value;
   const dispatch = useDispatch();
   const [error, setError] = useState("")
-  const [open,setOpen] = useState(false);
-  const [confirm,setConfirm] = useState(false);
 
   const setValue=(value)=>dispatch(setPage(value));
 
@@ -51,24 +54,9 @@ const Page16 = () => {
     setValue({...value,[name]:val});
   };
 
-  const beforeBack = ()=>{
-    dispatch(setPage16(value));
-  }
 
-  const beforeNext = ()=>{
-    dispatch(setPage16(value));
-    setOpen(true);
-  }
 
-  const onClickEvent = async()=>{
-    try {
-      const formData =objectToFormData(value);
-      await API.post("/report",formData);
-    } catch (error) {
-      console.log(error);
-    }
-    setConfirm(true);
-  }
+  
 
   useEffect(()=>{
     if(police_case_num||reported_to_the_police===2){
@@ -83,7 +71,6 @@ const Page16 = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <SubmitDialog open={open} handleClose={()=>setOpen(false)} confirm={confirm} onClickEvent={onClickEvent} />
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }}>
               <Grid item xs={10} sx={{ pt: 5 }}>

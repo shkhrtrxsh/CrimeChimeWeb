@@ -43,32 +43,32 @@ function Duplicate() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Container maxWidth="sm">
-            <Grid container spacing={2} justifyContent="center" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+          <Container maxWidth="sm" sx={{ml:3}}>
+            <Grid container spacing={2} justifyContent="center" sx={{ paddingTop: '20px', paddingBottom: '20px' }}>
               <Grid item xs={10}>
-                <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
+                <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', paddingBottom: '10px' }}>
                   Possible Duplicate
                 </Typography>
                 
               </Grid>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left',alignItems:"center" }}>
         
           <img src={current} alt="imgg" style={{ width: '6%', height: 'auto' }} />
         <Box>
-          <Typography variant="h1" align="center" style={{ fontWeight: 'normal', paddingBottom: '10px', fontSize: '17px' }}>
+          <Typography align="center" sx={{ fontWeight: 'normal', paddingBottom: '10px', fontSize: '17px' }}>
             Your report location on the map
           </Typography>
         </Box>
         
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left',alignItems:"center" }}>
         
           <img src={duplicate} alt="imgg" style={{ width: '7%', height: 'auto' }} />
         
         <Box>
-          <Typography variant="h1" align="center" style={{ fontWeight: 'normal', paddingBottom: '10px', fontSize: '17px' }}>
+          <Typography align="center" sx={{ fontWeight: 'normal', paddingBottom: '10px', fontSize: '17px' }}>
             Possible duplicate report location on the map
           </Typography>
         </Box>
@@ -89,12 +89,12 @@ function Duplicate() {
       </Table>
     </TableContainer>
              </Box> 
-              <Box style={{paddingTop:'5px'}}>
-              <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '17px' }}>
+              <Box sx={{paddingTop:'5px'}}>
+              <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', paddingBottom: '10px', }}>
                  Is this your crime?
                 </Typography>
                 <Box display="flex" justifyContent="center">
-        <Button variant="contained" color="primary" style={{ marginRight: '10px' }}>
+        <Button variant="contained" color="primary" sx={{ marginRight: '10px' }}>
           Yes
         </Button>
         <Button variant="contained" color="primary">
