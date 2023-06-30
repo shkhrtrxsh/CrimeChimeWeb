@@ -24,10 +24,8 @@ export const CurrentLocationCoordinates = () => {
         if(position.lat === positionLatitude && position.lng === positionLongitude){
             setTimeout(function(){
                 setPosition(currentLocation)
-                // console.log("GPS with time out")
             },500)
 
-            // console.log("GPS")
             
         }
 
@@ -40,10 +38,8 @@ export const CurrentLocationCoordinates = () => {
                     lat: positionLatitude,
                     lng: positionLongitude
                 })
-                // console.log("No GPS with time out")
             },1000)
             
-            // console.log('No GPS')
         }
     }, [])
 

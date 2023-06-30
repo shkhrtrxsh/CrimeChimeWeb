@@ -124,7 +124,6 @@ export const report = createSlice({
         [getCrimes.fulfilled]: (state, action) => {
             state.loading = false;
             state.crime_list = action.payload;
-            console.log(action.payload)
         },
         [getCrimes.rejected]: (state, action) => {
             state.loading = false;
