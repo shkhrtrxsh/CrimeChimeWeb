@@ -57,8 +57,6 @@ function Page1() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      {/* <div style={{ height: '100%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
-        <div style={{ width: isMdBreakpoint ? '33.33%' : '100%',display:'flex',flexDirection:'column' }}> */}
           <Container maxWidth="sm" style={{ padding: theme.spacing(5, 0) }}>
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={10}>
@@ -98,14 +96,6 @@ function Page1() {
               </Grid>
             </Grid>          
           </Container>
-          {/* <Box sx={{flexGrow:1}}>
-            <ProgressBar activeStep={1} nextLink="/report/page2"/>
-          </Box> */}
-        {/* </div>
-        <div style={{ width: isMdBreakpoint ? '66.67%' : '100%', height: isMdBreakpoint ? '91vh' : '0vh' }}>
-          <div id="map" style={{ width: '100%', height: '100%', display: isMdBreakpoint ? 'block' : 'none' }}></div>
-        </div>
-      </div> */}
     </LocalizationProvider>
   );
 }
