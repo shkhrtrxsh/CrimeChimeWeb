@@ -5,7 +5,7 @@ const VerticalProgressBar = ({progress=0,maxVal}) => {
     <Box sx={{display:"flex",flexDirection:"column"}}>
         {Array(maxVal).fill(0).map(($_,ind)=>{
             return(
-                <Box sx={{width:"15px",height:"15px",flexGrow:1,bgcolor:(ind<progress)?"black":'rgba(0,0,0,0.5)',borderRadius:"50%",mb:1,ml:1}}></Box>
+                <Box sx={{width:"15px",height:"15px",flexGrow:1,bgcolor:(ind<progress)?"black":'rgba(0,0,0,0.5)',borderRadius:"50%",mb:1,ml:1}} key={ind}></Box>
             )
         })}
     </Box>
