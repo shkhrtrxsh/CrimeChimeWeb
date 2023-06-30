@@ -28,8 +28,6 @@ import VerticalProgressBar from 'src/components/Progress/VerticalProgressBar';
 import { objectToFormData } from 'src/utils/formatObject';
 import API from 'src/config/api';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
-import { searchPlaces } from 'src/utils/searchPlace';
-import jsonp from 'jsonp';
 const ReportPageRouter = ({selectActive=1,setSelectActive,openState,mapRef})=>{
     const ReportPages=[
         <Page1/>,<Page2 setSelectActive={setSelectActive}/>,<Duplicate mapRef={mapRef}/>,<Page3/>,<Page4/>,<Page5/>,<Page6/>,<Page7/>,<Page8/>,<Page9/>,<Page10/>,<Page11/>,<Page12/>,<Page13/>,<Page14/>,<Page15/>,<Page16 setSelectActive={setSelectActive} openState={openState}/>
