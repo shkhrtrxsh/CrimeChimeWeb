@@ -63,7 +63,7 @@ function Page5() {
                   <TextField
                     type="number"
                     sx={{ px: 1 }}
-                    value={count}
+                    value={count||""}
                     onChange={(e)=>{
                       const count = e.target.value;
                       if(!count||count<=0){

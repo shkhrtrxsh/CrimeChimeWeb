@@ -17,29 +17,42 @@ import ProgressBar from 'src/layouts/Report/ProgressBar';
 import { splitISODatetime, splitLocaleDatetime } from 'src/utils/formatTime';
 
 function Page1() {
-  const {datetime} = useSelector(state=>state.reportRegister.data);
+  const {date_time:datetime} = useSelector(state=>state.reportRegister.data);
   //const {date,time} = datetime===null?{date:null,time:null}:splitLocaleDatetime()
   const dispatch = useDispatch();
 
   useEffect(()=>{
     if(datetime===null){
-      dispatch(setPage({datetime:new Date(Date.now()).toISOString()}))
+      dispatch(setPage({date_time:new Date(Date.now()).toISOString()}))
     }
   },[])
 
   const changeDate = (e)=>{
     const {date,time} = splitISODatetime(e);
     const newTime = datetime===null?time:splitISODatetime(e)?.time
-    dispatch(setPage({datetime:date+"T"+newTime+"Z"}));
+    dispatch(setPage({date_time:date+"T"+newTime+"Z"}));
   }
 
   const changeTime = (e)=>{
     const {date,time} = splitISODatetime(e);
     const newDate = datetime===null?date:splitISODatetime(e)?.date
-    dispatch(setPage({datetime:newDate+"T"+time+"Z"}));
+    dispatch(setPage({date_time:newDate+"T"+time+"Z"}));
   }
 
   const theme = useTheme();
+  const mnTime = (date)=>{
+    const dt = new Date(date);
+    var newDate = new Date(
+      dt.getFullYear(),
+      dt.getMonth(),
+      dt.getDate(),
+      0,
+      0,
+      0,
+      0
+    );
+    return Number(newDate);
+  }
   const dateNow = new Date(Date.now());
 
   return (
@@ -63,6 +76,7 @@ function Page1() {
                 <DatePicker
                   label="Select Date"
                   value={datetime}
+                  maxDate={dateNow}
                   onChange={changeDate}
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -78,7 +92,7 @@ function Page1() {
                   label="Select Time"
                   value={datetime}
                   onChange={changeTime}
-                  maxTime={dateNow}
+                  maxTime={mnTime(datetime)===mnTime(dateNow)?dateNow:new Date(0,0,0,23,59,59,999)}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </Grid>

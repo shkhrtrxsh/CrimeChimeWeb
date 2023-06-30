@@ -16,7 +16,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PeopleIcon from '@mui/icons-material/People';
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLock, setPage, setPage3 } from 'src/store/reducers/registerReport';
+import { setLock, setPage } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 

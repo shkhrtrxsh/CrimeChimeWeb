@@ -4,13 +4,19 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLock, setPage, setPage16 } from 'src/store/reducers/registerReport';
+import { setLock, setPage,  } from 'src/store/reducers/registerReport';
 import { objectToFormData } from 'src/utils/formatObject';
 import API from 'src/config/api';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
+import { useNavigate } from 'react-router-dom';
 
 export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
   const [disable, setDisable] = useState(false)
+  const navigate = useNavigate();
+  const handleSuccess = ()=>{
+    handleClose();
+    navigate("/");
+  }
   return(
     <Dialog
         open={open}
@@ -28,12 +34,12 @@ export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button disabled={disable} onClick={handleClose}>{confirm?"OK":"Cancel"}</Button>
+          <Button disabled={disable} onClick={confirm?handleSuccess:handleClose}>{confirm?"OK":"Cancel"}</Button>
           {!confirm&&<Button disabled={disable} onClick={()=>{
             setDisable(true);
             onClickEvent();
             setDisable(false);}} autoFocus>
-            OK
+            {disable?"Submitting...":"OK"}
           </Button>}
         </DialogActions>
       </Dialog>

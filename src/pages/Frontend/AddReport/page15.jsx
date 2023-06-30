@@ -4,7 +4,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFile, setPage, setPage15 } from 'src/store/reducers/registerReport';
+import { setFile, setPage, } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 
@@ -19,7 +19,6 @@ const Page15 = () => {
   const handleFileChange = (event) => {
     const files = event.target.files[0];
     const fileURL = URL.createObjectURL(files)
-    console.log(files.type)
     if (files.type.startsWith('video/')) {
       source.current.src=fileURL;
       source.current.style.display="block";

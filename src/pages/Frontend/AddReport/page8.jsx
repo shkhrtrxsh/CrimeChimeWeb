@@ -23,7 +23,6 @@ function Page8() {
   const setValue = (vehicle_theft)=>dispatch(setPage({vehicle_theft}))
 
   const handleChange = (event) => {
-    console.log(event.target.value)
     setValue(event.target.value);
   };
 
