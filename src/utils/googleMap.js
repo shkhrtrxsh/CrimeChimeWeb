@@ -1,4 +1,4 @@
-import { setPage, setZoom } from "src/store/reducers/registerReport";
+import { setMap, setPage, setZoom } from "src/store/reducers/registerReport";
 
 export const isWithinSAfrica = (latitude,longitude)=>{
     // Create a polygon representing the boundaries of South Africa
@@ -22,7 +22,6 @@ export const getLocationCoords = async () => {
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
       
-      console.log(latitude, longitude);
       return isWithinSAfrica(latitude, longitude);
     } catch (error) {
       console.error("Error:", error);
@@ -49,6 +48,8 @@ export const loadGoogleMaps = (dispatch,lng,lat,zoom=12) => {
         zoom,
         mapTypeId:zoom>SatelliteTransition?"satellite":"roadmap"
       });
+      const mapDiv=document.getElementById('map');
+      mapDiv.map=map;
       new window.google.maps.Marker({
         position: { lat: latitude, lng: longitude }, // Latitude and longitude of the marker
         map:map,
