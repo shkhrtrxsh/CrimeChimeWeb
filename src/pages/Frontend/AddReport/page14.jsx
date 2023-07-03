@@ -1,4 +1,4 @@
-import { Container, Typography, Grid, Box, Checkbox } from '@mui/material';
+import { Container, Typography,useTheme, Grid, Box, Checkbox } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ const Page14 = () => {
   const dispatch = useDispatch();
 
   const setChecked = (various)=> dispatch(setPage({various}))
-
+  const theme = useTheme();
   const handleChange = (event) => {
     setChecked(event.target.value);
   };
@@ -21,9 +21,13 @@ const Page14 = () => {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }} mt={5}>
               <Grid item xs={10} className="pt-5">
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Various
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
                   Check all boxes that apply
                 </Typography>

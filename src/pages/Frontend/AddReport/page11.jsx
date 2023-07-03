@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Container, Typography, Grid, Box, Checkbox, Select, MenuItem } from '@mui/material';
+import { Container, Typography,useTheme, Grid, Box, Checkbox, Select, MenuItem } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +10,7 @@ import ProgressBar from 'src/layouts/Report/ProgressBar';
 function Page11() {
   const {robbery:checked,robbery_type:value} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
-
+  const theme = useTheme();
   const setChecked=(robbery)=>dispatch(setPage({robbery}));
   const setValue=(robbery_type)=>dispatch(setPage({robbery_type}));
 
@@ -24,9 +24,13 @@ function Page11() {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }}>
               <Grid item xs={10} sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }} mt={5}>
-              <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
+              <Typography variant="h4" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Robbery
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
                 (Items stolen in public area)
                 </Typography>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, Typography, Grid, TextField, Box, Divider, LinearProgress, Button } from '@mui/material';
+import { Container, Typography,useTheme, Grid, TextField, Box, Divider, LinearProgress, Button } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import NextButton from 'src/components/Button/NextButton';
@@ -15,7 +15,7 @@ const Page15 = () => {
   const ref = useRef();
   const source = useRef();
   const canvas = useRef();
-
+  const theme = useTheme();
   const handleFileChange = (event) => {
     const files = event.target.files[0];
     const fileURL = URL.createObjectURL(files)
@@ -39,9 +39,13 @@ const Page15 = () => {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }} mt={5}>
               <Grid item xs={10} sx={{ pt: 0 }}>
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Media/Description
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
               </Grid>
 
               <Grid item xs={10} sx={{ pl: 5}}>

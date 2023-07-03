@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid, Box, Divider, LinearProgress, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
+import { Container,useTheme,  Typography, Grid, Box, Divider, LinearProgress, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -18,7 +18,7 @@ function Page9() {
   const {vehicle_make,vehicle_model,vehicle_colour,vehicle_year} = data;
   const dispatch = useDispatch();
   const [error,setError]=useState((initialState={})=>initialState);
-
+  const theme = useTheme();
   var currentYear = new Date().getFullYear();
   const [car_models,setCarModels]=useState([]);
   const car_colors=colors.data;
@@ -89,9 +89,13 @@ function Page9() {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }}>
               <Grid item xs={10} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',mt:5 }}>
-              <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
+              <Typography variant="h4" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Vehicle Types
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                   <DirectionsCarIcon sx={{ fontSize: '4rem' }} />
                 </Box>

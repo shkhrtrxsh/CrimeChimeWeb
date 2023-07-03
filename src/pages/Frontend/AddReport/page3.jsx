@@ -21,108 +21,106 @@ import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 function Page3() {
-  const {perpetrators,perpetrators_des} = useSelector(state=>state.reportRegister.data);
-  const [checked, setChecked] = useState(perpetrators<=0)
-  const [error,setError] = useState("")
+  const { perpetrators, perpetrators_des } = useSelector((state) => state.reportRegister.data);
+  const [checked, setChecked] = useState(perpetrators <= 0);
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
 
-  const handleTextChange = (event)=>{
-    const {name,value} = event.target;
-    dispatch(setPage({[name]:value}));
-    if(value&&value>0){
-      setError("");
+  const handleTextChange = (event) => {
+    const { name, value } = event.target;
+    dispatch(setPage({ [name]: value }));
+    if (value && value > 0) {
+      setError('');
       dispatch(setLock(false));
-    }else{
-      setError("*required");
+    } else {
+      setError('*required');
       dispatch(setLock(true));
     }
-  }
+  };
 
   const handleChange = (event) => {
     const checked = event.target.checked;
-    if(checked){
-      setError("");
+    if (checked) {
+      setError('');
       dispatch(setLock(false));
     }
-    dispatch(setPage({perpetrators:checked?-1:1}));
-    setChecked(checked)
+    dispatch(setPage({ perpetrators: checked ? -1 : 1 }));
+    setChecked(checked);
   };
+
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Container maxWidth="sm">
-            <Grid container spacing={2} justifyContent="center" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-              <Grid item xs={10}>
-                <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
-                  Perpetrators
-                </Typography>
-                <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                  (persons who committed the crime)
-                </Typography>
-              </Grid>
+      <Container maxWidth="sm">
+        <Grid container spacing={2} justifyContent="center" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+          <Grid item xs={10}>
+          <Box display="flex" alignItems="center" justifyContent="center">
+  <Box  borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
+  <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
+    Perpetrators
+  </Typography>
+  <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+</Box>
 
-              <div>
-                <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
-                  How many perpetrators?
-                </Typography>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
 
-                  <TextField
-                    type="number"
-                    name="perpetrators"
-                    value={perpetrators<0?"":perpetrators}
-                    onChange={handleTextChange}
-                    disabled={checked}
-                    InputProps={{
-                      inputProps: {
-                        min: 1,
-                        max: 10,
-                        step: 1,
-                      },
-                    }}
-                    error={error?true:false}
-                    helperText={error}
-                  />
+            <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
+              (persons who committed the crime)
+            </Typography>
+          </Grid>
 
-                  <Typography style={{ marginLeft: '8px', marginRight: '8px', display: 'flex', alignItems: 'center' }}>OR</Typography>
+          <div>
+            <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+              How many perpetrators?
+            </Typography>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <TextField
+                type="number"
+                name="perpetrators"
+                value={perpetrators < 0 ? '' : perpetrators}
+                onChange={handleTextChange}
+                disabled={checked}
+                InputProps={{
+                  inputProps: {
+                    min: 1,
+                    max: 10,
+                    step: 1,
+                  },
+                }}
+                error={error ? true : false}
+                helperText={error}
+              />
 
-                  <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+              <Typography style={{ marginLeft: '8px', marginRight: '8px', display: 'flex', alignItems: 'center' }}>OR</Typography>
 
-                  <Typography style={{ display: 'flex',alignItems: 'center' }}>Unknown</Typography>
+              <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
 
-                  <Checkbox checked={checked===true} value={perpetrators} onChange={handleChange} />
+              <Typography style={{ display: 'flex', alignItems: 'center' }}>Unknown</Typography>
 
-                </div>
-              </div>
+              <Checkbox checked={checked === true} value={perpetrators} onChange={handleChange} />
+            </div>
+          </div>
 
-              <Grid item xs={10} style={{ display: 'flex', justifyContent: 'center' }}>
-
-                <PeopleIcon style={{ height: '112px', width: '112px' }} />
-
-              </Grid>
-              <Grid item xs={10} style={{ textAlign: 'center' }}>
-
-                <TextField
-                  label="Describe their appearance.."
-                  name="perpetrator_des"
-                  multiline
-                  rows={4}
-                  value={perpetrators_des||""}
-                  onChange = {(e)=>dispatch(setPage({perpetrators_des:e.target.value}))}
-                  variant="outlined"
-                  style={{ width: '100%' }}
-                />
-                
-              </Grid>
-            </Grid>
-          </Container>
-          
+          <Grid item xs={10} style={{ display: 'flex', justifyContent: 'center' }}>
+            <PeopleIcon style={{ height: '112px', width: '112px' }} />
+          </Grid>
+          <Grid item xs={10} style={{ textAlign: 'center' }}>
+            <TextField
+              label="Describe their appearance.."
+              name="perpetrator_des"
+              multiline
+              rows={4}
+              value={perpetrators_des || ''}
+              onChange={(e) => dispatch(setPage({ perpetrators_des: e.target.value }))}
+              variant="outlined"
+              style={{ width: '100%' }}
+            />
+          </Grid>
+        </Grid>
+      </Container>
     </LocalizationProvider>
   );
 }
 
 export default Page3;
-
-

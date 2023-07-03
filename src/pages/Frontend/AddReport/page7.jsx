@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
+  Container,useTheme, 
   Typography,
   Grid,
   TextField,
@@ -24,7 +24,7 @@ function Page7() {
   const setValue=(assault)=>dispatch(setPage({assault}));
   const setCount=(assault_people)=>dispatch(setPage({assault_people}));
 
-
+  const theme = useTheme();
   const handleChange = (event) => {
     const value = event.target.value
     if(value==="0"||value==="2"){
@@ -41,9 +41,13 @@ function Page7() {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }}>
               <Grid item xs={10} sx={{ pt: 5,mt:5 }}>
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Assault
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
                   (injuries due to violence)
                 </Typography>

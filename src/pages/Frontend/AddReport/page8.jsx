@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
+  Container,useTheme, 
   Typography,
   Grid,
   Box,
@@ -19,7 +19,7 @@ import { setPage } from 'src/store/reducers/registerReport';
 function Page8() {
   const {vehicle_theft:value} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch(); 
-
+  const theme = useTheme();
   const setValue = (vehicle_theft)=>dispatch(setPage({vehicle_theft}))
 
   const handleChange = (event) => {
@@ -38,9 +38,13 @@ function Page8() {
           <Container>
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={10} sx={{ pt: { xs: 5, md: 0 },mt:5 }}>
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Vehicle Theft
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
                   (Excluding cash in-transit vehicles)
                 </Typography>

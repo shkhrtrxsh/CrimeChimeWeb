@@ -1,4 +1,4 @@
-import { Container, Typography, Grid, Box, Checkbox } from '@mui/material';
+import { Container, Typography,useTheme, Grid, Box, Checkbox } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import corruption from '../../../assets/images/corruption.png';
@@ -9,7 +9,7 @@ import { setPage } from 'src/store/reducers/registerReport';
 const Page13 = () => {
   const {bribery:checked} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
-
+  const theme = useTheme();
   const setChecked = (bribery)=> dispatch(setPage({bribery}))
   
   const handleChange = (event) => {
@@ -21,9 +21,13 @@ const Page13 = () => {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }} mt={5}>
               <Grid item xs={10} className="pt-5">
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Bribery
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', height: '4rem'}}>
                   <img src={corruption} alt="img corr" />
                 </Box>
