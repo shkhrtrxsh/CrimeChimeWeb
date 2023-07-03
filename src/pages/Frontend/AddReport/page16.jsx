@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { Container, Typography, Grid, Box, Select, MenuItem, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import { Container, Typography,useTheme, Grid, Box, Select, MenuItem, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
   const [disable, setDisable] = useState(false)
+  
   const navigate = useNavigate();
   const handleSuccess = ()=>{
     handleClose();
@@ -47,6 +48,7 @@ export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
 }
 
 const Page16 = ({selectActive,setActiveStep}) => {
+  const theme = useTheme();
   const register = useSelector(state=>state.reportRegister);
   const {data:value,lock}=register;
   const {police_reporting,reported_to_the_police,police_case_num}=value;
@@ -80,9 +82,13 @@ const Page16 = ({selectActive,setActiveStep}) => {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }}>
               <Grid item xs={10} sx={{ pt: 5 }}>
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Police Reporting
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                   <LocalPoliceIcon sx={{ fontSize: '4rem' }} />
                 </Box>
