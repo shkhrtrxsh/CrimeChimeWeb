@@ -1,10 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import API from 'src/config/api'
+import { objectToFormData } from 'src/utils/formatObject';
 
-export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes",async({lat,long})=>{
+export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes",async({lat,long,toDate,fromDate})=>{
+    const formData = objectToFormData({lat,long,toDate,fromDate})
     try {
-        const res = await API.post("/report/getNearByReport",{lat,long});
-        return res.data.data;
+        const res = await API({"url":"/report/area",method:"GET",data:formData});
+        return res.data.data.data;
     } catch (error) {
         console.error(error);
         throw Error(error.message);
