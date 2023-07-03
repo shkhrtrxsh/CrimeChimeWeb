@@ -1,4 +1,4 @@
-import { Container, Typography, Grid, TextField, Box ,Checkbox} from '@mui/material';
+import { Container, Typography,useTheme, Grid, TextField, Box ,Checkbox} from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
@@ -11,7 +11,7 @@ const Page12 = () => {
   const {kidnapping:checked,kidnapping_people:value} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
   const [error, setError] = useState("")
-
+  const theme = useTheme();
   const setChecked=(kidnapping)=>dispatch(setPage({kidnapping}));
   const setValue=(kidnapping_people)=>dispatch(setPage({kidnapping_people}));
 
@@ -44,9 +44,13 @@ const Page12 = () => {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }} mt={5}>
               <Grid item xs={10}>
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Kidnapping
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
               </Grid>
 
               <Grid item xs={10} sx={{ pl: 5 }}>

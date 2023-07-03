@@ -40,7 +40,7 @@ function Page4() {
     dispatch(setPage({[name]:value}));
   }
   
-
+  const theme = useTheme();
     const fields=[
       {
         name:"fully_auto_weapons",
@@ -84,14 +84,18 @@ function Page4() {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingTop: '40px' }}>
-              <Grid item xs={10} sx={{paddingBottom: '20px'}}>
-              <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
-                  Weapons
-                </Typography>
-                <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                  Perpetrator(s) had weapon(s)?
-                </Typography>
-              </Grid>
+            <Grid item xs={10} sx={{ paddingBottom: '20px' }}>
+  <Box display="flex" alignItems="center" justifyContent="center">
+    <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
+    <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
+    Weapons
+  </Typography>
+    <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+  </Box>
+  <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
+    Perpetrator(s) had weapon(s)?
+  </Typography>
+</Grid>
               <div>
                 <Select value={weapons} onChange={handleChange} sx={{ paddingX: 2,width:'95%',maxWidth:'310px' }} error={error?true:false}>
                     <MenuItem value={-1}>Perpetrator used weapons</MenuItem>

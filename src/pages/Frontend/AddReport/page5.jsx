@@ -16,7 +16,7 @@ function Page5() {
   const {murders:value,murders_people:count} = useSelector(state=>state.reportRegister.data);
   const [error,setError] = useState("");
   const dispatch = useDispatch();
-
+  const theme = useTheme();
   const setCount=(murders_people)=>dispatch(setPage({murders_people}));
   const setValue=(murders)=>dispatch(setPage({murders}));
 
@@ -36,9 +36,13 @@ function Page5() {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingTop: '40px' }}>
               <Grid item xs={10} >
-              <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
-                  Murders/Deaths
-                </Typography>
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
+              <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
+    Murders/Deaths
+  </Typography>
+  <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+  </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
                   Was anyone killed?
                 </Typography>
