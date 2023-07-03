@@ -69,7 +69,6 @@ function Duplicate({mapRef,viewCrime=false}) {
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 
   useEffect(()=>{
-    console.log(latitude,longitude)
     dispatch(setMarker({latitude,longitude}));
   },[latitude,longitude,index])
 
