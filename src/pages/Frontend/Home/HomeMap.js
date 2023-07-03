@@ -73,12 +73,14 @@ const HomeMap = () => {
 
     const closePopUp = () => {
         // setting key "seenPopUp" with value true into localStorage
+        console.log("popup closed")
         localStorage.setItem("seenPopUp", true);
         // setting state to false to not display pop-up
         setDisplayPopUp(false);
     };
     useEffect(() => {
         let returningUser = localStorage.getItem("seenPopUp");
+        console.log(!returningUser)
         setDisplayPopUp(!returningUser);
     
     }, []);
@@ -263,7 +265,7 @@ const HomeMap = () => {
                             options={mapSettings}
                             onLoad={onLoad}
                         >
-                            {localStorage.getItem("_token") && reports.data && reports.data.map((report, index) => (
+                            {localStorage.getItem("_token") && reports?.data && reports.data.map((report, index) => (
                                 <Marker key={index}
                                     position={{
                                         lat: Number(report.latitude),
