@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Grid, TextField, Box,
-  Select,
+  Select,useTheme, 
   MenuItem,
   Checkbox,
   FormControlLabel} from '@mui/material';
@@ -14,7 +14,7 @@ const Page6 = () => {
   const {rape:value,rape_people:count} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
   const [error,setError] = useState("");
-
+  const theme = useTheme();
   const setValue=(rape)=>dispatch(setPage({rape}));
   const setCount=(rape_people)=>dispatch(setPage({rape_people}));
 
@@ -35,9 +35,13 @@ const Page6 = () => {
           <Container>
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={10} sx={{ pt: 5,mt:5 }}>
+              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Rape
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+                </Box>
               </Grid>
 
               <Box sx={{ py: 1 }}>
