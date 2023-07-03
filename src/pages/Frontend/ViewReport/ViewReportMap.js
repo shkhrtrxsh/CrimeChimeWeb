@@ -277,6 +277,7 @@ const ViewReportMap = (props) => {
                                             paddingTop: '4px',
                                             float: 'left'
                                         }}
+                                        alt=""
                                             src={reportDetail && process.env.REACT_APP_API_URL + '/' + reportDetail.crime.icon_3d} />
                                         <Typography variant="h6" component="h6">
                                             {reportDetail && reportDetail.crime.name}
@@ -291,9 +292,9 @@ const ViewReportMap = (props) => {
                                     </Typography>
                                     <Box>
                                         <Typography component="h4" color="text.secondary">Images & Attachments: </Typography>
-                                        {reportDetail ? reportDetail.report_images.map((image, index) => (
+                                        {(reportDetail&&reportDetail?.report_images) ? reportDetail.report_images.map((image, index) => (
                                             
-                                            image.path !== '' && image.path.toString().endsWith("png") || image.path.toString().endsWith("jpeg") || image.path.toString().endsWith("jpg") ? (
+                                            image&&image?.path!==null&&image.path !== '' && (image.path.toString().endsWith("png") || image.path.toString().endsWith("jpeg") || image.path.toString().endsWith("jpg")) ? (
                                                 <ImageList width="100%" src={reportDetail && process.env.REACT_APP_API_URL + '/' + image.path} key={index} />
                                             ) : (
                                                 <video className="VideoInput_video" width="60%" height="auto" controls src={image.path ? process.env.REACT_APP_API_URL + '/' + image.path : 'no video'} />
@@ -321,8 +322,6 @@ const ViewReportMap = (props) => {
                                     }}
                                     icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
                                     onClick={() => { reportDetails(report) }}
-                                    // onMouseOver={() => {console.log('mouse over')}}
-                                    // onMouseDown={() => {console.log('mouse down')}}
 
                                 />
                             ))}

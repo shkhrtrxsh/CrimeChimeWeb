@@ -7,19 +7,27 @@ import { Container, Typography, Grid, TextField, Box,
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage } from 'src/store/reducers/registerReport';
+import { setLock, setPage } from 'src/store/reducers/registerReport';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 const Page6 = () => {
   const {rape:value,rape_people:count} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
+  const [error,setError] = useState("");
 
   const setValue=(rape)=>dispatch(setPage({rape}));
   const setCount=(rape_people)=>dispatch(setPage({rape_people}));
 
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    const value = event.target.value
+    if(value==="0"){
+      dispatch(setLock(false))
+      setCount(null);
+    }else{
+      setCount(1);
+    }
+    setValue(value);
   };
 
   return (
@@ -51,8 +59,18 @@ const Page6 = () => {
                     type="number"
                     sx={{ px: 1 }}
                     value={count}
-                    onChange={(e)=>setCount(e.target.value)}
-                    disabled={value===0}
+                    onChange={(e)=>{
+                      const count=e.target.value;
+                      if(!count||count<=0){
+                        dispatch(setLock(true))
+                        setError("*required")
+                      }else{
+                        dispatch(setLock(false))
+                        setError("")
+                      }
+                      setCount(count);
+                    }
+                    }
                     InputProps={{
                       inputProps: {
                         min: 1,
@@ -60,7 +78,9 @@ const Page6 = () => {
                         step: 1,
                       },
                     }}
-                    required
+                    error={error?true:false}
+                    helperText={error}
+                    disabled={value==="0"}
                   />
                   <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
                     Multiple Rape

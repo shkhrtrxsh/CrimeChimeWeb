@@ -10,6 +10,12 @@ import {
   
   useMediaQuery,
   useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  CircularProgress,
 } from '@mui/material';
 import current from '../../../assets/images/current.png';
 import duplicate from '../../../assets/images/duplicate.png';
@@ -20,32 +26,154 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
+import { getNearbyCrimes } from 'src/store/api/registerReport';
+import { fDateTimeSuffix } from 'src/utils/formatTime';
+import { capitalize } from 'src/utils/string';
+import { addMarkers, clearNearbyReports, setLock, setPage } from 'src/store/reducers/registerReport';
+import API from 'src/config/api';
 
-function Duplicate() {
+const vehicle_theft_choices = ["hijacking", "attempted hijacking", "vehicle theft", "attempted vehicle theft", "does not apply"];
+const various_choices = ["crime occured at ATM", "drug-related crime", "gang-related crime", "Arson was involed", "Vandalism was involed", "social unrest"]
+
+export const SuccessDialog = ({open,handleClose})=>{
+  return(
+    <Dialog
+        open={open===1||open===2}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        fullWidth maxWidth="sm"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {open===1?"Success":"Error"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {open===1?"Report Submitted Successfully":"Error Submitting the Report"}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>OK</Button>
+        </DialogActions>
+      </Dialog>
+  )
+}
+
+function Duplicate({mapRef,viewCrime=false}) {
   const dispatch = useDispatch();
-  const [mediaData, setMediaData] = useState('No media available');
+  const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
+  const {latitude:lat,longitude:long} = regData;
+  const [index,setIndex] = useState(0);
+  const [open, setOpen] = useState(0)
+  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images}=values[index]||{};
+  const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 
-  const data = [
-    { firstCol: 'Occurred:', secondCol: '27 november 2023 3:10 PM near smurts Avenue' },
-    { firstCol: 'Perpetrators:', secondCol: '4' },
-    { firstCol: 'Weapons:', secondCol: 'semi-automatic' },
-    { firstCol: 'Rape:', secondCol: '2' },
-    { firstCol: 'Various:', secondCol: 'Believed to be gang related' },
-    { firstCol: 'Police Reporting:', secondCol: 'Formally reported to the police' },
+  useEffect(() => {
+    dispatch(clearNearbyReports());
+    dispatch(getNearbyCrimes({lat,long}));
+    if(mapRef.current){
+      const mapElement = mapRef.current;
+      mapElement.marker=null;
+    }
+  }, [lat,long,mapRef]);
+
+  useEffect(() => {
+    if(values[index]){  
+      const interval = setInterval(() => {
+        if(mapRef.current){
+          const mapElement = mapRef.current;
+          if (mapElement.map) {
+            clearInterval(interval);
+            if(latitude&&longitude){  
+              const marker = new window.google.maps.Marker({
+                position: { lng:Number(longitude),
+                  lat:Number(latitude) },
+                map: mapElement.map,
+                title: "Crime Location Marker 2",
+                icon:duplicate,
+              });
+              //if (mapElement.marker) mapElement.marker.setMap(null);
+              mapElement.marker = marker;
+            }
+          }
+        }
+      }, 100);
+    }
+  }, [latitude, longitude,mapRef]);
+
+  const data = values[index]&& [
+    { firstCol: 'Occurred:', secondCol: <p>{date_time} near <b>{location}</b></p> },
+    { firstCol: 'Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"Unknown" },
+    { firstCol: 'Weapons:', secondCol: (()=>{
+      switch(weapons){
+        case 0:return `Unknown`
+        case 1:return `None`
+        default:return `Fully Automatic:${fully_auto_weapons},Semi Automatic:${semi_auto_weapons},Knife Weapons:${knife_weapons},Other:${other_weapons}`
+      }
+    })() },
+    { firstCol: 'Rape:', secondCol:(()=>{
+      switch(rape){
+        case 0:return `Does not apply`
+        case 1:return `Attempted Rape(${rape_people} involved)`
+        default:return `Rape(${rape_people} involved)`
+      }
+    })() },
+    { firstCol: 'Murder:', secondCol:(()=>{
+      switch(murder){
+        case 0:return `Unknown`
+        case 1:return `Murder(${murder_people} involved)`
+        default:return `No`
+      }
+    })() },
+    { firstCol: 'Vehicle Theft:', secondCol:(()=>{
+      switch(murder){
+        case 0:return `Unknown`
+        case 1:return `Murder(${assault_people} involved)`
+        default:return `No`
+      }
+    })() },
+    { firstCol: 'Assault:', secondCol:(()=>{
+      switch(assault){
+        case 0:return `Unknown`
+        case 1:return `Murder(${assault_people} involved)`
+        default:return `No`
+      }
+    })() },
+    { firstCol: 'Vehicle Theft:', secondCol:(()=>{
+      if(vehicle_theft===4){
+        return capitalize(vehicle_theft_choices[vehicle_theft])
+      }else{
+        return capitalize(`${vehicle_theft_choices[vehicle_theft]} of ${vehicle_year} ${vehicle_colour} ${vehicle_make} ${vehicle_model}`)
+      }
+    })() },
+    { firstCol: 'Burglary:', secondCol:(()=>{
+      switch(burglary){
+        case 0:return `Does not apply`
+        case 1:return `Attempted Burglary of ${burglary_type} `
+        default:return `No`
+      }
+    })() },
+    { firstCol: 'Robbery:', secondCol:(()=>{
+      switch(robbery){
+        case 0:return `Does not apply`
+        case 1:return `Attempted Burglary of ${robbery_type} `
+        default:return `No`
+      }
+    })() },
+    { firstCol: 'Kidnapping:', secondCol:(()=>{
+      switch(kidnapping){
+        case 0:return `Does not apply`
+        case 1:return `Attempted Kidnapping (${kidnapping_people} involved) `
+        default:return `No`
+      }
+    })() },
+    { firstCol: 'Reason for crime:', secondCol: various===null?"Unknown":capitalize(various_choices[various]) },
+    {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"Unknown":(police_reporting===0?"Yes":"No"))},
+    { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"Unknown":(reported_to_police===0?"Yes":"No")) },
+    { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:"N/A" },
     { firstCol: 'Media:', secondCol: mediaData },
   ];
 
-  useEffect(() => {
-    // Simulating API call to fetch media data from the backend
-    setTimeout(() => {
-      // Assuming the backend response provides either an image URL, video URL, or null if no media is available
-      const backendResponse = 'https://example.com/path-to-media/video.mp4'; // Replace with the actual backend response
-     if(backendResponse){
-     setMediaData(backendResponse);
-     }
-       
-    }, 2000);
-  }, []);
 
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
@@ -62,77 +190,130 @@ function Duplicate() {
     return videoExtensions.some(extension => lowerCaseUrl.endsWith(extension));
   }
   
+  const clickYes = async()=>{
+    dispatch(setLock(true));
+    try {
+      await API.post("report/checkReport",{
+        report_id:id,
+        latitude,
+        longitude,
+        date_time
+      });
+      setOpen(1);
+    } catch (error) {
+      console.error(error);
+      setOpen(2);
+    }
+    dispatch(setLock(false));
+  }
+
+  const markerDragEnd = (e) => {
+    if (e !== null) {
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
+        }
+      });
+    }
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Container maxWidth="sm">
-        <Grid container spacing={2} justifyContent="center" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-          <Grid item xs={10}>
-            <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
-              Possible Duplicate
-            </Typography>
-          </Grid>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <SuccessDialog open={open} handleClose = {()=>setOpen(0)}/>
+        <Box sx={{mt:5,pl:10,h:"100%"}}>
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item xs={10}>
+              <Box sx={{display:"flex",width:"100%",justifyContent:"center"}}>
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
+                  {viewCrime?"View Crime":"Possible Duplicate"}
+                </Typography>
+                {viewCrime&&
+                  <Box component={"button"} sx={{display:"flex",width:"100%",justifyContent:"center",border:"none"}}>
+                  </Box>
+                }
+              </Box>
+            </Grid>
+            
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                <img src={current} alt="imgg" style={{ width: '7%', height: '90%' }} />
-                <Box>
-                  <Typography variant="h1" align="center" style={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '17px' }}>
-                    Your report's location on the map
-                  </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start',alignItems:"center" }}>
+                  <img src={current} alt="imgg" style={{ height:'17px'}} />
+                  <Box>
+                    <Typography align="left" sx={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '12px' }}>
+                      Your report's location on the map
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start',alignItems:"center" }}>
+                  <img src={duplicate} alt="imgg" style={{ height:"17px"}} />
+                  <Box>
+                    <Typography align="left" sx={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '12px' }}>
+                      Possible duplicate report's location on the map
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                <img src={duplicate} alt="imgg" style={{ width: '8%', height: '100%' }} />
-                <Box>
-                  <Typography variant="h1" align="center" style={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '17px' }}>
-                    Possible duplicate report's location on the map
-                  </Typography>
-                </Box>
-              </Box>
+              {(()=>{
+                if(loading){
+                  return (
+                    <Box sx={{width:"100%",display:"flex",justifyContent:"center",mt:4}}>
+                      <CircularProgress/>
+                    </Box>
+                  )
+                }else{
+                  return (
+                  values[index]?
+                  <Box>
+                      <Box>
+                      <TableContainer component={Paper}>
+                        <Table>
+                          <TableBody>
+                            {data.map((row, index) => (
+                              <TableRow key={index}>
+                                <TableCell>{row.firstCol}</TableCell>
+                                <TableCell>
+                                  {row.firstCol === 'Media:' && mediaData ? (
+                                    isImage(mediaData) ? (
+                                      <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
+                                    ) : isVideo(mediaData) ? (
+                                      <video src={mediaData} controls style={{ width: '100%', height: 'auto' }} />
+                                    ) : (
+                                      'No media available'
+                                    )
+                                  ) : (
+                                    row.secondCol
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Box>
+                    <Box sx={{ paddingTop: '5px',mb:10 }}>
+                      <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '17px' }}>
+                        Is this your crime?
+                      </Typography>
+                      <Box display="flex" justifyContent="center">
+                        <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={clickYes} disabled={lock}>
+                          Yes
+                        </Button>
+                        {values[index+1]&&<Button variant="contained" color="primary" disabled={lock} onClick={()=>setIndex(index+1)}>
+                          No
+                        </Button>}
+                      </Box>
+                    </Box>
+                  </Box>
+                  :
+                  <Typography align="center">No crimes found!</Typography>
+                  );
+                }
+              })()}
+              
             </Box>
-            <Box>
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableBody>
-                    {data.map((row, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{row.firstCol}</TableCell>
-                        <TableCell>
-                          {row.firstCol === 'Media:' && mediaData ? (
-                            isImage(mediaData) ? (
-                              <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
-                            ) : isVideo(mediaData) ? (
-                              <video src={mediaData} controls style={{ width: '100%', height: 'auto' }} />
-                            ) : (
-                              'No media available'
-                            )
-                          ) : (
-                            row.secondCol
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-            <Box style={{ paddingTop: '5px' }}>
-              <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '17px' }}>
-                Is this your crime?
-              </Typography>
-              <Box display="flex" justifyContent="center">
-                <Button variant="contained" color="primary" style={{ marginRight: '10px' }}>
-                  Yes
-                </Button>
-                <Button variant="contained" color="primary">
-                  No
-                </Button>
-              </Box>
-            </Box>
-          </Box>
-        </Grid>
-      </Container>
+          </Grid>
+        </Box>
     </LocalizationProvider>
   );
 }

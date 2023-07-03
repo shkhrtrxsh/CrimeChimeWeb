@@ -7,7 +7,6 @@ export const login = createAsyncThunk(
     "auth/login",    
     async ({ formValue, navigate }, { rejectWithValue }) => {
 
-      console.log(formValue);
       try {
         const response = await API.post("/auth/login", formValue);
         if(response.data.status === 200){

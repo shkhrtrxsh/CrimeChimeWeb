@@ -2,29 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Grid, TextField, Box, Divider, LinearProgress, Checkbox,useMediaQuery,
   useTheme, 
   Select,
-  MenuItem} from '@mui/material';
+  MenuItem,
+  FormControlLabel} from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage } from 'src/store/reducers/registerReport';
+import { setLock, setPage } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 function Page5() {
-  const {murders:count,murders_people:value} = useSelector(state=>state.reportRegister.data);
-
+  const {murders:value,murders_people:count} = useSelector(state=>state.reportRegister.data);
+  const [error,setError] = useState("");
   const dispatch = useDispatch();
 
-  const setCount=(murders)=>dispatch(setPage({murders}));
-  const setValue=(murders_people)=>dispatch(setPage({murders_people}));
+  const setCount=(murders_people)=>dispatch(setPage({murders_people}));
+  const setValue=(murders)=>dispatch(setPage({murders}));
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    const value=event.target.value;
+    if(value==="0"){
+      setCount(1);
+    }else{
+      dispatch(setLock(false))
+      setCount(null);
+    }
+    setValue(value);
   };
-
-  const theme = useTheme();
-  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -40,17 +45,36 @@ function Page5() {
               </Grid>
 
               <div sx={{ paddingTop: '0px' }}>
-                <Select value={value} onChange={handleChange} sx={{ paddingX: 2,marginBottom:4,width:'95%',maxWidth:'310px' }}>
-                    <MenuItem value={0}>Yes</MenuItem>
-                    <MenuItem value={1}>No</MenuItem>
-                    <MenuItem value={3}>Unknown</MenuItem>
-                </Select>
+              <Box sx={{ display: 'flex', flexDirection: 'COLUMN', justifyContent: 'center', my: 4, pl: 4 }}>
+                <FormControlLabel
+                    control={<Checkbox checked={value==="0"} value={0} onChange={handleChange} />}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={value==="1"} value={1} onChange={handleChange} />}
+                    label="No"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={value==="3"} value={3} onChange={handleChange} />}
+                    label="Unknown"
+                  />
+                </Box>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3' }}>
                   <TextField
                     type="number"
                     sx={{ px: 1 }}
-                    value={count}
-                    onChange={(e)=>setCount(e.target.value)}
+                    value={count||""}
+                    onChange={(e)=>{
+                      const count = e.target.value;
+                      if(!count||count<=0){
+                        dispatch(setLock(true))
+                        setError("*required")
+                      }else{
+                        dispatch(setLock(false))
+                        setError("")
+                      }
+                      setCount(count)
+                    }}
                     disabled={value>0}
                     InputProps={{
                       inputProps: {
@@ -59,7 +83,8 @@ function Page5() {
                         step: 1,
                       },
                     }}
-                    required
+                    error={error?true:false}
+                    helperText={error}
                   />
                   <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
                     If yes, then how many?

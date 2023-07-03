@@ -3,21 +3,41 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage} from 'src/store/reducers/registerReport';
+import { setLock, setPage} from 'src/store/reducers/registerReport';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
+import { useEffect, useState } from 'react';
 
 const Page12 = () => {
   const {kidnapping:checked,kidnapping_people:value} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
+  const [error, setError] = useState("")
 
   const setChecked=(kidnapping)=>dispatch(setPage({kidnapping}));
   const setValue=(kidnapping_people)=>dispatch(setPage({kidnapping_people}));
 
   const handleChange = (event) => {
-    if(event.target?.checked)setChecked(event.target.value);
+    const checked=event.target?.checked;
+    if(checked){
+      setChecked(event.target.value);
+      if(checked==="0"){
+        dispatch(setLock(false));
+        setError("");
+      }else{
+        setValue(1);
+      }
+    }
     else setValue(event.target.value);
   };
 
+  useEffect(()=>{
+    if(value){
+      dispatch(setLock(false));
+      setError("");
+    }else if(checked==="1"){
+      dispatch(setLock(true));
+      setError("*required");
+    }
+  },[value])
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -54,6 +74,9 @@ const Page12 = () => {
                         inputProps={{ min: 0 }}
                         onChange={(event) => setValue(event.target.value)}
                         sx={{ width: '60px' }}
+                        disabled={checked==="0"}
+                        error={error?true:false}
+                        helperText={error}
                       />
                       <Typography variant="h6" sx={{ fontWeight: 'normal', textAlign: 'left', pl: 4 }}>
                         How many were kidnapped?

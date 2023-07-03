@@ -30,6 +30,8 @@ import {
     Card,
   } from '@mui/material';
   import { getSearchQueryParams, setSearchQueryParams, recordPerPage } from 'src/helpers/SearchHelper';
+import { getLocationCoords } from 'src/utils/googleMap';
+import { setPage } from 'src/store/reducers/registerReport';
 
 const containerStyle = {
     width: '100%',
@@ -56,7 +58,7 @@ const MapDivStyle = styled('div')(({ theme }) => ({
 
 
 const HomeMap = () => {
-    const position = CurrentLocationCoordinates()
+    const {latitude,longitude} = useSelector(state=>state.reportRegister.data);
     const isDesktop = useResponsive('up', 'md');
     const [open, setOpen] = React.useState(true);
     const theme = useTheme()
@@ -100,6 +102,19 @@ const HomeMap = () => {
     const reportDetails = (report) => {
         navigate(`/reportscrime?target=single&id=${report.id}`)
     }
+    const position = {
+        lat:Number(latitude),
+        lng:Number(longitude)
+    }
+    const onLoad = async(Map) => {
+
+        // map.current = Map; // Store the map instance in a global variable for access in the event handler
+        if(!latitude||!longitude){
+          const {latitude:lat,longitude:lng} = await getLocationCoords();
+          dispatch(setPage({latitude:lat,longitude:lng}));
+        }
+          
+        }
 
     return (
         <>
@@ -246,6 +261,7 @@ const HomeMap = () => {
                             center={position}
                             zoom={10}
                             options={mapSettings}
+                            onLoad={onLoad}
                         >
                             {localStorage.getItem("_token") && reports.data && reports.data.map((report, index) => (
                                 <Marker key={index}
@@ -255,8 +271,6 @@ const HomeMap = () => {
                                     }}
                                     icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
                                     onClick={() => { reportDetails(report) }}
-                                    // onMouseOver={() => {console.log('mouse over')}}
-                                    // onMouseDown={() => {console.log('mouse down')}}
 
                                 />
                             ))} 

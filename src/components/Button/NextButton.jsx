@@ -10,7 +10,7 @@ const NextButton = ({nextLink,beforeNext=null,afterNext=null,textValue}) => {
         afterNext &&afterNext();
     }
     return (
-        <Typography sx={{cursor:"pointer"}} variant="h6" onClick={next}>{textValue}</Typography>
+        <Typography sx={{cursor:"pointer",userSelect:"none"}} variant="h6" onClick={next}>{textValue}</Typography>
     )
 }
 

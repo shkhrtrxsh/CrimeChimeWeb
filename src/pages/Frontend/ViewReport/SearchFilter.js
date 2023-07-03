@@ -130,7 +130,6 @@ export default function SearchFilter(props) {
         if (address !== null) {
             url += `location=${address}&`
         }
-        console.log('url', url)
         navigate(`/report?${url}`, { replace: true })
         setState(false)
         

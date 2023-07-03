@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { showAuthUser } from 'src/store/api/user';
@@ -11,7 +11,8 @@ import Page from '../../../components/Page';
 import { APPBAR_DESKTOP } from 'src/constants/theme'
 import EditIcon from '@mui/icons-material/Edit';
 import { mapSettings, CurrentLocationCoordinates } from 'src/helpers/LocationHelper';
-
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 const containerStyle = {
     width: '100%',
@@ -53,6 +54,7 @@ const IconButtonStyle = styled(IconButton)(({ theme }) => ({
 const Profile = () => {
     const theme = useTheme()
     const dispatch = useDispatch()
+    const navigate = useNavigate();
 
     const dPosition = CurrentLocationCoordinates()
 
@@ -78,6 +80,9 @@ const Profile = () => {
 
     return (
         <Page title={user && user.name}>
+            <Fab color="primary" aria-label="add" sx={{position:"fixed",bottom:16,right:16}} onClick={()=>navigate("/report/add")}>
+                <AddIcon />
+            </Fab>
             <Container sx={{
                 marginTop: '20px'
             }}>

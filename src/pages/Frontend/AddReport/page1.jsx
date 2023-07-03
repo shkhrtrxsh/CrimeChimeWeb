@@ -17,35 +17,46 @@ import ProgressBar from 'src/layouts/Report/ProgressBar';
 import { splitISODatetime, splitLocaleDatetime } from 'src/utils/formatTime';
 
 function Page1() {
-  const {datetime} = useSelector(state=>state.reportRegister.data);
+  const {date_time:datetime} = useSelector(state=>state.reportRegister.data);
   //const {date,time} = datetime===null?{date:null,time:null}:splitLocaleDatetime()
   const dispatch = useDispatch();
 
   useEffect(()=>{
     if(datetime===null){
-      dispatch(setPage({datetime:new Date(Date.now()).toISOString()}))
+      dispatch(setPage({date_time:new Date(Date.now()).toISOString()}))
     }
   },[])
 
   const changeDate = (e)=>{
     const {date,time} = splitISODatetime(e);
     const newTime = datetime===null?time:splitISODatetime(e)?.time
-    dispatch(setPage({datetime:date+"T"+newTime+"Z"}));
+    dispatch(setPage({date_time:date+"T"+newTime+"Z"}));
   }
 
   const changeTime = (e)=>{
     const {date,time} = splitISODatetime(e);
     const newDate = datetime===null?date:splitISODatetime(e)?.date
-    dispatch(setPage({datetime:newDate+"T"+time+"Z"}));
+    dispatch(setPage({date_time:newDate+"T"+time+"Z"}));
   }
 
   const theme = useTheme();
+  const mnTime = (date)=>{
+    const dt = new Date(date);
+    var newDate = new Date(
+      dt.getFullYear(),
+      dt.getMonth(),
+      dt.getDate(),
+      0,
+      0,
+      0,
+      0
+    );
+    return Number(newDate);
+  }
   const dateNow = new Date(Date.now());
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      {/* <div style={{ height: '100%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
-        <div style={{ width: isMdBreakpoint ? '33.33%' : '100%',display:'flex',flexDirection:'column' }}> */}
           <Container maxWidth="sm" style={{ padding: theme.spacing(5, 0) }}>
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={10}>
@@ -63,6 +74,7 @@ function Page1() {
                 <DatePicker
                   label="Select Date"
                   value={datetime}
+                  maxDate={dateNow}
                   onChange={changeDate}
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -78,20 +90,12 @@ function Page1() {
                   label="Select Time"
                   value={datetime}
                   onChange={changeTime}
-                  maxTime={dateNow}
+                  maxTime={mnTime(datetime)===mnTime(dateNow)?dateNow:new Date(0,0,0,23,59,59,999)}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </Grid>
             </Grid>          
           </Container>
-          {/* <Box sx={{flexGrow:1}}>
-            <ProgressBar activeStep={1} nextLink="/report/page2"/>
-          </Box> */}
-        {/* </div>
-        <div style={{ width: isMdBreakpoint ? '66.67%' : '100%', height: isMdBreakpoint ? '91vh' : '0vh' }}>
-          <div id="map" style={{ width: '100%', height: '100%', display: isMdBreakpoint ? 'block' : 'none' }}></div>
-        </div>
-      </div> */}
     </LocalizationProvider>
   );
 }

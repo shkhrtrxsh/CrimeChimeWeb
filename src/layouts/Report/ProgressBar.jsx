@@ -11,23 +11,23 @@ const Progress = ({ activeStep }) => {
     return <LinearProgress variant="determinate" value={progress} />;
   };
 
-const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,backLink=null,setActiveStep,cancelState}) => {
+const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,backLink=null,setActiveStep,cancelState,lock,submit}) => {
   const [cancel,setCancel] = cancelState||[];
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   return (
-    <Box sx={{height:"100%",display: 'flex', justifyContent: 'center', alignItems: 'end',width:"100%"}}>
-        <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'end', backgroundColor: '#ffe600', color: 'black', padding: '12px',width:"100%" }}>
+    <Box sx={{height:"100%",display: 'flex', justifyContent: 'center', alignItems: 'start',width:"100%"}}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'start', backgroundColor: '#ffe600', color: 'black', padding: '12px',width:"100%" }}>
 
-            {backLink?<NextButton beforeNext={()=>setActiveStep(activeStep-1)} textValue="GO BACK"/>:null}
-
-            <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-
-            <Typography variant="h6">#{activeStep}/16</Typography>
+            {backLink?<NextButton beforeNext={lock?null:()=>setActiveStep(activeStep,activeStep-1)} textValue="GO BACK"/>:null}
 
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
 
-            <NextButton textValue="NEXT" beforeNext={()=>setActiveStep(activeStep+1)} />
+            <Typography variant="h6" sx={{cursor:"default"}}>#{activeStep}/17</Typography>
+
+            <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+
+            <NextButton textValue={submit?"SUBMIT":"NEXT"} beforeNext={lock?null:()=>{beforeNext?beforeNext():setActiveStep(activeStep,activeStep+1)}} />
             {!isMdBreakpoint&&
               <Box sx={{display:'flex',mx:3,justifyContent:'center',alignItems:'center'}} onClick={()=>{setCancel(false);}}>
                 <LocationOnIcon/>

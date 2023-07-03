@@ -29,7 +29,6 @@ export default function Dashboard() {
 
   const { user } = useSelector((state) => ({ ...state.user }));
 
-  console.log(user)
   useEffect(() => {
     dispatch(dashboard({}));
   }, [])

@@ -1,40 +1,89 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Grid, Box, Divider, LinearProgress, Select, MenuItem, TextField } from '@mui/material';
+import { Container, Typography, Grid, Box, Divider, LinearProgress, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
-import { setPage } from 'src/store/reducers/registerReport';
+import { setLock, setPage } from 'src/store/reducers/registerReport';
+import make from "src/car_makes.json";
+import colors from "src/car_colors.json";
+import axios from 'axios';
+
 
 function Page9() {
   const data = useSelector(state=>state.reportRegister.data);
+  const car_makes = make.data;
+  const {vehicle_make,vehicle_model,vehicle_colour,vehicle_year} = data;
   const dispatch = useDispatch();
+  const [error,setError]=useState((initialState={})=>initialState);
 
-  const handleChange = (event) => {
-    const {name,value} = event.target;
-    dispatch(setPage({[name]:value}));
-  };
+  var currentYear = new Date().getFullYear();
+  const [car_models,setCarModels]=useState([]);
+  const car_colors=colors.data;
+  const car_years=[...Array(currentYear - 1949)].map((_, i) => String(currentYear - i));
 
+  const required=(name,value)=>{
+    if(value){
+      setError((prev)=>({...prev,[name]:""}));
+      dispatch(setLock(true));
+    }else{
+      setError((prev)=>({...prev,[name]:"*required"}));
+    }
+  }
   const fields = [
     {
       name:"vehicle_make",
       label:"MAKE",
+      options:car_makes
     },
     {
       name:"vehicle_model",
       label:"MODEL",
+      options:car_models
     },
     {
       name:"vehicle_colour",
       label:"COLOR",
+      options:car_colors
     },
     {
       name:"vehicle_year",
       label:"YEAR",
+      options:car_years
     },
   ]
+  useEffect(() => {
+    let flag=1;
+    fields.forEach(({name})=>{
+      const value=data[name]||null;
+      if(value===""||value===null)flag=0;
+      required(name,value);
+    })
+    if(flag===1)dispatch(setLock(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vehicle_make,vehicle_model,vehicle_colour,vehicle_year])
+  
+  const handleChange = async(id,newValue) => {
+    dispatch(setPage({[id]:newValue}));
+    if(id==="vehicle_make"){
+      //clear vehicle make
+      dispatch(setPage({vehicle_model:""}))
+      //get list of vehicle models
+      try {
+        const res = await axios.get(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${newValue}?format=json`)
+        const result = res.data.Results;
+        setCarModels(result.map((data)=>{
+          return data.Model_Name;
+        }))
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Container>
@@ -52,11 +101,22 @@ function Page9() {
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     {fields.map((f,ind)=>{
                       return(
-                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }} key={ind}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2,justifyContent:'center' }} key={ind}>
                           <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left',width:"93px" }}>
                             {f.label}
                           </Typography>
-                          <TextField name={f.name} onChange={handleChange} value={data[f.name]} required/>
+                          <Autocomplete
+                            id={f.name}
+                            onChange={(_,newValue)=>handleChange(f.name,newValue)}
+                            value={data[f.name]||""}
+                            inputValue={data[f.name]||""}
+                            options={f?.options||[]}
+                            renderInput={(params) => 
+                              <TextField sx={{width:200}} {...params} name={f.name} error={error[f.name]?true:false} helperText={error[f.name]||""}
+                            />
+                            }
+                          />
+                          
                         </Box>
                       )
                   })}

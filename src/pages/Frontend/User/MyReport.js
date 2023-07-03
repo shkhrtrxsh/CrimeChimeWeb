@@ -43,16 +43,18 @@ const MyReport = () => {
                     <UserSideName />
                     <Grid item md={9} xs={12}>
                         <Grid container spacing={3}>
-                            {reports.data && reports.data.map((report, index) => (
+                            {reports.data && reports.data.map((report, index) => {
+                                const path = (report&&report?.report_image&&report.report_image.path!==null)
+                                return(
                                 <Grid item md={6} xs={12} key={index}>
                                     <Card>
-                                    {report.report_image.path !== '' && report.report_image.path.toString().endsWith("png") || report.report_image.path.toString().endsWith("jpg") || report.report_image.path.toString().endsWith("jpeg")? (
+                                    {(!(path===null||path === '') &&( path.toString().endsWith("png") || path.toString().endsWith("jpg") || path.toString().endsWith("jpeg")))? (
                                         <CardMedia
                                             component="img"
                                             alt="green iguana"
                                             image={report.report_image ? process.env.REACT_APP_API_URL + '/' + report.report_image.path : process.env.REACT_APP_API_URL + '/assets/image/no-image.jpg'}
                                         />) : (
-                                            <video className="VideoInput_video" width="100%" height="auto" controls src={report.report_image ? process.env.REACT_APP_API_URL + '/' + report.report_image.path : 'no video'} />
+                                            <video className="VideoInput_video" width="100%" height="auto" controls src={report?.report_image ? process.env.REACT_APP_API_URL + '/' + report.report_image.path : 'no video'} />
                                         )
                                     }
                                         <CardContent>
@@ -66,6 +68,7 @@ const MyReport = () => {
                                                     paddingTop: '4px',
                                                     float: 'left'
                                                 }}
+                                                alt=""
                                                     src={process.env.REACT_APP_API_URL + '/' + report.crime.icon} 
                                                     onError={({ currentTarget }) => {
                                                         currentTarget.onerror = null; // prevents looping
@@ -87,7 +90,8 @@ const MyReport = () => {
                                         </CardActions>
                                     </Card>
                                 </Grid>
-                            ))}
+                            )
+                            })}
                         </Grid>
                     </Grid>
                 </Grid>

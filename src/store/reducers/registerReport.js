@@ -1,57 +1,88 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { getNearbyCrimes, googleMapSearchLocation } from '../api/registerReport';
 
 const initialState = {
     activeStep:null,
     beforeNext:null,
     beforeBack:null,
     zoom:12,
+    lock:false,
+    loading:false,
+    error:null,
+    map:null,
     data:{
+        crime:1,
+        specific_crime:1,
         location:null,
         longitude:null,
         latitude:null,
-        crime:null,
         google_place_id:null,
-        specific_crime:null,
         description:null,
-        perpetrators:null,
+        perpetrators:-1,
         perpetrators_des:null,
-        weapons:null,
-        fully_auto_weapons:null,
-        semi_auto_weapons:null,
-        knife_weapons:null,
-        other_weapons:null,
-        murders:null,
+        weapons:0,
+        fully_auto_weapons:0,
+        semi_auto_weapons:0,
+        knife_weapons:0,
+        other_weapons:0,
+        murders:"3",
         murders_people:null,
-        rape:null,
+        rape:"0",
         rape_people:null,
-        assault:null,
+        assault:"0",
         assault_people:null,
-        vehicle_theft:null,
+        vehicle_theft:"4",
         vehicle_make:null,
         vehicle_model:null,
         vehicle_colour:null,
         vehicle_year:null,
-        burglary:null,
-        burglary_type:null,
-        robbery:null,
-        robbery_type:null,
-        kidnapping:null,
+        burglary:0,
+        burglary_type:"other",
+        robbery:0,
+        robbery_type:"other",
+        kidnapping:"0",
         kidnapping_people:null,
-        bribery:null,
+        bribery:"0",
         various:null,
-        police_reporting:null,
-        reported_to_the_police:null,
+        police_reporting:2,
+        reported_to_the_police:2,
         police_case_num:null,
         fileName:null,
-        datetime:null,
+        date_time:null,
         flag:null
-    }
+    },
+    nearbyData:[],
+    marker:null,
+    location:[]
 }
 
 const registerReport = createSlice({
   name: "registerReport",
   initialState,
   reducers: {
+    clearReport:(state,_)=>{
+        state=initialState;
+    },
+    clearNearbyReports:(state,_)=>{
+        state.nearbyData=[];
+    },
+    setMap:(state,action)=>{
+        state.map=action.payload
+    },
+    setMarker:(state,action)=>{
+        state.marker=action.payload
+    },
+    // addMarkers:(state,action)=>{
+    //     state.markers=action.payload
+    // },
+    // clearMarkers:(state,action)=>{
+    //     const index=action?.payload
+    //     if(index)state.markers.splice(index,1);
+    //     else state.markers=[];
+    // },
+    setLock:(state,action)=>{
+        state.lock=action.payload;
+    },
     setProgressBar:(state,action)=>{
         const {activeStep,beforeNext,beforeBack=null} = action.payload;
         state={...state,activeStep,beforeNext,beforeBack};
@@ -60,74 +91,37 @@ const registerReport = createSlice({
         state.zoom=action.payload;
     },
     setPage:(state,action)=>{
-        console.log(action.payload)
         state.data={...state.data,...action.payload};
     },
-    setPage2:(state,action)=>{
-        const {location,longitude,latitude} = action.payload;
-        state.data={...state.data,location,longitude,latitude};
-    },
-    setPage3:(state,action)=>{
-        const {perpetrators,perpetrators_des} = action.payload;
-        state.data = {...state.data,perpetrators,perpetrators_des};
-    },
-    setPage4:(state,action)=>{
-        state.data = {...state.data,...action.payload};
-    },
-    setPage5:(state,action)=>{
-        const {murders,murders_people=0} = action.payload
-        state.data={...state.data,murders,murders_people};
-    },
-    setPage6:(state,action)=>{
-        const {rape,rape_people=0} = action.payload
-        state.data={...state.data,rape,rape_people};
-    },
-    setPage7:(state,action)=>{
-        const {assault,assault_people=0} = action.payload
-        state.data={...state.data,assault,assault_people};
-    },
-    setPage8:(state,action)=>{
-        const {vehicle_theft} = action.payload
-        state.data={...state.data,vehicle_theft};
-    },
-    setPage9:(state,action)=>{
-        const {vehicle_make=null,vehicle_model=null,vehicle_colour=null,vehicle_year=null} = action.payload;
-        state.data={...state.data,vehicle_make,vehicle_model,vehicle_colour,vehicle_year,};
-    },
-    setPage10:(state,action)=>{
-        const {burglary=null,burglary_type=null} = action.payload;
-        console.log(action.payload)
-        state.data={...state.data,burglary,burglary_type};
-    },
-    setPage11:(state,action)=>{
-        const {robbery=null,robbery_type=null} = action.payload;
-        console.log(action.payload)
-        state.data={...state.data,robbery,robbery_type};
-    },
-    setPage12:(state,action)=>{
-        const {kidnapping,kidnapping_people} = action.payload;
-        state.data={...state.data,kidnapping,kidnapping_people};
-    },
-    setPage13:(state,action)=>{
-        const {bribery} = action.payload;
-        state.data={...state.data,bribery};
-    },
-    setPage14:(state,action)=>{
-        const {various} = action.payload;
-        state.data={...state.data,various};
-    },
-    setPage15:(state,action)=>{
-        console.log(action.payload)
-        const {files,fileName,description} = action.payload;
-        state.data={...state.data,files,description,fileName};
-    },
-    setPage16:(state,action)=>{
-        const {police_reporting,reported_to_the_police,police_case_num} = action.payload;
-        state.data={...state.data,police_reporting,reported_to_the_police,police_case_num};
-    },
-}
+},
+    extraReducers:{
+        // Permission Add Api
+        [getNearbyCrimes.pending]: (state, action) => {
+            state.loading = true;
+          },
+        [getNearbyCrimes.fulfilled]: (state, action) => {
+        state.loading = false;
+        state.nearbyData = action.payload||[];
+        },
+        [getNearbyCrimes.rejected]: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        },
+        [googleMapSearchLocation.pending]: (state, action) => {
+            state.loading = true;
+          },
+        [googleMapSearchLocation.fulfilled]: (state, action) => {
+        state.loading = false;
+        state.location = action.payload||[];
+        },
+        [googleMapSearchLocation.rejected]: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        },
+    }
+
 });
 
-export const {setZoom,setPage,setPage2,setPage3,setPage4,setPage5,setPage6,setPage7,setPage8,setPage9,setPage10,setPage11,setPage12,setPage13,setPage14,setPage15,setPage16,setProgressBar} =registerReport.actions;
+export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,clearReport,clearNearbyReports} =registerReport.actions;
 
 export const registerReportReducer = registerReport.reducer;

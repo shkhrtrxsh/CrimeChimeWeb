@@ -1,17 +1,18 @@
-import React, { useRef, useState } from 'react';
-import { GoogleMap, Marker } from '@react-google-maps/api';
-import { Container, FormControl, Grid, Box, Typography, Divider, LinearProgress } from '@mui/material';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { GoogleMap, LoadScript, Marker, useLoadScript } from '@react-google-maps/api';
+import { Container, FormControl, Grid, Box, Typography, Divider, LinearProgress, Autocomplete, TextField } from '@mui/material';
 import NextButton from 'src/components/Button/NextButton';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setZoom } from 'src/store/reducers/registerReport';
-
+import usePlacesAutocomplete, { getGeocode, getLatLng,getPlacePredictions } from 'use-places-autocomplete';
 const containerStyle = {
   width: '100%',
   height: '100%', // Adjust the height according to your needs
 };
-
+const libraries = ["places","geometry"];
 const Page2 = ({setSelectActive}) => {
+  const apiKey=process.env.REACT_APP_GOOGLE_MAP_API_KEY;
   const data = useSelector(state=>state.reportRegister);
   const {zoom} = data;
   const {location:formattedAddress,latitude,longitude}=data.data;
@@ -32,19 +33,18 @@ const Page2 = ({setSelectActive}) => {
   
   const markerDragEnd = (e) => {
     if (e !== null) {
-      // setPage({
-      //   lat: e.latLng.lat(),
-      //   lng: e.latLng.lng(),
-      // });  
-    
-      // Retrieve formatted address using reverse geocoding
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
         if (status === 'OK' && results[0]) {
-          dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat()}));
+          dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
         }
       });
     }
+  };
+
+  const handlePlaceSelect = (place) => {
+    // Handle the selected place
+    console.log(place);
   };
 
   const handleZoomChanged = () => {
@@ -55,7 +55,7 @@ const Page2 = ({setSelectActive}) => {
         <Box sx={{height:"100%",display:"flex",flexDirection:"column"}}>
           <Box sx={{flexGrow:1,position:'relative'}}>
             <Box id="kbd" sx={{position:"absolute",top:20,right:70,zIndex:1000}}>
-              <GoogleAutoComplete googleAutoComplete={googleAutoComplete} formattedAddress={formattedAddress} />
+              <GoogleAutoComplete style={{zIndex:1000}}/>
             </Box>
             <FormControl fullWidth sx={{ height:"100%" }}>
               <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={zoom} 
@@ -76,7 +76,6 @@ const Page2 = ({setSelectActive}) => {
      
   );
 };
-
 export default Page2;
 
 

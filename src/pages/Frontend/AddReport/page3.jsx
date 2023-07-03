@@ -16,21 +16,36 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PeopleIcon from '@mui/icons-material/People';
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage, setPage3 } from 'src/store/reducers/registerReport';
+import { setLock, setPage } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 function Page3() {
   const {perpetrators,perpetrators_des} = useSelector(state=>state.reportRegister.data);
+  const [checked, setChecked] = useState(perpetrators<=0)
+  const [error,setError] = useState("")
   const dispatch = useDispatch();
 
   const handleTextChange = (event)=>{
-    dispatch(setPage({perpetrators_des:event.target.value}));
+    const {name,value} = event.target;
+    dispatch(setPage({[name]:value}));
+    if(value&&value>0){
+      setError("");
+      dispatch(setLock(false));
+    }else{
+      setError("*required");
+      dispatch(setLock(true));
+    }
   }
 
   const handleChange = (event) => {
     const checked = event.target.checked;
-    dispatch(setPage({perpetrators:checked}));
+    if(checked){
+      setError("");
+      dispatch(setLock(false));
+    }
+    dispatch(setPage({perpetrators:checked?-1:1}));
+    setChecked(checked)
   };
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
@@ -53,11 +68,13 @@ function Page3() {
                   How many perpetrators?
                 </Typography>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
+
                   <TextField
                     type="number"
-                    value={perpetrators_des||""}
+                    name="perpetrators"
+                    value={perpetrators<0?"":perpetrators}
                     onChange={handleTextChange}
-                    disabled={perpetrators}
+                    disabled={checked}
                     InputProps={{
                       inputProps: {
                         min: 1,
@@ -65,28 +82,39 @@ function Page3() {
                         step: 1,
                       },
                     }}
-                    required
+                    error={error?true:false}
+                    helperText={error}
                   />
+
                   <Typography style={{ marginLeft: '8px', marginRight: '8px', display: 'flex', alignItems: 'center' }}>OR</Typography>
+
                   <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
+
                   <Typography style={{ display: 'flex',alignItems: 'center' }}>Unknown</Typography>
-                  <Checkbox checked={perpetrators||false} onChange={handleChange} />
+
+                  <Checkbox checked={checked===true} value={perpetrators} onChange={handleChange} />
+
                 </div>
               </div>
 
               <Grid item xs={10} style={{ display: 'flex', justifyContent: 'center' }}>
+
                 <PeopleIcon style={{ height: '112px', width: '112px' }} />
+
               </Grid>
               <Grid item xs={10} style={{ textAlign: 'center' }}>
+
                 <TextField
                   label="Describe their appearance.."
+                  name="perpetrator_des"
                   multiline
                   rows={4}
                   value={perpetrators_des||""}
-                  onChange = {(e)=>dispatch(setPage(e.target.value))}
+                  onChange = {(e)=>dispatch(setPage({perpetrators_des:e.target.value}))}
                   variant="outlined"
                   style={{ width: '100%' }}
                 />
+                
               </Grid>
             </Grid>
           </Container>

@@ -13,7 +13,7 @@ function Page10() {
   const dispatch = useDispatch();
 
   const setChecked=(burglary)=>dispatch(setPage({burglary}));
-  const setValue=(burglary_people)=>dispatch(setPage({burglary_people}));
+  const setValue=(burglary_type)=>dispatch(setPage({burglary_type}));
 
 
   const handleChange = (value) => {
@@ -65,7 +65,8 @@ function Page10() {
                     <Select
                       value={value||"other"}
                       onChange={(e)=>setValue(e.target.value)}
-                      sx={{ px: 2, width: '50%', borderRadius: 'none', height: '10' }}
+                      sx={{ px: 2, width: '50%', borderRadius: 'none', height: '10', }}
+                      disabled={checked===0}
                     >
                       <MenuItem value="bicycle">Bicycle</MenuItem>
                       <MenuItem value="handbag">Handbag</MenuItem>

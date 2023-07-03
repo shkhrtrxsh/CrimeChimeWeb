@@ -8,7 +8,7 @@ import ReportWrapper from "src/layouts/Report/ReportWrapper";
 const FrontendPrivateRoutes = [
     {
         path: '/report/add',
-        element: <AddReport />
+        element: <ReportWrapper/>
     },
     {
         path: '/profile',
@@ -25,9 +25,6 @@ const FrontendPrivateRoutes = [
     {
         path: '/my-report',
         element: <MyReport />
-    },
-    {   path:'/reportCrime',
-        element:<ReportWrapper/>,
     },
 ]
 

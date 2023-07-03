@@ -11,8 +11,8 @@ function Page11() {
   const {robbery:checked,robbery_type:value} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
 
-  const setChecked=(burglary)=>dispatch(setPage({burglary}));
-  const setValue=(burglary_people)=>dispatch(setPage({burglary_people}));
+  const setChecked=(robbery)=>dispatch(setPage({robbery}));
+  const setValue=(robbery_type)=>dispatch(setPage({robbery_type}));
 
 
   const handleChange = (v) => {
