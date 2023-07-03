@@ -29,7 +29,7 @@ import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@m
 import { getNearbyCrimes } from 'src/store/api/registerReport';
 import { fDateTimeSuffix } from 'src/utils/formatTime';
 import { capitalize } from 'src/utils/string';
-import { addMarkers, clearNearbyReports, setLock, setPage } from 'src/store/reducers/registerReport';
+import { addMarkers, clearNearbyReports, setLock, setMarker, setPage } from 'src/store/reducers/registerReport';
 import API from 'src/config/api';
 
 const vehicle_theft_choices = ["hijacking", "attempted hijacking", "vehicle theft", "attempted vehicle theft", "does not apply"];
@@ -67,6 +67,11 @@ function Duplicate({mapRef,viewCrime=false}) {
   const [open, setOpen] = useState(0)
   const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
+
+  useEffect(()=>{
+    console.log(latitude,longitude)
+    dispatch(setMarker({latitude,longitude}));
+  },[latitude,longitude,index])
 
   useEffect(() => {
     dispatch(clearNearbyReports());
@@ -228,10 +233,7 @@ function Duplicate({mapRef,viewCrime=false}) {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
                   {viewCrime?"View Crime":"Possible Duplicate"}
                 </Typography>
-                {viewCrime&&
-                  <Box component={"button"} sx={{display:"flex",width:"100%",justifyContent:"center",border:"none"}}>
-                  </Box>
-                }
+
               </Box>
             </Grid>
             
