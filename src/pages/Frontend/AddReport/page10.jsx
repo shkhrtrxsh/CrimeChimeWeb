@@ -78,13 +78,13 @@ function Page10() {
                       <MenuItem value="jewellery">Jewellery</MenuItem>
                       <MenuItem value="phone">Phone</MenuItem>
                       <MenuItem value="credit/debit/bank-card">Credit/Debit/Bank Card</MenuItem>
-                      <MenuItem value="wallet/cash">Wallet/Cash</MenuItem>
+                      <MenuItem value="wallet/cash">Wallet/Purse</MenuItem>
                       <MenuItem value="passport">Passport</MenuItem>
                       <MenuItem value="ID-document">ID Document</MenuItem>
                       <MenuItem value="general-documents">General Documents</MenuItem>
                       <MenuItem value="backpack">Backpack</MenuItem>
                       <MenuItem value="suitcase">Suitcase</MenuItem>
-                      <MenuItem value="copper">Copper</MenuItem>
+                      <MenuItem value="copper">Cash</MenuItem>
                       <MenuItem value="other">Other</MenuItem>
                     </Select>
                   </Box>
