@@ -9,18 +9,30 @@ import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import Duplicate from '../AddReport/duplicate';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
+import { SatelliteZoom } from 'src/constants/googleMap';
+import Image from '../../../assets/images/duplicate.png'
+import SearchFilter from '../ViewReport/SearchFilter';
 
 const ViewCrime = () => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
     const register = useSelector(state=>state.reportRegister);
-    const {data,zoom,lock,marker} = register;
+    const {data,zoom,lock,nearbyData} = register;
     const {longitude,latitude,vehicle_theft} = data;
     const [cancel,setCancel] = useState(true);
     const [selectActive, setSelectActive] = useState(1);
     const dispatch = useDispatch();
     const location = useLocation();
     const pathname = location.pathname;
-    const map = useRef(null)
+    const map = useRef(null);
+
+    const markerOptions = {
+      icon: {
+        url: Image,
+        scaledSize: new window.google.maps.Size(50, 50),
+        origin: new window.google.maps.Point(0, 0),
+        anchor: new window.google.maps.Point(25, 50)
+      }
+    };
 
     useEffect(()=>{
       (async()=>{
@@ -59,7 +71,7 @@ const ViewCrime = () => {
     };
     return (
         <Box sx={{ height: '100%',maxHeight:"91.3vh", display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
-            {isMdBreakpoint?null:
+            {/* {isMdBreakpoint?null:
                 <Box sx={{position:"fixed",bottom:0, width: '100%', height: "min-content",flexGrow:1,backgroundColor:"#ffe600",zIndex:100 }}>
                   <Box sx={{display:"flex",flexDirection:"row-reverse",my:2,userSelect:"none"}} onClick={()=>setCancel(!cancel)}>
                       {cancel?<CancelIcon sx={{ml:1,mr:3}}/>:<LocationOnIcon sx={{ml:1,mr:3}}/>}
@@ -68,13 +80,16 @@ const ViewCrime = () => {
                 <GoogleMap center={position} zoom={zoom} 
                   mapContainerStyle={{width:"100%",height:(cancel?"60vh":"0vh")}}
                   onLoad={onLoad}
+                  options={{
+                    mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
+                  }}
                   onZoomChanged={handleZoomChanged}>
                     <GoogleAutoComplete style={{position:"absolute",right:60,top:5,zIndex:1000}}/>
                     <Marker position={position} />
                     {(marker&&selectActive===3)&&<Marker position={marker}/>}
                   </GoogleMap>
             </Box>
-            }
+            } */}
 
             <Box sx={{ width: {md:selectActive===3?'65%':'50%',xs:'100%'},display:'flex',flexDirection:'column',height:"100%",overflowY:"auto", }}>
                 <Box sx={{display:"flex",alignItems:"center"}}>
@@ -84,13 +99,24 @@ const ViewCrime = () => {
             <Box id="hello" sx={{ width: isMdBreakpoint ? '66.67%' : '100%', height: isMdBreakpoint ? '91vh' : '0vh' }}>
               <GoogleMap center={position} zoom={zoom} 
               mapContainerStyle={{width:"100%",height:"100%"}}
+              options={{
+                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
+              }}
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
                 <GoogleAutoComplete style={{position:"absolute",right:60,top:5,zIndex:1000}}/>
-                <Marker position={position} draggable={true} onDragEnd={markerDragEnd}/>
-                {(marker&&selectActive===3)&&<Marker position={marker}/>}
+                  <Marker position={position} onDragEnd={markerDragEnd}/>
+                  {nearbyData.map(({latitude=null,longitude=null})=>{
+                    return(
+                      (latitude||longitude)&&<Marker position={{
+                        lat:Number(latitude),
+                        longitude:Number(longitude)
+                      }} options={markerOptions}/>
+                    )
+                  })}
               </GoogleMap>
             </Box>
+            <SearchFilter/>
         </Box>
     );
 }
