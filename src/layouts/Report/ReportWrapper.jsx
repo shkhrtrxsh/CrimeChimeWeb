@@ -30,6 +30,7 @@ import API from 'src/config/api';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { SatelliteZoom } from 'src/constants/googleMap';
 import Image from '../../assets/images/duplicate.png'
+import axios from 'axios';
 const ReportPageRouter = ({selectActive=1,setSelectActive,openState,mapRef})=>{
     const ReportPages=[
         <Page1/>,<Page2 setSelectActive={setSelectActive}/>,<Duplicate mapRef={mapRef}/>,<Page3/>,<Page4/>,<Page5/>,<Page6/>,<Page7/>,<Page8/>,<Page9/>,<Page10/>,<Page11/>,<Page12/>,<Page13/>,<Page14/>,<Page15/>,<Page16 setSelectActive={setSelectActive} openState={openState}/>
@@ -100,11 +101,20 @@ const ReportWrapper = () => {
 
       const onClickEvent = async()=>{
         try {
-          const formData =objectToFormData(data);
-          await API.post("/report",formData);
+          const fileURL = data.files;
+          const response = await fetch(fileURL);
+          if (response.ok) {
+            const blob = await response.blob();
+            const files = new File([blob], data.fileName);
+            const formData = objectToFormData(data);
+            formData.set("files", files);
+            await API.post("/report",formData);
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
         } catch (error) {
+          console.error(error);
         }
-        setConfirm(true);
       }
  
       const handleZoomChanged = () => {
@@ -114,7 +124,6 @@ const ReportWrapper = () => {
 
       map.current = Map; // Store the map instance in a global variable for access in the event handler
       if(!latitude||!longitude){
-        console.log("lodaed")
         const {latitude:lat,longitude:lng} = await getLocationCoords();
         dispatch(setPage({latitude:lat,longitude:lng}));
         const marker = new window.google.maps.Marker({
