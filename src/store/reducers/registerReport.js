@@ -14,8 +14,8 @@ const initialState = {
         crime:1,
         specific_crime:1,
         location:null,
-        longitude:null,
-        latitude:null,
+        longitude:28.034088,
+        latitude:-26.195246,
         google_place_id:null,
         description:null,
         perpetrators:-1,
@@ -49,8 +49,9 @@ const initialState = {
         police_case_num:null,
         fileName:null,
         date_time:null,
-        flag:null
+        flag:null,
     },
+    markers:null,
     nearbyData:[],
     marker:null,
     location:[]
@@ -60,6 +61,9 @@ const registerReport = createSlice({
   name: "registerReport",
   initialState,
   reducers: {
+    setMarkers:(state,action)=>{
+        state.markers=[...state.markers,...action.payload]
+    },
     clearReport:(state,_)=>{
         state=initialState;
     },
