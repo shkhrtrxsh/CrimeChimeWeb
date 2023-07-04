@@ -59,11 +59,10 @@ export const SuccessDialog = ({open,handleClose})=>{
   )
 }
 
-function Duplicate({mapRef,viewCrime=false}) {
+function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
   const dispatch = useDispatch();
   const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
   const {latitude:lat,longitude:long} = regData;
-  const [index,setIndex] = useState(0);
   const [open, setOpen] = useState(0)
   const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
@@ -230,7 +229,7 @@ function Duplicate({mapRef,viewCrime=false}) {
             <Grid item xs={10}>
               <Box sx={{display:"flex",width:"100%",justifyContent:"center"}}>
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
-                  {viewCrime?"View Crime":"Possible Duplicate"}
+                  {"Crime Details"}
                 </Typography>
 
               </Box>
@@ -250,7 +249,7 @@ function Duplicate({mapRef,viewCrime=false}) {
                   <img src={duplicate} alt="imgg" style={{ height:"17px"}} />
                   <Box>
                     <Typography align="left" sx={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '12px' }}>
-                      Possible duplicate report's location on the map
+                      Possible crime report's location on the map
                     </Typography>
                   </Box>
                 </Box>
@@ -293,16 +292,11 @@ function Duplicate({mapRef,viewCrime=false}) {
                       </TableContainer>
                     </Box>
                     <Box sx={{ paddingTop: '5px',mb:10 }}>
-                      <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '17px' }}>
-                        Is this your crime?
-                      </Typography>
+                  
                       <Box display="flex" justifyContent="center">
-                        <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={clickYes} disabled={lock}>
-                          Yes
+                        <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={onClose} disabled={lock}>
+                          Close
                         </Button>
-                        {values[index+1]&&<Button variant="contained" color="primary" disabled={lock} onClick={()=>setIndex(index+1)}>
-                          No
-                        </Button>}
                       </Box>
                     </Box>
                   </Box>
@@ -319,4 +313,4 @@ function Duplicate({mapRef,viewCrime=false}) {
   );
 }
 
-export default Duplicate;
+export default CrimeDialog;

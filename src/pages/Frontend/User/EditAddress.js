@@ -71,7 +71,6 @@ const EditAddress = () => {
     }, [user])
 
     const saveAddress = () => {
-        console.log(value)
         dispatch(updateUserAddress({value, navigate}))
     }
 

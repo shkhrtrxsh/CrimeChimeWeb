@@ -1,5 +1,5 @@
 // ----------------------------------------------------------------------
-
+import Adele from 'src/assets/fonts/adelle-sans-thin.otf';
 function pxToRem(value) {
   return `${value / 16}rem`;
 }
@@ -18,7 +18,7 @@ function responsiveFontSizes({ sm, md, lg }) {
   };
 }
 
-const FONT_PRIMARY = 'Public Sans, sans-serif';
+const FONT_PRIMARY = 'Adele,Public Sans, sans-serif';
 
 const typography = {
   fontFamily: FONT_PRIMARY,

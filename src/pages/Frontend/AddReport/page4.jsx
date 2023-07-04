@@ -6,7 +6,7 @@ import { Container, Typography, Grid, Box , Divider, LinearProgress, Checkbox, S
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import ak from '../../../assets/images/ak.png'
-import pistol from '../../../assets/images/ak.png'
+import pistol from '../../../assets/images/pistol.png'
 import knife from '../../../assets/images/knife.png'
 import others from '../../../assets/images/others.png'
 import NextButton from 'src/components/Button/NextButton';
@@ -52,6 +52,7 @@ function Page4() {
         ),
         imageSrc:ak,
         imageAlt:"Fully automatic(machine gun, assault rifle)",
+        imageStyle:{width:"60px",height:"auto"}
       },
       {
         name:"semi_auto_weapons",
@@ -111,7 +112,7 @@ function Page4() {
                       <Typography sx={{ fontWeight: 'normal',fontSize:'16px', paddingX: 2, textAlign: 'left' }}>
                         {f.label}
                       </Typography>
-                      <img src={f.imageSrc} style={{ width: '40px', height: '40px' }} alt={f.imageAlt} />
+                      <img src={f.imageSrc} style={{ width: '40px', height: '40px',...f.imageStyle }} alt={f.imageAlt} />
                     </li>
                     )
                   })}

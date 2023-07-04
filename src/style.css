@@ -1,6 +1,7 @@
-
-@tailwind components;
-@tailwind utilities;
+@font-face {
+    font-family: 'Adele';
+    src: url('./assets/fonts/AdelleSansDEV-Thin.otf') format('opentype');
+  }
 .pac-container{
     z-index: 100000
 }
