@@ -62,10 +62,10 @@ function Page7() {
           </Grid>
 
           <Box sx={{ py: 1 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 4, pl: 8 }}>
-              <FormControlLabel control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} />} label="Unknown" />
-              <FormControlLabel control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} />} label="Yes" />
-              <FormControlLabel control={<Checkbox checked={value === '2'} value={2} onChange={handleChange} />} label="No" />
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 8, pl: 8 }}>
+              <FormControlLabel control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} sx={{ paddingY: '20px'}}/>} label="Unknown" />
+              <FormControlLabel control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} sx={{ paddingY: '20px'}} />} label="Yes" />
+              <FormControlLabel control={<Checkbox checked={value === '2'} value={2} onChange={handleChange} sx={{ paddingY: '20px'}} />} label="No" />
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', mt: 3 }}>
                 <Select
                   value={count}

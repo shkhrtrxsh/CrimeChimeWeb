@@ -93,7 +93,7 @@ const Page12 = () => {
                   <Select
                     value={value || ''}
                     onChange={(event) => setValue(event.target.value)}
-                    sx={{ width: '60px' }}
+                    sx={{ width: '80px' }}
                     disabled={checked === '0'}
                     error={error ? true : false}
                   >

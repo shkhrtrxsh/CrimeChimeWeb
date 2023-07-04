@@ -70,7 +70,7 @@ const Page2 = ({setSelectActive}) => {
               </GoogleMap>
             </FormControl>
           </Box>
-          <Box style={{ backgroundColor: '#FCD34D', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginLeft: 'auto', marginRight: 'auto',width:'100%' }}>
+          <Box style={{ backgroundColor: '#ffe600', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginLeft: 'auto', marginRight: 'auto',width:'100%' }}>
           <NextButton beforeNext={()=>setSelectActive(1)} textValue="GO BACK"/>
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
             <NextButton beforeNext={()=>setSelectActive(3)} textValue="CONFIRM PLACE"/>
