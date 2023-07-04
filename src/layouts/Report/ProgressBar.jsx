@@ -25,7 +25,7 @@ const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,b
       width: isMdBreakpoint ? '42.9%' : '100%',
     }}
   >
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'start', backgroundColor: '#ffe600', color: 'black', padding: '12px',width:"100%" }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'start', backgroundColor: '#ffe600', color: 'black', padding: '5px',width:"100%" }}>
 
             {backLink?<NextButton beforeNext={lock?null:()=>setActiveStep(activeStep,activeStep-1)} textValue="GO BACK"/>:null}
 
