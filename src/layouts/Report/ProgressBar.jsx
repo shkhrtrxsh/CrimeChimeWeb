@@ -4,6 +4,7 @@ import React from 'react'
 import NextButton from 'src/components/Button/NextButton'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { loadGoogleMaps } from 'src/utils/googleMap';
+
 const Progress = ({ activeStep }) => {
     const totalSteps = 15;
     const progress = (activeStep / totalSteps) * 100;
@@ -27,7 +28,7 @@ const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,b
   >
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'start', backgroundColor: '#ffe600', color: 'black', padding: '5px',width:"100%" }}>
 
-            {backLink?<NextButton beforeNext={lock?null:()=>setActiveStep(activeStep,activeStep-1)} textValue="GO BACK"/>:null}
+            {backLink?<NextButton beforeNext={lock?null:()=>setActiveStep(activeStep,activeStep-1)} textValue="GO BACK"/>:<Typography sx={{cursor:"pointer"}} variant="h6">CANCEL</Typography>}
 
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
 
@@ -37,10 +38,12 @@ const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,b
 
             <NextButton textValue={submit?"SUBMIT":"NEXT"} beforeNext={lock?null:()=>{beforeNext?beforeNext():setActiveStep(activeStep,activeStep+1)}} />
             {!isMdBreakpoint&&
-              <Box sx={{display:'flex',mx:3,justifyContent:'center',alignItems:'center'}} onClick={()=>{setCancel(false);}}>
-                <LocationOnIcon/>
-                <Typography sx={{cursor:"pointer"}} variant="h6">View Map</Typography>
-              </Box>
+              <Box sx={{ display: 'flex', mx: 3, justifyContent: 'center', alignItems: 'center' }} onClick={() => { setCancel(false); }}>
+              <LocationOnIcon />
+              <Typography sx={{ cursor: 'pointer', textTransform: 'uppercase', textDecoration: 'underline' }} variant="h6">
+                VIEW MAP
+              </Typography>
+            </Box>
             }
         </Box>
         <Progress activeStep={activeStep} />

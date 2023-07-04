@@ -2,11 +2,11 @@ import React, { useEffect, useState} from 'react';
 import { Container, Typography,useTheme, Grid, Box, Select, MenuItem, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLock, setPage,  } from 'src/store/reducers/registerReport';
 import { objectToFormData } from 'src/utils/formatObject';
 import API from 'src/config/api';
+import police from '../../../assets/images/police.png'
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,7 +31,7 @@ export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {confirm?"Report Submitted Successfully":"Are you sure you want to Report the crime?"}
+            {confirm?"Report Submitted Successfully":"Are you sure you want to report the crime?"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -82,21 +82,21 @@ const Page16 = ({selectActive,setActiveStep}) => {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }}>
               <Grid item xs={10} sx={{ pt: 5 }}>
-              <Box display="flex" alignItems="center" justifyContent="center">
+              <Box display="flex" alignItems="center" justifyContent="center" paddingTop='10%'>
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Police Reporting
                 </Typography>
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <LocalPoliceIcon sx={{ fontSize: '4rem' }} />
-                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '20px' }}>
+      <img src={police} alt="Vehicle Theft" style={{ height: '100px' }} />
+    </Box>
               </Grid>
 
-              <Grid item xs={10} sx={{ pl: 5, pt: 5 }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Box sx={{ display: 'flex',alignItems:'center' }}>
+              <Grid item xs={10}>
+                <Box sx={{ display: 'flex', flexDirection: 'column',paddingTop:'15%' }}>
+                  <Box sx={{ display: 'flex',alignItems:'center',paddingTop:'10px'  }}>
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px:1, textAlign: 'left' }}>
                       Did the police attend the scene of crime?
                     </Typography>
@@ -107,7 +107,7 @@ const Page16 = ({selectActive,setActiveStep}) => {
                     </Select>
                   </Box>
 
-                  <Box sx={{ display: 'flex',alignItems:'center',mt:3 }}>
+                  <Box sx={{ display: 'flex',alignItems:'center',mt:3,paddingTop:'10%',paddingBottom:'10%'   }}>
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 1,  textAlign: 'left' }}>
                       Was the crime formally reported to the police?
                     </Typography>
@@ -117,7 +117,7 @@ const Page16 = ({selectActive,setActiveStep}) => {
                     </Select>
                   </Box>
 
-                  <Box sx={{ display: 'flex',mt:2,alignItems:"center" }}>
+                  <Box sx={{ display: 'flex',mt:2,alignItems:"center",paddingTop:'10px'  }}>
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 1,  textAlign: 'left' }}>
                       Please Specify the Case Number
                     </Typography>
