@@ -54,13 +54,20 @@ const initialState = {
     markers:null,
     nearbyData:[],
     marker:null,
-    location:[]
+    location:[],
+    crimeIndex:{
+        index:0,
+        viewCrime:false,
+    },
 }
 
 const registerReport = createSlice({
   name: "registerReport",
   initialState,
   reducers: {
+    setCrimeIndex:(state,action)=>{
+        state.crimeIndex={...state.crimeIndex,...action.payload}
+    },
     setMarkers:(state,action)=>{
         state.markers=[...state.markers,...action.payload]
     },
@@ -126,6 +133,6 @@ const registerReport = createSlice({
 
 });
 
-export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,clearReport,clearNearbyReports} =registerReport.actions;
+export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,clearReport,clearNearbyReports,setCrimeIndex} =registerReport.actions;
 
 export const registerReportReducer = registerReport.reducer;
