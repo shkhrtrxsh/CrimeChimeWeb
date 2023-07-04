@@ -61,8 +61,8 @@ function Page5() {
             </Typography>
           </Grid>
 
-          <div sx={{ paddingLeft: '6px' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 4, pl: 8 }}>
+          <div>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 4, pl: 1}}>
               <FormControlLabel
                 control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} />}
                 label="Yes"
@@ -79,7 +79,7 @@ function Page5() {
                 sx={{ paddingTop: '20px' }}
               />
             </Box>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', paddingLeft: '20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', }}>
               <Select
                 value={count || ''}
                 onChange={(e) => {
@@ -94,7 +94,6 @@ function Page5() {
                   setCount(count);
                 }}
                 disabled={value > 0}
-                sx={{ minWidth: '100px', mr: 2 }}
                 error={error ? true : false}
               >
                 {Array.from({ length: 30 }, (_, index) => (

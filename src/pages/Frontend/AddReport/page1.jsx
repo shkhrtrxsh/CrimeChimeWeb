@@ -158,7 +158,7 @@ function Page1() {
           <Grid item xs={12}>
             <Box display="flex" alignItems="center" justifyContent="center" paddingTop="10px">
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
-              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px' , paddingBottom:'20px'}}>
+              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px' , paddingBottom:'5px'}}>
                 Select Date
               </Typography>
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
@@ -211,9 +211,9 @@ function Page1() {
           </Grid>
           <Box style={{display:"flex", flexDirection:"column", width: '75%' }}>
             <Grid item xs={12}>
-            <Box display="flex" alignItems="center" justifyContent="center" paddingTop="20px">
+            <Box display="flex" alignItems="center" justifyContent="center" paddingTop="20px" paddingBottom="20px">
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
-              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px', paddingBottom:'30px' }}>
+              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px', paddingBottom:'5px' }}>
                 Select Time
               </Typography>
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
