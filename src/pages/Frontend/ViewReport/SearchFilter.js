@@ -25,7 +25,9 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { APPBAR_DESKTOP } from 'src/constants/theme'
 import AddIcon from '@mui/icons-material/Add';
 import useResponsive from 'src/hooks/useResponsive';
-import { DatePicker, LocalizationProvider } from '@mui/lab';
+import {  LocalizationProvider } from '@mui/lab';
+import {DatePicker} from '@mui/x-date-pickers'
+
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import { format } from 'date-fns';
@@ -85,8 +87,11 @@ export default function SearchFilter(props) {
     // place.geometry.viewport.Wa.lo
 
     const filterSearchHandler = ()=>{
-        dispatch(clearReport());
-        dispatch(getNearbyCrimes({lat:latitude,long:longitude,toDate,fromDate}));
+        if(toDate>=fromDate&&latitude&&longitude){
+            dispatch(clearReport());
+            dispatch(getNearbyCrimes({lat:latitude,long:longitude,toDate,fromDate}));
+            toggleDrawer(false)
+        }
     }
 
     const clearSearchHandler = ()=>{
@@ -100,7 +105,7 @@ export default function SearchFilter(props) {
                     size="medium"
                     color="primary"
                     aria-label="add report"
-                    to="/report/reportCrime"
+                    to="/report/add"
                     component={Link}
                     variant={isDesktop ? 'extended' : 'circular'}
                 >
@@ -128,20 +133,22 @@ export default function SearchFilter(props) {
                         }}>
                             Filter your report
                         </Typography>
-                        <GoogleAutoComplete/>
-                        
+                        <Box>
+                            <GoogleAutoComplete style={{}}/>
+                            {!(latitude&&longitude)&&<Typography sx={{color:"red",fontSize:12}}>*required</Typography>}
+                        </Box>
 
                     <DatePicker
                         label="From"
                         value={fromDate}
-                        maxDate={dateNow}
+                        maxDate={new Date(toDate)}
                         onChange={(event,newValue)=>setFromDate(event)}
                         renderInput={(params) => <TextField {...params} />}
                         />
                         <DatePicker
                         label="To"
                         value={toDate}
-                        maxDate={new Date(fromDate)}
+                        maxDate={dateNow}
                         onChange={(event,newValue)=>setToDate(event)}
                         renderInput={(params) => <TextField {...params} />}
                         />
