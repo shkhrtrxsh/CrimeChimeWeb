@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import { format } from 'date-fns';
 import API from 'src/config/api'
 import { objectToFormData } from 'src/utils/formatObject';
 
 export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes",async({latitude,longitude,toDate=null,fromDate=null})=>{
-    const formData = objectToFormData({latitude,longitude,to_date:toDate,from_date:fromDate})
+    const formData = objectToFormData({latitude,longitude,to_date:format(toDate,"yyyy-MM-dd"),from_date:format(fromDate,"yyyy-MM-dd")})
     try {
         const res = await API({"url":"/report/area",method:"POST",data:formData});
         return res.data.data.data;

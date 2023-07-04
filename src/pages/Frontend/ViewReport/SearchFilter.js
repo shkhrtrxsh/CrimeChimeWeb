@@ -69,14 +69,12 @@ const BoxButtonStyle = styled(Box)(({ theme }) => ({
 
 export default function SearchFilter(props) {
     const dateNow = new Date(Date.now());
-    const {data,nearbyReport,markers} = useSelector(state=>state.reportRegister);
+    const {data} = useSelector(state=>state.reportRegister);
     const {latitude,longitude} = data;
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [state, setState] = React.useState(false);
     const [toDate, setToDate] = useState(dateNow);
     const [fromDate, setFromDate] = useState(dateNow);
-    const [address, setAddress] = useState('');
     const isDesktop = useResponsive('up', 'md');
     const toggleDrawer = (event) => {
         setState(event);

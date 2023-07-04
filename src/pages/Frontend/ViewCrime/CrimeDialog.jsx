@@ -72,8 +72,6 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
   },[latitude,longitude,index])
 
   useEffect(() => {
-    dispatch(clearNearbyReports());
-    dispatch(getNearbyCrimes({lat,long}));
     if(mapRef.current){
       const mapElement = mapRef.current;
       mapElement.marker=null;
@@ -236,24 +234,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
             </Grid>
             
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start',alignItems:"center" }}>
-                  <img src={current} alt="imgg" style={{ height:'17px'}} />
-                  <Box>
-                    <Typography align="left" sx={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '12px' }}>
-                      Your report's location on the map
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start',alignItems:"center" }}>
-                  <img src={duplicate} alt="imgg" style={{ height:"17px"}} />
-                  <Box>
-                    <Typography align="left" sx={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '12px' }}>
-                      Possible crime report's location on the map
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
+                
               {(()=>{
                 if(loading){
                   return (

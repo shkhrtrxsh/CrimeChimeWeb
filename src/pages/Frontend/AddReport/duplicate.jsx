@@ -31,6 +31,7 @@ import { fDateTimeSuffix } from 'src/utils/formatTime';
 import { capitalize } from 'src/utils/string';
 import { addMarkers, clearNearbyReports, setLock, setMarker, setPage } from 'src/store/reducers/registerReport';
 import API from 'src/config/api';
+import { useNavigate } from 'react-router-dom';
 
 const vehicle_theft_choices = ["hijacking", "attempted hijacking", "vehicle theft", "attempted vehicle theft", "does not apply"];
 const various_choices = ["crime occured at ATM", "drug-related crime", "gang-related crime", "Arson was involed", "Vandalism was involed", "social unrest"]
@@ -61,6 +62,7 @@ export const SuccessDialog = ({open,handleClose})=>{
 
 function Duplicate({mapRef,viewCrime=false}) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
   const {latitude:lat,longitude:long} = regData;
   const [index,setIndex] = useState(0);
@@ -221,10 +223,16 @@ const theme = useTheme();
       });
     }
   };
-
+  const handleClose=(open)=>{
+    const prev = open;
+    setOpen(0)
+    if(prev===1){
+      navigate("/");
+    }
+  }
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <SuccessDialog open={open} handleClose = {()=>setOpen(0)}/>
+        <SuccessDialog open={open} handleClose = {handleClose}/>
         <Box sx={{mt:5,pl:5,h:"100%"}}>
           <Grid container spacing={2} justifyContent="center" alignItems='center' sx={{ textAlign: 'center' }}>
             <Grid item xs={10}>
