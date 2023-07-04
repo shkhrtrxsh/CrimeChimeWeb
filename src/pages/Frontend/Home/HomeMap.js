@@ -17,6 +17,7 @@ import {SearchInTable} from 'src/components/Table';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ActiveInactiveButton } from 'src/components/Button';
 import { fDateTime } from 'src/utils/formatTime';
+import Image from 'src/assets/images/duplicate.png'
 
 import { 
     Table,
@@ -31,7 +32,7 @@ import {
   } from '@mui/material';
   import { getSearchQueryParams, setSearchQueryParams, recordPerPage } from 'src/helpers/SearchHelper';
 import { getLocationCoords } from 'src/utils/googleMap';
-import { setPage } from 'src/store/reducers/registerReport';
+import { setCrimeIndex, setPage } from 'src/store/reducers/registerReport';
 
 const containerStyle = {
     width: '100%',
@@ -58,7 +59,8 @@ const MapDivStyle = styled('div')(({ theme }) => ({
 
 
 const HomeMap = () => {
-    const {latitude,longitude} = useSelector(state=>state.reportRegister.data);
+    const {data} =  useSelector(state=>state.reportRegister);
+    const {latitude,longitude} = data; 
     const isDesktop = useResponsive('up', 'md');
     const [open, setOpen] = React.useState(true);
     const theme = useTheme()
@@ -66,6 +68,15 @@ const HomeMap = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
+
+    const markerOptions = {
+        icon: {
+          url: Image,
+          scaledSize: new window.google.maps.Size(50, 50),
+          origin: new window.google.maps.Point(0, 0),
+          anchor: new window.google.maps.Point(25, 50)
+        }
+      };
 
     const handleClose = () => setOpen(false);
     const [hidden, setHidden] = React.useState(true);
@@ -170,7 +181,7 @@ const HomeMap = () => {
                     color="primary"
                     aria-label="reported crimes"
                     title="view crimes"
-                    to="/report"
+                    to="/reportscrime"
                     component={Link}
                     variant={isDesktop ? 'extended' : 'circular'}
                 >
@@ -267,12 +278,16 @@ const HomeMap = () => {
                         >
                             {localStorage.getItem("_token") && reports?.data && reports.data.map((report, index) => (
                                 <Marker key={index}
+                                    onClick={()=>{
+                                        dispatch(setCrimeIndex({index,viewCrime:true}));
+                                        navigate("/reportscrime")
+                                    }}
                                     position={{
                                         lat: Number(report.latitude),
                                         lng: Number(report.longitude)
                                     }}
-                                    icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
-                                    onClick={() => { reportDetails(report) }}
+                                    // icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
+                                    options={markerOptions}
 
                                 />
                             ))} 
