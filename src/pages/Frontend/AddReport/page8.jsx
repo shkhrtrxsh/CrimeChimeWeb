@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@mui/material';
+import Vehicle from '../../../assets/images/vehiclee.png'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TypoSub from 'src/components/Typography/TypoSub';
@@ -48,6 +49,9 @@ function Page8() {
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
                   (Excluding cash in-transit vehicles)
                 </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '20px' }}>
+      <img src={Vehicle} alt="Vehicle Theft" style={{ height: '100px' }} />
+    </Box>
               </Grid>
 
               <Box sx={{ pl: 5, pt: 0, }}>

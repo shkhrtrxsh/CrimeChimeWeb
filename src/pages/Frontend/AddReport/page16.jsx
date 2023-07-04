@@ -2,11 +2,11 @@ import React, { useEffect, useState} from 'react';
 import { Container, Typography,useTheme, Grid, Box, Select, MenuItem, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLock, setPage,  } from 'src/store/reducers/registerReport';
 import { objectToFormData } from 'src/utils/formatObject';
 import API from 'src/config/api';
+import police from '../../../assets/images/police.png'
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 import { useNavigate } from 'react-router-dom';
 
@@ -82,20 +82,20 @@ const Page16 = ({selectActive,setActiveStep}) => {
           <Container>
             <Grid container spacing={2} justifyContent="center" sx={{ paddingY: 0 }}>
               <Grid item xs={10} sx={{ pt: 5 }}>
-              <Box display="flex" alignItems="center" justifyContent="center" paddingTop='20%'>
+              <Box display="flex" alignItems="center" justifyContent="center" paddingTop='10%'>
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Police Reporting
                 </Typography>
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <LocalPoliceIcon sx={{ fontSize: '4rem' }} />
-                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '20px' }}>
+      <img src={police} alt="Vehicle Theft" style={{ height: '100px' }} />
+    </Box>
               </Grid>
 
               <Grid item xs={10}>
-                <Box sx={{ display: 'flex', flexDirection: 'column',paddingTop:'20%' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column',paddingTop:'15%' }}>
                   <Box sx={{ display: 'flex',alignItems:'center',paddingTop:'10px'  }}>
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px:1, textAlign: 'left' }}>
                       Did the police attend the scene of crime?

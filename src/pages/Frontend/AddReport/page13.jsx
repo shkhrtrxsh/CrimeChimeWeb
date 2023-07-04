@@ -1,7 +1,7 @@
 import { Container, Typography,useTheme, Grid, Box, Checkbox } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import corruption from '../../../assets/images/corruption.png';
+import bribe from '../../../assets/images/bribe.png';
 import { useDispatch, useSelector } from 'react-redux';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 import { setPage } from 'src/store/reducers/registerReport';
@@ -28,26 +28,26 @@ const Page13 = () => {
                 </Typography>
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'center', height: '4rem'}}>
-                  <img src={corruption} alt="img corr" />
-                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '20px' }}>
+      <img src={bribe} alt="Vehicle Theft" style={{ height: '100px' }} />
+    </Box>
               </Grid>
 
               <Grid item xs={10} >
                 <Box sx={{ display: 'flex', flexDirection: 'column' , paddingTop:'5%' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 5 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 3, pl: 5 }}>
                     <Checkbox checked={checked==="0"} value={0} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'center' }}>
                       Does not apply
                     </Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 5 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 3, pl: 5 }}>
                     <Checkbox checked={checked==="1"} value={1} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Bribe requested by police officer
                     </Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 5 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 3, pl: 5 }}>
                     <Checkbox checked={checked==="2"} value={2} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Bribe requested by civil servant
@@ -55,7 +55,7 @@ const Page13 = () => {
                       <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(not a police officer)</span>
                     </Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 5 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 3, pl: 5 }}>
                     <Checkbox checked={checked==="3"} value={3} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Bribe requested by politician
