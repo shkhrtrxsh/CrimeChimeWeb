@@ -173,7 +173,7 @@ const ReportWrapper = () => {
                 <VerticalProgressBar progress={selectActive} maxVal={17}/>
             </Box>
             <Box sx={{ width: {md:'50%',xs:'100%'},display:'flex',flexDirection:'column',height:"100%",overflowY:"auto", }}>
-                <Box sx={{display:"flex",alignItems:"center"}}>
+                <Box sx={{display:"flex",alignItems:"center",mb:10}}>
                     <ReportPageRouter selectActive={selectActive} mapRef={map}/>
                     {/* <Page9/> */}
                 </Box>
