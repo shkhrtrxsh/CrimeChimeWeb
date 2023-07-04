@@ -1,22 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {  useLocation } from 'react-router-dom'
-import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Drawer, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { getLocationCoords, loadGoogleMaps } from 'src/utils/googleMap';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage, setZoom, } from 'src/store/reducers/registerReport';
+import { setCrimeIndex, setPage, setZoom, } from 'src/store/reducers/registerReport';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
-import Duplicate from '../AddReport/duplicate';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { SatelliteZoom } from 'src/constants/googleMap';
 import Image from '../../../assets/images/duplicate.png'
 import SearchFilter from '../ViewReport/SearchFilter';
-
+import CrimeDialog from "./CrimeDialog";
+import { getNearbyCrimes } from 'src/store/api/registerReport';
 const ViewCrime = () => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
     const register = useSelector(state=>state.reportRegister);
-    const {data,zoom,lock,nearbyData} = register;
+    const {data,zoom,lock,nearbyData,crimeIndex} = register;
     const {longitude,latitude,vehicle_theft} = data;
     const [cancel,setCancel] = useState(true);
     const [selectActive, setSelectActive] = useState(1);
@@ -24,6 +24,7 @@ const ViewCrime = () => {
     const location = useLocation();
     const pathname = location.pathname;
     const map = useRef(null);
+    const [viewCrime,setViewCrime] = useState(false);
 
     const markerOptions = {
       icon: {
@@ -37,6 +38,7 @@ const ViewCrime = () => {
     useEffect(()=>{
       (async()=>{
         const {latitude,longitude} = await getLocationCoords();
+        dispatch(getNearbyCrimes({latitude,longitude}));
         setPage(latitude,longitude);
       })()
     },[])
@@ -59,6 +61,10 @@ const ViewCrime = () => {
     const theme = useTheme();
     const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
+    const onMarkerClick = (ind)=>{
+      dispatch(setCrimeIndex({index:ind,viewCrime:true}));
+    }
+
     const markerDragEnd = (e) => {
       if (e !== null) {
         const geocoder = new window.google.maps.Geocoder();
@@ -71,32 +77,12 @@ const ViewCrime = () => {
     };
     return (
         <Box sx={{ height: '100%',maxHeight:"91.3vh", display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
-            {/* {isMdBreakpoint?null:
-                <Box sx={{position:"fixed",bottom:0, width: '100%', height: "min-content",flexGrow:1,backgroundColor:"#ffe600",zIndex:100 }}>
-                  <Box sx={{display:"flex",flexDirection:"row-reverse",my:2,userSelect:"none"}} onClick={()=>setCancel(!cancel)}>
-                      {cancel?<CancelIcon sx={{ml:1,mr:3}}/>:<LocationOnIcon sx={{ml:1,mr:3}}/>}
-                      <Typography>{cancel?"Close Map":"View Map"}</Typography>
+            <Drawer anchor="left" open={crimeIndex.viewCrime} onClose={()=>dispatch(setCrimeIndex({viewCrime:false}))}>
+                <Box sx={{display:"flex",alignItems:"center",maxWidth:"500px"}}>
+                  <CrimeDialog mapRef={map} index={crimeIndex.index} onClose={()=>setViewCrime(false)}/>
                 </Box>
-                <GoogleMap center={position} zoom={zoom} 
-                  mapContainerStyle={{width:"100%",height:(cancel?"60vh":"0vh")}}
-                  onLoad={onLoad}
-                  options={{
-                    mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
-                  }}
-                  onZoomChanged={handleZoomChanged}>
-                    <GoogleAutoComplete style={{position:"absolute",right:60,top:5,zIndex:1000}}/>
-                    <Marker position={position} />
-                    {(marker&&selectActive===3)&&<Marker position={marker}/>}
-                  </GoogleMap>
-            </Box>
-            } */}
-
-            <Box sx={{ width: {md:selectActive===3?'65%':'50%',xs:'100%'},display:'flex',flexDirection:'column',height:"100%",overflowY:"auto", }}>
-                <Box sx={{display:"flex",alignItems:"center"}}>
-                <Duplicate mapRef={map} viewCrime={true}/>
-                </Box>
-            </Box>
-            <Box id="hello" sx={{ width: isMdBreakpoint ? '66.67%' : '100%', height: isMdBreakpoint ? '91vh' : '0vh' }}>
+            </Drawer>
+            <Box id="hello" sx={{ width: '100%', height: '100%' }}>
               <GoogleMap center={position} zoom={zoom} 
               mapContainerStyle={{width:"100%",height:"100%"}}
               options={{
@@ -106,12 +92,14 @@ const ViewCrime = () => {
               onZoomChanged={handleZoomChanged}>
                 <GoogleAutoComplete style={{position:"absolute",right:60,top:5,zIndex:1000}}/>
                   <Marker position={position} onDragEnd={markerDragEnd}/>
-                  {nearbyData.map(({latitude=null,longitude=null})=>{
+                  {nearbyData.map(({latitude=null,longitude=null},ind)=>{
                     return(
-                      (latitude||longitude)&&<Marker position={{
+                      (latitude||longitude)&&<Marker key={ind} position={{
                         lat:Number(latitude),
-                        longitude:Number(longitude)
-                      }} options={markerOptions}/>
+                        lng:Number(longitude)
+                      }} options={markerOptions}
+                        onClick={()=>onMarkerClick(ind)}
+                      />
                     )
                   })}
               </GoogleMap>
