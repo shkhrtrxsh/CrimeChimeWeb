@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-const VerticalProgressBar = ({progress=0,maxVal}) => {
+const VerticalProgressBar = ({ progress = 0, maxVal }) => {
   return (
     <Box sx={{display:"flex",flexDirection:"column"}}>
         {Array(maxVal).fill(0).map(($_,ind)=>{
@@ -13,3 +13,4 @@ const VerticalProgressBar = ({progress=0,maxVal}) => {
 }
 
 export default VerticalProgressBar;
+

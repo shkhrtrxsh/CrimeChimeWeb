@@ -16,7 +16,15 @@ const ProgressBar = ({activeStep,beforeNext=null,beforeBack=null,nextLink=null,b
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   return (
-    <Box sx={{height:"100%",display: 'flex', justifyContent: 'center', alignItems: 'start',width:"100%"}}>
+    <Box
+    sx={{
+      height: "100%",
+      display: 'flex',
+      justifyContent: isMdBreakpoint ? 'start' : 'center',
+      alignItems: 'start',
+      width: isMdBreakpoint ? '42.9%' : '100%',
+    }}
+  >
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'start', backgroundColor: '#ffe600', color: 'black', padding: '12px',width:"100%" }}>
 
             {backLink?<NextButton beforeNext={lock?null:()=>setActiveStep(activeStep,activeStep-1)} textValue="GO BACK"/>:null}
