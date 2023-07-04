@@ -11,6 +11,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import NoMedia from 'src/assets/images/unavailable.svg'
 
 const MyReport = () => {
 
@@ -25,14 +26,17 @@ const MyReport = () => {
     const videoExtensions = ['.mpg', '.mp2', '.mpeg', '.mpe', '.mpv', '.mp4'] //you can add more extensions
     let vistatus
 
-    const isVideo = (v) => {
-        videoExtensions.map((e) => {
-          vistatus = v.includes(e);
-        })
+    function isImage(url) {
+        const imageExtensions = ['.apng', '.bmp', '.gif', '.ico', '.cur', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
+        const lowerCaseUrl = url.toLowerCase();
+        return imageExtensions.some(extension => lowerCaseUrl.endsWith(extension));
+      }
       
-        return vistatus
-    };
-
+    function isVideo(url) {
+        const videoExtensions = ['.mp4', '.webm', '.ogg', '.ogv', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.m4v', '.3gp'];
+        const lowerCaseUrl = url.toLowerCase();
+        return videoExtensions.some(extension => lowerCaseUrl.endsWith(extension));
+    }
 
     return (
         <Page title="My Report">
@@ -44,18 +48,27 @@ const MyReport = () => {
                     <Grid item md={9} xs={12}>
                         <Grid container spacing={3}>
                             {reports.data && reports.data.map((report, index) => {
-                                const path = (report&&report?.report_image&&report.report_image.path!==null)
+                                let path = (report?.report_image&&report.report_image?.path);
+                                if(!(path===null||path === '')){
+                                    path=process.env.REACT_APP_API_URL+"/"+path;
+                                }
                                 return(
                                 <Grid item md={6} xs={12} key={index}>
                                     <Card>
-                                    {(!(path===null||path === '') &&( path.toString().endsWith("png") || path.toString().endsWith("jpg") || path.toString().endsWith("jpeg")))? (
+                                    {(!(path===null||path === '') &&isImage(path))? (
                                         <CardMedia
                                             component="img"
                                             alt="green iguana"
-                                            image={report.report_image ? process.env.REACT_APP_API_URL + '/' + report.report_image.path : process.env.REACT_APP_API_URL + '/assets/image/no-image.jpg'}
-                                        />) : (
-                                            <video className="VideoInput_video" width="100%" height="auto" controls src={report?.report_image ? process.env.REACT_APP_API_URL + '/' + report.report_image.path : 'no video'} />
-                                        )
+                                            image={path}
+                                        />) :(!(path===null||path === '') &&isVideo(path))? (
+                                            <video className="VideoInput_video" width="100%" height="auto" controls src={path} />
+                                        ):(
+                                            <CardMedia
+                                                component="img"
+                                                alt="no media"
+                                                image={NoMedia}
+                                            />)
+
                                     }
                                         <CardContent>
                                             <Typography gutterBottom variant="h5" component="div">
