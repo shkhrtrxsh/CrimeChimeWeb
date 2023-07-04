@@ -5,7 +5,7 @@ import NextButton from 'src/components/Button/NextButton';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setZoom } from 'src/store/reducers/registerReport';
-import usePlacesAutocomplete, { getGeocode, getLatLng,getPlacePredictions } from 'use-places-autocomplete';
+
 import { SatelliteZoom } from 'src/constants/googleMap';
 const containerStyle = {
   width: '100%',
