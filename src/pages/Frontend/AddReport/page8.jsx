@@ -52,17 +52,26 @@ function Page8() {
 
               <Box sx={{ pl: 5, pt: 0, }}>
                 <div sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 0 }}>
-                <Box sx={{display:"flex",flexDirection:"column"}}
-                  >
-                    {fields.map((f,ind)=>{
-                      return(
-                        <FormControlLabel control={<Checkbox/>} checked={value===`${f.value}`} value ={f.value} key={ind} label={
-                          <TypoSub mainText={f.main} subText={f.sub}/>
-                        } onChange={handleChange}/>
-                        )
-                          })}
-                      </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 6, pl: 4 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+  {fields.map((f, ind) => {
+    return (
+      <FormControlLabel
+        control={<Checkbox />}
+        checked={value === `${f.value}`}
+        value={f.value}
+        key={ind}
+        label={
+          <Box sx={{ display: 'flex', flexDirection: 'column', paddingTop: '20px' }}>
+            <TypoSub mainText={f.main} subText={f.sub} />
+          </Box>
+        }
+        onChange={handleChange}
+      />
+    );
+  })}
+</Box>
+
                   </Box>
                 </div>
               </Box>

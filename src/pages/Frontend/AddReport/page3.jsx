@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Typography,
@@ -6,7 +6,8 @@ import {
   TextField,
   Box,
   Divider,
-  LinearProgress,
+  Select,
+  MenuItem,
   Checkbox,
   useMediaQuery,
   useTheme,
@@ -56,17 +57,15 @@ function Page3() {
       <Container maxWidth="sm">
         <Grid container spacing={2} justifyContent="center" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
           <Grid item xs={10}>
-          <Box display="flex" alignItems="center" justifyContent="center">
-  <Box  borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
-  <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
-    Perpetrators
-  </Typography>
-  <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
-</Box>
-
-
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
+              <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
+                Perpetrators
+              </Typography>
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+            </Box>
             <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-              (persons who committed the crime)
+              (Persons who committed the crime)
             </Typography>
           </Grid>
 
@@ -74,23 +73,32 @@ function Page3() {
             <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
               How many perpetrators?
             </Typography>
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <TextField
-                type="number"
-                name="perpetrators"
-                value={perpetrators < 0 ? '' : perpetrators}
-                onChange={handleTextChange}
-                disabled={checked}
-                InputProps={{
-                  inputProps: {
-                    min: 1,
-                    max: 10,
-                    step: 1,
-                  },
-                }}
-                error={error ? true : false}
-                helperText={error}
-              />
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '20px' }}>
+            <Select
+  value={perpetrators}
+  onChange={(event) => {
+    const value = event.target.value;
+    dispatch(setPage({ perpetrators: value }));
+    if (value && value > 0) {
+      setError('');
+      dispatch(setLock(false));
+    } else {
+      setError('*required');
+      dispatch(setLock(true));
+    }
+  }}
+  disabled={checked}
+  error={error ? true : false}
+  style={{ marginRight: '8px' }}
+>
+  {Array.from({ length: 30 }, (_, index) => index + 1).map((number) => (
+    <MenuItem key={number} value={number}>
+      {number}
+    </MenuItem>
+  ))}
+</Select>
+
+
 
               <Typography style={{ marginLeft: '8px', marginRight: '8px', display: 'flex', alignItems: 'center' }}>OR</Typography>
 
@@ -105,7 +113,7 @@ function Page3() {
           <Grid item xs={10} style={{ display: 'flex', justifyContent: 'center' }}>
             <PeopleIcon style={{ height: '112px', width: '112px' }} />
           </Grid>
-          <Grid item xs={10} style={{ textAlign: 'center' }}>
+          <Grid item xs={10} style={{ textAlign: 'center', paddingTop: '20px' }}>
             <TextField
               label="Describe their appearance.."
               name="perpetrator_des"
@@ -124,3 +132,4 @@ function Page3() {
 }
 
 export default Page3;
+

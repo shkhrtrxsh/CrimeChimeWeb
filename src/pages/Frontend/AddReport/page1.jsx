@@ -154,10 +154,11 @@ function Page1() {
   </Typography>
 </Box>
           </Grid>
+  
           <Grid item xs={12}>
             <Box display="flex" alignItems="center" justifyContent="center" paddingTop="10px">
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
-              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px' }}>
+              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px' , paddingBottom:'20px'}}>
                 Select Date
               </Typography>
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
@@ -208,58 +209,62 @@ function Page1() {
               ))}
             </TextField>
           </Grid>
-
-          <Grid item xs={12}>
-            <Box display="flex" alignItems="center" justifyContent="center" paddingTop="10px">
+          <Box style={{display:"flex", flexDirection:"column", width: '75%' }}>
+            <Grid item xs={12}>
+            <Box display="flex" alignItems="center" justifyContent="center" paddingTop="20px">
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
-              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px' }}>
+              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px', paddingBottom:'30px' }}>
                 Select Time
               </Typography>
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
             </Box>
           </Grid>
-          <Grid item xs={3} sx={{ textAlign: 'center' }}>
-            <TextField
-              select
-              label="Hour"
-              value={timeValue.getHours() % 12 || 12}
-              onChange={handleHourChange}
-              fullWidth
-            >
-              {hours.map((hour) => (
-                <MenuItem key={hour} value={hour}>
-                  {hour}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
-          <Grid item xs={3} sx={{ textAlign: 'center' }}>
-            <TextField
-              select
-              label="Minute"
-              value={timeValue.getMinutes()}
-              onChange={handleMinuteChange}
-              fullWidth
-            >
-              {minutes.map((minute) => (
-                <MenuItem key={minute} value={minute}>
-                  {minute.toString().padStart(2, '0')}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
-          <Grid item xs={3} sx={{ textAlign: 'center' }}>
-            <TextField
-              select
-              label="AM/PM"
-              value={timeValue.getHours() >= 12 ? 'pm' : 'am'}
-              onChange={handleAmPmChange}
-              fullWidth
-            >
-              <MenuItem value="am">AM</MenuItem>
-              <MenuItem value="pm">PM</MenuItem>
-            </TextField>
-          </Grid>
+          <Box display="flex" flexDirection="row" width="100%">
+  <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
+    <TextField
+      select
+      label="Hour"
+      value={timeValue.getHours() % 12 || 12}
+      onChange={handleHourChange}
+      fullWidth
+    >
+      {hours.map((hour) => (
+        <MenuItem key={hour} value={hour}>
+          {hour}
+        </MenuItem>
+      ))}
+    </TextField>
+  </Grid>
+  <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
+    <TextField
+      select
+      label="Minute"
+      value={timeValue.getMinutes()}
+      onChange={handleMinuteChange}
+      fullWidth
+    >
+      {minutes.map((minute) => (
+        <MenuItem key={minute} value={minute}>
+          {minute.toString().padStart(2, '0')}
+        </MenuItem>
+      ))}
+    </TextField>
+  </Grid>
+  <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
+    <TextField
+      select
+      label="AM/PM"
+      value={timeValue.getHours() >= 12 ? 'pm' : 'am'}
+      onChange={handleAmPmChange}
+      fullWidth
+    >
+      <MenuItem value="am">AM</MenuItem>
+      <MenuItem value="pm">PM</MenuItem>
+    </TextField>
+  </Grid>
+</Box>
+          </Box>
+          
         </Grid>
       </Container>
     </LocalizationProvider>

@@ -3,13 +3,13 @@ import {
   Container,
   Typography,
   Grid,
- 
+  useTheme,
   Box,
   
   Button,
   
   useMediaQuery,
-  useTheme,
+  
   Dialog,
   DialogTitle,
   DialogContent,
@@ -67,7 +67,7 @@ function Duplicate({mapRef,viewCrime=false}) {
   const [open, setOpen] = useState(0)
   const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
-
+const theme = useTheme();
   useEffect(() => {
     dispatch(clearNearbyReports());
     dispatch(getNearbyCrimes({lat,long}));
@@ -175,9 +175,9 @@ function Duplicate({mapRef,viewCrime=false}) {
   ];
 
 
-  const theme = useTheme();
+  
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
-
+  
   function isImage(url) {
     const imageExtensions = ['.apng', '.bmp', '.gif', '.ico', '.cur', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
     const lowerCaseUrl = url.toLowerCase();
@@ -206,7 +206,6 @@ function Duplicate({mapRef,viewCrime=false}) {
     }
     dispatch(setLock(false));
   }
-
   const markerDragEnd = (e) => {
     if (e !== null) {
       const geocoder = new window.google.maps.Geocoder();
@@ -221,13 +220,17 @@ function Duplicate({mapRef,viewCrime=false}) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SuccessDialog open={open} handleClose = {()=>setOpen(0)}/>
-        <Box sx={{mt:5,pl:10,h:"100%"}}>
-          <Grid container spacing={2} justifyContent="center">
+        <Box sx={{mt:5,pl:5,h:"100%"}}>
+          <Grid container spacing={2} justifyContent="center" alignItems='center' sx={{ textAlign: 'center' }}>
             <Grid item xs={10}>
-              <Box sx={{display:"flex",width:"100%",justifyContent:"center"}}>
-                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
+              <Box sx={{display:"flex",width:"100%",justifyContent:"center", alignItems:'center'}}>
+              <Box display="flex" alignItems="center" justifyContent="center" paddingTop="10px">
+              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
+                <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
                   {viewCrime?"View Crime":"Possible Duplicate"}
                 </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+            </Box>
                 {viewCrime&&
                   <Box component={"button"} sx={{display:"flex",width:"100%",justifyContent:"center",border:"none"}}>
                   </Box>
