@@ -28,6 +28,9 @@ import VerticalProgressBar from 'src/components/Progress/VerticalProgressBar';
 import { objectToFormData } from 'src/utils/formatObject';
 import API from 'src/config/api';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import { SatelliteZoom } from 'src/constants/googleMap';
+import Image from '../../assets/images/duplicate.png'
+import axios from 'axios';
 const ReportPageRouter = ({selectActive=1,setSelectActive,openState,mapRef})=>{
     const ReportPages=[
         <Page1/>,<Page2 setSelectActive={setSelectActive}/>,<Duplicate mapRef={mapRef}/>,<Page3/>,<Page4/>,<Page5/>,<Page6/>,<Page7/>,<Page8/>,<Page9/>,<Page10/>,<Page11/>,<Page12/>,<Page13/>,<Page14/>,<Page15/>,<Page16 setSelectActive={setSelectActive} openState={openState}/>
@@ -50,9 +53,22 @@ const ReportWrapper = () => {
     const pathname = location.pathname;
     const map = useRef(null)
 
-    useEffect(() => {
-      dispatch(clearReport());
-    }, [])
+    // useEffect(() => {
+    //   dispatch(clearReport());
+    // }, [])
+      const markerOptions = {
+        icon: {
+          url: Image,
+          scaledSize: new window.google.maps.Size(50, 50),
+          origin: new window.google.maps.Point(0, 0),
+          anchor: new window.google.maps.Point(25, 50)
+        }
+      };
+    const markerPosition={
+      lat:Number(marker?.latitude),
+      lng:Number(marker?.longitude),
+    }
+   
     
     const mapOptions = {
       zoomControl: true,
@@ -61,7 +77,8 @@ const ReportWrapper = () => {
       },
       streetViewControlOptions: {
         position: window.google.maps.ControlPosition.RIGHT_CENTER
-      }
+      },
+        mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
     };
 
     const position={
@@ -84,11 +101,20 @@ const ReportWrapper = () => {
 
       const onClickEvent = async()=>{
         try {
-          const formData =objectToFormData(data);
-          await API.post("/report",formData);
+          const fileURL = data.files;
+          const response = await fetch(fileURL);
+          if (response.ok) {
+            const blob = await response.blob();
+            const files = new File([blob], data.fileName);
+            const formData = objectToFormData(data);
+            formData.set("files", files);
+            await API.post("/report",formData);
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
         } catch (error) {
+          console.error(error);
         }
-        setConfirm(true);
       }
  
       const handleZoomChanged = () => {
@@ -100,6 +126,10 @@ const ReportWrapper = () => {
       if(!latitude||!longitude){
         const {latitude:lat,longitude:lng} = await getLocationCoords();
         dispatch(setPage({latitude:lat,longitude:lng}));
+        const marker = new window.google.maps.Marker({
+          position: position,
+          map: Map
+        });
       }
         
       }
@@ -107,6 +137,13 @@ const ReportWrapper = () => {
     const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
     if([2].includes(selectActive))return <ReportPageRouter selectActive={selectActive} setSelectActive={setSelectActive}/>
+
+    function createMarker(position) {
+      return new window.google.maps.Marker({
+        position: position,
+        map: map.current
+      });
+    }
   
     return (
         <Box sx={{ height: '100%',maxHeight:"91.3vh", display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
@@ -118,10 +155,13 @@ const ReportWrapper = () => {
                       </Box>
                       <GoogleMap center={position} zoom={zoom} 
                         mapContainerStyle={{width:"100%",height:"100%"}}
+                        options={{
+                          mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
+                        }}
                         onLoad={onLoad}
                         onZoomChanged={handleZoomChanged}>
                           <Marker position={position} />
-                          {(marker&&selectActive===3)&&<Marker position={marker}/>}
+                          {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions}/>} 
                         </GoogleMap>
                   </Box>
               }
@@ -133,7 +173,7 @@ const ReportWrapper = () => {
                 <VerticalProgressBar progress={selectActive} maxVal={17}/>
             </Box>
             <Box sx={{ width: {md:'50%',xs:'100%'},display:'flex',flexDirection:'column',height:"100%",overflowY:"auto", }}>
-                <Box sx={{display:"flex",alignItems:"center"}}>
+                <Box sx={{display:"flex",alignItems:"center",mb:10}}>
                     <ReportPageRouter selectActive={selectActive} mapRef={map}/>
                     {/* <Page9/> */}
                 </Box>
@@ -144,7 +184,7 @@ const ReportWrapper = () => {
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
                 <Marker position={position} draggable={true}/>
-                {(marker&&selectActive===3)&&<Marker position={marker}/>}
+                {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions} draggable={true}/>}
               </GoogleMap>
             </Box>
         </Box>

@@ -3,13 +3,13 @@ import {
   Container,
   Typography,
   Grid,
-  useTheme,
+ 
   Box,
   
   Button,
   
   useMediaQuery,
-  
+  useTheme,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -59,15 +59,13 @@ export const SuccessDialog = ({open,handleClose})=>{
   )
 }
 
-function Duplicate({mapRef,viewCrime=false}) {
+function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
   const dispatch = useDispatch();
   const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
   const {latitude:lat,longitude:long} = regData;
-  const [index,setIndex] = useState(0);
   const [open, setOpen] = useState(0)
   const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
-const theme = useTheme();
 
   useEffect(()=>{
     dispatch(setMarker({latitude,longitude}));
@@ -180,9 +178,9 @@ const theme = useTheme();
   ];
 
 
-  
+  const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
-  
+
   function isImage(url) {
     const imageExtensions = ['.apng', '.bmp', '.gif', '.ico', '.cur', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
     const lowerCaseUrl = url.toLowerCase();
@@ -211,6 +209,7 @@ const theme = useTheme();
     }
     dispatch(setLock(false));
   }
+
   const markerDragEnd = (e) => {
     if (e !== null) {
       const geocoder = new window.google.maps.Geocoder();
@@ -225,21 +224,13 @@ const theme = useTheme();
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SuccessDialog open={open} handleClose = {()=>setOpen(0)}/>
-        <Box sx={{mt:5,pl:5,h:"100%"}}>
-          <Grid container spacing={2} justifyContent="center" alignItems='center' sx={{ textAlign: 'center' }}>
+        <Box sx={{mt:5,pl:10,h:"100%"}}>
+          <Grid container spacing={2} justifyContent="center">
             <Grid item xs={10}>
-              <Box sx={{display:"flex",width:"100%",justifyContent:"center", alignItems:'center'}}>
-              <Box display="flex" alignItems="center" justifyContent="center" paddingTop="10px">
-              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
-                <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
-                  {viewCrime?"View Crime":"Possible Duplicate"}
+              <Box sx={{display:"flex",width:"100%",justifyContent:"center"}}>
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
+                  {"Crime Details"}
                 </Typography>
-                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
-            </Box>
-                {viewCrime&&
-                  <Box component={"button"} sx={{display:"flex",width:"100%",justifyContent:"center",border:"none"}}>
-                  </Box>
-                }
 
               </Box>
             </Grid>
@@ -258,7 +249,7 @@ const theme = useTheme();
                   <img src={duplicate} alt="imgg" style={{ height:"17px"}} />
                   <Box>
                     <Typography align="left" sx={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '12px' }}>
-                      Possible duplicate report's location on the map
+                      Possible crime report's location on the map
                     </Typography>
                   </Box>
                 </Box>
@@ -301,16 +292,11 @@ const theme = useTheme();
                       </TableContainer>
                     </Box>
                     <Box sx={{ paddingTop: '5px',mb:10 }}>
-                      <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '17px' }}>
-                        Is this your crime?
-                      </Typography>
+                  
                       <Box display="flex" justifyContent="center">
-                        <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={clickYes} disabled={lock}>
-                          Yes
+                        <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={onClose} disabled={lock}>
+                          Close
                         </Button>
-                        {values[index+1]&&<Button variant="contained" color="primary" disabled={lock} onClick={()=>setIndex(index+1)}>
-                          No
-                        </Button>}
                       </Box>
                     </Box>
                   </Box>
@@ -327,4 +313,4 @@ const theme = useTheme();
   );
 }
 
-export default Duplicate;
+export default CrimeDialog;

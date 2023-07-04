@@ -180,7 +180,6 @@ export const getCrimes = createAsyncThunk(
 export const getSpecificCrimesById = createAsyncThunk(
     "specific-crime-by-id",
     async ({id}, { rejectWithValue }) => {
-        console.log(id)
       try {
         const response = await API.get(`/crime/${id}`);
         if(response.data.status === 200){

@@ -12,7 +12,8 @@ import {
     Typography,
     Box,
     Fab,
-    Button
+    Button,
+    TextField
 } from '@mui/material';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { styled, useTheme } from '@mui/material/styles';
@@ -24,6 +25,14 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { APPBAR_DESKTOP } from 'src/constants/theme'
 import AddIcon from '@mui/icons-material/Add';
 import useResponsive from 'src/hooks/useResponsive';
+import {  LocalizationProvider } from '@mui/lab';
+import {DatePicker} from '@mui/x-date-pickers'
+
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+
+import { format } from 'date-fns';
+import { getNearbyCrimes } from 'src/store/api/registerReport';
+import { clearReport } from 'src/store/reducers/registerReport';
 
 const OuterPaperStyle = styled(Paper)(({ theme }) => ({
     [theme.breakpoints.up('sm')]: {
@@ -59,113 +68,44 @@ const BoxButtonStyle = styled(Box)(({ theme }) => ({
 }));
 
 export default function SearchFilter(props) {
+    const dateNow = new Date(Date.now());
+    const {data,nearbyReport,markers} = useSelector(state=>state.reportRegister);
+    const {latitude,longitude} = data;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [state, setState] = React.useState(false);
-    const [crime, setCrime] = useState('');
-    const [specificCrime, setSpecificCrime] = useState('');
-    const [specificTime, setSpecificTime] = useState('');
+    const [toDate, setToDate] = useState(dateNow);
+    const [fromDate, setFromDate] = useState(dateNow);
     const [address, setAddress] = useState('');
-    const [searchParams] = useSearchParams();
-    const [viewport, setViewport] = useState(null)
     const isDesktop = useResponsive('up', 'md');
-    const [position, setPosition] = useState({
-        lat:0,
-        lng:0,
-    });
-
-    const { crime_list } = useSelector((state) => ({ ...state.report }));
-    const { specific_crime_list } = useSelector((state) => ({ ...state.report }));
-
     const toggleDrawer = (event) => {
         setState(event);
-        dispatch(getCrimes({}))
-
-        if (searchParams.get('crime') !== null) {
-            setCrime(searchParams.get('crime'))
-        }
-        if (searchParams.get('specific-crime') !== null) {
-            setSpecificCrime(searchParams.get('specific-crime'))
-        }
     };
-
     // place.geometry.viewport.Ia.hi
     // place.geometry.viewport.Ia.lo
     // place.geometry.viewport.Wa.hi
     // place.geometry.viewport.Wa.lo
 
-    useEffect(() => {
-        let id = crime === '' ? 1 : crime;
-        dispatch(getSpecificCrimesById({ id }))
-        setSpecificCrime('')
-
-    }, [crime])
-
-    const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
-        setPosition({
-            lat:latitude,
-            lng:longitude
-        })
-        setAddress(address)
-        if (viewport !== null) {
-            setViewport(viewport.geometry.viewport)
+    const filterSearchHandler = ()=>{
+        if(toDate>=fromDate&&latitude&&longitude){
+            dispatch(clearReport());
+            dispatch(getNearbyCrimes({lat:latitude,long:longitude,toDate,fromDate}));
+            toggleDrawer(false)
         }
     }
 
-    const filterSearchHandler = () => {
-        let url = '';
-
-        if (viewport !== null) {
-            url += `iahi=${viewport.Ja.hi}&ialo=${viewport.Ja.lo}&wahi=${viewport.Va.hi}&walo=${viewport.Va.lo}&`
-        }
-        if (crime !== null) {
-            url += `crime=${crime}&`
-        }
-        if (specificCrime !== null) {
-            url += `specific-crime=${specificCrime}&`
-        }
-        if (specificTime !== null) {
-            url += `specific-time=${specificTime}&`
-        }
-        if (address !== null) {
-            url += `location=${address}&`
-        }
-        navigate(`/report?${url}`, { replace: true })
-        setState(false)
+    const clearSearchHandler = ()=>{
         
-        if(position.lat !== 0 && position.lng !== 0){
-            props.viewportPosition(position)
-        }        
-    }
-
-    const crimeHandle = (e) => {
-        setCrime(e.target.value)
-    }
-
-    const specificCrimeHandle = (e) => {
-        setSpecificCrime(e.target.value)
-    }
-
-    const specificTimeHandle = (e) => {
-        setSpecificTime(e.target.value)
-    }
-
-    const clearSearchHandler = () => {
-        setCrime('')
-        setSpecificCrime('')
-        setSpecificTime('')
-        setAddress('')
-        navigate(`/report`, { replace: true })
     }
 
     return (
-        <React.Fragment>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
             <BoxButtonStyle>
                 <Fab
                     size="medium"
                     color="primary"
                     aria-label="add report"
-                    to="/report/reportCrime"
+                    to="/report/add"
                     component={Link}
                     variant={isDesktop ? 'extended' : 'circular'}
                 >
@@ -193,69 +133,26 @@ export default function SearchFilter(props) {
                         }}>
                             Filter your report
                         </Typography>
-                        <GoogleAutoComplete googleAutoComplete={googleAutoComplete} oldAddress={address} />
+                        <Box>
+                            <GoogleAutoComplete style={{}}/>
+                            {!(latitude&&longitude)&&<Typography sx={{color:"red",fontSize:12}}>*required</Typography>}
+                        </Box>
 
-                        <CrimeFormControl sx={{ m: 1, minWidth: 80 }}>
-                            <InputLabel id="demo-simple-select-autowidth-label">Select Crime Type</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-autowidth-label"
-                                id="demo-simple-select-autowidth"
-                                value={crime}
-                                onChange={crimeHandle}
-                                fullWidth
-                                label="Select Crime Type"
-                            >
-                                {crime_list && crime_list.map((crime, index) => (
-                                    <MenuItem value={crime.id} key={index}>
-                                        <ListItemIcon>
-                                            <ImageIcon src={process.env.REACT_APP_API_URL + '/' + crime.icon} />
-                                        </ListItemIcon>
-                                        <ListItemText>{crime.name}</ListItemText>
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </CrimeFormControl>
-                        <FormControl sx={{ m: 1, minWidth: 80 }}>
-                            <InputLabel id="demo-simple-select-autowidth-label">Select Specific Crime</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-autowidth-label"
-                                id="demo-simple-select-autowidth"
-                                value={specificCrime}
-                                onChange={specificCrimeHandle}
-                                fullWidth
-                                label="Select Specific Crime"
-                            >
-                                {specific_crime_list && specific_crime_list.map((crime, index) => (
-                                    <MenuItem value={crime.id} key={index}>
-                                        {crime.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-
-                        <FormControl sx={{ m: 1, minWidth: 80 }}>
-                            <InputLabel id="demo-simple-select-autowidth-label">Select Time </InputLabel>
-                            <Select
-                                labelId="demo-simple-select-autowidth-label"
-                                id="demo-simple-select-autowidth"
-                                value={specificTime}
-                                onChange={specificTimeHandle}
-                                fullWidth
-                                label="Select Specific Time"
-                            >
-                                <MenuItem value="week" key="1">
-                                    Week
-                                </MenuItem>
-                                <MenuItem value="month" key="2">
-                                    Month
-                                </MenuItem>
-                                <MenuItem value="year" key="3">
-                                    Year
-                                </MenuItem>
-                                
-                            </Select>
-                        </FormControl>
-
+                    <DatePicker
+                        label="From"
+                        value={fromDate}
+                        maxDate={new Date(toDate)}
+                        onChange={(event,newValue)=>setFromDate(event)}
+                        renderInput={(params) => <TextField {...params} />}
+                        />
+                        <DatePicker
+                        label="To"
+                        value={toDate}
+                        maxDate={dateNow}
+                        onChange={(event,newValue)=>setToDate(event)}
+                        renderInput={(params) => <TextField {...params} />}
+                        />
+                        
                         <Stack direction="row" spacing={2} sx={{marginTop:'30px !important'}}>
                             <Button
                                 sx={{
@@ -285,6 +182,6 @@ export default function SearchFilter(props) {
                 </OuterPaperStyle>
             </Drawer>
             
-        </React.Fragment>
+        </LocalizationProvider>
     );
 }

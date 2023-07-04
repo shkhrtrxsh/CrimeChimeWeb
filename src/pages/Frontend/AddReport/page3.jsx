@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLock, setPage } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
+import Perps from "src/assets/images/perps.png"
 
 function Page3() {
   const { perpetrators, perpetrators_des } = useSelector((state) => state.reportRegister.data);
@@ -111,7 +112,7 @@ function Page3() {
           </div>
 
           <Grid item xs={10} style={{ display: 'flex', justifyContent: 'center' }}>
-            <PeopleIcon style={{ height: '112px', width: '112px' }} />
+            <img src={Perps} width="70px" height="auto" alt="perpertrator icon"/>
           </Grid>
           <Grid item xs={10} style={{ textAlign: 'center', paddingTop: '20px' }}>
             <TextField

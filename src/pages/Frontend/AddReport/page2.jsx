@@ -5,6 +5,8 @@ import NextButton from 'src/components/Button/NextButton';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setZoom } from 'src/store/reducers/registerReport';
+import usePlacesAutocomplete, { getGeocode, getLatLng,getPlacePredictions } from 'use-places-autocomplete';
+import { SatelliteZoom } from 'src/constants/googleMap';
 const containerStyle = {
   width: '100%',
   height: '100%', // Adjust the height according to your needs
@@ -43,7 +45,6 @@ const Page2 = ({setSelectActive}) => {
 
   const handlePlaceSelect = (place) => {
     // Handle the selected place
-    console.log(place);
   };
 
   const handleZoomChanged = () => {
@@ -57,7 +58,10 @@ const Page2 = ({setSelectActive}) => {
               <GoogleAutoComplete style={{zIndex:1000}}/>
             </Box>
             <FormControl fullWidth sx={{ height:"100%" }}>
-              <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={zoom} 
+              <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={zoom}
+              options={{
+                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
+              }}
               onLoad={Map => {
                 map.current = Map; // Store the map instance in a global variable for access in the event handler
               }}
