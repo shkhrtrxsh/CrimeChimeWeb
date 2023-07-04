@@ -109,6 +109,7 @@ const ReportWrapper = () => {
             const formData = objectToFormData(data);
             formData.set("files", files);
             await API.post("/report",formData);
+            setConfirm(true);
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -148,10 +149,10 @@ const ReportWrapper = () => {
     return (
         <Box sx={{ height: '100%',maxHeight:"91.3vh", display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
           {isMdBreakpoint||cancel ?null:
-                  <Box sx={{position:'fixed',bottom:0, width: '100%', height: "60%",flexGrow:1,backgroundColor:"#ffe600",zIndex:100 }}>
-                      <Box sx={{display:"flex",flexDirection:"row-reverse",my:2}} onClick={()=>setCancel(true)}>
+                  <Box sx={{position:'fixed',bottom:0, width: '100%', height: "45%",flexGrow:1,backgroundColor:"#ffe600",zIndex:100 }}>
+                      <Box sx={{display:"flex",flexDirection:"row-reverse",my:0.5}} onClick={()=>setCancel(true)}>
                           <CancelIcon sx={{ml:1,mr:3}}/>
-                          <Typography>close</Typography>
+                          <Typography>Close</Typography>
                       </Box>
                       <GoogleMap center={position} zoom={zoom} 
                         mapContainerStyle={{width:"100%",height:"100%"}}
