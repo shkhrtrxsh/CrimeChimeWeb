@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Adele';
-    src: url('./assets/fonts/adelle-sans-thin.otf') format('opentype');
+    src: url('./assets/fonts/AdelleSansDEV-Thin.otf') format('opentype');
   }
 .pac-container{
     z-index: 100000
