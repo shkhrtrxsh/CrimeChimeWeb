@@ -275,9 +275,9 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
                                 <TableCell>
                                   {row.firstCol === 'Media:' && mediaData ? (
                                     isImage(mediaData) ? (
-                                      <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
+                                      <img src={process.env.REACT_APP_API_URL+"/"+mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
                                     ) : isVideo(mediaData) ? (
-                                      <video src={mediaData} controls style={{ width: '100%', height: 'auto' }} />
+                                      <video src={process.env.REACT_APP_API_URL+"/"+mediaData} controls style={{ width: '100%', height: 'auto' }} />
                                     ) : (
                                       'No media available'
                                     )
