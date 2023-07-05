@@ -4,10 +4,22 @@ import API from 'src/config/api'
 import { objectToFormData } from 'src/utils/formatObject';
 
 export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes",async({latitude,longitude,toDate=null,fromDate=null})=>{
-    const formData = objectToFormData({latitude,longitude,to_date:format(toDate,"yyyy-MM-dd"),from_date:format(fromDate,"yyyy-MM-dd")})
-    try {
-        const res = await API({"url":"/report/area",method:"POST",data:formData});
-        return res.data.data.data;
+  try {
+      const formData = objectToFormData({latitude,longitude,to_date:toDate&&format(toDate,"yyyy-MM-dd"),from_date:fromDate&&
+      format(fromDate,"yyyy-MM-dd")})
+      const res = await API({"url":"/report/area",method:"POST",data:formData});
+      return res.data.data.data;
+    } catch (error) {
+        console.error(error);
+        throw Error(error.message);
+    }
+})
+
+export const getNearbyCrimes2 = createAsyncThunk("registerReport/getNearbyCrimes",async({latitude,longitude})=>{
+  try {
+      const formData = objectToFormData({lat:latitude,long:longitude})
+      const res = await API({"url":"/report/getNearByReport",method:"POST",data:formData});
+      return res.data.data;
     } catch (error) {
         console.error(error);
         throw Error(error.message);

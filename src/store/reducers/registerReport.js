@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getNearbyCrimes, googleMapSearchLocation } from '../api/registerReport';
+import { getNearbyCrimes, getNearbyCrimes2, googleMapSearchLocation } from '../api/registerReport';
 
 const initialState = {
     activeStep:null,
@@ -118,6 +118,17 @@ const registerReport = createSlice({
         state.nearbyData = action.payload||[];
         },
         [getNearbyCrimes.rejected]: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        },
+        [getNearbyCrimes2.pending]: (state, action) => {
+            state.loading = true;
+          },
+        [getNearbyCrimes2.fulfilled]: (state, action) => {
+        state.loading = false;
+        state.nearbyData = action.payload||[];
+        },
+        [getNearbyCrimes2.rejected]: (state, action) => {
         state.loading = false;
         state.error = action.payload;
         },
