@@ -70,7 +70,7 @@ function Page3() {
             </Typography>
           </Grid>
 
-          <div>
+          <div style={{paddingTop: '30px', paddingBottom: '30px' }}>
             <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
               How many perpetrators?
             </Typography>
@@ -111,10 +111,10 @@ function Page3() {
             </div>
           </div>
 
-          <Grid item xs={10} style={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid item xs={10} style={{ display: 'flex', justifyContent: 'center', paddingTop:'40px', paddingBottom:'40px' }}>
             <img src={Perps} width="70px" height="auto" alt="perpertrator icon"/>
           </Grid>
-          <Grid item xs={10} style={{ textAlign: 'center', paddingTop: '20px' }}>
+          <Grid item xs={10} style={{ textAlign: 'center', paddingTop: '40px' }}>
             <TextField
               label="Describe their appearance.."
               name="perpetrator_des"
