@@ -72,15 +72,15 @@ const Page12 = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={10} sx={{ pl: 5 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 6  }}>
+          <Grid item xs={10} sx={{  }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column',paddingLeft: '16px' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4  }}>
                 <Checkbox checked={checked === '0'} value={0} onChange={handleChange} />
                 <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                   Does not apply
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 6 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4 }}>
                 <Checkbox checked={checked === '1'} value={1} onChange={handleChange} />
                 <Typography variant="h6" sx={{ fontWeight: 'normal', pl: 5, textAlign: 'left' }}>
                   Attempted kidnapping
@@ -88,7 +88,7 @@ const Page12 = () => {
                   <Typography variant="body2" sx={{ textAlign: 'left' }}>(unsuccessful kidnapping attempt)</Typography>
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 6 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4 }}>
                 <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'flex-start' }}>
                   <Select
                     value={value || ''}
