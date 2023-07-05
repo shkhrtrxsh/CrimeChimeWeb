@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getMyReport } from 'src/store/api/report';
-import { Button, Container, Grid } from '@mui/material'
+import { Box, Button, Container, Grid } from '@mui/material'
 import UserSideName from './components/UserSideNav';
 import Page from '../../../components/Page';
 import Card from '@mui/material/Card';
@@ -53,49 +53,32 @@ const MyReport = () => {
                                     path=process.env.REACT_APP_API_URL+"/"+path;
                                 }
                                 return(
-                                <Grid item md={6} xs={12} key={index}>
-                                    <Card>
+                                <Grid item md={4} xs={12} key={index}>
+                                    <Card sx={{maxWidth:"300px",maxHeight:"450px",height:"450px"}}>
                                     {(!(path===null||path === '') &&isImage(path))? (
                                         <CardMedia
                                             component="img"
                                             alt="green iguana"
                                             image={path}
+                                            width="300px"
+                                            height="300px"
+                                            sx={{objectFit:"contain",maxWidth:"300px",maxHeight:"200px"}}
                                         />) :(!(path===null||path === '') &&isVideo(path))? (
-                                            <video className="VideoInput_video" width="100%" height="auto" controls src={path} />
+                                            <video className="VideoInput_video" width="300px" height="300px" controls src={path} />
                                         ):(
-                                            <CardMedia
-                                                component="img"
-                                                alt="no media"
-                                                image={NoMedia}
-                                            />)
+                                            <Box sx={{display:"flex",width:"300px",height:"200px",alignItems:"center",justifyContent:"center"}}>
+                                                No media Available
+                                            </Box>
+                                            )
 
                                     }
                                         <CardContent>
                                             <Typography gutterBottom variant="h5" component="div">
                                                 {report.location}
                                             </Typography>
-                                            <Typography variant="body1" color="text.primary">
-                                                <img style={{
-                                                    width: '45px',
-                                                    paddingRight: '8px',
-                                                    paddingTop: '4px',
-                                                    float: 'left'
-                                                }}
-                                                alt=""
-                                                    src={process.env.REACT_APP_API_URL + '/' + report.crime.icon} 
-                                                    onError={({ currentTarget }) => {
-                                                        currentTarget.onerror = null; // prevents looping
-                                                        currentTarget.src=process.env.REACT_APP_API_URL + '/assets/image/no-image.jpg'
-                                                    }}
-                                                />
-
-                                                {report.crime.name}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.primary">
-                                                {report.specific_crime.name}
-                                            </Typography>
+                                            
                                             <Typography variant="body2" color="text.secondary" sx={{ marginTop: '15px' }}>
-                                                {report.description}
+                                                {report.description||"No Description"}
                                             </Typography>
                                         </CardContent>
                                         <CardActions sx={{    paddingLeft: '24px'}}>
