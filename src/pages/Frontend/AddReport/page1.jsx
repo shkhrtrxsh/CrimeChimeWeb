@@ -131,7 +131,7 @@ function Page1() {
     setTimeValue(selectedTime);
     changeTime(selectedTime);
   };
-
+  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   const hours = Array.from({ length: 12 }, (_, index) => index + 1);
   const minutes = Array.from({ length: 60 }, (_, index) => index);
 
@@ -156,9 +156,9 @@ function Page1() {
           </Grid>
   
           <Grid item xs={12}>
-            <Box display="flex" alignItems="center" justifyContent="center" paddingTop="10px">
+          <Box display="flex" alignItems="center" justifyContent="center" paddingTop={isMdBreakpoint ? '40px' : '80px'} paddingBottom={isMdBreakpoint ? '40px' : '35px'} >
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
-              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px' , paddingBottom:'5px'}}>
+              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '0px' , paddingBottom:'0px'}}>
                 Select Date
               </Typography>
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
@@ -211,7 +211,7 @@ function Page1() {
           </Grid>
           <Box style={{display:"flex", flexDirection:"column", width: '75%' }}>
             <Grid item xs={12}>
-            <Box display="flex" alignItems="center" justifyContent="center" paddingTop="20px" paddingBottom="20px">
+            <Box display="flex" alignItems="center" justifyContent="center" paddingTop={isMdBreakpoint ? '40px' : '80px'}  paddingBottom={isMdBreakpoint ? '40px' : '40px'} >
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
               <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px', paddingBottom:'5px' }}>
                 Select Time
