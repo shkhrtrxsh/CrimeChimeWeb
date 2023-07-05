@@ -29,7 +29,7 @@ const Page14 = () => {
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                  Check all boxes that apply
+                  Check the box that may apply
                 </Typography>
               </Grid>
 
@@ -46,7 +46,7 @@ const Page14 = () => {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be drug-related
                       <br />
-                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(perpetrator involved with drugs)</span>
+                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(Perpetrator involved with drugs)</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 4 }}>
@@ -60,7 +60,7 @@ const Page14 = () => {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Arson was involved
                       <br />
-                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(setting fire to a property on purpose)</span>
+                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(Setting fire to a property on purpose)</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 4 }}>
@@ -68,7 +68,7 @@ const Page14 = () => {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Vandalism was involved
                       <br />
-                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(malicious destruction or defacement of property)</span>
+                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(Malicious destruction or defacement of property)</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 4 }}>
