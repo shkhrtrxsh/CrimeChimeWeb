@@ -26,7 +26,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
-import { getNearbyCrimes } from 'src/store/api/registerReport';
+import { getNearbyCrimes, getNearbyCrimes2 } from 'src/store/api/registerReport';
 import { fDateTimeSuffix } from 'src/utils/formatTime';
 import { capitalize } from 'src/utils/string';
 import { addMarkers, clearNearbyReports, setLock, setMarker, setPage } from 'src/store/reducers/registerReport';
@@ -75,9 +75,13 @@ const theme = useTheme();
     dispatch(setMarker({latitude,longitude}));
   },[latitude,longitude,index])
 
+  useEffect(()=>{
+    dispatch(getNearbyCrimes2({latitude:lat,longitude:long}));
+  },[]);
+
   useEffect(() => {
     dispatch(clearNearbyReports());
-    dispatch(getNearbyCrimes({lat,long}));
+    dispatch(getNearbyCrimes2({latitude:lat,longitude:long}));
     if(mapRef.current){
       const mapElement = mapRef.current;
       mapElement.marker=null;
@@ -180,8 +184,6 @@ const theme = useTheme();
     { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:"N/A" },
     { firstCol: 'Media:', secondCol: mediaData },
   ];
-
-
   
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   
