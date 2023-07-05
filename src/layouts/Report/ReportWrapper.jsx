@@ -53,9 +53,9 @@ const ReportWrapper = () => {
     const pathname = location.pathname;
     const map = useRef(null)
 
-    // useEffect(() => {
-    //   dispatch(clearReport());
-    // }, [])
+    useEffect(() => {
+      dispatch(clearReport());
+    }, [])
       const markerOptions = {
         icon: {
           url: Image,
