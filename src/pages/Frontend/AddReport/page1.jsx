@@ -71,9 +71,9 @@ function Page1() {
   ];
   const years = Array.from({ length: 2 }, (_, index) => dateNow.getFullYear() - index);
 
-  const [dateValue, setDateValue] = useState(new Date(datetime));
-  const [timeValue, setTimeValue] = useState(new Date(datetime));
-  const [amPmValue, setAmPmValue] = useState(new Date(datetime).getHours() >= 12 ? 'pm' : 'am');
+  const [dateValue, setDateValue] = useState(new Date(Date.now()));
+  const [timeValue, setTimeValue] = useState(new Date(Date.now()));
+  const [amPmValue, setAmPmValue] = useState(new Date(Date.now()).getHours() >= 12 ? 'pm' : 'am');
 
   const handleDayChange = (e) => {
     const selectedDay = e.target.value;
