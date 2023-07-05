@@ -97,7 +97,7 @@ function Page4() {
     Perpetrator(s) had weapon(s)?
   </Typography>
 </Grid>
-              <div>
+              <Box paddingLeft="40px">
                 <Select value={weapons} onChange={handleChange} sx={{ paddingX: 2,width:'95%',maxWidth:'310px' }} error={error?true:false}>
                     <MenuItem value={-1}>Perpetrator used weapons</MenuItem>
                     <MenuItem value={1}>Perpetrator didn't use weapon</MenuItem>
@@ -119,7 +119,7 @@ function Page4() {
                 </Box>
                 
                
-              </div>
+              </Box>
             </Grid>
           </Container>
     </LocalizationProvider>
