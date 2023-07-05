@@ -12,6 +12,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import NoMedia from 'src/assets/images/unavailable.svg'
+import { setCrimeIndex, setNearbyReports } from 'src/store/reducers/registerReport';
 
 const MyReport = () => {
 
@@ -82,7 +83,12 @@ const MyReport = () => {
                                             </Typography>
                                         </CardContent>
                                         <CardActions sx={{    paddingLeft: '24px'}}>
-                                            <Button onClick={() => {navigate('/report?target=single&id='+report.id)}} size="small">view Report</Button>
+                                            <Button onClick={() => {
+                                                dispatch(setNearbyReports(reports.data));
+                                                dispatch(setCrimeIndex({index,viewCrime:true}))
+                                                navigate("/reportscrime")
+                                                
+                                            }} size="small">view Report</Button>
                                         </CardActions>
                                     </Card>
                                 </Grid>
