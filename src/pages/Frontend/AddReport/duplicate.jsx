@@ -67,7 +67,7 @@ function Duplicate({mapRef,viewCrime=false}) {
   const {latitude:lat,longitude:long} = regData;
   const [index,setIndex] = useState(0);
   const [open, setOpen] = useState(0)
-  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images}=values[index]||{};
+  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images,description}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 const theme = useTheme();
 
@@ -113,7 +113,9 @@ const theme = useTheme();
   }, [latitude, longitude,mapRef]);
 
   const data = values[index]&& [
-    { firstCol: 'Occurred:', secondCol: <p>{date_time} near <b>{location}</b></p> },
+    { firstCol: 'Time of Occurence:', secondCol: <p>{date_time}</p> },
+    { firstCol: 'Address:', secondCol: <p>{location}</p> },
+    { firstCol: 'Description:', secondCol: <p>{description}</p> },
     { firstCol: 'Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"Unknown" },
     { firstCol: 'Weapons:', secondCol: (()=>{
       switch(weapons){
@@ -124,7 +126,7 @@ const theme = useTheme();
     })() },
     { firstCol: 'Rape:', secondCol:(()=>{
       switch(rape){
-        case 0:return `Does not apply`
+        case 0:return null;//`Does not apply`
         case 1:return `Attempted Rape(${rape_people} involved)`
         default:return `Rape(${rape_people} involved)`
       }
@@ -133,49 +135,42 @@ const theme = useTheme();
       switch(murder){
         case 0:return `Unknown`
         case 1:return `Murder(${murder_people} involved)`
-        default:return `No`
-      }
-    })() },
-    { firstCol: 'Vehicle Theft:', secondCol:(()=>{
-      switch(murder){
-        case 0:return `Unknown`
-        case 1:return `Murder(${assault_people} involved)`
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Assault:', secondCol:(()=>{
       switch(assault){
         case 0:return `Unknown`
         case 1:return `Murder(${assault_people} involved)`
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Vehicle Theft:', secondCol:(()=>{
       if(vehicle_theft===4){
-        return capitalize(vehicle_theft_choices[vehicle_theft])
+        return null;//capitalize(vehicle_theft_choices[vehicle_theft])
       }else{
         return capitalize(`${vehicle_theft_choices[vehicle_theft]} of ${vehicle_year} ${vehicle_colour} ${vehicle_make} ${vehicle_model}`)
       }
     })() },
     { firstCol: 'Burglary:', secondCol:(()=>{
       switch(burglary){
-        case 0:return `Does not apply`
+        case 0:return null//`Does not apply`
         case 1:return `Attempted Burglary of ${burglary_type} `
-        default:return `No`
+        default:return `Burglary of ${burglary_type}`
       }
     })() },
     { firstCol: 'Robbery:', secondCol:(()=>{
       switch(robbery){
-        case 0:return `Does not apply`
+        case 0:return null;//`Does not apply`
         case 1:return `Attempted Burglary of ${robbery_type} `
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Kidnapping:', secondCol:(()=>{
       switch(kidnapping){
-        case 0:return `Does not apply`
+        case 0:return null;//`Does not apply`
         case 1:return `Attempted Kidnapping (${kidnapping_people} involved) `
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Reason for crime:', secondCol: various===null?"Unknown":capitalize(various_choices[various]) },
@@ -289,7 +284,7 @@ const theme = useTheme();
                         <Table>
                           <TableBody>
                             {data.map((row, index) => (
-                              <TableRow key={index}>
+                              row.secondCol!==null&&<TableRow key={index}>
                                 <TableCell>{row.firstCol}</TableCell>
                                 <TableCell>
                                   {row.firstCol === 'Media:' && mediaData ? (
