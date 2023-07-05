@@ -68,6 +68,7 @@ function Page11() {
                       value={value}
                       onChange={(e)=>setValue(e.target.value)}
                       sx={{ px: 2, width: '50%', borderRadius: 'none', height: '10' }}
+                      disabled={checked===0}
                     >
                       <MenuItem value="bicycle">Bicycle</MenuItem>
                       <MenuItem value="handbag">Handbag</MenuItem>

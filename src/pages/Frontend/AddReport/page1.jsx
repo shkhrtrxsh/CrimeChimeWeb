@@ -71,9 +71,11 @@ function Page1() {
   ];
   const years = Array.from({ length: 2 }, (_, index) => dateNow.getFullYear() - index);
 
-  const [dateValue, setDateValue] = useState(new Date(datetime));
-  const [timeValue, setTimeValue] = useState(new Date(datetime));
-  const [amPmValue, setAmPmValue] = useState(new Date(datetime).getHours() >= 12 ? 'pm' : 'am');
+  
+const [dateValue, setDateValue] = useState(dateNow); // Set the initial date value to the current local date
+const [timeValue, setTimeValue] = useState(dateNow); // Set the initial time value to the current local time
+const [amPmValue, setAmPmValue] = useState(dateNow.getHours() >= 12 ? 'pm' : 'am'); // Set the initial amPmValue based on the current local time
+const [futureDateWarning, setFutureDateWarning] = useState(false); // Added state for the warning
 
   const handleDayChange = (e) => {
     const selectedDay = e.target.value;
@@ -81,6 +83,10 @@ function Page1() {
     selectedDate.setDate(selectedDay);
     setDateValue(selectedDate);
     changeDate(selectedDate);
+
+    const currentDate = new Date();
+    const isFutureDate = selectedDate > currentDate;
+    setFutureDateWarning(isFutureDate);
   };
 
   const handleMonthChange = (e) => {
@@ -89,6 +95,10 @@ function Page1() {
     selectedDate.setMonth(selectedMonth - 1);
     setDateValue(selectedDate);
     changeDate(selectedDate);
+
+    const currentDate = new Date();
+    const isFutureDate = selectedDate > currentDate;
+    setFutureDateWarning(isFutureDate);
   };
 
   const handleYearChange = (e) => {
@@ -97,6 +107,10 @@ function Page1() {
     selectedDate.setFullYear(selectedYear);
     setDateValue(selectedDate);
     changeDate(selectedDate);
+
+    const currentDate = new Date();
+    const isFutureDate = selectedDate > currentDate;
+    setFutureDateWarning(isFutureDate);
   };
 
   const handleHourChange = (e) => {
@@ -117,20 +131,24 @@ function Page1() {
 
   const handleAmPmChange = (e) => {
     const selectedAmPm = e.target.value;
+    setAmPmValue(selectedAmPm);
+  
     const selectedTime = new Date(timeValue);
     const hours = selectedTime.getHours();
     let newHours = hours;
-    
+  
     if (selectedAmPm === 'am' && hours >= 12) {
       newHours -= 12;
     } else if (selectedAmPm === 'pm' && hours < 12) {
       newHours += 12;
     }
-    
+  
     selectedTime.setHours(newHours);
     setTimeValue(selectedTime);
-    changeTime(selectedTime);
+  
+    dispatch(setPage(1)); // Dispatch the setPage action to update the page state
   };
+  
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   const hours = Array.from({ length: 12 }, (_, index) => index + 1);
   const minutes = Array.from({ length: 60 }, (_, index) => index);
@@ -140,25 +158,31 @@ function Page1() {
       <Container maxWidth="sm" style={{ padding: theme.spacing(5, 0) }}>
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12}>
-          <Box display="flex" alignItems="center" justifyContent="center">
-  <Typography
-    variant="h1"
-    sx={{
-      textAlign: 'center',
-      borderBottom: `2px solid ${theme.palette.warning.main}`,
-      paddingBottom: '2px',
-    }}
-    className="font-bold pb-2 text-3xl"
-  >
-    Report Crime
-  </Typography>
-</Box>
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <Typography
+                variant="h1"
+                sx={{
+                  textAlign: 'center',
+                  borderBottom: `2px solid ${theme.palette.warning.main}`,
+                  paddingBottom: '2px',
+                }}
+                className="font-bold pb-2 text-3xl"
+              >
+                Report Crime
+              </Typography>
+            </Box>
           </Grid>
-  
+
           <Grid item xs={12}>
-          <Box display="flex" alignItems="center" justifyContent="center" paddingTop={isMdBreakpoint ? '40px' : '80px'} paddingBottom={isMdBreakpoint ? '40px' : '35px'} >
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              paddingTop={isMdBreakpoint ? '40px' : '80px'}
+              paddingBottom={isMdBreakpoint ? '40px' : '35px'}
+            >
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
-              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '0px' , paddingBottom:'0px'}}>
+              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '0px', paddingBottom: '0px' }}>
                 Select Date
               </Typography>
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
@@ -209,62 +233,65 @@ function Page1() {
               ))}
             </TextField>
           </Grid>
-          <Box style={{display:"flex", flexDirection:"column", width: '75%' }}>
-            <Grid item xs={12}>
-            <Box display="flex" alignItems="center" justifyContent="center" paddingTop={isMdBreakpoint ? '40px' : '80px'}  paddingBottom={isMdBreakpoint ? '40px' : '40px'} >
-              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
-              <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px', paddingBottom:'5px' }}>
-                Select Time
+          {futureDateWarning && ( // Display the warning if futureDateWarning is true
+            <Grid item xs={7}>
+              <Typography variant="body2" color="error">
+                Please note that the selected date is in the future.
               </Typography>
-              <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+            </Grid>
+          )}
+          <Box style={{ display: 'flex', flexDirection: 'column', width: '75%' }}>
+            <Grid item xs={12}>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                paddingTop={isMdBreakpoint ? '40px' : '80px'}
+                paddingBottom={isMdBreakpoint ? '40px' : '40px'}
+              >
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
+                <Typography variant="h4" sx={{ fontWeight: 'normal', textAlign: 'center', paddingTop: '5px', paddingBottom: '5px' }}>
+                  Select Time
+                </Typography>
+                <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
+              </Box>
+            </Grid>
+            <Box display="flex" flexDirection="row" width="100%">
+              <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
+                <TextField select label="Hour" value={timeValue.getHours() % 12 || 12} onChange={handleHourChange} fullWidth>
+                  {hours.map((hour) => (
+                    <MenuItem key={hour} value={hour}>
+                      {hour}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
+                <TextField select label="Minute" value={timeValue.getMinutes()} onChange={handleMinuteChange} fullWidth>
+                  {minutes.map((minute) => (
+                    <MenuItem key={minute} value={minute}>
+                      {minute.toString().padStart(2, '0')}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
+                <TextField
+                  select
+                  label="AM/PM"
+                  value={amPmValue}
+                  onChange={handleAmPmChange}
+                  fullWidth
+                >
+                  <MenuItem value="am">AM</MenuItem>
+                  <MenuItem value="pm">PM</MenuItem>
+                </TextField>
+              </Grid>
             </Box>
-          </Grid>
-          <Box display="flex" flexDirection="row" width="100%">
-  <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
-    <TextField
-      select
-      label="Hour"
-      value={timeValue.getHours() % 12 || 12}
-      onChange={handleHourChange}
-      fullWidth
-    >
-      {hours.map((hour) => (
-        <MenuItem key={hour} value={hour}>
-          {hour}
-        </MenuItem>
-      ))}
-    </TextField>
-  </Grid>
-  <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
-    <TextField
-      select
-      label="Minute"
-      value={timeValue.getMinutes()}
-      onChange={handleMinuteChange}
-      fullWidth
-    >
-      {minutes.map((minute) => (
-        <MenuItem key={minute} value={minute}>
-          {minute.toString().padStart(2, '0')}
-        </MenuItem>
-      ))}
-    </TextField>
-  </Grid>
-  <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
-    <TextField
-      select
-      label="AM/PM"
-      value={timeValue.getHours() >= 12 ? 'pm' : 'am'}
-      onChange={handleAmPmChange}
-      fullWidth
-    >
-      <MenuItem value="am">AM</MenuItem>
-      <MenuItem value="pm">PM</MenuItem>
-    </TextField>
-  </Grid>
-</Box>
           </Box>
+
           
+
         </Grid>
       </Container>
     </LocalizationProvider>
@@ -272,4 +299,3 @@ function Page1() {
 }
 
 export default Page1;
-
