@@ -94,8 +94,6 @@ export default function Report() {
             <TableHead>
               <TableRow>
                 <TableCell>Location</TableCell>
-                <TableCell align="left">Crime</TableCell>
-                <TableCell align="left">Specific Crime</TableCell>
                 <TableCell align="left">Reporter</TableCell>
                 <TableCell align="left">Status</TableCell>
                 <TableCell align="left">Created At</TableCell>
@@ -103,11 +101,9 @@ export default function Report() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {reports.data && reports.data.map((report) => (
+              {reports.data && reports.data.map((report,index) => (
                 <TableRow key={report.id}>
                   <TableCell component="th" scope="row">{report.location}</TableCell>
-                  <TableCell align="left">{report.crime.name}</TableCell>
-                  <TableCell align="left">{report.specific_crime.name}</TableCell>  
                   <TableCell align="left">{report.user.name}</TableCell>                  
                   <TableCell align="left">
                     <ActiveInactiveButton 
@@ -120,6 +116,7 @@ export default function Report() {
                   <TableCell align="left">{fDateTime(report.created_at)}</TableCell>
                   <TableCell align="right">
                     <ActionOptions 
+                    index={index}
                       delete_id={report.id}
                       show_url={'/report?target=single&id='+report.id}
                       add_note={'/add_not/'+report.id}

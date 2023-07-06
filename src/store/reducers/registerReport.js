@@ -74,6 +74,9 @@ const registerReport = createSlice({
     clearReport:(state,_)=>{
         state=initialState;
     },
+    setNearbyReports:(state,action)=>{
+        state.nearbyData=[...action.payload];
+    },
     clearNearbyReports:(state,_)=>{
         state.nearbyData=[];
     },
@@ -133,6 +136,6 @@ const registerReport = createSlice({
 
 });
 
-export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,clearReport,clearNearbyReports,setCrimeIndex} =registerReport.actions;
+export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports} =registerReport.actions;
 
 export const registerReportReducer = registerReport.reducer;

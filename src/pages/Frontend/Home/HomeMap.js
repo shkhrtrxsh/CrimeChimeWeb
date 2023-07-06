@@ -33,7 +33,9 @@ import {
   } from '@mui/material';
   import { getSearchQueryParams, setSearchQueryParams, recordPerPage } from 'src/helpers/SearchHelper';
 import { getLocationCoords } from 'src/utils/googleMap';
-import { setCrimeIndex, setPage } from 'src/store/reducers/registerReport';
+import { setCrimeIndex, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
+import ActionOptions from 'src/components/ActionOptions';
+import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog';
 
 const containerStyle = {
     width: '100%',
@@ -69,7 +71,10 @@ const HomeMap = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
-    const isAuth = IsAuth();
+    const [openDialog, setOpenDialog] = React.useState({
+        status: false, 
+        id: null 
+      });    const isAuth = IsAuth();
     const markerOptions = {
         icon: {
           url: Image,
@@ -124,6 +129,7 @@ const HomeMap = () => {
         lat:Number(latitude),
         lng:Number(longitude)
     }
+    
     const onLoad = async(Map) => {
 
         // map.current = Map; // Store the map instance in a global variable for access in the event handler
@@ -133,12 +139,21 @@ const HomeMap = () => {
         }
           
         }
-        const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+        const callDeleteFunc = (status, id) => {
+            if(status === true){
+              dispatch(deleteReport({id}))
+            }
+          }        const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
         
     return (
         <>
         {localStorage.getItem("_token") ?
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'390px'}} onClick={() => setHidden(s => !s)}>
+                <ConfirmDeleteDialog 
+                    openDialog={openDialog} 
+                    setOpenDialog={setOpenDialog}
+                    confirmDialog={callDeleteFunc}
+                />
                 {!hidden ? <Fab
                     size="medium"
                     color="primary"
@@ -255,36 +270,37 @@ const HomeMap = () => {
                     {!hidden ?(
                         <Card>
                             <SearchInTable searchByParam={setSearchByParam} />
-                                <TableContainer component={Paper}>
+                                <TableContainer component={Paper}sx={{pr:6}}>
                                     <Table aria-label="simple table">
                                         <TableHead>
                                         <TableRow>
                                             <TableCell>Location</TableCell>
-                                            <TableCell align="left">Crime</TableCell>
-                                            <TableCell align="left">Specific Crime</TableCell>
                                             <TableCell align="left">Reporter</TableCell>
-                                            <TableCell align="left">Status</TableCell>
                                             <TableCell align="left">Created At</TableCell>
-                                            {/* <TableCell align="right">Action</TableCell> */}
+                                            <TableCell align="right">Action</TableCell>
                                         </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                        {reports.data && reports.data.map((report) => (
+                                        {reports.data && reports.data.map((report,index) => (
                                             <TableRow key={report.id}>
                                             <TableCell component="th" scope="row">{report.location}</TableCell>
-                                            <TableCell align="left">{report.crime.name}</TableCell>
-                                            <TableCell align="left">{report.specific_crime.name}</TableCell>  
                                             <TableCell align="left">{report.user.name}</TableCell>                  
-                                            <TableCell align="left">
-                                                <ActiveInactiveButton 
-                                                
-                                                status={report.status}
-                                                >
-                                                {report.status ? "Active" : "Inactive"}
-                                                </ActiveInactiveButton>
-                                            </TableCell>
                                             <TableCell align="left">{fDateTime(report.created_at)}</TableCell>
-                                            
+                                            <TableCell align="right">
+                                                <ActionOptions 
+                                                index={index}
+                                                delete_id={report.id}
+                                                show_url={'/report?target=single&id='+report.id}
+                                                add_note={'/add_not/'+report.id}
+                                                deleteAction={(event) => {
+                                                    setOpenDialog((prevState) => ({
+                                                      ...prevState,
+                                                      status: event.status,
+                                                      id:event.id
+                                                    }));
+                                                  }}
+                                                />
+                                            </TableCell>
                                             </TableRow>
                                         ))}
                                         </TableBody>
@@ -312,6 +328,7 @@ const HomeMap = () => {
                             {localStorage.getItem("_token") && reports?.data && reports.data.map((report, index) => (
                                 <Marker key={index}
                                     onClick={()=>{
+                                        dispatch(setNearbyReports(reports?.data||[]));
                                         dispatch(setCrimeIndex({index,viewCrime:true}));
                                         navigate("/reportscrime")
                                     }}

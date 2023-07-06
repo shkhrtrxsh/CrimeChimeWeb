@@ -65,21 +65,7 @@ export default function Dashboard() {
             <Grid item xs={12} sm={6} md={4}>
               <AppWidgetSummary title="Inactive Report" total={user.user ? user.report.inactive : 0} icon={'mdi:user'} />
             </Grid>
-            <Grid item xs={12} md={6} lg={6}>
-              <AppCurrentVisits
-                title="Crimes"
-                chartData={[
-                  { label: 'Violent Crime', value: user.user ? user.report.violent_crime : 0 },
-                  { label: 'Theft', value: user.user ? user.report.theft : 0 },
-                  { label: 'Property Damage', value: user.user ? user.report.property_damage : 0 },
-                ]}
-                chartColors={[
-                  theme.palette.chart.red[0],
-                  theme.palette.chart.green[0],
-                  theme.palette.chart.grey[0],
-                ]}
-              />
-            </Grid>
+            
           </Grid>
           : ""
         }

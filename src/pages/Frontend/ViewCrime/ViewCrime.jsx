@@ -24,7 +24,6 @@ const ViewCrime = () => {
     const location = useLocation();
     const pathname = location.pathname;
     const map = useRef(null);
-    const [viewCrime,setViewCrime] = useState(false);
 
     const markerOptions = {
       icon: {
@@ -34,6 +33,12 @@ const ViewCrime = () => {
         anchor: new window.google.maps.Point(25, 50)
       }
     };
+    
+    useEffect(()=>{
+      if(!crimeIndex.viewCrime){
+        dispatch(getNearbyCrimes({latitude,longitude,fromDate:new Date(Date.now()-365*24*3600*1000),toDate:new Date(Date.now())}));
+      }
+    },[])
 
     useEffect(()=>{
       (async()=>{
@@ -79,7 +84,7 @@ const ViewCrime = () => {
         <Box sx={{ height: '100%',maxHeight:"91.3vh", display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
             <Drawer anchor="left" open={crimeIndex.viewCrime} onClose={()=>dispatch(setCrimeIndex({viewCrime:false}))}>
                 <Box sx={{display:"flex",alignItems:"center",maxWidth:"500px"}}>
-                  <CrimeDialog mapRef={map} index={crimeIndex.index} onClose={()=>setViewCrime(false)}/>
+                  <CrimeDialog mapRef={map} index={crimeIndex.index} onClose={()=>dispatch(setCrimeIndex({viewCrime:false}))}/>
                 </Box>
             </Drawer>
             <Box id="hello" sx={{ width: '100%', height: '100%' }}>
@@ -90,7 +95,6 @@ const ViewCrime = () => {
               }}
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
-                <GoogleAutoComplete style={{position:"absolute",right:60,top:5,zIndex:1000}}/>
                   <Marker position={position} onDragEnd={markerDragEnd}/>
                   {nearbyData.map(({latitude=null,longitude=null},ind)=>{
                     return(
