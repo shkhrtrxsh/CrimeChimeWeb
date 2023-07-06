@@ -143,7 +143,8 @@ const HomeMap = () => {
             if(status === true){
               dispatch(deleteReport({id}))
             }
-          }        const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+          } ;      
+           const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
         
     return (
         <>
@@ -234,7 +235,7 @@ const HomeMap = () => {
           background: 'rgba(255, 255, 255, 0.6)',
           textAlign: 'center',
           padding: '10px',
-          zIndex: 9999,
+          zIndex: 1,
         }}
       >
         <Box sx={{ marginTop: '10px' }}>
