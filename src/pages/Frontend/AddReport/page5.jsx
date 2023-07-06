@@ -62,21 +62,28 @@ function Page5() {
           </Grid>
 
           <div>
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 4, pl: 1}}>
-              <FormControlLabel
-                control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} />}
-                label="Yes"
-                sx={{ paddingBottom: '20px' }}
+          <Typography
+              variant="h2"
+              align="center"
+              style={{ fontWeight: 'normal', paddingBottom: '0px', fontSize: '15px', paddingLeft: '5px', paddingTop: '20px' }}
+            >
+              Select any one
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 3, pl: 1}}>
+               <FormControlLabel
+                control={<Checkbox checked={value === '3'} value={3} onChange={handleChange} />}
+                label="Unknown"
+                sx={{ paddingTop: '10px' }}
               />
               <FormControlLabel
                 control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} />}
                 label="No"
                 sx={{ paddingTop: '20px', paddingBottom: '20px' }}
               />
-              <FormControlLabel
-                control={<Checkbox checked={value === '3'} value={3} onChange={handleChange} />}
-                label="Unknown"
-                sx={{ paddingTop: '20px' }}
+             <FormControlLabel
+                control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} />}
+                label="Yes"
+                sx={{ paddingBottom: '20px' }}
               />
             </Box>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', }}>

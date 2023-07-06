@@ -95,7 +95,7 @@ const Page16 = ({selectActive,setActiveStep}) => {
               </Grid>
 
               <Grid item xs={10}>
-                <Box sx={{ display: 'flex', flexDirection: 'column',paddingTop:'15%' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column',paddingTop:'10%' }}>
                   <Box sx={{ display: 'flex',alignItems:'center',paddingTop:'10px'  }}>
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px:1, textAlign: 'left' }}>
                       Did the police attend the scene of crime?

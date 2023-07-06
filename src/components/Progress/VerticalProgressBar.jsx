@@ -1,16 +1,36 @@
-import { Box } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 
 const VerticalProgressBar = ({ progress = 0, maxVal }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
-    <Box sx={{display:"flex",flexDirection:"column"}}>
-        {Array(maxVal).fill(0).map(($_,ind)=>{
-            return(
-                <Box sx={{ width:"10px",height:"20px",flexGrow:1,bgcolor:(ind<progress)?"#ffe600":'rgba(0,0,0,0.1)',border:"1px solid black",mb:1,ml:1}} key={ind}></Box>
-            )
+    <Box sx={{ display: "flex", flexDirection: "column", height: "70%" }}>
+      {Array(maxVal)
+        .fill(0)
+        .map((_, ind) => {
+          const isFilled = ind < progress;
+          return (
+            <Box
+              key={ind}
+              sx={{
+                
+                width: "10px",
+                height: isMobile ? `${100 / maxVal}%` : `${80 / maxVal}%`,
+                flexGrow: 1,
+                bgcolor: isFilled ? "#ffe600" : 'rgba(251, 251, 251, 0.963)',
+                border: "1px solid black",
+                mb: '5px',
+                ml: '15px',
+              }}
+            ></Box>
+          );
         })}
     </Box>
   );
-}
+};
 
 export default VerticalProgressBar;
+
+
 

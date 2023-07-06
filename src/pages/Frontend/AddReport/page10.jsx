@@ -84,7 +84,7 @@ function Page10() {
                       <MenuItem value="general-documents">General Documents</MenuItem>
                       <MenuItem value="backpack">Backpack</MenuItem>
                       <MenuItem value="suitcase">Suitcase</MenuItem>
-                      <MenuItem value="suitcase">Cash in Transit Vehicle</MenuItem>
+                      <MenuItem value="suitcase">Cash-in-Transit Vehicle</MenuItem>
                       <MenuItem value="copper">Cash</MenuItem>
                       <MenuItem value="other">Other</MenuItem>
                     </Select>
