@@ -5,7 +5,7 @@ const VerticalProgressBar = ({ progress = 0, maxVal }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "65%" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "70%" }}>
       {Array(maxVal)
         .fill(0)
         .map((_, ind) => {
@@ -20,8 +20,8 @@ const VerticalProgressBar = ({ progress = 0, maxVal }) => {
                 flexGrow: 1,
                 bgcolor: isFilled ? "#ffe600" : 'rgba(251, 251, 251, 0.963)',
                 border: "1px solid black",
-                mb: isMobile ? '1%' : '1%',
-                ml: '5px',
+                mb: '5px',
+                ml: '15px',
               }}
             ></Box>
           );
