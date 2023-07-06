@@ -20,7 +20,7 @@ import {
 import current from '../../../assets/images/current.png';
 import duplicate from '../../../assets/images/duplicate.png';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loadGoogleMaps } from 'src/utils/googleMap';
@@ -246,7 +246,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
                         <Table>
                           <TableBody>
                             {data.map((row, index) => (
-                              <TableRow key={index}>
+                              row.secondCol&&<TableRow key={index}>
                                 <TableCell>{row.firstCol}</TableCell>
                                 <TableCell>
                                   {row.firstCol === 'Media:' && mediaData ? (

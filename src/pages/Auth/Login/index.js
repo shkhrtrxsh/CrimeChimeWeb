@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import "yup-phone";
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate, Link as RouterLink, Navigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 // form
 import { useForm } from 'react-hook-form';
@@ -21,6 +21,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import axios from 'axios';
 import  API from "../../../config/api";
 import { toast } from "react-toastify";
+import { IsAuth } from 'src/helpers/RouteHelper';
 
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -90,7 +91,7 @@ export default function Login() {
       // }
       dispatch(login({formValue, navigate}))
   };
-
+  if (IsAuth())return <Navigate to="/"/>;
   return (
     <Page title="Login">
       <RootStyle>

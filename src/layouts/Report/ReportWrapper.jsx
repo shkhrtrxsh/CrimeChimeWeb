@@ -33,7 +33,7 @@ import Image from '../../assets/images/duplicate.png'
 import axios from 'axios';
 const ReportPageRouter = ({selectActive=1,setSelectActive,openState,mapRef})=>{
     const ReportPages=[
-        <Page1/>,<Page2 setSelectActive={setSelectActive}/>,<Duplicate mapRef={mapRef}/>,<Page3/>,<Page4/>,<Page5/>,<Page6/>,<Page7/>,<Page8/>,<Page9/>,<Page10/>,<Page11/>,<Page12/>,<Page13/>,<Page14/>,<Page15/>,<Page16 setSelectActive={setSelectActive} openState={openState}/>
+        <Page1/>,<Page2 setSelectActive={setSelectActive}/>,<Duplicate mapRef={mapRef} setSelectActive={setSelectActive}/>,<Page3/>,<Page4/>,<Page5/>,<Page6/>,<Page7/>,<Page8/>,<Page9/>,<Page10/>,<Page11/>,<Page12/>,<Page13/>,<Page14/>,<Page15/>,<Page16 setSelectActive={setSelectActive} openState={openState}/>
     ]
     return ReportPages[selectActive-1];
 }
@@ -78,7 +78,7 @@ const ReportWrapper = () => {
       streetViewControlOptions: {
         position: window.google.maps.ControlPosition.RIGHT_CENTER
       },
-        mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
+        mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE
     };
 
     const position={
@@ -157,7 +157,7 @@ const ReportWrapper = () => {
                       <GoogleMap center={position} zoom={zoom} 
                         mapContainerStyle={{width:"100%",height:"100%"}}
                         options={{
-                          mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
+                          mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE
                         }}
                         onLoad={onLoad}
                         onZoomChanged={handleZoomChanged}>
@@ -175,7 +175,7 @@ const ReportWrapper = () => {
             </Box>
             <Box sx={{ width: {md:'50%',xs:'100%'},display:'flex',flexDirection:'column',height:"100%",overflowY:"auto", }}>
                 <Box sx={{display:"flex",alignItems:"center",mb:10}}>
-                    <ReportPageRouter selectActive={selectActive} mapRef={map}/>
+                    <ReportPageRouter selectActive={selectActive} setSelectActive={setSelectActive} mapRef={map}/>
                     {/* <Page9/> */}
                 </Box>
             </Box>
@@ -184,7 +184,7 @@ const ReportWrapper = () => {
               mapContainerStyle={{width:"100%",height:"100%"}}
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
-                <Marker position={position} draggable={true}/>
+                <Marker position={position} draggable={false}/>
                 {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions} draggable={true}/>}
               </GoogleMap>
             </Box>

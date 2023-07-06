@@ -11,7 +11,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
 import { setLock, setPage } from 'src/store/reducers/registerReport';
 import ProgressBar from 'src/layouts/Report/ProgressBar';

@@ -20,7 +20,7 @@ import {
 import current from '../../../assets/images/current.png';
 import duplicate from '../../../assets/images/duplicate.png';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loadGoogleMaps } from 'src/utils/googleMap';
@@ -50,7 +50,7 @@ export const SuccessDialog = ({open,handleClose})=>{
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {open===1?"Report Submitted Successfully":"Error Submitting the Report"}
+            {open===1?"Thanks for confirming the crime. Crime has been recorded.":"Error Submitting the Report.Please Try Again."}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -60,7 +60,7 @@ export const SuccessDialog = ({open,handleClose})=>{
   )
 }
 
-function Duplicate({mapRef,viewCrime=false}) {
+function Duplicate({mapRef,viewCrime=false,setSelectActive}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
@@ -70,18 +70,21 @@ function Duplicate({mapRef,viewCrime=false}) {
   const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images,description}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 const theme = useTheme();
+const doFunc=()=>{
+  setSelectActive(4);
+}
 
   useEffect(()=>{
     dispatch(setMarker({latitude,longitude}));
   },[latitude,longitude,index])
 
   useEffect(()=>{
-    dispatch(getNearbyCrimes2({latitude:lat,longitude:long}));
+    dispatch(getNearbyCrimes2({latitude:lat,longitude:long,doFunc}));
   },[]);
 
   useEffect(() => {
     dispatch(clearNearbyReports());
-    dispatch(getNearbyCrimes2({latitude:lat,longitude:long}));
+    dispatch(getNearbyCrimes2({latitude:lat,longitude:long,doFunc}));
     if(mapRef.current){
       const mapElement = mapRef.current;
       mapElement.marker=null;
@@ -313,9 +316,14 @@ const theme = useTheme();
                         <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={clickYes} disabled={lock}>
                           Yes
                         </Button>
-                        {values[index+1]&&<Button variant="contained" color="primary" disabled={lock} onClick={()=>setIndex(index+1)}>
+                        <Button variant="contained" color="primary" disabled={lock} onClick={()=>{
+                            if(!values[index+1]){
+                              setSelectActive(4);
+                            }
+                            setIndex(index+1)
+                          }}>
                           No
-                        </Button>}
+                        </Button>
                       </Box>
                     </Box>
                   </Box>

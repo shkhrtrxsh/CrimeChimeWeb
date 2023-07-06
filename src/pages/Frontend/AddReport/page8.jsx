@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import Vehicle from '../../../assets/images/vehiclee.png'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import TypoSub from 'src/components/Typography/TypoSub';
 import { useDispatch, useSelector } from 'react-redux';
 import ProgressBar from 'src/layouts/Report/ProgressBar';

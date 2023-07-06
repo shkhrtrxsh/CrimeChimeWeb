@@ -60,7 +60,7 @@ const Page2 = ({setSelectActive}) => {
             <FormControl fullWidth sx={{ height:"100%" }}>
               <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={zoom}
               options={{
-                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
+                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE
               }}
               onLoad={Map => {
                 map.current = Map; // Store the map instance in a global variable for access in the event handler

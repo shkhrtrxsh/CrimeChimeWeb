@@ -1,6 +1,6 @@
 import { Container, Typography,useTheme, Grid, Box, Checkbox } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import bribe from '../../../assets/images/bribe.png';
 import { useDispatch, useSelector } from 'react-redux';
 import ProgressBar from 'src/layouts/Report/ProgressBar';

@@ -155,10 +155,10 @@ const HomeMap = () => {
                     title="Map view" 
                     variant={isDesktop ? 'extended' : 'circular'}
                     >
-                    <LocationOnIcon />
                     {isDesktop &&
                         <Typography component='h6'></Typography>
                     }
+                    <LocationOnIcon />
                 </Fab>: <Fab
                     size="medium"
                     color="primary"
@@ -166,10 +166,10 @@ const HomeMap = () => {
                     title="Table view" 
                     variant={isDesktop ? 'extended' : 'circular'}
                     >
-                    <TableViewIcon />
                     {isDesktop &&
-                        <Typography component='h6'></Typography>
+                        <Typography component='h6'sx={{width:100}}>List Crime</Typography>
                     }
+                    <TableViewIcon />
                 </Fab>}
             </BoxButtonStyle>:''
         }
@@ -183,10 +183,10 @@ const HomeMap = () => {
                     component={Link}
                     variant={isDesktop ? 'extended' : 'circular'}
                 >
-                    <AddIcon />
                     {isDesktop &&
-                        <Typography component='h6'></Typography>
+                        <Typography component='h6' sx={{width:100}}>Report Crime</Typography>
                     }
+                    <AddIcon />
                 </Fab>
             </BoxButtonStyle>
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'290px'}}>
@@ -200,10 +200,10 @@ const HomeMap = () => {
                     component={Link}
                     variant={isDesktop ? 'extended' : 'circular'}
                 >
-                    <VisibilityIcon />
                     {isDesktop &&
-                        <Typography component='h6' sx={{ marginLeft: '3px' }}></Typography>
+                        <Typography component='h6' sx={{ marginLeft: '3px',width:100 }}>View Crime</Typography>
                     }
+                    <VisibilityIcon />
                 </Fab>
                 
             </BoxButtonStyle>
@@ -292,7 +292,7 @@ const HomeMap = () => {
                             options={mapSettings}
                             onLoad={onLoad}
                         >
-                            {localStorage.getItem("_token") && reports?.data && reports.data.map((report, index) => (
+                            {reports?.data && reports.data.map((report, index) => (
                                 <Marker key={index}
                                     onClick={()=>{
                                         dispatch(setNearbyReports(reports?.data||[]));
