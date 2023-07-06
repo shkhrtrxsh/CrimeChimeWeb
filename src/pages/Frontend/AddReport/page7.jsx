@@ -62,6 +62,13 @@ function Page7() {
           </Grid>
 
           <Box sx={{ py: 1 }}>
+          <Typography
+              variant="h2"
+              align="center"
+              style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '18px', paddingLeft: '20px', paddingTop: '10px' }}
+            >
+              Select any one
+            </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 8, pl: 8 }}>
               <FormControlLabel control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} sx={{ paddingY: '20px'}}/>} label="Unknown" />
               <FormControlLabel control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} sx={{ paddingY: '20px'}} />} label="Yes" />

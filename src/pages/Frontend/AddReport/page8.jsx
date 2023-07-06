@@ -46,17 +46,24 @@ function Page8() {
                 </Typography>
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
-                <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
+                <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '0px', fontSize: '12px' }}>
                   (Excluding cash in-transit vehicles)
                 </Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '10px' }}>
-      <img src={Vehicle} alt="Vehicle Theft" style={{ height: '90px' }} />
+      <img src={Vehicle} alt="Vehicle Theft" style={{ height: '80px' }} />
     </Box>
               </Grid>
-
-              <Box sx={{ pl: 5, pt: 0, }}>
+              
+              <Box sx={{ pl: 3, pt: 0, }}>
+<Typography
+              variant="h2"
+              align="center"
+              style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '18px', paddingLeft: '0px', paddingTop: '5px' }}
+            >
+              Select any one
+            </Typography>
                 <div sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4, pl: 4 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
   {fields.map((f, ind) => {
     return (

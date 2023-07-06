@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect} from 'react';
+import React, { useState,Fragment, useEffect} from 'react';
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import { Link } from 'react-router-dom';
 import { APPBAR_DESKTOP } from 'src/constants/theme'
-import { Box, Typography, Fab, Modal, Button } from '@mui/material';
+import {  useMediaQuery,Box, Typography, Fab, Modal, Button } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TableViewIcon from '@mui/icons-material/TableView';
@@ -18,6 +18,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ActiveInactiveButton } from 'src/components/Button';
 import { fDateTime } from 'src/utils/formatTime';
 import Image from 'src/assets/images/duplicate.png'
+import { IsAuth } from 'src/helpers/RouteHelper';
 
 import { 
     Table,
@@ -68,7 +69,7 @@ const HomeMap = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
-
+    const isAuth = IsAuth();
     const markerOptions = {
         icon: {
           url: Image,
@@ -77,7 +78,11 @@ const HomeMap = () => {
           anchor: new window.google.maps.Point(25, 50)
         }
       };
+      const [showBox, setShowBox] = useState(true);
 
+      const handleCloseBox = () => {
+        setShowBox(false);
+      };
     const handleClose = () => setOpen(false);
     const [hidden, setHidden] = React.useState(true);
     const [displayPopUp, setDisplayPopUp] = React.useState(true);
@@ -128,7 +133,8 @@ const HomeMap = () => {
         }
           
         }
-
+        const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+        
     return (
         <>
         {localStorage.getItem("_token") ?
@@ -192,6 +198,7 @@ const HomeMap = () => {
                 </Fab>
                 
             </BoxButtonStyle>
+            
             <Box sx={{
                 background: theme.palette.secondary.main,
                 textAlign: 'center',
@@ -202,6 +209,32 @@ const HomeMap = () => {
                 </Typography>
                 
             </Box>
+            {!isAuth && showBox && isMobile && (
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: 'rgba(255, 255, 255, 0.6)',
+          textAlign: 'center',
+          padding: '10px',
+          zIndex: 9999,
+        }}
+      >
+        <Box sx={{ marginTop: '10px' }}>
+          <Button variant="contained" color="primary" sx={{ marginRight: '10px' }} onClick={() => navigate('/register')}>
+            Sign Up To Report Crime
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleCloseBox}>
+            No Thanks
+          </Button>
+        </Box>
+      </Box>
+    )}
+
+
+
             
             <Box sx={{ display: 'flex' }}>
                 <Box sx={{

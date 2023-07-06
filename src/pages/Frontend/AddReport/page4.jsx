@@ -64,6 +64,7 @@ function Page4() {
         ),
         imageSrc:pistol,
         imageAlt:"Semi automatic(pistol, handgun)",
+        imageStyle: { width: "40px", height: "40px", transform: "scaleX(-1)" }
       },
       { 
         name:"knife_weapons",
