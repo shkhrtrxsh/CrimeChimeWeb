@@ -240,7 +240,7 @@ const HomeMap = () => {
       >
         <Box sx={{ marginTop: '10px' }}>
           <Button variant="contained" color="primary" sx={{ marginRight: '10px' }} onClick={() => navigate('/register')}>
-            Sign Up To Report Crime
+            Login In to CrimeChime
           </Button>
           <Button variant="contained" color="primary" onClick={handleCloseBox}>
             No Thanks

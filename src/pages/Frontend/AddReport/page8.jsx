@@ -58,12 +58,12 @@ function Page8() {
 <Typography
               variant="h2"
               align="center"
-              style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '18px', paddingLeft: '0px', paddingTop: '5px' }}
+              style={{ fontWeight: 'normal', paddingBottom: '0px', fontSize: '15px', paddingLeft: '5px', paddingTop: '10px' }}
             >
               Select any one
             </Typography>
                 <div sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 4 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 8 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
   {fields.map((f, ind) => {
     return (

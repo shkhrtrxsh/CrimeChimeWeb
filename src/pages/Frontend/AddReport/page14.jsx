@@ -33,15 +33,15 @@ const Page14 = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={10} sx={{ pl: 5, pt: 0 }}>
+              <Grid item xs={8} sx={{ pl: 5, pt: 0 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 4 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
                     <Checkbox checked={checked==="0"} value={0} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Crime occurred at ATM
                     </Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 4 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
                     <Checkbox checked={checked==="1"} value={1} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be drug-related
@@ -49,13 +49,13 @@ const Page14 = () => {
                       <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(Perpetrator involved with drugs)</span>
                     </Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 4 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
                     <Checkbox checked={checked==="2"} value={2} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be gang-related
                     </Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 4 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
                     <Checkbox checked={checked==="3"} value={3} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Arson was involved
@@ -63,7 +63,7 @@ const Page14 = () => {
                       <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(Setting fire to a property on purpose)</span>
                     </Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 4 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
                     <Checkbox checked={checked==="4"} value={4} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Vandalism was involved
@@ -71,7 +71,7 @@ const Page14 = () => {
                       <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(Malicious destruction or defacement of property)</span>
                     </Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 4 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
                     <Checkbox checked={checked==="5"} value={5} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Social unrest

@@ -66,11 +66,11 @@ const Page6 = () => {
           <Typography
               variant="h2"
               align="center"
-              style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '18px', paddingLeft: '14px', paddingTop: '15px' }}
+              style={{ fontWeight: 'normal', paddingBottom: '0px', fontSize: '15px', paddingLeft: '5px', paddingTop: '40px' }}
             >
               Select any one
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'COLUMN', justifyContent: 'center', my: 6, pl: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'COLUMN', justifyContent: 'center', my: 4, pl: 2 }}>
               <FormControlLabel
                 control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} />}
                 label="Does Not Apply"

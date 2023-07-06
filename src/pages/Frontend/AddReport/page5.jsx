@@ -65,15 +65,15 @@ function Page5() {
           <Typography
               variant="h2"
               align="center"
-              style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '18px', paddingLeft: '5px', paddingTop: '10px' }}
+              style={{ fontWeight: 'normal', paddingBottom: '0px', fontSize: '15px', paddingLeft: '5px', paddingTop: '20px' }}
             >
               Select any one
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 4, pl: 1}}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 3, pl: 1}}>
                <FormControlLabel
                 control={<Checkbox checked={value === '3'} value={3} onChange={handleChange} />}
                 label="Unknown"
-                sx={{ paddingTop: '20px' }}
+                sx={{ paddingTop: '10px' }}
               />
               <FormControlLabel
                 control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} />}
