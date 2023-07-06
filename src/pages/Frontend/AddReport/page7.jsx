@@ -62,10 +62,17 @@ function Page7() {
           </Grid>
 
           <Box sx={{ py: 1 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 8, pl: 8 }}>
-              <FormControlLabel control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} sx={{ paddingY: '20px'}}/>} label="Unknown" />
-              <FormControlLabel control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} sx={{ paddingY: '20px'}} />} label="Yes" />
-              <FormControlLabel control={<Checkbox checked={value === '2'} value={2} onChange={handleChange} sx={{ paddingY: '20px'}} />} label="No" />
+          <Typography
+              variant="h2"
+              align="center"
+              style={{ fontWeight: 'normal', paddingBottom: '0px', fontSize: '15px', paddingLeft: '5px', paddingTop: '35px' }}
+            >
+              Select any one
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 4, pl: 14 }}>
+              <FormControlLabel control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}}/>} label="Unknown" />
+              <FormControlLabel control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}} />} label="Yes" />
+              <FormControlLabel control={<Checkbox checked={value === '2'} value={2} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}} />} label="No" />
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', mt: 3 }}>
                 <Select
                   value={count}
@@ -81,7 +88,7 @@ function Page7() {
                     setCount(count);
                   }}
                   disabled={value === '0' || value === '2'}
-                  sx={{ width: 100, marginRight: 2 }}
+                  
                 >
                   {Array.from({ length: 30 }, (_, index) => index + 1).map((num) => (
                     <MenuItem key={num} value={num}>

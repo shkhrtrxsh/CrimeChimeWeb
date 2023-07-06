@@ -72,17 +72,17 @@ const Page12 = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={10} sx={{  }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column',paddingLeft: '16px' }}>
+          <Grid item xs={8} style={{ paddingLeft:'40px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column',paddingLeft: '20px' }}>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4  }}>
                 <Checkbox checked={checked === '0'} value={0} onChange={handleChange} />
-                <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                   Does not apply
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4 }}>
                 <Checkbox checked={checked === '1'} value={1} onChange={handleChange} />
-                <Typography variant="h6" sx={{ fontWeight: 'normal', pl: 5, textAlign: 'left' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'normal', pl: 2, textAlign: 'left' }}>
                   Attempted kidnapping
                   <br />
                   <Typography variant="body2" sx={{ textAlign: 'left' }}>(unsuccessful kidnapping attempt)</Typography>
@@ -93,7 +93,7 @@ const Page12 = () => {
                   <Select
                     value={value || ''}
                     onChange={(event) => setValue(event.target.value)}
-                    sx={{ width: '80px' }}
+                    
                     disabled={checked === '0'}
                     error={error ? true : false}
                   >
@@ -103,7 +103,7 @@ const Page12 = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  <Typography variant="h6" sx={{ fontWeight: 'normal', textAlign: 'left', pl: 4 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 'normal', textAlign: 'left', pl: 1 }}>
                     How many were kidnapped?
                   </Typography>
                 </Box>

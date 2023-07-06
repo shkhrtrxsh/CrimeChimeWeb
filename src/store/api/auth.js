@@ -10,7 +10,7 @@ export const login = createAsyncThunk(
       try {
         const response = await API.post("/auth/login", formValue);
         if(response.data.status === 200){
-          toast.success("OTP Send");
+          toast.success("OTP Sent");
           navigate("/auth/verify");
           return response.data;
         }
@@ -47,7 +47,7 @@ export const register = createAsyncThunk(
     try {
       const response = await API.post("/auth/register", formValue);
       if(response.data.status === 200){
-        toast.success("OTP Send");
+        toast.success("OTP Sent");
         navigate("/auth/verify");
         return response.data;
       }
