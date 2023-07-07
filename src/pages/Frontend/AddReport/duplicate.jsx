@@ -252,7 +252,7 @@ const theme = useTheme();
               </Box>
             </Grid>
             
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', paddingLeft: '15px' }}>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start',alignItems:"center" }}>
                   <img src={current} alt="imgg" style={{ height:'17px'}} />
