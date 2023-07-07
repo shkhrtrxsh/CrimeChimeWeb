@@ -91,7 +91,7 @@ export default function OtpVerify() {
             <PaperStyle>
               <HeaderStyle>
                 <Typography variant="h4">
-                  Otp Verification
+                  OTP Verification
                 </Typography>
                 <Typography variant="p">
                   Please enter the OTP sent to your mobile number to login.

@@ -256,8 +256,8 @@ const [futureDateWarning, setFutureDateWarning] = useState(false); // Added stat
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
               </Box>
             </Grid>
-            <Box display="flex" flexDirection="row" width="100%">
-              <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
+            <Box display="flex" flexDirection="row" width="100%" justifyContent='end'>
+              <Grid item xs={3.8} sx={{ textAlign: 'center',paddingX: '5px' }}>
                 <TextField select label="Hour" value={timeValue.getHours() % 12 || 12} onChange={handleHourChange} fullWidth>
                   {hours.map((hour) => (
                     <MenuItem key={hour} value={hour}>
@@ -266,7 +266,7 @@ const [futureDateWarning, setFutureDateWarning] = useState(false); // Added stat
                   ))}
                 </TextField>
               </Grid>
-              <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
+              <Grid item xs={3.9} sx={{ textAlign: 'center', width: '100%',paddingX: '5px' }}>
                 <TextField select label="Minute" value={timeValue.getMinutes()} onChange={handleMinuteChange} fullWidth>
                   {minutes.map((minute) => (
                     <MenuItem key={minute} value={minute}>
@@ -275,7 +275,7 @@ const [futureDateWarning, setFutureDateWarning] = useState(false); // Added stat
                   ))}
                 </TextField>
               </Grid>
-              <Grid item xs={4} sx={{ textAlign: 'center', width: '100%' }}>
+              <Grid item xs={3.9} sx={{ textAlign: 'center', width: '100%', paddingX: '5px' }}>
                 <TextField
                   select
                   label="AM/PM"
