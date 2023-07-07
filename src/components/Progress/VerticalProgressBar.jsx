@@ -19,7 +19,7 @@ const VerticalProgressBar = ({ progress = 0, maxVal }) => {
                 height: isMobile ? `${100 / maxVal}%` : `${80 / maxVal}%`,
                 flexGrow: 1,
                 bgcolor: isFilled ? "#ffe600" : 'rgba(251, 251, 251, 0.963)',
-                border: "1px solid black",
+                border: "1px solid gray",
                 mb: '5px',
                 ml: '15px',
               }}
