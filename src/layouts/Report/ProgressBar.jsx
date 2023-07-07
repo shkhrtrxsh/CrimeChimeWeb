@@ -35,7 +35,7 @@ const ProgressBar = ({
   };
 
   return (
-    <Box
+    <Box id="progress_bar"
       sx={{
         height: '100%',
         display: 'flex',

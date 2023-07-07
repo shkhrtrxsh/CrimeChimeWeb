@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { SatelliteZoom } from 'src/constants/googleMap';
 
 export const CurrentLocationCoordinates = () => {
 
@@ -51,9 +52,10 @@ export const positionLatitude = -26.2041028;
 export const positionLongitude = 28.0473051;
 
 
-export const mapSettings =  {
+export const mapSettings = (zoom)=> ({
     // zoomControl: false,
     streetViewControl: false,
     mapTypeControl: false,
     fullscreenControl: false,
-}
+    mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.TERRAIN
+})

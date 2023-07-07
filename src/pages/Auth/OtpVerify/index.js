@@ -94,7 +94,7 @@ export default function OtpVerify() {
                   Otp Verification
                 </Typography>
                 <Typography variant="p">
-                  Please enter the OTP send to your mobile number to login.
+                  Please enter the OTP sent to your mobile number to login.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

@@ -25,7 +25,7 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { APPBAR_DESKTOP } from 'src/constants/theme'
 import AddIcon from '@mui/icons-material/Add';
 import useResponsive from 'src/hooks/useResponsive';
-import {  LocalizationProvider } from '@mui/lab';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import {DatePicker} from '@mui/x-date-pickers'
 
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -33,6 +33,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { format } from 'date-fns';
 import { getNearbyCrimes } from 'src/store/api/registerReport';
 import { clearReport } from 'src/store/reducers/registerReport';
+import TransparentFab from 'src/layouts/components/TransparentFab';
 
 const OuterPaperStyle = styled(Paper)(({ theme }) => ({
     [theme.breakpoints.up('sm')]: {
@@ -99,20 +100,18 @@ export default function SearchFilter(props) {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <BoxButtonStyle>
-                <Fab
+                <TransparentFab
                     size="medium"
                     color="primary"
                     aria-label="add report"
                     to="/report/add"
                     component={Link}
-                    variant={isDesktop ? 'extended' : 'circular'}
+                    variant='extended'
                 >
                     <AddIcon />
-                    {isDesktop &&
-                        <Typography component='h6'>Report Crime</Typography>
-                    }
+                    <Typography component='h6'>Report Crime</Typography>
 
-                </Fab>
+                </TransparentFab>
                 <Fab
                     size="medium"
                     color="primary"

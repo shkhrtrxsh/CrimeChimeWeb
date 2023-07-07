@@ -70,7 +70,6 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }) {
 
   return (
     <RootStyle>
-      {!isDesktop && (
         <Drawer
           open={isOpenSidebar}
           onClose={onCloseSidebar}
@@ -80,9 +79,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }) {
         >
           {renderContent}
         </Drawer>
-      )}
 
-      {isDesktop && (
         <Drawer
           open
           variant="persistent"
@@ -99,7 +96,6 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }) {
         >
           {renderContent}
         </Drawer>
-      )}
     </RootStyle>
   );
 }

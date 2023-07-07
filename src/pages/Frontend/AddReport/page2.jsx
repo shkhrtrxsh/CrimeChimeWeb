@@ -50,18 +50,29 @@ const Page2 = ({setSelectActive}) => {
   const handleZoomChanged = () => {
     if(map.current)dispatch(setZoom(map.current.getZoom()))
   };
-
+  const mapOptions={
+    fullscreenControl:false,
+    zoomControlOptions: {
+      position: window.google.maps.ControlPosition.RIGHT_CENTER
+    },
+    streetViewControlOptions: {
+      position: window.google.maps.ControlPosition.RIGHT_CENTER
+    },
+    mapTypeControlOptions: {
+      position: window.google.maps.ControlPosition.RIGHT_BOTTOM
+    },
+    mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE      
+  }
   return (
         <Box sx={{height:"100%",display:"flex",flexDirection:"column"}}>
           <Box sx={{flexGrow:1,position:'relative'}}>
-            <Box id="kbd" sx={{position:"absolute",top:20,right:70,zIndex:1000}}>
+            <Box id="kbd" sx={{position:"absolute",top:20,right:{sm:0,md:70},
+            left:10,zIndex:1000}}>
               <GoogleAutoComplete style={{zIndex:1000}}/>
             </Box>
             <FormControl fullWidth sx={{ height:"100%" }}>
               <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={zoom}
-              options={{
-                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE
-              }}
+              options={mapOptions}
               onLoad={Map => {
                 map.current = Map; // Store the map instance in a global variable for access in the event handler
               }}

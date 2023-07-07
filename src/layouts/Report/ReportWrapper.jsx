@@ -68,10 +68,10 @@ const ReportWrapper = () => {
       lat:Number(marker?.latitude),
       lng:Number(marker?.longitude),
     }
-   
+    const theme = useTheme();   
+    const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
     
     const mapOptions = {
-      zoomControl: true,
       zoomControlOptions: {
         position: window.google.maps.ControlPosition.RIGHT_CENTER
       },
@@ -134,8 +134,6 @@ const ReportWrapper = () => {
       }
         
       }
-    const theme = useTheme();
-    const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
     if([2].includes(selectActive))return <ReportPageRouter selectActive={selectActive} setSelectActive={setSelectActive}/>
 
@@ -157,7 +155,13 @@ const ReportWrapper = () => {
                       <GoogleMap center={position} zoom={zoom} 
                         mapContainerStyle={{width:"100%",height:"100%"}}
                         options={{
-                          mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE
+                          mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE,
+                          zoomControlOptions: {
+                            position: window.google.maps.ControlPosition.RIGHT_CENTER
+                          },
+                          streetViewControlOptions: {
+                            position: window.google.maps.ControlPosition.RIGHT_CENTER
+                          },                    
                         }}
                         onLoad={onLoad}
                         onZoomChanged={handleZoomChanged}>

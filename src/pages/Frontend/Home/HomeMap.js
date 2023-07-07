@@ -36,6 +36,7 @@ import { getLocationCoords } from 'src/utils/googleMap';
 import { setCrimeIndex, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
 import ActionOptions from 'src/components/ActionOptions';
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog';
+import TransparentFab from 'src/layouts/components/TransparentFab';
 
 const containerStyle = {
     width: '100%',
@@ -63,7 +64,7 @@ const MapDivStyle = styled('div')(({ theme }) => ({
 
 const HomeMap = () => {
     const {data} =  useSelector(state=>state.reportRegister);
-    const {latitude,longitude} = data; 
+    const {latitude,longitude,zoom} = data; 
     const isDesktop = useResponsive('up', 'md');
     const [open, setOpen] = React.useState(true);
     const theme = useTheme()
@@ -145,73 +146,63 @@ const HomeMap = () => {
             }
           } ;      
            const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
-        
+    const admin = reports?.admin?true:false;
     return (
         <>
-        {localStorage.getItem("_token") ?
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'390px'}} onClick={() => setHidden(s => !s)}>
                 <ConfirmDeleteDialog 
                     openDialog={openDialog} 
                     setOpenDialog={setOpenDialog}
                     confirmDialog={callDeleteFunc}
                 />
-                {!hidden ? <Fab
+                {!hidden ? <TransparentFab
                     size="medium"
                     color="primary"
                     aria-label="view report"
                     title="Map view" 
-                    variant={isDesktop ? 'extended' : 'circular'}
+                    variant='extended'
                     >
-                    {isDesktop &&
-                        <Typography component='h6'></Typography>
-                    }
+                    <Typography component='h6'>Listed Crimes</Typography>
                     <LocationOnIcon />
-                </Fab>: <Fab
+                </TransparentFab>: <TransparentFab
                     size="medium"
                     color="primary"
                     aria-label="view report"
                     title="Table view" 
-                    variant={isDesktop ? 'extended' : 'circular'}
+                    variant='extended'
                     >
-                    {isDesktop &&
-                        <Typography component='h6'sx={{width:100}}>List Crime</Typography>
-                    }
+                    <Typography component='h6'sx={{width:100}}>Listed Crimes</Typography>
                     <TableViewIcon />
-                </Fab>}
-            </BoxButtonStyle>:''
-        }
+                </TransparentFab>}
+            </BoxButtonStyle>
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'340px'}}>
-                <Fab
+                <TransparentFab
                     size="medium"
                     color="primary"
                     aria-label="add report"
                     title="add report"
                     to="/report/add"
                     component={Link}
-                    variant={isDesktop ? 'extended' : 'circular'}
+                    variant='extended'
                 >
-                    {isDesktop &&
-                        <Typography component='h6' sx={{width:100}}>Report Crime</Typography>
-                    }
+                    <Typography component='h6' sx={{width:100}}>Report Crime</Typography>
                     <AddIcon />
-                </Fab>
+                </TransparentFab>
             </BoxButtonStyle>
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'290px'}}>
 
-                <Fab
+                <TransparentFab
                     size="medium"
                     color="primary"
                     aria-label="reported crimes"
                     title="view crimes"
                     to="/reportscrime"
                     component={Link}
-                    variant={isDesktop ? 'extended' : 'circular'}
+                    variant='extended'
                 >
-                    {isDesktop &&
                         <Typography component='h6' sx={{ marginLeft: '3px',width:100 }}>View Crime</Typography>
-                    }
                     <VisibilityIcon />
-                </Fab>
+                </TransparentFab>
                 
             </BoxButtonStyle>
             
@@ -276,7 +267,7 @@ const HomeMap = () => {
                                         <TableHead>
                                         <TableRow>
                                             <TableCell>Location</TableCell>
-                                            <TableCell align="left">Reporter</TableCell>
+                                            {admin&&<TableCell align="left">Reporter</TableCell>}
                                             <TableCell align="left">Created At</TableCell>
                                             <TableCell align="right">Action</TableCell>
                                         </TableRow>
@@ -285,7 +276,7 @@ const HomeMap = () => {
                                         {reports.data && reports.data.map((report,index) => (
                                             <TableRow key={report.id}>
                                             <TableCell component="th" scope="row">{report.location}</TableCell>
-                                            <TableCell align="left">{report.user.name}</TableCell>                  
+                                            {admin&&<TableCell align="left">{report.user.name}</TableCell>  }                
                                             <TableCell align="left">{fDateTime(report.created_at)}</TableCell>
                                             <TableCell align="right">
                                                 <ActionOptions 
@@ -323,7 +314,7 @@ const HomeMap = () => {
                             mapContainerStyle={containerStyle}
                             center={position}
                             zoom={10}
-                            options={mapSettings}
+                            options={mapSettings(zoom)}
                             onLoad={onLoad}
                         >
                             {reports?.data && reports.data.map((report, index) => (

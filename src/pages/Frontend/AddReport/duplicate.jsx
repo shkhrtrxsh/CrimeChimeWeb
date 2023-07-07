@@ -179,7 +179,7 @@ const doFunc=()=>{
     { firstCol: 'Reason for crime:', secondCol: various===null?"Unknown":capitalize(various_choices[various]) },
     {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"Unknown":(police_reporting===0?"Yes":"No"))},
     { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"Unknown":(reported_to_police===0?"Yes":"No")) },
-    { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:"N/A" },
+    ...police_case_num&&{ firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:"N/A" },
     { firstCol: 'Media:', secondCol: mediaData },
   ];
   

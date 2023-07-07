@@ -43,7 +43,7 @@ const initialState = {
         kidnapping:"0",
         kidnapping_people:null,
         bribery:"0",
-        various:null,
+        various:[],
         police_reporting:2,
         reported_to_the_police:2,
         police_case_num:null,
