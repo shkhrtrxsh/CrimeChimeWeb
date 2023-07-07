@@ -90,10 +90,10 @@ export default function OtpVerify() {
             <PaperStyle>
               <HeaderStyle>
                 <Typography variant="h4">
-                  Otp Verification
+                  OTP Verification
                 </Typography>
                 <Typography variant="p">
-                  Please enter the OTP send to your mobile number to login.
+                  Please enter the OTP sent to your mobile number to login.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
