@@ -152,21 +152,21 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
     { firstCol: 'Robbery:', secondCol:(()=>{
       switch(robbery){
         case 0:return null;//`Does not apply`
-        case 1:return `Attempted Burglary of ${robbery_type} `
-        default:return null;//`No`
+        case 1:return `Attempted Robbery of ${robbery_type} `
+        default:return `Robbery of ${robbery_type} `;//`No`
       }
     })() },
     { firstCol: 'Kidnapping:', secondCol:(()=>{
       switch(kidnapping){
         case 0:return null;//`Does not apply`
         case 1:return `Attempted Kidnapping (${kidnapping_people} involved) `
-        default:return null;//`No`
+        default:return `Kidnapping (${kidnapping_people} involved) `;//`No`
       }
     })() },
     { firstCol: 'Reason for crime:', secondCol: various===null?"Unknown":capitalize(various_choices[various]) },
     {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"Unknown":(police_reporting===0?"Yes":"No"))},
     { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"Unknown":(reported_to_police===0?"Yes":"No")) },
-    ...police_case_num&&{ firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:"N/A" },
+    { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
     { firstCol: 'Media:', secondCol: mediaData },
   ];
 

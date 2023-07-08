@@ -75,7 +75,7 @@ function Page7() {
               <FormControlLabel control={<Checkbox checked={value === '2'} value={2} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}} />} label="No" />
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', mt: 3 }}>
                 <Select
-                  value={count}
+                  value={count||""}
                   onChange={(e) => {
                     const count = e.target.value;
                     if (!count || count <= 0) {

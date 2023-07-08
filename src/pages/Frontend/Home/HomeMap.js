@@ -162,7 +162,7 @@ const HomeMap = () => {
                     title="Map view" 
                     variant='extended'
                     >
-                    <Typography component='h6'>Listed Crimes</Typography>
+                    <Typography component='h6'>Map View</Typography>
                     <LocationOnIcon />
                 </TransparentFab>: <TransparentFab
                     size="medium"
@@ -171,7 +171,7 @@ const HomeMap = () => {
                     title="Table view" 
                     variant='extended'
                     >
-                    <Typography component='h6'sx={{width:100}}>Listed Crimes</Typography>
+                    <Typography component='h6'sx={{width:100}}>Table View</Typography>
                     <TableViewIcon />
                 </TransparentFab>}
             </BoxButtonStyle>

@@ -35,7 +35,7 @@ const Page14 = () => {
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                  Check the box that may apply
+                  Check all that apply
                 </Typography>
               </Grid>
 
@@ -56,13 +56,13 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox transparentfab value={2} onChange={handleChange} />
+                    <Checkbox  value={2} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be gang-related
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox transparentfab value={3} onChange={handleChange} />
+                    <Checkbox  value={3} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Arson was involved
                       <br />
@@ -70,7 +70,7 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox transparentfab value={4} onChange={handleChange} />
+                    <Checkbox  value={4} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Vandalism was involved
                       <br />
@@ -78,7 +78,7 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox transparentfab value={5} onChange={handleChange} />
+                    <Checkbox  value={5} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Social unrest
                     </Typography>

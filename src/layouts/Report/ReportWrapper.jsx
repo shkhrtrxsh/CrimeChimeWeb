@@ -4,7 +4,7 @@ import ProgressBar from './ProgressBar'
 import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { getLocationCoords, loadGoogleMaps } from 'src/utils/googleMap';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearReport, setPage, setZoom, } from 'src/store/reducers/registerReport';
+import { clearReport, setDuplicate, setLock, setPage, setZoom, } from 'src/store/reducers/registerReport';
 import Page1 from '../../pages/Frontend/AddReport/page1'
 import Duplicate from '../../pages/Frontend/AddReport/duplicate'
 import Page2 from '../../pages/Frontend/AddReport/page2'
@@ -39,21 +39,18 @@ const ReportPageRouter = ({selectActive=1,setSelectActive,openState,mapRef})=>{
 }
 
 const ReportWrapper = () => {
-    const apiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
     const register = useSelector(state=>state.reportRegister);
-    const {data,zoom,lock,marker} = register;
+    const {data,zoom,lock,marker,duplicate,nearbyData=[]} = register;
     const {longitude,latitude,vehicle_theft} = data;
     const [cancel,setCancel] = useState(true);
     const [selectActive, setSelectActive] = useState(1);
-    const openState = useState(false);
     const [open,setOpen] = useState(false);
     const [confirm,setConfirm] = useState(false);
     const dispatch = useDispatch();
-    const location = useLocation();
-    const pathname = location.pathname;
     const map = useRef(null)
 
     useEffect(() => {
+      console.log("hello")
       dispatch(clearReport());
     }, [])
       const markerOptions = {
@@ -95,8 +92,48 @@ const ReportWrapper = () => {
         }
         setSelectActive(newStep);
     }
-    const beforeNext = ()=>{
-        setOpen(true);
+    const beforeBack = async()=>{
+      switch(selectActive){        
+        case 3:
+          const {index,open} = duplicate||{};
+          const {id,latitude,longitude,date_time} = nearbyData[index]||{};
+          dispatch(setLock(true));
+          try {
+            await API.post("report/checkReport",{
+              report_id:id,
+              latitude,
+              longitude,
+              date_time
+            });
+            dispatch(setDuplicate({open:1}));
+          } catch (error) {
+            console.error(error);
+            dispatch(setDuplicate({open:2}))
+          }
+          dispatch(setLock(false));
+          return;
+        case 4:
+          setSelectActive(2);
+          return;
+        default:break;
+      }
+      setActiveStep(selectActive, selectActive - 1) ;
+    }
+    const beforeNext = async()=>{        
+       switch(selectActive){      
+        case 3:
+          const {index,open} = duplicate||{};
+          if(!nearbyData[index+1]){
+            setSelectActive(4);
+          }
+            dispatch(setDuplicate({index:index+1}));
+          return;
+        case 17:
+          setOpen(true);
+          return;
+        default:break;
+      }
+      setActiveStep(selectActive, selectActive + 1) ;
       }
 
       const onClickEvent = async()=>{
@@ -106,7 +143,7 @@ const ReportWrapper = () => {
           if (response.ok) {
             const blob = await response.blob();
             const files = new File([blob], data.fileName);
-            const formData = objectToFormData(data);
+            const formData = objectToFormData({...data,various:`[${String(data.various)}]`});
             formData.set("files", files);
             await API.post("/report",formData);
             setConfirm(true);
@@ -137,12 +174,8 @@ const ReportWrapper = () => {
 
     if([2].includes(selectActive))return <ReportPageRouter selectActive={selectActive} setSelectActive={setSelectActive}/>
 
-    function createMarker(position) {
-      return new window.google.maps.Marker({
-        position: position,
-        map: map.current
-      });
-    }
+    const textNext=(selectActive===3?"NO":null);
+    const textBack=(selectActive===3?"YES":null);
   
     return (
         <Box sx={{ height: '100%',maxHeight:"91.3vh", display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
@@ -170,8 +203,8 @@ const ReportWrapper = () => {
                         </GoogleMap>
                   </Box>
               }
-            <Box sx={{position:"fixed",bottom:0,height:"min-content",width:'100%',display:"flex",zIndex:500}}>
-              <ProgressBar activeStep={selectActive} setActiveStep={setActiveStep} backLink={selectActive-1} nextLink="/report/page2" cancelState={[cancel,setCancel]} lock={lock} beforeNext={selectActive===17?beforeNext:null} submit={selectActive===17}/>
+            <Box sx={{position:"fixed",bottom:0,width:'100%',display:"flex",zIndex:500}}>
+              <ProgressBar activeStep={selectActive} setActiveStep={setActiveStep} backLink={selectActive-1} nextLink="/report/page2" cancelState={[cancel,setCancel]} lock={lock} beforeNext={beforeNext} beforeBack={beforeBack} submit={selectActive===17} textNext={textNext} textBack={textBack}/>
             </Box>
             <SubmitDialog open={open} handleClose={()=>setOpen(false)} confirm={confirm} onClickEvent={onClickEvent} />
             <Box sx={{height:"100%",position:"fixed",display:"flex",alignItems:"center",top:0}}>

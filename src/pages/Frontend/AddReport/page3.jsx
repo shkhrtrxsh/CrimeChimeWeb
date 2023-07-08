@@ -76,7 +76,7 @@ function Page3() {
             </Typography>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '20px' }}>
             <Select
-  value={perpetrators}
+  value={perpetrators>=0?perpetrators:''}
   onChange={(event) => {
     const value = event.target.value;
     dispatch(setPage({ perpetrators: value }));

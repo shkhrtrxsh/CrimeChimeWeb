@@ -18,7 +18,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import current from '../../../assets/images/current.png';
-import duplicate from '../../../assets/images/duplicate.png';
+import duplicateImage from '../../../assets/images/duplicate.png';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,7 +29,7 @@ import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@m
 import { getNearbyCrimes, getNearbyCrimes2 } from 'src/store/api/registerReport';
 import { fDateTimeSuffix } from 'src/utils/formatTime';
 import { capitalize } from 'src/utils/string';
-import { addMarkers, clearNearbyReports, setLock, setMarker, setPage } from 'src/store/reducers/registerReport';
+import { addMarkers, clearNearbyReports, setDuplicate, setLock, setMarker, setPage } from 'src/store/reducers/registerReport';
 import API from 'src/config/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,23 +63,23 @@ export const SuccessDialog = ({open,handleClose})=>{
 function Duplicate({mapRef,viewCrime=false,setSelectActive}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
+  const {nearbyData:values=[],data:regData,loading,duplicate} = useSelector(state=>state.reportRegister);
+  const {index,open} = duplicate;
   const {latitude:lat,longitude:long} = regData;
-  const [index,setIndex] = useState(0);
-  const [open, setOpen] = useState(0)
   const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images,description}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 const theme = useTheme();
 const doFunc=()=>{
   setSelectActive(4);
 }
-
+  
   useEffect(()=>{
     dispatch(setMarker({latitude,longitude}));
   },[latitude,longitude,index])
 
   useEffect(()=>{
     dispatch(getNearbyCrimes2({latitude:lat,longitude:long,doFunc}));
+    dispatch(setDuplicate({index:0}))
   },[]);
 
   useEffect(() => {
@@ -179,7 +179,7 @@ const doFunc=()=>{
     { firstCol: 'Reason for crime:', secondCol: various===null?"Unknown":capitalize(various_choices[various]) },
     {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"Unknown":(police_reporting===0?"Yes":"No"))},
     { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"Unknown":(reported_to_police===0?"Yes":"No")) },
-    ...police_case_num&&{ firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:"N/A" },
+    { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
     { firstCol: 'Media:', secondCol: mediaData },
   ];
   
@@ -197,42 +197,16 @@ const doFunc=()=>{
     return videoExtensions.some(extension => lowerCaseUrl.endsWith(extension));
   }
   
-  const clickYes = async()=>{
-    dispatch(setLock(true));
-    try {
-      await API.post("report/checkReport",{
-        report_id:id,
-        latitude,
-        longitude,
-        date_time
-      });
-      setOpen(1);
-    } catch (error) {
-      console.error(error);
-      setOpen(2);
-    }
-    dispatch(setLock(false));
-  }
-  const markerDragEnd = (e) => {
-    if (e !== null) {
-      const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
-        }
-      });
-    }
-  };
   const handleClose=(open)=>{
     const prev = open;
-    setOpen(0)
+    dispatch(setDuplicate({open:0}))
     if(prev===1){
       navigate("/");
     }
   }
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <SuccessDialog open={open} handleClose = {handleClose}/>
+        <SuccessDialog open={open} handleClose = {()=>handleClose(open)}/>
         <Box sx={{mt:5,pl:5,h:"100%"}}>
           <Grid container spacing={2} justifyContent="center" alignItems='center' sx={{ textAlign: 'center' }}>
             <Grid item xs={10}>
@@ -263,7 +237,7 @@ const doFunc=()=>{
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start',alignItems:"center" }}>
-                  <img src={duplicate} alt="imgg" style={{ height:"17px"}} />
+                  <img src={duplicateImage} alt="imgg" style={{ height:"17px"}} />
                   <Box>
                     <Typography align="left" sx={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '12px' }}>
                       Possible duplicate report's location on the map
@@ -312,19 +286,6 @@ const doFunc=()=>{
                       <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '17px' }}>
                         Is this your crime?
                       </Typography>
-                      <Box display="flex" justifyContent="center">
-                        <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={clickYes} disabled={lock}>
-                          Yes
-                        </Button>
-                        <Button variant="contained" color="primary" disabled={lock} onClick={()=>{
-                            if(!values[index+1]){
-                              setSelectActive(4);
-                            }
-                            setIndex(index+1)
-                          }}>
-                          No
-                        </Button>
-                      </Box>
                     </Box>
                   </Box>
                   :

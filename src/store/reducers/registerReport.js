@@ -13,7 +13,7 @@ const initialState = {
     data:{
         crime:1,
         specific_crime:1,
-        location:null,
+        location:"Johannesberg,South Africa",
         longitude:28.034088,
         latitude:-26.195246,
         google_place_id:null,
@@ -59,12 +59,19 @@ const initialState = {
         index:0,
         viewCrime:false,
     },
+    duplicate:{
+        index:0,
+        open:0
+    }
 }
 
 const registerReport = createSlice({
   name: "registerReport",
   initialState,
   reducers: {
+    setDuplicate:(state,action)=>{
+        state.duplicate={...state.duplicate,...action.payload}
+    },
     setCrimeIndex:(state,action)=>{
         state.crimeIndex={...state.crimeIndex,...action.payload}
     },
@@ -72,7 +79,9 @@ const registerReport = createSlice({
         state.markers=[...state.markers,...action.payload]
     },
     clearReport:(state,_)=>{
-        state=initialState;
+        Object.keys(initialState).forEach((name)=>{
+            state[name]=initialState[name];
+        })
     },
     setNearbyReports:(state,action)=>{
         state.nearbyData=[...action.payload];
@@ -147,6 +156,6 @@ const registerReport = createSlice({
 
 });
 
-export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports} =registerReport.actions;
+export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports,setDuplicate} =registerReport.actions;
 
 export const registerReportReducer = registerReport.reducer;

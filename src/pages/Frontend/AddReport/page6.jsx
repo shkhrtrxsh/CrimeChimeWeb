@@ -88,7 +88,7 @@ const Page6 = () => {
               />
               <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3' ,paddingTop:'15px'}}>
                 <Select
-                  value={count}
+                  value={count||""}
                   onChange={(e) => {
                     const count = e.target.value;
                     if (!count || count <= 0) {
