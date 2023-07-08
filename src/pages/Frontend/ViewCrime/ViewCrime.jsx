@@ -110,7 +110,12 @@ const ViewCrime = () => {
                   })}
               </GoogleMap>
             </Box>
-            <SearchFilter/>
+            
+            <Box sx={{ position: 'absolute', top: '30%', right: 0.5, zIndex: 1, width: '50%' }}>
+          <SearchFilter />
+        </Box>
+           
+           
         </Box>
     );
 }
