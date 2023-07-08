@@ -167,7 +167,7 @@ const ViewReportMap = (props) => {
     }
     const [hidden, setHidden] = React.useState(true);
     const isDesktop = useResponsive('up', 'md');
-
+    const admin = reports?.admin?true:false;
     return (
         <>
             
@@ -178,12 +178,10 @@ const ViewReportMap = (props) => {
                         color="primary"
                         aria-label="view report"
                         title="Map view" 
-                        variant={isDesktop ? 'extended' : 'circular'}
+                        variant='extended'
                         >
+                        <Typography component='h6'>Listed Crimes</Typography>
                         <LocationOnIcon />
-                        {isDesktop &&
-                            <Typography component='h6'></Typography>
-                        }
                     </Fab>
                     : 
                     <Fab
@@ -191,12 +189,10 @@ const ViewReportMap = (props) => {
                         color="primary"
                         aria-label="view report"
                         title="Table view" 
-                        variant={isDesktop ? 'extended' : 'circular'}
+                        variant='extended'
                         >
                         <TableViewIcon />
-                        {isDesktop &&
-                            <Typography component='h6'></Typography>
-                        }
+                        <Typography component='h6'>Listed Crimes</Typography>
                     </Fab>
                 }
             </BoxButtonStyle>
@@ -210,7 +206,7 @@ const ViewReportMap = (props) => {
                                             <TableCell>Location</TableCell>
                                             <TableCell align="left">Crime</TableCell>
                                             <TableCell align="left">Specific Crime</TableCell>
-                                            <TableCell align="left">Reporter</TableCell>
+                                            {admin&&<TableCell align="left">Reporter</TableCell>}
                                             <TableCell align="left">Status</TableCell>
                                             <TableCell align="left">Created At</TableCell>
                                             {/* <TableCell align="right">Action</TableCell> */}
@@ -221,7 +217,7 @@ const ViewReportMap = (props) => {
                                             <TableRow key={report.id}>
                                             <TableCell component="th" scope="row">{report.location}</TableCell>
                                             <TableCell align="left">{report.crime.name}</TableCell>
-                                            <TableCell align="left">{report.specific_crime.name}</TableCell>  
+                                            {admin&&<TableCell align="left">{report.specific_crime.name}</TableCell>}  
                                             <TableCell align="left">{report.user.name}</TableCell>                  
                                             <TableCell align="left">
                                                 <ActiveInactiveButton 

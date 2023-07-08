@@ -13,7 +13,7 @@ import {
   useTheme,
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import PeopleIcon from '@mui/icons-material/People';
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -76,7 +76,7 @@ function Page3() {
             </Typography>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '20px' }}>
             <Select
-  value={perpetrators}
+  value={perpetrators>=0?perpetrators:''}
   onChange={(event) => {
     const value = event.target.value;
     dispatch(setPage({ perpetrators: value }));

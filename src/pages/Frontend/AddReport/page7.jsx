@@ -11,7 +11,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
 import { setLock, setPage } from 'src/store/reducers/registerReport';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
@@ -75,7 +75,7 @@ function Page7() {
               <FormControlLabel control={<Checkbox checked={value === '2'} value={2} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}} />} label="No" />
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', mt: 3 }}>
                 <Select
-                  value={count}
+                  value={count||""}
                   onChange={(e) => {
                     const count = e.target.value;
                     if (!count || count <= 0) {

@@ -23,6 +23,8 @@ const ProgressBar = ({
   cancelState,
   lock,
   submit,
+  textNext=null,
+  textBack=null
 }) => {
   const [cancel, setCancel] = cancelState || [];
   const theme = useTheme();
@@ -35,7 +37,7 @@ const ProgressBar = ({
   };
 
   return (
-    <Box
+    <Box id="progress_bar"
       sx={{
         height: '100%',
         display: 'flex',
@@ -56,7 +58,7 @@ const ProgressBar = ({
       >
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: useMediaQuery(theme.breakpoints.up('md')) ? '33.3%' : '30%' }}>
           {backLink ? (
-            <NextButton beforeNext={lock ? null : () => setActiveStep(activeStep, activeStep - 1)} textValue="GO BACK" />
+            <NextButton beforeNext={lock ? null : () => beforeBack()} textValue={textBack||"GO BACK"} />
           ) : (
             <Typography sx={{ cursor: 'pointer' }} variant="h6" onClick={handleCancel}>
               CANCEL
@@ -69,7 +71,7 @@ const ProgressBar = ({
         </Box>
         <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: useMediaQuery(theme.breakpoints.up('md')) ? '33.3%' : '20%' }}>
-          <NextButton textValue={submit ? 'SUBMIT' : 'NEXT'} beforeNext={lock ? null : () => { beforeNext ? beforeNext() : setActiveStep(activeStep, activeStep + 1) }} />
+          <NextButton textValue={textNext||(submit ? 'SUBMIT' : 'NEXT')} beforeNext={lock ? null : () => { beforeNext && beforeNext()}} />
         </Box>
         {!isMdBreakpoint && (
           <>

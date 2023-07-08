@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, useTheme, Typography, Grid, Box, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage } from 'src/store/reducers/registerReport';

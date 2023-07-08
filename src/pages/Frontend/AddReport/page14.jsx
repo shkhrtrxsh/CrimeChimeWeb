@@ -1,17 +1,23 @@
 import { Container, Typography,useTheme, Grid, Box, Checkbox } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
 import { setPage} from 'src/store/reducers/registerReport';
 
 const Page14 = () => {
-  const {various:checked} = useSelector(state=>state.reportRegister.data);
+  const {various:checked=[]} = useSelector(state=>state.reportRegister.data);
   const dispatch = useDispatch();
 
   const setChecked = (various)=> dispatch(setPage({various}))
   const theme = useTheme();
   const handleChange = (event) => {
-    setChecked(event.target.value);
+    if(!event.target.checked){
+      const removedChecked = checked.filter((d)=>d!==event.target.value);
+      setChecked(removedChecked)
+    }
+    else{
+      setChecked([...checked,event.target.value]);
+    }
   };
 
 
@@ -29,20 +35,20 @@ const Page14 = () => {
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                  Check the box that may apply
+                  Check all that apply
                 </Typography>
               </Grid>
 
               <Grid item xs={8} sx={{ pl: 5, pt: 0 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox checked={checked==="0"} value={0} onChange={handleChange} />
+                    <Checkbox value={0} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Crime occurred at ATM
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox checked={checked==="1"} value={1} onChange={handleChange} />
+                    <Checkbox value={1} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be drug-related
                       <br />
@@ -50,13 +56,13 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox checked={checked==="2"} value={2} onChange={handleChange} />
+                    <Checkbox  value={2} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be gang-related
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox checked={checked==="3"} value={3} onChange={handleChange} />
+                    <Checkbox  value={3} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Arson was involved
                       <br />
@@ -64,7 +70,7 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox checked={checked==="4"} value={4} onChange={handleChange} />
+                    <Checkbox  value={4} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Vandalism was involved
                       <br />
@@ -72,7 +78,7 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox checked={checked==="5"} value={5} onChange={handleChange} />
+                    <Checkbox  value={5} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Social unrest
                     </Typography>

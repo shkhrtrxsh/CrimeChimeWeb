@@ -47,7 +47,10 @@ export const getReports = createAsyncThunk(
     try {
       const response = await API.get(`/report?${param}`);
       if(response.data.status === 200){
-        return response.data.data;
+        const allData = response.data.data;
+        const admin = allData?.admin?true:false;
+        const user = (admin&&allData?.user)?allData.user:null;
+        return {...allData.report,admin,user} ;
       }
     } catch (err) {
       return rejectWithValue(err.response.data);

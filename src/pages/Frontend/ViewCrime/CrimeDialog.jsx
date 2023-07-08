@@ -20,7 +20,7 @@ import {
 import current from '../../../assets/images/current.png';
 import duplicate from '../../../assets/images/duplicate.png';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loadGoogleMaps } from 'src/utils/googleMap';
@@ -64,7 +64,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
   const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
   const {latitude:lat,longitude:long} = regData;
   const [open, setOpen] = useState(0)
-  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images}=values[index]||{};
+  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images,description}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 
   useEffect(()=>{
@@ -103,7 +103,9 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
   }, [latitude, longitude,mapRef]);
 
   const data = values[index]&& [
-    { firstCol: 'Occurred:', secondCol: <p>{date_time} near <b>{location}</b></p> },
+    { firstCol: 'Time of Occurence:', secondCol: <p>{date_time}</p> },
+    { firstCol: 'Address:', secondCol: <p>{location}</p> },
+    { firstCol: 'Description:', secondCol: <p>{description}</p> },
     { firstCol: 'Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"Unknown" },
     { firstCol: 'Weapons:', secondCol: (()=>{
       switch(weapons){
@@ -114,7 +116,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
     })() },
     { firstCol: 'Rape:', secondCol:(()=>{
       switch(rape){
-        case 0:return `Does not apply`
+        case 0:return null;//`Does not apply`
         case 1:return `Attempted Rape(${rape_people} involved)`
         default:return `Rape(${rape_people} involved)`
       }
@@ -123,55 +125,48 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
       switch(murder){
         case 0:return `Unknown`
         case 1:return `Murder(${murder_people} involved)`
-        default:return `No`
-      }
-    })() },
-    { firstCol: 'Vehicle Theft:', secondCol:(()=>{
-      switch(murder){
-        case 0:return `Unknown`
-        case 1:return `Murder(${assault_people} involved)`
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Assault:', secondCol:(()=>{
       switch(assault){
         case 0:return `Unknown`
         case 1:return `Murder(${assault_people} involved)`
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Vehicle Theft:', secondCol:(()=>{
       if(vehicle_theft===4){
-        return capitalize(vehicle_theft_choices[vehicle_theft])
+        return null;//capitalize(vehicle_theft_choices[vehicle_theft])
       }else{
         return capitalize(`${vehicle_theft_choices[vehicle_theft]} of ${vehicle_year} ${vehicle_colour} ${vehicle_make} ${vehicle_model}`)
       }
     })() },
     { firstCol: 'Burglary:', secondCol:(()=>{
       switch(burglary){
-        case 0:return `Does not apply`
+        case 0:return null//`Does not apply`
         case 1:return `Attempted Burglary of ${burglary_type} `
-        default:return `No`
+        default:return `Burglary of ${burglary_type}`
       }
     })() },
     { firstCol: 'Robbery:', secondCol:(()=>{
       switch(robbery){
-        case 0:return `Does not apply`
-        case 1:return `Attempted Burglary of ${robbery_type} `
-        default:return `No`
+        case 0:return null;//`Does not apply`
+        case 1:return `Attempted Robbery of ${robbery_type} `
+        default:return `Robbery of ${robbery_type} `;//`No`
       }
     })() },
     { firstCol: 'Kidnapping:', secondCol:(()=>{
       switch(kidnapping){
-        case 0:return `Does not apply`
+        case 0:return null;//`Does not apply`
         case 1:return `Attempted Kidnapping (${kidnapping_people} involved) `
-        default:return `No`
+        default:return `Kidnapping (${kidnapping_people} involved) `;//`No`
       }
     })() },
     { firstCol: 'Reason for crime:', secondCol: various===null?"Unknown":capitalize(various_choices[various]) },
     {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"Unknown":(police_reporting===0?"Yes":"No"))},
     { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"Unknown":(reported_to_police===0?"Yes":"No")) },
-    { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:"N/A" },
+    { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
     { firstCol: 'Media:', secondCol: mediaData },
   ];
 
@@ -251,7 +246,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
                         <Table>
                           <TableBody>
                             {data.map((row, index) => (
-                              <TableRow key={index}>
+                              row.secondCol&&<TableRow key={index}>
                                 <TableCell>{row.firstCol}</TableCell>
                                 <TableCell>
                                   {row.firstCol === 'Media:' && mediaData ? (

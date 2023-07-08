@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import { Container, Typography,useTheme, Grid, Box, Select, MenuItem, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
 import { setLock, setPage,  } from 'src/store/reducers/registerReport';
 import { objectToFormData } from 'src/utils/formatObject';
@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
   const [disable, setDisable] = useState(false)
-  
+  const [error,setError]=useState(false);
   const navigate = useNavigate();
   const handleSuccess = ()=>{
     handleClose();
@@ -27,19 +27,35 @@ export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
         fullWidth maxWidth="sm"
       >
         <DialogTitle id="alert-dialog-title">
-          {confirm?"Success":"Submit Report"}
+          {
+            (()=>{
+              if(error)return "Error"
+              else return confirm?"Success":"Submit Report"
+            })()
+          }
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {confirm?"Report Submitted Successfully":"Are you sure you want to report the crime?"}
+          {
+            (()=>{
+              if(error)return "Encountered an Error.Please try again."
+              else return confirm?"Report Submitted Successfully":"Are you sure you want to report the crime?"})()
+            }
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button disabled={disable} onClick={confirm?handleSuccess:handleClose}>{confirm?"OK":"Cancel"}</Button>
-          {!confirm&&<Button disabled={disable} onClick={()=>{
-            setDisable(true);
-            onClickEvent();
-            setDisable(false);}} autoFocus>
+          <Button disabled={disable} onClick={error?handleClose:(confirm?handleSuccess:handleClose)}>{confirm?"OK":"Cancel"}</Button>
+          {!confirm&&<Button disabled={disable} onClick={async()=>{
+            try {
+              setDisable(true);
+              await onClickEvent();
+              setDisable(false);
+            } catch (error) {
+              console.error(error);
+              setDisable(false);
+              setError(true);
+            }
+          }} autoFocus>
             {disable?"Submitting...":"OK"}
           </Button>}
         </DialogActions>
