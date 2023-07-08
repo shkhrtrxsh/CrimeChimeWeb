@@ -36,11 +36,11 @@ function Page1() {
     dispatch(setPage({ date_time: date + 'T' + newTime + 'Z' }));
   };
 
-  const changeTime = (e) => {
+  const changeTime = (selectedHour, selectedMinute) => {
     const selectedTime = new Date(datetime);
-    const hours = selectedTime.getHours() >= 12 ? e.target.value + 12 : e.target.value;
+    const hours = selectedTime.getHours() >= 12 ? selectedHour + 12 : selectedHour;
     const minutes = selectedTime.getMinutes();
-    
+  
     selectedTime.setHours(hours);
     selectedTime.setMinutes(minutes);
     dispatch(setPage({ date_time: selectedTime.toISOString() }));
@@ -75,7 +75,8 @@ function Page1() {
 const [dateValue, setDateValue] = useState(dateNow); // Set the initial date value to the current local date
 const [timeValue, setTimeValue] = useState(dateNow); // Set the initial time value to the current local time
 const [amPmValue, setAmPmValue] = useState(dateNow.getHours() >= 12 ? 'pm' : 'am'); // Set the initial amPmValue based on the current local time
-const [futureDateWarning, setFutureDateWarning] = useState(false); // Added state for the warning
+const [futureDateWarning, setFutureDateWarning] = useState(false); 
+const [futureTimeWarning, setFutureTimeWarning] = useState(false);
 
   const handleDayChange = (e) => {
     const selectedDay = e.target.value;
@@ -114,21 +115,40 @@ const [futureDateWarning, setFutureDateWarning] = useState(false); // Added stat
   };
 
   const handleHourChange = (e) => {
-    const selectedHour = e.target.value;
+    const selectedHour = parseInt(e.target.value, 10);
     const selectedTime = new Date(timeValue);
     selectedTime.setHours(selectedHour);
     setTimeValue(selectedTime);
-    changeTime(selectedTime);
+    
+    const currentDate = new Date();
+    const isToday = dateValue.toDateString() === currentDate.toDateString();
+    console.log(isToday);
+    console.log(dateValue.toDateString())
+    console.log(selectedHour)
+    console.log(currentDate.getHours())
+    console.log(isToday && selectedHour > currentDate.getHours())
+    const isFutureTime = isToday && selectedHour > (currentDate.getHours() % 12 || 12) ;
+    setFutureTimeWarning(isFutureTime);
+    console.log({futureDateWarning})
+    changeTime(selectedHour, selectedTime.getMinutes());
   };
-
+  
   const handleMinuteChange = (e) => {
-    const selectedMinute = e.target.value;
+    const selectedMinute = parseInt(e.target.value, 10);
     const selectedTime = new Date(timeValue);
     selectedTime.setMinutes(selectedMinute);
     setTimeValue(selectedTime);
-    changeTime(selectedTime);
+    
+    const currentDate = new Date();
+    const isToday = dateValue.toDateString() === currentDate.toDateString();
+    const isFutureTime = isToday && selectedTime > currentDate;
+    setFutureTimeWarning(isFutureTime);
+    
+    changeTime(selectedTime.getHours(), selectedMinute);
   };
-
+  
+  
+  
   const handleAmPmChange = (e) => {
     const selectedAmPm = e.target.value;
     setAmPmValue(selectedAmPm);
@@ -136,6 +156,21 @@ const [futureDateWarning, setFutureDateWarning] = useState(false); // Added stat
     const selectedTime = new Date(timeValue);
     const hours = selectedTime.getHours();
     let newHours = hours;
+  
+    // Get the current time
+    const currentTime = new Date();
+  
+    // Check if the current time is in PM
+    const isCurrentTimePM = currentTime.getHours() >= 12;
+  
+    // Check if the selected day is the same as today's date
+    const isSameDay = dateValue.getDate() === currentTime.getDate() &&
+      dateValue.getMonth() === currentTime.getMonth() &&
+      dateValue.getFullYear() === currentTime.getFullYear();
+  
+    // Set the futureTimeWarning to true if the selected day is the same as today's date and the current time is in PM
+    const isFutureTime = isSameDay && isCurrentTimePM;
+    setFutureTimeWarning(isFutureTime);
   
     if (selectedAmPm === 'am' && hours >= 12) {
       newHours -= 12;
@@ -148,6 +183,8 @@ const [futureDateWarning, setFutureDateWarning] = useState(false); // Added stat
   
     dispatch(setPage(1)); // Dispatch the setPage action to update the page state
   };
+  
+  
   
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   const hours = Array.from({ length: 12 }, (_, index) => index + 1);
@@ -287,11 +324,16 @@ const [futureDateWarning, setFutureDateWarning] = useState(false); // Added stat
                   <MenuItem value="pm">PM</MenuItem>
                 </TextField>
               </Grid>
+              
             </Box>
           </Box>
-
-          
-
+{futureTimeWarning && ( // Display the warning if futureTateWarning is true
+            <Grid item xs={7} sx={{ textAlign: 'center' }}>
+              <Typography variant="body2" color="error">
+                Please note that the selected time is in the future.
+              </Typography>
+            </Grid>
+          )}
         </Grid>
       </Container>
     </LocalizationProvider>
