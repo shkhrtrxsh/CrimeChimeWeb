@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Container, Typography,useTheme, Grid, TextField, Box, Divider, LinearProgress, Button } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFile, setPage, } from 'src/store/reducers/registerReport';

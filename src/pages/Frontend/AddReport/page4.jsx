@@ -4,7 +4,7 @@ import { Container, Typography, Grid, Box , Divider, LinearProgress, Checkbox, S
   TextField,
   FormHelperText, } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import ak from '../../../assets/images/ak.png'
 import pistol from '../../../assets/images/pistol.png'
 import knife from '../../../assets/images/knife.png'

@@ -41,11 +41,13 @@ const ViewCrime = () => {
     },[])
 
     useEffect(()=>{
-      (async()=>{
-        const {latitude,longitude} = await getLocationCoords();
-        dispatch(getNearbyCrimes({latitude,longitude}));
-        setPage(latitude,longitude);
-      })()
+      if(!crimeIndex.viewCrime){
+        (async()=>{
+          const {latitude,longitude} = await getLocationCoords();
+          dispatch(getNearbyCrimes({latitude,longitude,fromDate:new Date(Date.now()-365*24*3600*1000),toDate:new Date(Date.now())}));
+          setPage(latitude,longitude);
+        })()
+      }
     },[])
 
     const position={
@@ -91,7 +93,7 @@ const ViewCrime = () => {
               <GoogleMap center={position} zoom={zoom} 
               mapContainerStyle={{width:"100%",height:"100%"}}
               options={{
-                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.ROADMAP:window.google.maps.MapTypeId.SATELLITE
+                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE
               }}
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>

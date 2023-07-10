@@ -80,7 +80,7 @@ export default function Report() {
   const setSearchByParam = (param) => {
     navigate(`/reports?${param}`)
   }
-
+  const admin = reports?.admin?true:false;
   return (
     <Fragment>
       <BreadcrumbNavigator
@@ -94,7 +94,7 @@ export default function Report() {
             <TableHead>
               <TableRow>
                 <TableCell>Location</TableCell>
-                <TableCell align="left">Reporter</TableCell>
+                {admin&&<TableCell align="left">Reporter</TableCell>}
                 <TableCell align="left">Status</TableCell>
                 <TableCell align="left">Created At</TableCell>
                 <TableCell align="right">Action</TableCell>
@@ -104,7 +104,7 @@ export default function Report() {
               {reports.data && reports.data.map((report,index) => (
                 <TableRow key={report.id}>
                   <TableCell component="th" scope="row">{report.location}</TableCell>
-                  <TableCell align="left">{report.user.name}</TableCell>                  
+                  {admin&&<TableCell align="left">{report.user.name}</TableCell>}                  
                   <TableCell align="left">
                     <ActiveInactiveButton 
                       onClick={() => setChangeStatusDialog({ status: true, id: report.id })}

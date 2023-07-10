@@ -18,18 +18,18 @@ import {
   CircularProgress,
 } from '@mui/material';
 import current from '../../../assets/images/current.png';
-import duplicate from '../../../assets/images/duplicate.png';
+import duplicateImage from '../../../assets/images/duplicate.png';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { loadGoogleMaps } from 'src/utils/googleMap';
 
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
-import { getNearbyCrimes } from 'src/store/api/registerReport';
+import { getNearbyCrimes, getNearbyCrimes2 } from 'src/store/api/registerReport';
 import { fDateTimeSuffix } from 'src/utils/formatTime';
 import { capitalize } from 'src/utils/string';
-import { addMarkers, clearNearbyReports, setLock, setMarker, setPage } from 'src/store/reducers/registerReport';
+import { addMarkers, clearNearbyReports, setDuplicate, setLock, setMarker, setPage } from 'src/store/reducers/registerReport';
 import API from 'src/config/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -50,7 +50,7 @@ export const SuccessDialog = ({open,handleClose})=>{
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {open===1?"Report Submitted Successfully":"Error Submitting the Report"}
+            {open===1?"Thanks for confirming the crime. Crime has been recorded.":"Error Submitting the Report.Please Try Again."}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -60,24 +60,31 @@ export const SuccessDialog = ({open,handleClose})=>{
   )
 }
 
-function Duplicate({mapRef,viewCrime=false}) {
+function Duplicate({mapRef,viewCrime=false,setSelectActive}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
+  const {nearbyData:values=[],data:regData,loading,duplicate} = useSelector(state=>state.reportRegister);
+  const {index,open} = duplicate;
   const {latitude:lat,longitude:long} = regData;
-  const [index,setIndex] = useState(0);
-  const [open, setOpen] = useState(0)
-  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images}=values[index]||{};
+  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images,description}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 const theme = useTheme();
-
+const doFunc=()=>{
+  setSelectActive(4);
+}
+  
   useEffect(()=>{
     dispatch(setMarker({latitude,longitude}));
   },[latitude,longitude,index])
 
+  useEffect(()=>{
+    dispatch(getNearbyCrimes2({latitude:lat,longitude:long,doFunc}));
+    dispatch(setDuplicate({index:0}))
+  },[]);
+
   useEffect(() => {
     dispatch(clearNearbyReports());
-    dispatch(getNearbyCrimes({lat,long}));
+    dispatch(getNearbyCrimes2({latitude:lat,longitude:long,doFunc}));
     if(mapRef.current){
       const mapElement = mapRef.current;
       mapElement.marker=null;
@@ -109,7 +116,9 @@ const theme = useTheme();
   }, [latitude, longitude,mapRef]);
 
   const data = values[index]&& [
-    { firstCol: 'Occurred:', secondCol: <p>{date_time} near <b>{location}</b></p> },
+    { firstCol: 'Time of Occurence:', secondCol: <p>{date_time}</p> },
+    { firstCol: 'Address:', secondCol: <p>{location}</p> },
+    { firstCol: 'Description:', secondCol: <p>{description}</p> },
     { firstCol: 'Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"Unknown" },
     { firstCol: 'Weapons:', secondCol: (()=>{
       switch(weapons){
@@ -120,7 +129,7 @@ const theme = useTheme();
     })() },
     { firstCol: 'Rape:', secondCol:(()=>{
       switch(rape){
-        case 0:return `Does not apply`
+        case 0:return null;//`Does not apply`
         case 1:return `Attempted Rape(${rape_people} involved)`
         default:return `Rape(${rape_people} involved)`
       }
@@ -129,59 +138,50 @@ const theme = useTheme();
       switch(murder){
         case 0:return `Unknown`
         case 1:return `Murder(${murder_people} involved)`
-        default:return `No`
-      }
-    })() },
-    { firstCol: 'Vehicle Theft:', secondCol:(()=>{
-      switch(murder){
-        case 0:return `Unknown`
-        case 1:return `Murder(${assault_people} involved)`
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Assault:', secondCol:(()=>{
       switch(assault){
         case 0:return `Unknown`
         case 1:return `Murder(${assault_people} involved)`
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Vehicle Theft:', secondCol:(()=>{
       if(vehicle_theft===4){
-        return capitalize(vehicle_theft_choices[vehicle_theft])
+        return null;//capitalize(vehicle_theft_choices[vehicle_theft])
       }else{
         return capitalize(`${vehicle_theft_choices[vehicle_theft]} of ${vehicle_year} ${vehicle_colour} ${vehicle_make} ${vehicle_model}`)
       }
     })() },
     { firstCol: 'Burglary:', secondCol:(()=>{
       switch(burglary){
-        case 0:return `Does not apply`
+        case 0:return null//`Does not apply`
         case 1:return `Attempted Burglary of ${burglary_type} `
-        default:return `No`
+        default:return `Burglary of ${burglary_type}`
       }
     })() },
     { firstCol: 'Robbery:', secondCol:(()=>{
       switch(robbery){
-        case 0:return `Does not apply`
+        case 0:return null;//`Does not apply`
         case 1:return `Attempted Burglary of ${robbery_type} `
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Kidnapping:', secondCol:(()=>{
       switch(kidnapping){
-        case 0:return `Does not apply`
+        case 0:return null;//`Does not apply`
         case 1:return `Attempted Kidnapping (${kidnapping_people} involved) `
-        default:return `No`
+        default:return null;//`No`
       }
     })() },
     { firstCol: 'Reason for crime:', secondCol: various===null?"Unknown":capitalize(various_choices[various]) },
     {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"Unknown":(police_reporting===0?"Yes":"No"))},
     { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"Unknown":(reported_to_police===0?"Yes":"No")) },
-    { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:"N/A" },
+    { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
     { firstCol: 'Media:', secondCol: mediaData },
   ];
-
-
   
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   
@@ -197,42 +197,16 @@ const theme = useTheme();
     return videoExtensions.some(extension => lowerCaseUrl.endsWith(extension));
   }
   
-  const clickYes = async()=>{
-    dispatch(setLock(true));
-    try {
-      await API.post("report/checkReport",{
-        report_id:id,
-        latitude,
-        longitude,
-        date_time
-      });
-      setOpen(1);
-    } catch (error) {
-      console.error(error);
-      setOpen(2);
-    }
-    dispatch(setLock(false));
-  }
-  const markerDragEnd = (e) => {
-    if (e !== null) {
-      const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
-        }
-      });
-    }
-  };
   const handleClose=(open)=>{
     const prev = open;
-    setOpen(0)
+    dispatch(setDuplicate({open:0}))
     if(prev===1){
       navigate("/");
     }
   }
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <SuccessDialog open={open} handleClose = {handleClose}/>
+        <SuccessDialog open={open} handleClose = {()=>handleClose(open)}/>
         <Box sx={{mt:5,pl:5,h:"100%"}}>
           <Grid container spacing={2} justifyContent="center" alignItems='center' sx={{ textAlign: 'center' }}>
             <Grid item xs={10}>
@@ -263,7 +237,7 @@ const theme = useTheme();
                   </Box>
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start',alignItems:"center" }}>
-                  <img src={duplicate} alt="imgg" style={{ height:"17px"}} />
+                  <img src={duplicateImage} alt="imgg" style={{ height:"17px"}} />
                   <Box>
                     <Typography align="left" sx={{ fontWeight: 'normal', paddingBottom: '10px', paddingTop: '10px', fontSize: '12px' }}>
                       Possible duplicate report's location on the map
@@ -287,7 +261,7 @@ const theme = useTheme();
                         <Table>
                           <TableBody>
                             {data.map((row, index) => (
-                              <TableRow key={index}>
+                              row.secondCol!==null&&<TableRow key={index}>
                                 <TableCell>{row.firstCol}</TableCell>
                                 <TableCell>
                                   {row.firstCol === 'Media:' && mediaData ? (
@@ -312,14 +286,6 @@ const theme = useTheme();
                       <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '17px' }}>
                         Is this your crime?
                       </Typography>
-                      <Box display="flex" justifyContent="center">
-                        <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={clickYes} disabled={lock}>
-                          Yes
-                        </Button>
-                        {values[index+1]&&<Button variant="contained" color="primary" disabled={lock} onClick={()=>setIndex(index+1)}>
-                          No
-                        </Button>}
-                      </Box>
                     </Box>
                   </Box>
                   :

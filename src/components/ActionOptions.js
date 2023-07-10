@@ -78,7 +78,6 @@ const ActionOptions = (props) => {
       {show_url !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }}>
         <Box sx={{display:"flex"}} onClick={()=>{
-          console.log(data)
           dispatch(setNearbyReports(data));
           dispatch(setCrimeIndex({index,viewCrime:true}))
           navigate("/reportscrime")
