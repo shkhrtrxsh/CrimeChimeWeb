@@ -50,6 +50,11 @@ const initialState = {
         fileName:null,
         date_time:null,
         flag:null,
+        
+    },
+    warnings:{
+        futureTimeWarning:false,
+        futureDateWarning:false
     },
     markers:null,
     nearbyData:[],
@@ -89,6 +94,9 @@ const registerReport = createSlice({
     clearNearbyReports:(state,_)=>{
         state.nearbyData=[];
     },
+    setWarnings: (state, action) => {
+        state.warnings = action.payload;
+      },
     setMap:(state,action)=>{
         state.map=action.payload
     },
@@ -156,6 +164,6 @@ const registerReport = createSlice({
 
 });
 
-export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports,setDuplicate} =registerReport.actions;
+export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,setWarnings,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports,setDuplicate} =registerReport.actions;
 
 export const registerReportReducer = registerReport.reducer;

@@ -16,7 +16,7 @@ import { DatePicker, TimePicker, LocalizationProvider, DateTimePicker } from '@m
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage } from 'src/store/reducers/registerReport';
+import { setPage, setWarnings } from 'src/store/reducers/registerReport';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 import { splitISODatetime, splitLocaleDatetime } from 'src/utils/formatTime';
 
@@ -33,7 +33,7 @@ function Page1() {
   const changeDate = (e) => {
     const { date, time } = splitISODatetime(e);
     const newTime = datetime === null ? time : splitISODatetime(e)?.time;
-    dispatch(setPage({ date_time: date + 'T' + newTime + 'Z' }));
+    dispatch(setPage({ date_time: date + 'T' + newTime + 'Z'}));
   };
 
   const changeTime = (selectedHour, selectedMinute) => {
@@ -43,7 +43,8 @@ function Page1() {
   
     selectedTime.setHours(hours);
     selectedTime.setMinutes(minutes);
-    dispatch(setPage({ date_time: selectedTime.toISOString() }));
+    console.log(futureTimeWarning);
+    dispatch(setPage({ date_time: selectedTime.toISOString()}));
   };
 
   const theme = useTheme();
@@ -83,11 +84,13 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const selectedDate = new Date(dateValue);
     selectedDate.setDate(selectedDay);
     setDateValue(selectedDate);
-    changeDate(selectedDate);
+    
 
     const currentDate = new Date();
     const isFutureDate = selectedDate > currentDate;
     setFutureDateWarning(isFutureDate);
+    dispatch(setWarnings({ futureDateWarning: isFutureDate }));
+    changeDate(selectedDate);
   };
 
   const handleMonthChange = (e) => {
@@ -95,11 +98,13 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const selectedDate = new Date(dateValue);
     selectedDate.setMonth(selectedMonth - 1);
     setDateValue(selectedDate);
-    changeDate(selectedDate);
+    
 
     const currentDate = new Date();
     const isFutureDate = selectedDate > currentDate;
     setFutureDateWarning(isFutureDate);
+    dispatch(setWarnings({ futureDateWarning: isFutureDate }));
+    changeDate(selectedDate);
   };
 
   const handleYearChange = (e) => {
@@ -107,11 +112,13 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const selectedDate = new Date(dateValue);
     selectedDate.setFullYear(selectedYear);
     setDateValue(selectedDate);
-    changeDate(selectedDate);
+    
 
     const currentDate = new Date();
     const isFutureDate = selectedDate > currentDate;
     setFutureDateWarning(isFutureDate);
+    dispatch(setWarnings({ futureDateWarning: isFutureDate }));
+    changeDate(selectedDate);
   };
 
   const handleHourChange = (e) => {
@@ -122,8 +129,10 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     
     const currentDate = new Date();
     const isToday = dateValue.toDateString() === currentDate.toDateString();
+    
     const isFutureTime = isToday && selectedHour > (currentDate.getHours() % 12 || 12) ;
     setFutureTimeWarning(isFutureTime);
+    dispatch(setWarnings({ futureTimeWarning: isFutureTime }));
     changeTime(selectedHour, selectedTime.getMinutes());
   };
   
@@ -137,7 +146,7 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const isToday = dateValue.toDateString() === currentDate.toDateString();
     const isFutureTime = isToday && selectedTime > currentDate;
     setFutureTimeWarning(isFutureTime);
-    
+    dispatch(setWarnings({ futureTimeWarning: isFutureTime }));
     changeTime(selectedTime.getHours(), selectedMinute);
   };
   
@@ -158,12 +167,13 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const isCurrentTimePM = currentTime.getHours() >= 12;
   
     // Check if the selected day is the same as today's date
-    const isSameDay = dateValue.getDate() === currentTime.getDate() &&
+    const isSameDay =
+      dateValue.getDate() === currentTime.getDate() &&
       dateValue.getMonth() === currentTime.getMonth() &&
       dateValue.getFullYear() === currentTime.getFullYear();
   
-    // Set the futureTimeWarning to true if the selected day is the same as today's date and the current time is in PM
-    const isFutureTime = isSameDay && isCurrentTimePM;
+    // Set the futureTimeWarning to true if the selected day is the same as today's date, the current time is in AM, and the selected time is in PM
+    const isFutureTime = isSameDay && isCurrentTimePM && selectedAmPm === 'pm';
     setFutureTimeWarning(isFutureTime);
   
     if (selectedAmPm === 'am' && hours >= 12) {
@@ -174,8 +184,14 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
   
     selectedTime.setHours(newHours);
     setTimeValue(selectedTime);
-  
-    dispatch(setPage(1)); // Dispatch the setPage action to update the page state
+    dispatch(setWarnings({ futureTimeWarning: isFutureTime }));
+    dispatch(
+      setPage({
+        date_time: selectedTime.toISOString(),
+         // Update the futureTimeWarning value
+        
+      })
+    );
   };
   
   
