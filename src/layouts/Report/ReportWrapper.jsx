@@ -50,7 +50,6 @@ const ReportWrapper = () => {
     const map = useRef(null)
 
     useEffect(() => {
-      console.log("hello")
       dispatch(clearReport());
     }, [])
       const markerOptions = {

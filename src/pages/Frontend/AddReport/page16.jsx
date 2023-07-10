@@ -3,20 +3,25 @@ import { Container, Typography,useTheme, Grid, Box, Select, MenuItem, TextField,
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { useDispatch, useSelector } from 'react-redux';
-import { setLock, setPage,  } from 'src/store/reducers/registerReport';
+import { setCrimeIndex, setLock, setPage,  } from 'src/store/reducers/registerReport';
 import { objectToFormData } from 'src/utils/formatObject';
 import API from 'src/config/api';
 import police from '../../../assets/images/police.png'
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 import { useNavigate } from 'react-router-dom';
+import { getNearbyCrimes } from 'src/store/api/registerReport';
 
 export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
   const [disable, setDisable] = useState(false)
+  const {latitude,longitude} = useSelector(state=>state.reportRegister);
+  const dispatch = useDispatch();
   const [error,setError]=useState(false);
   const navigate = useNavigate();
+  
   const handleSuccess = ()=>{
     handleClose();
-    navigate("/");
+    dispatch(getNearbyCrimes({latitude,longitude,fromDate:new Date(Date.now()-365*24*3600*1000),toDate:new Date(Date.now())}));
+    navigate("/reportscrime");
   }
   return(
     <Dialog

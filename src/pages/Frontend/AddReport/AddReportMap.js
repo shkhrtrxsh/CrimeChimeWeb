@@ -160,18 +160,15 @@ const AddReportMap = () => {
     const onSubmit = (formValue) => {
         formValue.crime = crime
         formValue.specific_crime = specificCrime
-        console.log(formValue);
         dispatch(addReport({ formValue, navigate }))
     };
 
     const markerDragEnd = (e) => {
-        console.log(e)
         if (e !== null) {
             setValue('latitude', e.latLng.lat());
             setValue('longitude', e.latLng.lng());
 
             axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${e.latLng.lat()},${e.latLng.lng()}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`).then(response => {
-                console.log(response.data.results) 
                 setFormattedAddress(response.data.results[0].formatted_address)
                 setValue('google_place_id', response.data.results[0].place_id);
                 setValue('location', response.data.results[0].formatted_address);

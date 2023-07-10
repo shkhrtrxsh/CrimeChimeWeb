@@ -95,14 +95,12 @@ const HomeMap = () => {
 
     const closePopUp = () => {
         // setting key "seenPopUp" with value true into localStorage
-        console.log("popup closed")
         localStorage.setItem("seenPopUp", true);
         // setting state to false to not display pop-up
         setDisplayPopUp(false);
     };
     useEffect(() => {
         let returningUser = localStorage.getItem("seenPopUp");
-        console.log(!returningUser)
         setDisplayPopUp(!returningUser);
     
     }, []);
@@ -159,7 +157,6 @@ const HomeMap = () => {
                     size="medium"
                     color="primary"
                     aria-label="view report"
-                    title="Map view" 
                     variant='extended'
                     >
                     <Typography component='h6'>Map View</Typography>
@@ -168,7 +165,6 @@ const HomeMap = () => {
                     size="medium"
                     color="primary"
                     aria-label="view report"
-                    title="Table view" 
                     variant='extended'
                     >
                     <Typography component='h6'sx={{width:100}}>Table View</Typography>
@@ -180,7 +176,6 @@ const HomeMap = () => {
                     size="medium"
                     color="primary"
                     aria-label="add report"
-                    title="add report"
                     to="/report/add"
                     component={Link}
                     variant='extended'
@@ -195,7 +190,6 @@ const HomeMap = () => {
                     size="medium"
                     color="primary"
                     aria-label="reported crimes"
-                    title="view crimes"
                     to="/reportscrime"
                     component={Link}
                     variant='extended'

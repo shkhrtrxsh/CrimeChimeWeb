@@ -122,14 +122,8 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     
     const currentDate = new Date();
     const isToday = dateValue.toDateString() === currentDate.toDateString();
-    console.log(isToday);
-    console.log(dateValue.toDateString())
-    console.log(selectedHour)
-    console.log(currentDate.getHours())
-    console.log(isToday && selectedHour > currentDate.getHours())
     const isFutureTime = isToday && selectedHour > (currentDate.getHours() % 12 || 12) ;
     setFutureTimeWarning(isFutureTime);
-    console.log({futureDateWarning})
     changeTime(selectedHour, selectedTime.getMinutes());
   };
   

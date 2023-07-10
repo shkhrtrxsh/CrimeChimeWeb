@@ -24,7 +24,7 @@ const ViewCrime = () => {
     const location = useLocation();
     const pathname = location.pathname;
     const map = useRef(null);
-
+  
     const markerOptions = {
       icon: {
         url: Image,
@@ -93,17 +93,21 @@ const ViewCrime = () => {
               <GoogleMap center={position} zoom={zoom} 
               mapContainerStyle={{width:"100%",height:"100%"}}
               options={{
-                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE
+                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE,
+                mapTypeControlOptions: {
+                  position:isMdBreakpoint?window.google.maps.ControlPosition.LEFT_TOP:window.google.maps.ControlPosition.LEFT_BOTTOM
+                }
               }}
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
-                  <Marker position={position} onDragEnd={markerDragEnd}/>
+                  <Marker id="mark" position={position} onDragEnd={markerDragEnd}/>
                   {nearbyData.map(({latitude=null,longitude=null},ind)=>{
+                    const position={
+                      lat:Number(latitude),
+                      lng:Number(longitude)
+                    };
                     return(
-                      (latitude||longitude)&&<Marker key={ind} position={{
-                        lat:Number(latitude),
-                        lng:Number(longitude)
-                      }} options={markerOptions}
+                      <Marker draggable={true} key={ind} position={position} options={markerOptions}
                         onClick={()=>onMarkerClick(ind)}
                       />
                     )
@@ -111,11 +115,7 @@ const ViewCrime = () => {
               </GoogleMap>
             </Box>
             
-            <Box sx={{ position: 'absolute', top: '30%', right: 0.5, zIndex: 1, width: '50%' }}>
-          <SearchFilter />
-        </Box>
-           
-           
+          <SearchFilter />           
         </Box>
     );
 }
