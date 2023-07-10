@@ -50,6 +50,8 @@ const initialState = {
         fileName:null,
         date_time:null,
         flag:null,
+        futureTimeWarning:false,
+        futureDateWarning:false
     },
     markers:null,
     nearbyData:[],

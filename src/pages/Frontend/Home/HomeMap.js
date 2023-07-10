@@ -240,11 +240,11 @@ const HomeMap = () => {
       >
         <Box sx={{ marginTop: '10px', display: 'flex' ,flexDirection: 'column' }}>
             <Box paddingBottom='5px'>
-               <Button  sx={{ backgroundColor: 'rgba(255, 255, 255, 0.7)' , border: 'solid lightgreen'}} onClick={() => navigate('/register')}>
+               <Button  sx={{ backgroundColor: '#ffe600'}} onClick={() => navigate('/register')}>
             SIGN UP TO REPORT CRIME
           </Button> 
             </Box>
-          <Box><Button  sx={{ backgroundColor: 'rgba(255, 255, 255, 0.7)' , border: 'solid black' }} onClick={handleCloseBox}>
+          <Box><Button  sx={{ backgroundColor: '#ffe600' }} onClick={handleCloseBox}>
            THANKS, I'M JUST LOOKING
           </Button></Box>
           

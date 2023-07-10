@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { Box, Divider, LinearProgress, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import NextButton from 'src/components/Button/NextButton';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -28,11 +29,16 @@ const ProgressBar = ({
   const theme = useTheme();
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   const navigate = useNavigate();
-
+  const register = useSelector(state=>state.reportRegister);
+  const {data} = register;
+  const {futureDateWarning,futureTimeWarning} = data;
+  console.log(futureTimeWarning);
   const handleCancel = () => {
     // Redirect to the home page
     navigate('/');
   };
+
+  const isDisableNext =(activeStep === 1 && (futureDateWarning || futureTimeWarning)); 
 
   return (
     <Box
@@ -69,7 +75,15 @@ const ProgressBar = ({
         </Box>
         <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: useMediaQuery(theme.breakpoints.up('md')) ? '33.3%' : '20%' }}>
-          <NextButton textValue={submit ? 'SUBMIT' : 'NEXT'} beforeNext={lock ? null : () => { beforeNext ? beforeNext() : setActiveStep(activeStep, activeStep + 1) }} />
+          <NextButton
+            textValue={submit ? 'SUBMIT' : 'NEXT'}
+            beforeNext={lock ? null : () => {
+              if (!isDisableNext) { // Proceed to the next step only if the Next button is not disabled
+                beforeNext ? beforeNext() : setActiveStep(activeStep, activeStep + 1)
+              }
+            }}
+            disabled={isDisableNext} // Disable the Next button based on the isDisableNext variable
+          />
         </Box>
         {!isMdBreakpoint && (
           <>

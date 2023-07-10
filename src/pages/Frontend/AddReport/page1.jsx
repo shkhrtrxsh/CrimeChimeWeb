@@ -33,7 +33,7 @@ function Page1() {
   const changeDate = (e) => {
     const { date, time } = splitISODatetime(e);
     const newTime = datetime === null ? time : splitISODatetime(e)?.time;
-    dispatch(setPage({ date_time: date + 'T' + newTime + 'Z' }));
+    dispatch(setPage({ date_time: date + 'T' + newTime + 'Z',futureDateWarning: futureDateWarning }));
   };
 
   const changeTime = (selectedHour, selectedMinute) => {
@@ -43,7 +43,8 @@ function Page1() {
   
     selectedTime.setHours(hours);
     selectedTime.setMinutes(minutes);
-    dispatch(setPage({ date_time: selectedTime.toISOString() }));
+    console.log(futureTimeWarning);
+    dispatch(setPage({ date_time: selectedTime.toISOString(), futureTimeWarning: futureTimeWarning }));
   };
 
   const theme = useTheme();
@@ -83,11 +84,11 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const selectedDate = new Date(dateValue);
     selectedDate.setDate(selectedDay);
     setDateValue(selectedDate);
-    changeDate(selectedDate);
+    
 
     const currentDate = new Date();
     const isFutureDate = selectedDate > currentDate;
-    setFutureDateWarning(isFutureDate);
+    setFutureDateWarning(isFutureDate);changeDate(selectedDate);
   };
 
   const handleMonthChange = (e) => {
@@ -95,11 +96,12 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const selectedDate = new Date(dateValue);
     selectedDate.setMonth(selectedMonth - 1);
     setDateValue(selectedDate);
-    changeDate(selectedDate);
+    
 
     const currentDate = new Date();
     const isFutureDate = selectedDate > currentDate;
     setFutureDateWarning(isFutureDate);
+    changeDate(selectedDate);
   };
 
   const handleYearChange = (e) => {
@@ -107,11 +109,11 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const selectedDate = new Date(dateValue);
     selectedDate.setFullYear(selectedYear);
     setDateValue(selectedDate);
-    changeDate(selectedDate);
+    
 
     const currentDate = new Date();
     const isFutureDate = selectedDate > currentDate;
-    setFutureDateWarning(isFutureDate);
+    setFutureDateWarning(isFutureDate);changeDate(selectedDate);
   };
 
   const handleHourChange = (e) => {
@@ -122,14 +124,10 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     
     const currentDate = new Date();
     const isToday = dateValue.toDateString() === currentDate.toDateString();
-    console.log(isToday);
-    console.log(dateValue.toDateString())
-    console.log(selectedHour)
-    console.log(currentDate.getHours())
-    console.log(isToday && selectedHour > currentDate.getHours())
+    
     const isFutureTime = isToday && selectedHour > (currentDate.getHours() % 12 || 12) ;
     setFutureTimeWarning(isFutureTime);
-    console.log({futureDateWarning})
+    
     changeTime(selectedHour, selectedTime.getMinutes());
   };
   
@@ -164,12 +162,13 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const isCurrentTimePM = currentTime.getHours() >= 12;
   
     // Check if the selected day is the same as today's date
-    const isSameDay = dateValue.getDate() === currentTime.getDate() &&
+    const isSameDay =
+      dateValue.getDate() === currentTime.getDate() &&
       dateValue.getMonth() === currentTime.getMonth() &&
       dateValue.getFullYear() === currentTime.getFullYear();
   
-    // Set the futureTimeWarning to true if the selected day is the same as today's date and the current time is in PM
-    const isFutureTime = isSameDay && isCurrentTimePM;
+    // Set the futureTimeWarning to true if the selected day is the same as today's date, the current time is in AM, and the selected time is in PM
+    const isFutureTime = isSameDay && isCurrentTimePM && selectedAmPm === 'pm';
     setFutureTimeWarning(isFutureTime);
   
     if (selectedAmPm === 'am' && hours >= 12) {
@@ -181,7 +180,13 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     selectedTime.setHours(newHours);
     setTimeValue(selectedTime);
   
-    dispatch(setPage(1)); // Dispatch the setPage action to update the page state
+    dispatch(
+      setPage({
+        date_time: selectedTime.toISOString(),
+        futureTimeWarning: isFutureTime, // Update the futureTimeWarning value
+        futureDateWarning: futureDateWarning,
+      })
+    );
   };
   
   
