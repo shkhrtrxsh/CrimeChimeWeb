@@ -32,8 +32,8 @@ const ProgressBar = ({
   const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   const navigate = useNavigate();
   const register = useSelector(state=>state.reportRegister);
-  const {data} = register;
-  const {futureDateWarning,futureTimeWarning} = data;
+  const {warnings} = register;
+  const {futureDateWarning,futureTimeWarning} = warnings;
   console.log(futureTimeWarning);
   const handleCancel = () => {
     // Redirect to the home page
@@ -86,7 +86,7 @@ const ProgressBar = ({
             }}
             disabled={isDisableNext} // Disable the Next button based on the isDisableNext variable
           />
-          <NextButton textValue={textNext||(submit ? 'SUBMIT' : 'NEXT')} beforeNext={lock ? null : () => { beforeNext && beforeNext()}} />
+          
         </Box>
         {!isMdBreakpoint && (
           <>

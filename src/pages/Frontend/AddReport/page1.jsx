@@ -16,7 +16,7 @@ import { DatePicker, TimePicker, LocalizationProvider, DateTimePicker } from '@m
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import NextButton from 'src/components/Button/NextButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPage } from 'src/store/reducers/registerReport';
+import { setPage, setWarnings } from 'src/store/reducers/registerReport';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 import { splitISODatetime, splitLocaleDatetime } from 'src/utils/formatTime';
 
@@ -33,7 +33,7 @@ function Page1() {
   const changeDate = (e) => {
     const { date, time } = splitISODatetime(e);
     const newTime = datetime === null ? time : splitISODatetime(e)?.time;
-    dispatch(setPage({ date_time: date + 'T' + newTime + 'Z',futureDateWarning: futureDateWarning }));
+    dispatch(setPage({ date_time: date + 'T' + newTime + 'Z'}));
   };
 
   const changeTime = (selectedHour, selectedMinute) => {
@@ -44,7 +44,7 @@ function Page1() {
     selectedTime.setHours(hours);
     selectedTime.setMinutes(minutes);
     console.log(futureTimeWarning);
-    dispatch(setPage({ date_time: selectedTime.toISOString(), futureTimeWarning: futureTimeWarning }));
+    dispatch(setPage({ date_time: selectedTime.toISOString()}));
   };
 
   const theme = useTheme();
@@ -88,7 +88,9 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
 
     const currentDate = new Date();
     const isFutureDate = selectedDate > currentDate;
-    setFutureDateWarning(isFutureDate);changeDate(selectedDate);
+    setFutureDateWarning(isFutureDate);
+    dispatch(setWarnings({ futureDateWarning: isFutureDate }));
+    changeDate(selectedDate);
   };
 
   const handleMonthChange = (e) => {
@@ -101,6 +103,7 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const currentDate = new Date();
     const isFutureDate = selectedDate > currentDate;
     setFutureDateWarning(isFutureDate);
+    dispatch(setWarnings({ futureDateWarning: isFutureDate }));
     changeDate(selectedDate);
   };
 
@@ -113,7 +116,9 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
 
     const currentDate = new Date();
     const isFutureDate = selectedDate > currentDate;
-    setFutureDateWarning(isFutureDate);changeDate(selectedDate);
+    setFutureDateWarning(isFutureDate);
+    dispatch(setWarnings({ futureDateWarning: isFutureDate }));
+    changeDate(selectedDate);
   };
 
   const handleHourChange = (e) => {
@@ -127,7 +132,7 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     
     const isFutureTime = isToday && selectedHour > (currentDate.getHours() % 12 || 12) ;
     setFutureTimeWarning(isFutureTime);
-    
+    dispatch(setWarnings({ futureTimeWarning: isFutureTime }));
     changeTime(selectedHour, selectedTime.getMinutes());
   };
   
@@ -141,7 +146,7 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
     const isToday = dateValue.toDateString() === currentDate.toDateString();
     const isFutureTime = isToday && selectedTime > currentDate;
     setFutureTimeWarning(isFutureTime);
-    
+    dispatch(setWarnings({ futureTimeWarning: isFutureTime }));
     changeTime(selectedTime.getHours(), selectedMinute);
   };
   
@@ -179,12 +184,12 @@ const [futureTimeWarning, setFutureTimeWarning] = useState(false);
   
     selectedTime.setHours(newHours);
     setTimeValue(selectedTime);
-  
+    dispatch(setWarnings({ futureTimeWarning: isFutureTime }));
     dispatch(
       setPage({
         date_time: selectedTime.toISOString(),
-        futureTimeWarning: isFutureTime, // Update the futureTimeWarning value
-        futureDateWarning: futureDateWarning,
+         // Update the futureTimeWarning value
+        
       })
     );
   };
