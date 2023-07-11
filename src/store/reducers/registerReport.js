@@ -16,7 +16,7 @@ const initialState = {
         location:"Johannesberg,South Africa",
         longitude:28.034088,
         latitude:-26.195246,
-        google_place_id:null,
+        google_place_id:"ChIJUWpA8GgMlR4RQUDTsdnJiiM",
         description:null,
         perpetrators:-1,
         perpetrators_des:null,

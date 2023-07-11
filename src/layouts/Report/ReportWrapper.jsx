@@ -55,7 +55,7 @@ const ReportWrapper = () => {
       const markerOptions = {
         icon: {
           url: Image,
-          scaledSize: new window.google.maps.Size(50, 50),
+          scaledSize: new window.google.maps.Size(80, 80),
           origin: new window.google.maps.Point(0, 0),
           anchor: new window.google.maps.Point(25, 50)
         }
@@ -198,7 +198,7 @@ const ReportWrapper = () => {
                         onLoad={onLoad}
                         onZoomChanged={handleZoomChanged}>
                           <Marker position={position} />
-                          {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions}/>} 
+                          {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions} label={{text:`${marker?.user_count||0}`,color:"red",fontWeight:"bold",className:"map-label"}}/>} 
                         </GoogleMap>
                   </Box>
               }
@@ -221,7 +221,7 @@ const ReportWrapper = () => {
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
                 <Marker position={position} draggable={false}/>
-                {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions} draggable={true}/>}
+                {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions} draggable={true} label={{text:`${marker?.user_count||0}`,fontWeight:"bold",className:"map-label"}}/>}
               </GoogleMap>
             </Box>
         </Box>

@@ -17,9 +17,9 @@ export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes"
 
 export const getNearbyCrimes2 = createAsyncThunk("registerReport/getNearbyCrimes",async({latitude,longitude,doFunc})=>{
   try {
-      const formData = objectToFormData({lat:latitude,long:longitude})
-      const res = await API({"url":"/report/getNearByReport",method:"POST",data:formData});
-      const data=res.data.data;
+      const formData = objectToFormData({latitude,longitude})
+      const res = await API({"url":"/report/area",method:"POST",data:formData});
+      const data=res.data.data.data;
       if(!data||data.length===0)doFunc();
       return data;
     } catch (error) {

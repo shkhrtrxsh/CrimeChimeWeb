@@ -5,7 +5,7 @@ import { getLocationCoords, loadGoogleMaps } from 'src/utils/googleMap';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCrimeIndex, setPage, setZoom, } from 'src/store/reducers/registerReport';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, InfoBox, Marker, useLoadScript } from '@react-google-maps/api';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { SatelliteZoom } from 'src/constants/googleMap';
@@ -28,7 +28,7 @@ const ViewCrime = () => {
     const markerOptions = {
       icon: {
         url: Image,
-        scaledSize: new window.google.maps.Size(50, 50),
+        scaledSize: new window.google.maps.Size(80, 80),
         origin: new window.google.maps.Point(0, 0),
         anchor: new window.google.maps.Point(25, 50)
       }
@@ -51,8 +51,8 @@ const ViewCrime = () => {
     },[])
 
     const position={
-        lat:Number(latitude),
-        lng:Number(longitude)
+        lat:Number(latitude)+0.0008,
+        lng:Number(longitude)+0.0008
     }
       const handleZoomChanged = () => {
         if(map.current)dispatch(setZoom(map.current.getZoom()))
@@ -78,6 +78,7 @@ const ViewCrime = () => {
         geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
           if (status === 'OK' && results[0]) {
             dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
+            dispatch(getNearbyCrimes({latitude:e.latLng.lat(),longitude:e.latLng.lng(),fromDate:null,toDate:null}));
           }
         });
       }
@@ -100,18 +101,18 @@ const ViewCrime = () => {
               }}
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
-                  <Marker id="mark" position={position} onDragEnd={markerDragEnd}/>
-                  {nearbyData.map(({latitude=null,longitude=null},ind)=>{
+                  {nearbyData.map(({latitude=null,longitude=null,user_count=0},ind)=>{
                     const position={
                       lat:Number(latitude),
                       lng:Number(longitude)
                     };
                     return(
-                      <Marker draggable={true} key={ind} position={position} options={markerOptions}
-                        onClick={()=>onMarkerClick(ind)}
+                      <Marker key={ind} position={position} options={markerOptions}
+                      onClick={()=>onMarkerClick(ind)} label={{text:`${user_count||0}`,fontWeight:"bold",className:"map-label",color:"red"}}
                       />
-                    )
-                  })}
+                      )
+                    })}
+                    <Marker id="mark" draggable={true} position={position} onDragEnd={markerDragEnd}/>
               </GoogleMap>
             </Box>
             

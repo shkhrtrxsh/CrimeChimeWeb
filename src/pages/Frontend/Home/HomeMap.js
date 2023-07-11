@@ -37,6 +37,7 @@ import { setCrimeIndex, setNearbyReports, setPage } from 'src/store/reducers/reg
 import ActionOptions from 'src/components/ActionOptions';
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog';
 import TransparentFab from 'src/layouts/components/TransparentFab';
+import { getNearbyCrimes } from 'src/store/api/registerReport';
 
 const containerStyle = {
     width: '100%',
@@ -63,12 +64,11 @@ const MapDivStyle = styled('div')(({ theme }) => ({
 
 
 const HomeMap = () => {
-    const {data} =  useSelector(state=>state.reportRegister);
+    const {data,nearbyData:reports} =  useSelector(state=>state.reportRegister);
     const {latitude,longitude,zoom} = data; 
     const isDesktop = useResponsive('up', 'md');
     const [open, setOpen] = React.useState(true);
     const theme = useTheme()
-    const { reports } = useSelector((state) => ({ ...state.report }));
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
@@ -79,7 +79,7 @@ const HomeMap = () => {
     const markerOptions = {
         icon: {
           url: Image,
-          scaledSize: new window.google.maps.Size(50, 50),
+          scaledSize: new window.google.maps.Size(80, 80),
           origin: new window.google.maps.Point(0, 0),
           anchor: new window.google.maps.Point(25, 50)
         }
@@ -106,7 +106,7 @@ const HomeMap = () => {
     }, []);
     useEffect(() => {
         const param = getSearchQueryParams(searchParams)
-        dispatch(getReports({param}))
+        dispatch(getNearbyCrimes({latitude,longitude,fromDate:null,toDate:null}))
     },[searchParams]);
 
     const setSearchByParam = (param) => {
@@ -145,6 +145,19 @@ const HomeMap = () => {
           } ;      
            const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
     const admin = reports?.admin?true:false;
+
+    const markerDragEnd = (e) => {
+        if (e !== null) {
+          const geocoder = new window.google.maps.Geocoder();
+          geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+              dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
+              dispatch(getNearbyCrimes({latitude:e.latLng.lat(),longitude:e.latLng.lng(),fromDate:null,toDate:null}));
+            }
+          });
+        }
+      };
+      console.log(reports);
     return (
         <>
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'390px'}} onClick={() => setHidden(s => !s)}>
@@ -270,7 +283,7 @@ const HomeMap = () => {
                                         </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                        {reports.data && reports.data.map((report,index) => (
+                                        {reports && reports.map((report,index) => (
                                             <TableRow key={report.id}>
                                             <TableCell component="th" scope="row">{report.location}</TableCell>
                                             {admin&&<TableCell align="left">{report.user.name}</TableCell>  }                
@@ -314,12 +327,17 @@ const HomeMap = () => {
                             options={mapSettings(zoom)}
                             onLoad={onLoad}
                         >
-                            {reports?.data && reports.data.map((report, index) => (
+                            <Marker id="mark" zIndex={1} draggable={true} position={{
+                                lat:Number(latitude),
+                                lng:Number(longitude)
+                                }} onDragEnd={markerDragEnd}/>
+                            {reports && reports.map((report, index) => (
                                 <Marker key={index}
+                                    zIndex={0}
                                     onClick={()=>{
-                                        dispatch(setNearbyReports(reports?.data||[]));
+                                        dispatch(setNearbyReports(reports||[]));
                                         dispatch(setCrimeIndex({index,viewCrime:true}));
-                                        navigate("/reportscrime")
+                                        navigate("/reportscrime") 
                                     }}
                                     position={{
                                         lat: Number(report.latitude),
@@ -327,7 +345,7 @@ const HomeMap = () => {
                                     }}
                                     // icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
                                     options={markerOptions}
-
+                                    label={{text:`${report?.user_count||0}`,fontWeight:"bold",className:"map-label",color:"red"}}
                                 />
                             ))} 
                             
@@ -349,8 +367,10 @@ const HomeMap = () => {
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: 500,
+                    boxShadow:24,
+                    borderRadius:"10px",
                     bgcolor: 'background.paper',
-                    boxShadow: 24,
+                    outline:"none",
                     p: 4,
                     [theme.breakpoints.down('sm')]: {
                         width: '90%',
