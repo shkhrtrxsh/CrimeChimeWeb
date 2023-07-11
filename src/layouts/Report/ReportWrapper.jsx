@@ -198,7 +198,7 @@ const ReportWrapper = () => {
                         onLoad={onLoad}
                         onZoomChanged={handleZoomChanged}>
                           <Marker position={position} />
-                          {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions} label={{text:`${marker?.user_count||0}`,color:"red",fontWeight:"bold",className:"map-label"}}/>} 
+                          {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions} label={{text:`${marker?.user_count||1}`,color:"red",fontWeight:"bold",className:"map-label"}}/>} 
                         </GoogleMap>
                   </Box>
               }
@@ -221,7 +221,7 @@ const ReportWrapper = () => {
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
                 <Marker position={position} draggable={false}/>
-                {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions} draggable={true} label={{text:`${marker?.user_count||0}`,fontWeight:"bold",className:"map-label"}}/>}
+                {((marker?.latitude||marker?.longitude)&&selectActive===3)&&<Marker position={markerPosition} options={markerOptions} draggable={true} label={{text:`${marker?.user_count||1}`,fontWeight:"bold",className:"map-label"}}/>}
               </GoogleMap>
             </Box>
         </Box>

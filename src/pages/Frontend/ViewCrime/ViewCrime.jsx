@@ -108,7 +108,7 @@ const ViewCrime = () => {
                     };
                     return(
                       <Marker key={ind} position={position} options={markerOptions}
-                      onClick={()=>onMarkerClick(ind)} label={{text:`${user_count||0}`,fontWeight:"bold",className:"map-label",color:"red"}}
+                      onClick={()=>onMarkerClick(ind)} label={{text:`${user_count||1}`,fontWeight:"bold",className:"map-label",color:"red"}}
                       />
                       )
                     })}

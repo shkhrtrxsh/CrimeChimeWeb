@@ -345,7 +345,7 @@ const HomeMap = () => {
                                     }}
                                     // icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
                                     options={markerOptions}
-                                    label={{text:`${report?.user_count||0}`,fontWeight:"bold",className:"map-label",color:"red"}}
+                                    label={{text:`${report?.user_count||1}`,fontWeight:"bold",className:"map-label",color:"red"}}
                                 />
                             ))} 
                             
