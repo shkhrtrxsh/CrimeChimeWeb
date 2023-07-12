@@ -29,7 +29,7 @@ export const otpVerify = createAsyncThunk(
     try {
       const response = await API.post("/auth/otp-verify", formValue);
       if(response.data.status === 200){
-        toast.success("Login Successfully");
+        toast.success("Login Successful");
         navigate("/");
         return response.data;
       }
@@ -65,7 +65,7 @@ export const logout = createAsyncThunk(
     try {
       const response = await API.post("/auth/logout");
       if(response.data.status === 200){
-        toast.success(response.data.message);
+        toast.success("User Logout Successfully");
         localStorage.clear();
         navigate("/");
         return response.data;

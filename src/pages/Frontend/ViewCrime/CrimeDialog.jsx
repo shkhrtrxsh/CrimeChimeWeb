@@ -64,7 +64,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
   const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
   const {latitude:lat,longitude:long} = regData;
   const [open, setOpen] = useState(0)
-  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images,description}=values[index]||{};
+  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images,description,user_count}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 
   useEffect(()=>{
@@ -168,6 +168,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
     { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"Unknown":(reported_to_police===0?"Yes":"No")) },
     { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
     { firstCol: 'Media:', secondCol: mediaData },
+    {firstCol:'No of Reports:',secondCol:user_count||1 }
   ];
 
 

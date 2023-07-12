@@ -5,7 +5,7 @@ import { getLocationCoords, loadGoogleMaps } from 'src/utils/googleMap';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCrimeIndex, setPage, setZoom, } from 'src/store/reducers/registerReport';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, InfoBox, Marker, useLoadScript } from '@react-google-maps/api';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { SatelliteZoom } from 'src/constants/googleMap';
@@ -24,11 +24,11 @@ const ViewCrime = () => {
     const location = useLocation();
     const pathname = location.pathname;
     const map = useRef(null);
-
+  
     const markerOptions = {
       icon: {
         url: Image,
-        scaledSize: new window.google.maps.Size(50, 50),
+        scaledSize: new window.google.maps.Size(80, 80),
         origin: new window.google.maps.Point(0, 0),
         anchor: new window.google.maps.Point(25, 50)
       }
@@ -51,8 +51,8 @@ const ViewCrime = () => {
     },[])
 
     const position={
-        lat:Number(latitude),
-        lng:Number(longitude)
+        lat:Number(latitude)+0.0008,
+        lng:Number(longitude)+0.0008
     }
       const handleZoomChanged = () => {
         if(map.current)dispatch(setZoom(map.current.getZoom()))
@@ -78,6 +78,7 @@ const ViewCrime = () => {
         geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
           if (status === 'OK' && results[0]) {
             dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
+            dispatch(getNearbyCrimes({latitude:e.latLng.lat(),longitude:e.latLng.lng(),fromDate:null,toDate:null}));
           }
         });
       }
@@ -93,29 +94,29 @@ const ViewCrime = () => {
               <GoogleMap center={position} zoom={zoom} 
               mapContainerStyle={{width:"100%",height:"100%"}}
               options={{
-                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE
+                mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE,
+                mapTypeControlOptions: {
+                  position:isMdBreakpoint?window.google.maps.ControlPosition.LEFT_TOP:window.google.maps.ControlPosition.LEFT_BOTTOM
+                }
               }}
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
-                  <Marker position={position} onDragEnd={markerDragEnd}/>
-                  {nearbyData.map(({latitude=null,longitude=null},ind)=>{
+                  {nearbyData.map(({latitude=null,longitude=null,user_count=0},ind)=>{
+                    const position={
+                      lat:Number(latitude),
+                      lng:Number(longitude)
+                    };
                     return(
-                      (latitude||longitude)&&<Marker key={ind} position={{
-                        lat:Number(latitude),
-                        lng:Number(longitude)
-                      }} options={markerOptions}
-                        onClick={()=>onMarkerClick(ind)}
+                      <Marker key={ind} position={position} options={markerOptions}
+                      onClick={()=>onMarkerClick(ind)} label={{text:`${user_count||1}`,fontWeight:"bold",className:"map-label",color:"red"}}
                       />
-                    )
-                  })}
+                      )
+                    })}
+                    <Marker id="mark" draggable={true} position={position} onDragEnd={markerDragEnd}/>
               </GoogleMap>
             </Box>
             
-            <Box sx={{ position: 'absolute', top: '30%', right: 0.5, zIndex: 1, width: '50%' }}>
-          <SearchFilter />
-        </Box>
-           
-           
+          <SearchFilter />           
         </Box>
     );
 }

@@ -15,52 +15,42 @@ export const auth = createSlice({
         // Login Api
         [login.pending]: (state, action) => {
           state.loading = true;
-          console.log('pending')
         },
         [login.fulfilled]: (state, action) => {
           state.loading = false;
-          console.log(action.payload)
           state.user = action.payload;
-          console.log('fulfilled')
         },
         [login.rejected]: (state, action) => {
           state.loading = false;
           state.error = action.payload.message;
-          console.log('rejected')
         },
 
         // Register API
         [register.pending]: (state, action) => {
           state.loading = true;
-          console.log('pending')
         },
         [register.fulfilled]: (state, action) => {
           state.loading = false;
           state.user = action.payload;
-          console.log('fulfilled')
         },
         [register.rejected]: (state, action) => {
           state.loading = false;
           state.error = action.payload.message;
-          console.log('rejected')
         },
 
         // otpverify Api
         [otpVerify.pending]: (state, action) => {
           state.loading = true;
-          console.log('pending')
         },
         [otpVerify.fulfilled]: (state, action) => {
           state.loading = false;
           localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
           localStorage.setItem("_token", action.payload.access_token);
           state.user = action.payload;
-          console.log('fulfilled')
         },
         [otpVerify.rejected]: (state, action) => {
           state.loading = false;
           state.error = action.payload.message;
-          console.log('rejected')
         },
     }
 })

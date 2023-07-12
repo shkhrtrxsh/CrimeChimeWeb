@@ -87,7 +87,6 @@ export default function SearchFilter(props) {
 
     const filterSearchHandler = ()=>{
         if(toDate>=fromDate&&latitude&&longitude){
-            dispatch(clearReport());
             dispatch(getNearbyCrimes({latitude,longitude,toDate,fromDate}));
             toggleDrawer(false)
         }

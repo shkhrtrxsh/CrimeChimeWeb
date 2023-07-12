@@ -197,7 +197,6 @@ export const getSpecificCrimesById = createAsyncThunk(
 export const uploadReportImage = createAsyncThunk(
     "upload report image",
     async ({file}, { rejectWithValue }) => {
-        console.log(file)
       try {
         const response = await API.post(`/report/image-upload`, {file:file}, {headers: {
             'content-type': 'multipart/form-data',
