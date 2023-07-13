@@ -4,7 +4,7 @@ import ProgressBar from './ProgressBar'
 import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { getLocationCoords, loadGoogleMaps } from 'src/utils/googleMap';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearReport, setDuplicate, setLock, setPage, setZoom, } from 'src/store/reducers/registerReport';
+import { clearReport, setDuplicate, setEdit, setLock, setPage, setZoom, } from 'src/store/reducers/registerReport';
 import Page1 from '../../pages/Frontend/AddReport/page1'
 import Duplicate from '../../pages/Frontend/AddReport/duplicate'
 import Page2 from '../../pages/Frontend/AddReport/page2'
@@ -40,7 +40,7 @@ const ReportPageRouter = ({selectActive=1,setSelectActive,openState,mapRef})=>{
 
 const ReportWrapper = () => {
     const register = useSelector(state=>state.reportRegister);
-    const {data,zoom,lock,marker,duplicate,nearbyData=[]} = register;
+    const {data,zoom,lock,marker,duplicate,nearbyData=[],edit} = register;
     const {longitude,latitude,vehicle_theft} = data;
     const [cancel,setCancel] = useState(true);
     const [selectActive, setSelectActive] = useState(1);
@@ -50,7 +50,9 @@ const ReportWrapper = () => {
     const map = useRef(null)
 
     useEffect(() => {
-      dispatch(clearReport());
+      if(!edit){
+        dispatch(clearReport());
+      }
     }, [])
       const markerOptions = {
         icon: {
@@ -138,14 +140,23 @@ const ReportWrapper = () => {
       const onClickEvent = async()=>{
         try {
           const fileURL = data.files;
-          const response = await fetch(fileURL);
+          const fileSet = data.fileSet;
+          let response={ok:true};
+          if(fileSet) response = await fetch(fileURL);
           if (response.ok) {
-            const blob = await response.blob();
-            const files = new File([blob], data.fileName);
             const formData = objectToFormData({...data,various:`[${String(data.various)}]`});
-            formData.set("files", files);
-            await API.post("/report",formData);
+            if(fileSet){
+              const blob = await response.blob();
+              const files = new File([blob], data.fileName);
+              formData.set("files", files);
+            }else{
+              formData.delete("files");
+              formData.delete("fileName");
+            }
+            const url=edit?"/report/update/"+data?.id:"/report";
+            await API.post(url,formData);
             setConfirm(true);
+            dispatch(setEdit(false));
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }

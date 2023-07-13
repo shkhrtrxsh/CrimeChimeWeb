@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setZoom } from 'src/store/reducers/registerReport';
 
 import { SatelliteZoom } from 'src/constants/googleMap';
+import { toast } from 'react-toastify';
+import { isWithinSAfrica } from 'src/utils/googleMap';
 const containerStyle = {
   width: '100%',
   height: '100%', // Adjust the height according to your needs
@@ -20,8 +22,8 @@ const Page2 = ({setSelectActive}) => {
   const dispatch = useDispatch();
   const map = useRef(null);
   const position = {
-    lat: latitude||-26.2023, // Latitude of India
-    lng: longitude||28.0436, // Longitude of India
+    lat: Number(latitude)||-26.2023, // Latitude of India
+    lng: Number(longitude)||28.0436, // Longitude of India
   }
 
   const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
@@ -32,12 +34,20 @@ const Page2 = ({setSelectActive}) => {
     }));
   };
   
-  const markerDragEnd = (e) => {
+  const markerDragEnd = async(e) => {
     if (e !== null) {
+      //check if within S.Africa
+      const [lat,lng] = [e.latLng.lat(), e.latLng.lng()];
+      const [_,isSA] = await isWithinSAfrica(lat,lng);
+      if(!isSA){
+        toast.error("Crimes can be reported only within South Africa");
+        dispatch(setPage({latitude,longitude}))
+        return;
+      }
       const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
+      geocoder.geocode({ location: { lat, lng } }, (results, status) => {
         if (status === 'OK' && results[0]) {
-          dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
+          dispatch(setPage({location:results[0].formatted_address,longitude:lng,latitude: lat,google_place_id:results[0].place_id}));
         }
       });
     }
@@ -51,6 +61,7 @@ const Page2 = ({setSelectActive}) => {
     if(map.current)dispatch(setZoom(map.current.getZoom()))
   };
   const mapOptions={
+    gestureHandling: "greedy",
     fullscreenControl:false,
     zoomControlOptions: {
       position: window.google.maps.ControlPosition.RIGHT_CENTER

@@ -34,7 +34,6 @@ const ProgressBar = ({
   const register = useSelector(state=>state.reportRegister);
   const {warnings} = register;
   const {futureDateWarning,futureTimeWarning} = warnings;
-  console.log(futureTimeWarning);
   const handleCancel = () => {
     // Redirect to the home page
     navigate('/');

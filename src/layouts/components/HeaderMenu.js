@@ -222,7 +222,7 @@ export default function HeaderMenu(props) {
                                             onClick={handleDrawerClose}
                                             activeclassname="active"
                                         >
-                                            All Report
+                                            All Reports
                                         </LinkDrawerButton>
                                         <Divider sx={{ height: '2px' }} />
                                     </>

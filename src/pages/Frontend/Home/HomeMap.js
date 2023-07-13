@@ -33,7 +33,7 @@ import {
   } from '@mui/material';
   import { getSearchQueryParams, setSearchQueryParams, recordPerPage } from 'src/helpers/SearchHelper';
 import { getLocationCoords } from 'src/utils/googleMap';
-import { setCrimeIndex, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
+import { clearReport, setCrimeIndex, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
 import ActionOptions from 'src/components/ActionOptions';
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog';
 import TransparentFab from 'src/layouts/components/TransparentFab';
@@ -72,6 +72,11 @@ const HomeMap = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(clearReport());
+    },[])
+
     const [openDialog, setOpenDialog] = React.useState({
         status: false, 
         id: null 
@@ -107,7 +112,7 @@ const HomeMap = () => {
     useEffect(() => {
         const param = getSearchQueryParams(searchParams)
         dispatch(getNearbyCrimes({latitude,longitude,fromDate:null,toDate:null}))
-    },[searchParams]);
+    },[latitude,longitude]);
 
     const setSearchByParam = (param) => {
         navigate(`/reportshome?${param}`)
@@ -132,10 +137,8 @@ const HomeMap = () => {
     const onLoad = async(Map) => {
 
         // map.current = Map; // Store the map instance in a global variable for access in the event handler
-        if(!latitude||!longitude){
           const {latitude:lat,longitude:lng} = await getLocationCoords();
           dispatch(setPage({latitude:lat,longitude:lng}));
-        }
           
         }
         const callDeleteFunc = (status, id) => {
@@ -157,7 +160,6 @@ const HomeMap = () => {
           });
         }
       };
-      console.log(reports);
     return (
         <>
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'390px'}} onClick={() => setHidden(s => !s)}>

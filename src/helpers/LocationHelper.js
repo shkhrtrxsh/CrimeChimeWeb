@@ -56,6 +56,7 @@ export const mapSettings = (zoom)=> ({
     // zoomControl: false,
     streetViewControl: false,
     mapTypeControl: false,
+    gestureHandling: "greedy",
     fullscreenControl: false,
     mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.TERRAIN
 })

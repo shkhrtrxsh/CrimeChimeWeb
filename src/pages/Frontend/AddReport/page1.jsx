@@ -43,7 +43,6 @@ function Page1() {
   
     selectedTime.setHours(hours);
     selectedTime.setMinutes(minutes);
-    console.log(futureTimeWarning);
     dispatch(setPage({ date_time: selectedTime.toISOString()}));
   };
 

@@ -12,7 +12,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import NoMedia from 'src/assets/images/unavailable.svg'
-import { setCrimeIndex, setNearbyReports } from 'src/store/reducers/registerReport';
+import { setCrimeIndex, setEdit, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
 
 const MyReport = () => {
 
@@ -39,6 +39,23 @@ const MyReport = () => {
         return videoExtensions.some(extension => lowerCaseUrl.endsWith(extension));
     }
 
+    const handleEdit = (report)=>{
+        let newReport = {...report,crime:null,specific_crime:null}; 
+        const report_image=newReport.report_image
+        newReport.files=newReport.fileName=(process.env.REACT_APP_API_URL+"/"+report_image?.path)||null; 
+        newReport.report_image=null;
+        //remove null values from newReport
+        const keyList = Object.keys(newReport);
+        keyList.forEach((key)=>{
+            if((newReport[key]==null)){
+                delete newReport.key;
+            }
+        })                                            
+        dispatch(setEdit(true));
+        dispatch(setPage(newReport));
+        navigate("/report/add");
+    }
+
     return (
         <Page title="My Report">
             <Container sx={{
@@ -63,7 +80,7 @@ const MyReport = () => {
                                             image={path}
                                             width="300px"
                                             height="300px"
-                                            sx={{objectFit:"contain",maxWidth:"300px",maxHeight:"200px"}}
+                                            sx={{newReportFit:"contain",maxWidth:"300px",maxHeight:"200px"}}
                                         />) :(!(path===null||path === '') &&isVideo(path))? (
                                             <video className="VideoInput_video" width="300px" height="300px" controls src={path} />
                                         ):(
@@ -88,7 +105,10 @@ const MyReport = () => {
                                                 dispatch(setCrimeIndex({index,viewCrime:true}))
                                                 navigate("/reportscrime")
                                                 
-                                            }} size="small">view Report</Button>
+                                            }} size="small">View Report</Button>
+                                            <Button onClick={() => {
+                                                handleEdit(report);
+                                            }} size="small">Edit Report</Button>
                                         </CardActions>
                                     </Card>
                                 </Grid>

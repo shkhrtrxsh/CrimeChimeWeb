@@ -95,6 +95,7 @@ const ViewCrime = () => {
               mapContainerStyle={{width:"100%",height:"100%"}}
               options={{
                 mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE,
+                gestureHandling:"greedy",
                 mapTypeControlOptions: {
                   position:isMdBreakpoint?window.google.maps.ControlPosition.LEFT_TOP:window.google.maps.ControlPosition.LEFT_BOTTOM
                 }

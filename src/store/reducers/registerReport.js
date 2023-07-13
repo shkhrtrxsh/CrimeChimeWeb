@@ -11,6 +11,7 @@ const initialState = {
     error:null,
     map:null,
     data:{
+        id:null,
         crime:1,
         specific_crime:1,
         location:"Johannesberg,South Africa",
@@ -50,7 +51,7 @@ const initialState = {
         fileName:null,
         date_time:null,
         flag:null,
-        
+        fileSet:false
     },
     warnings:{
         futureTimeWarning:false,
@@ -67,13 +68,17 @@ const initialState = {
     duplicate:{
         index:0,
         open:0
-    }
+    },
+    edit:false,
 }
 
 const registerReport = createSlice({
   name: "registerReport",
   initialState,
   reducers: {
+    setEdit:(state,action)=>{
+        state.edit=action.payload;
+    },
     setDuplicate:(state,action)=>{
         state.duplicate={...state.duplicate,...action.payload}
     },
@@ -124,6 +129,9 @@ const registerReport = createSlice({
     setPage:(state,action)=>{
         state.data={...state.data,...action.payload};
     },
+    setPageWithoutNull:(state,action)=>{
+        state.data={...state.data,...action.payload};
+    },
 },
     extraReducers:{
         // Permission Add Api
@@ -164,6 +172,6 @@ const registerReport = createSlice({
 
 });
 
-export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,setWarnings,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports,setDuplicate} =registerReport.actions;
+export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,setWarnings,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports,setDuplicate,setEdit} =registerReport.actions;
 
 export const registerReportReducer = registerReport.reducer;
