@@ -218,10 +218,10 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SuccessDialog open={open} handleClose = {()=>setOpen(0)}/>
-        <Box sx={{mt:5,pl:10,h:"100%"}}>
+        <Box sx={{mt:5,pl:2,h:"100%"}}>
           <Grid container spacing={2} justifyContent="center">
             <Grid item xs={10}>
-              <Box sx={{display:"flex",width:"100%",justifyContent:"center"}}>
+              <Box sx={{display:"flex",width:"100%",justifyContent:"center", alignItems:'center'}}>
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
                   {"Crime Details"}
                 </Typography>
