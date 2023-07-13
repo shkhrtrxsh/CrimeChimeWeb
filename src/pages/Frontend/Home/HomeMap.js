@@ -174,7 +174,7 @@ const HomeMap = () => {
                     aria-label="view report"
                     variant='extended'
                     >
-                    <Typography component='h6'>Map View</Typography>
+                    {hidden && <Typography component='h6'>Map View</Typography>}
                     <LocationOnIcon />
                 </TransparentFab>: <TransparentFab
                     size="medium"
@@ -195,10 +195,11 @@ const HomeMap = () => {
                     component={Link}
                     variant='extended'
                 >
-                    <Typography component='h6' sx={{width:100}}>Report Crime</Typography>
+                    {hidden && <Typography component='h6' sx={{width:100}}>Report Crime</Typography>}
                     <AddIcon />
                 </TransparentFab>
             </BoxButtonStyle>
+            
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'290px'}}>
 
                 <TransparentFab
@@ -209,11 +210,13 @@ const HomeMap = () => {
                     component={Link}
                     variant='extended'
                 >
-                        <Typography component='h6' sx={{ marginLeft: '3px',width:100 }}>View Crime</Typography>
+                        {hidden && <Typography component='h6' sx={{ marginLeft: '3px',width:100 }}>View Crime</Typography>}
                     <VisibilityIcon />
                 </TransparentFab>
                 
-            </BoxButtonStyle>
+            </BoxButtonStyle>    
+            
+            
             
             <Box sx={{
                 background: theme.palette.secondary.main,
@@ -273,13 +276,13 @@ const HomeMap = () => {
                     
                     {!hidden ?(
                         <Card>
-                            <SearchInTable searchByParam={setSearchByParam} />
-                                <TableContainer component={Paper}sx={{pr:6}}>
+                            
+                                <TableContainer component={Paper}sx={{pr:7}}>
                                     <Table aria-label="simple table">
                                         <TableHead>
                                         <TableRow>
                                             <TableCell>Location</TableCell>
-                                            {admin&&<TableCell align="left">Reporter</TableCell>}
+                                            {admin &&<TableCell align="left">Reporter</TableCell>}
                                             <TableCell align="left">Created At</TableCell>
                                             <TableCell align="right">Action</TableCell>
                                         </TableRow>
@@ -288,7 +291,7 @@ const HomeMap = () => {
                                         {reports && reports.map((report,index) => (
                                             <TableRow key={report.id}>
                                             <TableCell component="th" scope="row">{report.location}</TableCell>
-                                            {admin&&<TableCell align="left">{report.user.name}</TableCell>  }                
+                                            {admin &&<TableCell align="left">{report.user.name}</TableCell>  }                
                                             <TableCell align="left">{fDateTime(report.created_at)}</TableCell>
                                             <TableCell align="right">
                                                 <ActionOptions 
