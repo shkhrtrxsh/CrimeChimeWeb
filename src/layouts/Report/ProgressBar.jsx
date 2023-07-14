@@ -77,7 +77,7 @@ const ProgressBar = ({
         <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: useMediaQuery(theme.breakpoints.up('md')) ? '33.3%' : '20%' }}>
           <NextButton
-            textValue={submit ? 'SUBMIT' : 'NEXT'}
+            textValue={textNext?textNext:submit ? 'SUBMIT' : 'NEXT'}
             beforeNext={lock ? null : () => {
               if (!isDisableNext) { // Proceed to the next step only if the Next button is not disabled
                 beforeNext ? beforeNext() : setActiveStep(activeStep, activeStep + 1)

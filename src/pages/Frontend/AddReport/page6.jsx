@@ -26,8 +26,8 @@ const Page6 = () => {
   const setCount = (rape_people) => dispatch(setPage({ rape_people }));
 
   const handleChange = (event) => {
-    const value = event.target.value;
-    if (value === '0') {
+    const value = Number(event.target.value);
+    if (value === 0) {
       dispatch(setLock(false));
       setCount(null);
     } else {
@@ -72,17 +72,17 @@ const Page6 = () => {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'COLUMN', justifyContent: 'center', my: 4, pl: 2 }}>
               <FormControlLabel
-                control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} />}
+                control={<Checkbox checked={value === 0} value={0} onChange={handleChange} />}
                 label="Does Not Apply"
                 sx={{ paddingBottom: '20px' }}
               />
               <FormControlLabel
-                control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} />}
+                control={<Checkbox checked={value === 1} value={1} onChange={handleChange} />}
                 label="Attempted Rape"
                 sx={{ paddingTop: '20px', paddingBottom: '20px' }}
               />
               <FormControlLabel
-                control={<Checkbox checked={value === '2'} value={2} onChange={handleChange} />}
+                control={<Checkbox checked={value === 2} value={2} onChange={handleChange} />}
                 label="Rape"
                 sx={{ paddingTop: '10px' }}
               />
@@ -101,7 +101,7 @@ const Page6 = () => {
                     setCount(count);
                   }}
                   error={error ? true : false}
-                  disabled={value === '0'}
+                  disabled={value === 0}
                 >
                   {Array.from({ length: 30 }, (_, index) => (
                     <MenuItem key={index + 1} value={index + 1}>

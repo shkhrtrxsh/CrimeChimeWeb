@@ -111,7 +111,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
       switch(weapons){
         case 0:return `Unknown`
         case 1:return `None`
-        default:return `Fully Automatic:${fully_auto_weapons},Semi Automatic:${semi_auto_weapons},Knife Weapons:${knife_weapons},Other:${other_weapons}`
+        default:return `Fully Automatic: ${fully_auto_weapons}, Semi Automatic: ${semi_auto_weapons}, Knife Weapons: ${knife_weapons}, Other: ${other_weapons}`
       }
     })() },
     { firstCol: 'Rape:', secondCol:(()=>{

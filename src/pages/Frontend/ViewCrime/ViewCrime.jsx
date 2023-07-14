@@ -60,10 +60,8 @@ const ViewCrime = () => {
     const onLoad = async(Map) => {
 
       map.current = Map; // Store the map instance in a global variable for access in the event handler
-      if(!latitude||!longitude){
         const {latitude:lat,longitude:lng} = await getLocationCoords();
         dispatch(setPage({latitude:lat,longitude:lng}));
-      }
       }
     const theme = useTheme();
     const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));

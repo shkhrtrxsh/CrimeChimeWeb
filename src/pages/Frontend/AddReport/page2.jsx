@@ -17,7 +17,7 @@ const libraries = ["places","geometry"];
 const Page2 = ({setSelectActive}) => {
   const apiKey=process.env.REACT_APP_GOOGLE_MAP_API_KEY;
   const data = useSelector(state=>state.reportRegister);
-  const {zoom} = data;
+  const {zoom,edit} = data;
   const {location:formattedAddress,latitude,longitude}=data.data;
   const dispatch = useDispatch();
   const map = useRef(null);
@@ -95,7 +95,7 @@ const Page2 = ({setSelectActive}) => {
           <Box style={{ backgroundColor: '#ffe600', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginLeft: 'auto', marginRight: 'auto',width:'100%' }}>
           <NextButton beforeNext={()=>setSelectActive(1)} textValue="GO BACK"/>
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-            <NextButton beforeNext={()=>setSelectActive(3)} textValue="CONFIRM PLACE"/>
+            <NextButton beforeNext={()=>setSelectActive(edit?4:3)} textValue="CONFIRM PLACE"/>
           </Box>
         </Box>
      

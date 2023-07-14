@@ -12,7 +12,7 @@ import { CurrentLocationCoordinates, mapSettings } from 'src/helpers/LocationHel
 import useResponsive from 'src/hooks/useResponsive';
 import { styled, useTheme } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { getReports, deleteReport, reportStatus} from 'src/store/api/report';
+import { getReports, deleteReport, reportStatus, getCrimes} from 'src/store/api/report';
 import {SearchInTable} from 'src/components/Table';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ActiveInactiveButton } from 'src/components/Button';
@@ -65,6 +65,7 @@ const MapDivStyle = styled('div')(({ theme }) => ({
 
 const HomeMap = () => {
     const {data,nearbyData:reports} =  useSelector(state=>state.reportRegister);
+    const {reports:reportedData={}} = useSelector(state=>state.report);
     const {latitude,longitude,zoom} = data; 
     const isDesktop = useResponsive('up', 'md');
     const [open, setOpen] = React.useState(true);
@@ -75,8 +76,9 @@ const HomeMap = () => {
 
     useEffect(()=>{
         dispatch(clearReport());
+        dispatch(getReports({param:`per_page=10&order_by=latest`}));
     },[])
-
+    
     const [openDialog, setOpenDialog] = React.useState({
         status: false, 
         id: null 
@@ -110,9 +112,13 @@ const HomeMap = () => {
     
     }, []);
     useEffect(() => {
-        const param = getSearchQueryParams(searchParams)
         dispatch(getNearbyCrimes({latitude,longitude,fromDate:null,toDate:null}))
     },[latitude,longitude]);
+
+    useEffect(()=>{
+        const param = getSearchQueryParams(searchParams)
+        dispatch(getReports({param}));
+    },[searchParams])
 
     const setSearchByParam = (param) => {
         navigate(`/reportshome?${param}`)
@@ -288,7 +294,7 @@ const HomeMap = () => {
                                         </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                        {reports && reports.map((report,index) => (
+                                        {reportedData && (reportedData.data||[]).map((report,index) => (
                                             <TableRow key={report.id}>
                                             <TableCell component="th" scope="row">{report.location}</TableCell>
                                             {admin &&<TableCell align="left">{report.user.name}</TableCell>  }                
@@ -313,15 +319,15 @@ const HomeMap = () => {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                                <TablePagination
+                                {reportedData&&<TablePagination
                                     rowsPerPageOptions={recordPerPage}
                                     onRowsPerPageChange={handleChangeRowsPerPage}
                                     component="div"
-                                    count={reports.total}
-                                    rowsPerPage={reports.per_page}
-                                    page={reports.current_page - 1}
+                                    count={reportedData.total}
+                                    rowsPerPage={reportedData.per_page}
+                                    page={reportedData.current_page - 1}
                                     onPageChange={handlePageChange}
-                                />
+                                />}
                         </Card>
                         )
                         : (

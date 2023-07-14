@@ -46,6 +46,7 @@ const ReportWrapper = () => {
     const [selectActive, setSelectActive] = useState(1);
     const [open,setOpen] = useState(false);
     const [confirm,setConfirm] = useState(false);
+    const [locChanged,setLocChanged] = useState(false);
     const dispatch = useDispatch();
     const map = useRef(null)
 
@@ -94,7 +95,7 @@ const ReportWrapper = () => {
         setSelectActive(newStep);
     }
     const beforeBack = async()=>{
-      switch(selectActive){        
+      switch(selectActive){  
         case 3:
           const {index,open} = duplicate||{};
           const {id,latitude,longitude,date_time} = nearbyData[index]||{};
@@ -120,8 +121,8 @@ const ReportWrapper = () => {
       }
       setActiveStep(selectActive, selectActive - 1) ;
     }
-    const beforeNext = async()=>{        
-       switch(selectActive){      
+    const beforeNext = async()=>{ 
+       switch(selectActive){
         case 3:
           const {index,open} = duplicate||{};
           if(!nearbyData[index+1]){
@@ -171,13 +172,10 @@ const ReportWrapper = () => {
     const onLoad = async(Map) => {
 
       map.current = Map; // Store the map instance in a global variable for access in the event handler
-      if(!latitude||!longitude){
+      if(!locChanged&&!edit){
         const {latitude:lat,longitude:lng} = await getLocationCoords();
         dispatch(setPage({latitude:lat,longitude:lng}));
-        const marker = new window.google.maps.Marker({
-          position: position,
-          map: Map
-        });
+        setLocChanged(true);
       }
         
       }

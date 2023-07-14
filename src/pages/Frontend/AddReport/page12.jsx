@@ -28,8 +28,8 @@ const Page12 = () => {
   const handleChange = (event) => {
     const checked = event.target?.checked;
     if (checked) {
-      setChecked(event.target.value);
-      if (checked === '0') {
+      setChecked(Number(event.target.value));
+      if (checked === 0) {
         dispatch(setLock(false));
         setError('');
       } else {
@@ -44,7 +44,7 @@ const Page12 = () => {
     if (value) {
       dispatch(setLock(false));
       setError('');
-    } else if (checked === '1') {
+    } else if (checked === 1) {
       dispatch(setLock(true));
       setError('*required');
     }
@@ -75,13 +75,13 @@ const Page12 = () => {
           <Grid item xs={8} style={{ paddingLeft:'40px' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column',paddingLeft: '20px' }}>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4  }}>
-                <Checkbox checked={checked === '0'} value={0} onChange={handleChange} />
+                <Checkbox checked={checked === 0} value={0} onChange={handleChange} />
                 <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                   Does not apply
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 4 }}>
-                <Checkbox checked={checked === '1'} value={1} onChange={handleChange} />
+                <Checkbox checked={checked === 1} value={1} onChange={handleChange} />
                 <Typography variant="h6" sx={{ fontWeight: 'normal', pl: 2, textAlign: 'left' }}>
                   Attempted kidnapping
                   <br />
@@ -94,7 +94,7 @@ const Page12 = () => {
                     value={value || ''}
                     onChange={(event) => setValue(event.target.value)}
                     
-                    disabled={checked === '0'}
+                    disabled={checked === 0}
                     error={error ? true : false}
                   >
                     {Array.from({ length: 30 }, (_, index) => index).map((num) => (

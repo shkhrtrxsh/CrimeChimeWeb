@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getMyReport } from 'src/store/api/report';
-import { Box, Button, Container, Grid } from '@mui/material'
+import { Box, Button, Container, Grid, Tooltip } from '@mui/material'
 import UserSideName from './components/UserSideNav';
 import Page from '../../../components/Page';
 import Card from '@mui/material/Card';
@@ -13,6 +13,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import NoMedia from 'src/assets/images/unavailable.svg'
 import { setCrimeIndex, setEdit, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
+import { css } from '@emotion/css';
+import ClampLines from 'react-clamp-lines';
 
 const MyReport = () => {
 
@@ -91,13 +93,41 @@ const MyReport = () => {
 
                                     }
                                         <CardContent>
-                                            <Typography gutterBottom variant="h5" component="div">
-                                                {report.location}
-                                            </Typography>
+                                            <Tooltip title={report.location}>
+                                                <Typography gutterBottom variant="h5" component="div" className={css`
+                                                    max-height:100px;
+                                                    min-height:100px;
+                                                    height:100px;
+                                                    
+                                                `}>
+                                                    <ClampLines
+                                                        text={report.location}
+                                                        lines={3}
+                                                        ellipsis="..."
+                                                        innerElement="p"
+                                                        stopPropagation={true}
+                                                        buttons={false}
+                                                    />
+                                                </Typography>
+                                            </Tooltip>
                                             
-                                            <Typography variant="body2" color="text.secondary" sx={{ marginTop: '15px' }}>
-                                                {report.description||"No Description"}
-                                            </Typography>
+                                            <Tooltip title={report?.description||""}>
+                                                <Typography variant="body2" color="text.secondary" className={css`
+                                                    margin-top:15px;
+                                                    max-height:22px;
+                                                    min-height:22px;
+                                                    height:22px;
+                                                `}>
+                                                    <ClampLines
+                                                        text={report?.description||"No Description"}
+                                                        lines={2}
+                                                        ellipsis="..."
+                                                        innerElement="p"
+                                                        stopPropagation={true}
+                                                        buttons={false}
+                                                    />
+                                                </Typography>
+                                            </Tooltip>
                                         </CardContent>
                                         <CardActions sx={{    paddingLeft: '24px'}}>
                                             <Button onClick={() => {

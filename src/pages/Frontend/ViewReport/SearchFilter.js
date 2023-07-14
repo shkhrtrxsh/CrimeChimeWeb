@@ -78,6 +78,11 @@ export default function SearchFilter(props) {
     const [fromDate, setFromDate] = useState(dateNow);
     const isDesktop = useResponsive('up', 'md');
     const toggleDrawer = (event) => {
+        if(!event){
+            setToDate(dateNow);
+            setFromDate(dateNow);
+            setState()
+        }
         setState(event);
     };
     // place.geometry.viewport.Ia.hi

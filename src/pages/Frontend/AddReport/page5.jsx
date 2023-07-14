@@ -22,8 +22,8 @@ function Page5() {
   const setValue = (murders) => dispatch(setPage({ murders }));
 
   const handleChange = (event) => {
-    const value = event.target.value;
-    if (value === '0') {
+    const value = Number(event.target.value);
+    if (value === 0) {
       setCount(1);
     } else {
       dispatch(setLock(false));
@@ -71,17 +71,17 @@ function Page5() {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 3, pl: 1}}>
                <FormControlLabel
-                control={<Checkbox checked={value === '3'} value={3} onChange={handleChange} />}
+                control={<Checkbox checked={value === 3} value={3} onChange={handleChange} />}
                 label="Unknown"
                 sx={{ paddingTop: '10px' }}
               />
               <FormControlLabel
-                control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} />}
+                control={<Checkbox checked={value === 1} value={1} onChange={handleChange} />}
                 label="No"
                 sx={{ paddingTop: '20px', paddingBottom: '20px' }}
               />
              <FormControlLabel
-                control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} />}
+                control={<Checkbox checked={value === 0} value={0} onChange={handleChange} />}
                 label="Yes"
                 sx={{ paddingBottom: '20px' }}
               />
