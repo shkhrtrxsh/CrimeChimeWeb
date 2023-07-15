@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPage, setZoom } from 'src/store/reducers/registerReport';
 
 import { SatelliteZoom } from 'src/constants/googleMap';
+import { toast } from 'react-toastify';
+import { isWithinSAfrica } from 'src/utils/googleMap';
 const containerStyle = {
   width: '100%',
   height: '100%', // Adjust the height according to your needs
@@ -15,13 +17,13 @@ const libraries = ["places","geometry"];
 const Page2 = ({setSelectActive}) => {
   const apiKey=process.env.REACT_APP_GOOGLE_MAP_API_KEY;
   const data = useSelector(state=>state.reportRegister);
-  const {zoom} = data;
+  const {zoom,edit} = data;
   const {location:formattedAddress,latitude,longitude}=data.data;
   const dispatch = useDispatch();
   const map = useRef(null);
   const position = {
-    lat: latitude||-26.2023, // Latitude of India
-    lng: longitude||28.0436, // Longitude of India
+    lat: Number(latitude)||-26.2023, // Latitude of India
+    lng: Number(longitude)||28.0436, // Longitude of India
   }
 
   const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
@@ -32,12 +34,20 @@ const Page2 = ({setSelectActive}) => {
     }));
   };
   
-  const markerDragEnd = (e) => {
+  const markerDragEnd = async(e) => {
     if (e !== null) {
+      //check if within S.Africa
+      const [lat,lng] = [e.latLng.lat(), e.latLng.lng()];
+      const [_,isSA] = await isWithinSAfrica(lat,lng);
+      if(!isSA){
+        toast.error("Crimes can be reported only within South Africa");
+        dispatch(setPage({latitude,longitude}))
+        return;
+      }
       const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
+      geocoder.geocode({ location: { lat, lng } }, (results, status) => {
         if (status === 'OK' && results[0]) {
-          dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
+          dispatch(setPage({location:results[0].formatted_address,longitude:lng,latitude: lat,google_place_id:results[0].place_id}));
         }
       });
     }
@@ -51,6 +61,7 @@ const Page2 = ({setSelectActive}) => {
     if(map.current)dispatch(setZoom(map.current.getZoom()))
   };
   const mapOptions={
+    gestureHandling: "greedy",
     fullscreenControl:false,
     zoomControlOptions: {
       position: window.google.maps.ControlPosition.RIGHT_CENTER
@@ -84,7 +95,7 @@ const Page2 = ({setSelectActive}) => {
           <Box style={{ backgroundColor: '#ffe600', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginLeft: 'auto', marginRight: 'auto',width:'100%' }}>
           <NextButton beforeNext={()=>setSelectActive(1)} textValue="GO BACK"/>
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
-            <NextButton beforeNext={()=>setSelectActive(3)} textValue="CONFIRM PLACE"/>
+            <NextButton beforeNext={()=>setSelectActive(edit?4:3)} textValue="CONFIRM PLACE"/>
           </Box>
         </Box>
      

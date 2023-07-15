@@ -60,10 +60,8 @@ const ViewCrime = () => {
     const onLoad = async(Map) => {
 
       map.current = Map; // Store the map instance in a global variable for access in the event handler
-      if(!latitude||!longitude){
         const {latitude:lat,longitude:lng} = await getLocationCoords();
         dispatch(setPage({latitude:lat,longitude:lng}));
-      }
       }
     const theme = useTheme();
     const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
@@ -95,6 +93,7 @@ const ViewCrime = () => {
               mapContainerStyle={{width:"100%",height:"100%"}}
               options={{
                 mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE,
+                gestureHandling:"greedy",
                 mapTypeControlOptions: {
                   position:isMdBreakpoint?window.google.maps.ControlPosition.LEFT_TOP:window.google.maps.ControlPosition.LEFT_BOTTOM
                 }

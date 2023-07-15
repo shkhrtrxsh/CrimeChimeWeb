@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import "yup-phone";
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 import { useNavigate, Link as RouterLink} from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 // form
@@ -15,6 +15,7 @@ import { LoadingButton } from '@mui/lab';
 import Page from '../../../components/Page';
 
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
+import { initial } from 'lodash';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -44,6 +45,26 @@ const HeaderStyle = styled('div')(({ theme }) => ({
   margin: '2rem 2rem .6rem 2rem'
 }));
 
+const initialErrorState = {
+  name: '',
+  email: '',
+  phone: '',
+};
+
+const reducer = (state, action) => {
+  console.log("here")
+  switch (action.type) {
+    case "SETTER":
+      console.log("action")
+      return {...state,...action.payload}
+    case "CLEAR":
+      return initialErrorState;
+    default:
+      return state;
+  }
+};
+
+
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -62,6 +83,8 @@ export default function Login() {
     phone: '',
   };
 
+  const [errors,dispatchError] = useReducer(reducer,initialErrorState);
+
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
     defaultValues,
@@ -73,7 +96,7 @@ export default function Login() {
   } = methods;
 
   const onSubmit = (formValue) => {
-    dispatch(register({formValue, navigate}))
+    dispatch(register({formValue, navigate,dispatchError}))
   };
 
   return (
@@ -92,11 +115,12 @@ export default function Login() {
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={3}>
-                  <RHFTextField name="name" label="Name" />
-                  <RHFTextField name="email" label="E-mail Address" />
+                  <RHFTextField name="name" label="Name" errorOther={errors?.name} />
+                  <RHFTextField name="email" label="E-mail Address" errorOther={errors?.email} />
                   <RHFTextField 
                     name="phone" 
                     label="Phone Number"
+                    errorOther={errors?.phone}
                   />
                 </Stack>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>

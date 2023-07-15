@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getMyReport } from 'src/store/api/report';
-import { Box, Button, Container, Grid } from '@mui/material'
+import { Box, Button, Container, Grid, Tooltip } from '@mui/material'
 import UserSideName from './components/UserSideNav';
 import Page from '../../../components/Page';
 import Card from '@mui/material/Card';
@@ -12,7 +12,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import NoMedia from 'src/assets/images/unavailable.svg'
-import { setCrimeIndex, setNearbyReports } from 'src/store/reducers/registerReport';
+import { setCrimeIndex, setEdit, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
+import { css } from '@emotion/css';
+import ClampLines from 'react-clamp-lines';
 
 const MyReport = () => {
 
@@ -39,6 +41,23 @@ const MyReport = () => {
         return videoExtensions.some(extension => lowerCaseUrl.endsWith(extension));
     }
 
+    const handleEdit = (report)=>{
+        let newReport = {...report,crime:null,specific_crime:null}; 
+        const report_image=newReport.report_image
+        newReport.files=newReport.fileName=(process.env.REACT_APP_API_URL+"/"+report_image?.path)||null; 
+        newReport.report_image=null;
+        //remove null values from newReport
+        const keyList = Object.keys(newReport);
+        keyList.forEach((key)=>{
+            if((newReport[key]==null)){
+                delete newReport.key;
+            }
+        })                                            
+        dispatch(setEdit(true));
+        dispatch(setPage(newReport));
+        navigate("/report/add");
+    }
+
     return (
         <Page title="My Report">
             <Container sx={{
@@ -63,7 +82,7 @@ const MyReport = () => {
                                             image={path}
                                             width="300px"
                                             height="300px"
-                                            sx={{objectFit:"contain",maxWidth:"300px",maxHeight:"200px"}}
+                                            sx={{newReportFit:"contain",maxWidth:"300px",maxHeight:"200px"}}
                                         />) :(!(path===null||path === '') &&isVideo(path))? (
                                             <video className="VideoInput_video" width="300px" height="300px" controls src={path} />
                                         ):(
@@ -74,13 +93,41 @@ const MyReport = () => {
 
                                     }
                                         <CardContent>
-                                            <Typography gutterBottom variant="h5" component="div">
-                                                {report.location}
-                                            </Typography>
+                                            <Tooltip title={report.location}>
+                                                <Typography gutterBottom variant="h5" component="div" className={css`
+                                                    max-height:100px;
+                                                    min-height:100px;
+                                                    height:100px;
+                                                    
+                                                `}>
+                                                    <ClampLines
+                                                        text={report.location}
+                                                        lines={3}
+                                                        ellipsis="..."
+                                                        innerElement="p"
+                                                        stopPropagation={true}
+                                                        buttons={false}
+                                                    />
+                                                </Typography>
+                                            </Tooltip>
                                             
-                                            <Typography variant="body2" color="text.secondary" sx={{ marginTop: '15px' }}>
-                                                {report.description||"No Description"}
-                                            </Typography>
+                                            <Tooltip title={report?.description||""}>
+                                                <Typography variant="body2" color="text.secondary" className={css`
+                                                    margin-top:15px;
+                                                    max-height:22px;
+                                                    min-height:22px;
+                                                    height:22px;
+                                                `}>
+                                                    <ClampLines
+                                                        text={report?.description||"No Description"}
+                                                        lines={2}
+                                                        ellipsis="..."
+                                                        innerElement="p"
+                                                        stopPropagation={true}
+                                                        buttons={false}
+                                                    />
+                                                </Typography>
+                                            </Tooltip>
                                         </CardContent>
                                         <CardActions sx={{    paddingLeft: '24px'}}>
                                             <Button onClick={() => {
@@ -88,7 +135,10 @@ const MyReport = () => {
                                                 dispatch(setCrimeIndex({index,viewCrime:true}))
                                                 navigate("/reportscrime")
                                                 
-                                            }} size="small">view Report</Button>
+                                            }} size="small">View Report</Button>
+                                            <Button onClick={() => {
+                                                handleEdit(report);
+                                            }} size="small">Edit Report</Button>
                                         </CardActions>
                                     </Card>
                                 </Grid>

@@ -16,7 +16,9 @@ import {
   TableHead,
   TableRow,
   Paper, 
-  Card
+  Card,
+  Tooltip,
+  Link
 } from '@mui/material';
 import BreadcrumbNavigator from 'src/components/BreadcrumbNavigator';
 import {SearchInTable} from 'src/components/Table';
@@ -77,9 +79,7 @@ export default function Report() {
     navigate(`/reports?${param}`)
   }
 
-  const setSearchByParam = (param) => {
-    navigate(`/reports?${param}`)
-  }
+  
   const admin = reports?.admin?true:false;
   return (
     <Fragment>
@@ -88,11 +88,12 @@ export default function Report() {
         rightButton={{name: "add report", link: "/report/add"}} 
       />
       <Card>
-        <SearchInTable searchByParam={setSearchByParam} />
+        <SearchInTable />
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
+                {admin&&<TableCell align="left"></TableCell>}
                 <TableCell>Location</TableCell>
                 {admin&&<TableCell align="left">Reporter</TableCell>}
                 <TableCell align="left">Status</TableCell>
@@ -103,6 +104,13 @@ export default function Report() {
             <TableBody>
               {reports.data && reports.data.map((report,index) => (
                 <TableRow key={report.id}>
+                  {admin&&<TableCell align="left" sx={{fontSize:10,userSelect:"none"}}>{report.is_updated===1&&
+                    <Tooltip title="User has edited the crime entry">
+                      <Link>
+                        (edited)
+                      </Link>
+                    </Tooltip>
+                  }</TableCell>}
                   <TableCell component="th" scope="row">{report.location}</TableCell>
                   {admin&&<TableCell align="left">{report.user.name}</TableCell>}                  
                   <TableCell align="left">
@@ -133,7 +141,7 @@ export default function Report() {
           onRowsPerPageChange={handleChangeRowsPerPage}
           component="div"
           count={reports.total}
-          rowsPerPage={reports.per_page}
+          rowsPerPage={10}//reports.per_page}
           page={reports.current_page - 1}
           onPageChange={handlePageChange}
         />

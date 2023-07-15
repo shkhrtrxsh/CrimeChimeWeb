@@ -12,7 +12,7 @@ import { CurrentLocationCoordinates, mapSettings } from 'src/helpers/LocationHel
 import useResponsive from 'src/hooks/useResponsive';
 import { styled, useTheme } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { getReports, deleteReport, reportStatus} from 'src/store/api/report';
+import { getReports, deleteReport, reportStatus, getCrimes} from 'src/store/api/report';
 import {SearchInTable} from 'src/components/Table';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ActiveInactiveButton } from 'src/components/Button';
@@ -33,7 +33,7 @@ import {
   } from '@mui/material';
   import { getSearchQueryParams, setSearchQueryParams, recordPerPage } from 'src/helpers/SearchHelper';
 import { getLocationCoords } from 'src/utils/googleMap';
-import { setCrimeIndex, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
+import { clearReport, setCrimeIndex, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
 import ActionOptions from 'src/components/ActionOptions';
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog';
 import TransparentFab from 'src/layouts/components/TransparentFab';
@@ -65,6 +65,7 @@ const MapDivStyle = styled('div')(({ theme }) => ({
 
 const HomeMap = () => {
     const {data,nearbyData:reports} =  useSelector(state=>state.reportRegister);
+    const {reports:reportedData={}} = useSelector(state=>state.report);
     const {latitude,longitude,zoom} = data; 
     const isDesktop = useResponsive('up', 'md');
     const [open, setOpen] = React.useState(true);
@@ -72,6 +73,12 @@ const HomeMap = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(clearReport());
+        dispatch(getReports({param:`per_page=10&order_by=latest`}));
+    },[])
+    
     const [openDialog, setOpenDialog] = React.useState({
         status: false, 
         id: null 
@@ -105,9 +112,13 @@ const HomeMap = () => {
     
     }, []);
     useEffect(() => {
-        const param = getSearchQueryParams(searchParams)
         dispatch(getNearbyCrimes({latitude,longitude,fromDate:null,toDate:null}))
-    },[searchParams]);
+    },[latitude,longitude]);
+
+    useEffect(()=>{
+        const param = getSearchQueryParams(searchParams)
+        dispatch(getReports({param}));
+    },[searchParams])
 
     const setSearchByParam = (param) => {
         navigate(`/reportshome?${param}`)
@@ -132,10 +143,8 @@ const HomeMap = () => {
     const onLoad = async(Map) => {
 
         // map.current = Map; // Store the map instance in a global variable for access in the event handler
-        if(!latitude||!longitude){
           const {latitude:lat,longitude:lng} = await getLocationCoords();
           dispatch(setPage({latitude:lat,longitude:lng}));
-        }
           
         }
         const callDeleteFunc = (status, id) => {
@@ -157,7 +166,6 @@ const HomeMap = () => {
           });
         }
       };
-      console.log(reports);
     return (
         <>
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'390px'}} onClick={() => setHidden(s => !s)}>
@@ -286,7 +294,7 @@ const HomeMap = () => {
                                         </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                        {reports && reports.map((report,index) => (
+                                        {reportedData && (reportedData.data||[]).map((report,index) => (
                                             <TableRow key={report.id}>
                                             <TableCell component="th" scope="row">{report.location}</TableCell>
                                             {admin &&<TableCell align="left">{report.user.name}</TableCell>  }                
@@ -311,15 +319,15 @@ const HomeMap = () => {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                                <TablePagination
+                                {reportedData&&<TablePagination
                                     rowsPerPageOptions={recordPerPage}
                                     onRowsPerPageChange={handleChangeRowsPerPage}
                                     component="div"
-                                    count={reports.total}
-                                    rowsPerPage={reports.per_page}
-                                    page={reports.current_page - 1}
+                                    count={reportedData.total}
+                                    rowsPerPage={reportedData.per_page}
+                                    page={reportedData.current_page - 1}
                                     onPageChange={handlePageChange}
-                                />
+                                />}
                         </Card>
                         )
                         : (

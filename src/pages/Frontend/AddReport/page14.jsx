@@ -12,11 +12,11 @@ const Page14 = () => {
   const theme = useTheme();
   const handleChange = (event) => {
     if(!event.target.checked){
-      const removedChecked = checked.filter((d)=>d!==event.target.value);
+      const removedChecked = checked.filter((d)=>d!==Number(event.target.value));
       setChecked(removedChecked)
     }
     else{
-      setChecked([...checked,event.target.value]);
+      setChecked([...checked,Number(event.target.value)]);
     }
   };
 

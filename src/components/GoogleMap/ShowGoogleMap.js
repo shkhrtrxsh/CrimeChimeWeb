@@ -114,7 +114,6 @@ const ShowGoogleMap = () => {
             console.log(e.latLng.lat())
             console.log(e.latLng.lng())
         }
-        console.log(e)
     }
 
     return (

@@ -24,7 +24,7 @@ function Page8() {
   const setValue = (vehicle_theft)=>dispatch(setPage({vehicle_theft}))
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    setValue(Number(event.target.value));
   };
 
   const fields=[
@@ -69,7 +69,7 @@ function Page8() {
     return (
       <FormControlLabel
         control={<Checkbox />}
-        checked={value === `${f.value}`}
+        checked={value === f.value}
         value={f.value}
         key={ind}
         label={

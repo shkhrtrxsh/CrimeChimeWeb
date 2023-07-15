@@ -4,7 +4,7 @@ import ProgressBar from './ProgressBar'
 import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { getLocationCoords, loadGoogleMaps } from 'src/utils/googleMap';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearReport, setDuplicate, setLock, setPage, setZoom, } from 'src/store/reducers/registerReport';
+import { clearReport, setDuplicate, setEdit, setLock, setPage, setZoom, } from 'src/store/reducers/registerReport';
 import Page1 from '../../pages/Frontend/AddReport/page1'
 import Duplicate from '../../pages/Frontend/AddReport/duplicate'
 import Page2 from '../../pages/Frontend/AddReport/page2'
@@ -40,17 +40,20 @@ const ReportPageRouter = ({selectActive=1,setSelectActive,openState,mapRef})=>{
 
 const ReportWrapper = () => {
     const register = useSelector(state=>state.reportRegister);
-    const {data,zoom,lock,marker,duplicate,nearbyData=[]} = register;
+    const {data,zoom,lock,marker,duplicate,nearbyData=[],edit} = register;
     const {longitude,latitude,vehicle_theft} = data;
     const [cancel,setCancel] = useState(true);
     const [selectActive, setSelectActive] = useState(1);
     const [open,setOpen] = useState(false);
     const [confirm,setConfirm] = useState(false);
+    const [locChanged,setLocChanged] = useState(false);
     const dispatch = useDispatch();
     const map = useRef(null)
 
     useEffect(() => {
-      dispatch(clearReport());
+      if(!edit){
+        dispatch(clearReport());
+      }
     }, [])
       const markerOptions = {
         icon: {
@@ -92,7 +95,7 @@ const ReportWrapper = () => {
         setSelectActive(newStep);
     }
     const beforeBack = async()=>{
-      switch(selectActive){        
+      switch(selectActive){  
         case 3:
           const {index,open} = duplicate||{};
           const {id,latitude,longitude,date_time} = nearbyData[index]||{};
@@ -118,8 +121,8 @@ const ReportWrapper = () => {
       }
       setActiveStep(selectActive, selectActive - 1) ;
     }
-    const beforeNext = async()=>{        
-       switch(selectActive){      
+    const beforeNext = async()=>{ 
+       switch(selectActive){
         case 3:
           const {index,open} = duplicate||{};
           if(!nearbyData[index+1]){
@@ -138,14 +141,23 @@ const ReportWrapper = () => {
       const onClickEvent = async()=>{
         try {
           const fileURL = data.files;
-          const response = await fetch(fileURL);
+          const fileSet = data.fileSet;
+          let response={ok:true};
+          if(fileSet) response = await fetch(fileURL);
           if (response.ok) {
-            const blob = await response.blob();
-            const files = new File([blob], data.fileName);
             const formData = objectToFormData({...data,various:`[${String(data.various)}]`});
-            formData.set("files", files);
-            await API.post("/report",formData);
+            if(fileSet){
+              const blob = await response.blob();
+              const files = new File([blob], data.fileName);
+              formData.set("files", files);
+            }else{
+              formData.delete("files");
+              formData.delete("fileName");
+            }
+            const url=edit?"/report/update/"+data?.id:"/report";
+            await API.post(url,formData);
             setConfirm(true);
+            dispatch(setEdit(false));
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -160,13 +172,10 @@ const ReportWrapper = () => {
     const onLoad = async(Map) => {
 
       map.current = Map; // Store the map instance in a global variable for access in the event handler
-      if(!latitude||!longitude){
+      if(!locChanged&&!edit){
         const {latitude:lat,longitude:lng} = await getLocationCoords();
         dispatch(setPage({latitude:lat,longitude:lng}));
-        const marker = new window.google.maps.Marker({
-          position: position,
-          map: Map
-        });
+        setLocChanged(true);
       }
         
       }

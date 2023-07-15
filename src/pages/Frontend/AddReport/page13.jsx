@@ -13,7 +13,7 @@ const Page13 = () => {
   const setChecked = (bribery)=> dispatch(setPage({bribery}))
   
   const handleChange = (event) => {
-    setChecked(event.target.value);
+    setChecked(Number(event.target.value));
   };
 
   return (
@@ -36,19 +36,19 @@ const Page13 = () => {
               <Grid item xs={8} >
                 <Box sx={{ display: 'flex', flexDirection: 'column' , paddingTop:'5%' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
-                    <Checkbox checked={checked==="0"} value={0} onChange={handleChange} />
+                    <Checkbox checked={checked===0} value={0} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
                       Does not apply
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
-                    <Checkbox checked={checked==="1"} value={1} onChange={handleChange} />
+                    <Checkbox checked={checked===1} value={1} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Bribe requested by police officer
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
-                    <Checkbox checked={checked==="2"} value={2} onChange={handleChange} />
+                    <Checkbox checked={checked===2} value={2} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Bribe requested by civil servant
                       <br />
@@ -56,7 +56,7 @@ const Page13 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
-                    <Checkbox checked={checked==="3"} value={3} onChange={handleChange} />
+                    <Checkbox checked={checked===3} value={3} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Bribe requested by politician
                     </Typography>

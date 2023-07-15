@@ -7,30 +7,39 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFile, setPage, } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
+import { isImage, isVideo } from 'src/utils/ext';
 
 const Page15 = () => {
   const value = useSelector(state=>state.reportRegister.data);
+  const {fileName,files} = value;
   const dispatch = useDispatch();
   const setValue = (value)=>dispatch(setPage(value));
   const ref = useRef();
   const source = useRef();
   const canvas = useRef();
   const theme = useTheme();
+  
+  useEffect(()=>{
+    if(fileName){
+      if (isVideo(fileName)) {
+        source.current.src=files;
+        source.current.style.display="block";
+        canvas.current.style.display="none";
+      } else if (isImage(fileName)) {
+        canvas.current.style.display="block";
+        canvas.current.src=files;
+        source.current.style.display="none";
+      }
+    }
+  },[files])
+
   const handleFileChange = (event) => {
     const files = event.target.files[0];
     const fileURL = URL.createObjectURL(files)
-    if (files.type.startsWith('video/')) {
-      source.current.src=fileURL;
-      source.current.style.display="block";
-      canvas.current.style.display="none";
-    } else if (files.type.startsWith('image/')) {
-      canvas.current.style.display="block";
-      canvas.current.src=fileURL;
-      source.current.style.display="none";
-    }
+    
     const fileName = files.name;
     if (files) {
-      setValue({files:fileURL,fileName});
+      setValue({files:fileURL,fileName,fileSet:true});
     }
   };
 

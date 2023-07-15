@@ -13,6 +13,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { mapSettings, CurrentLocationCoordinates } from 'src/helpers/LocationHelper';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import { getLocationCoords } from 'src/utils/googleMap';
+import { setPage } from 'src/store/reducers/registerReport';
 
 const containerStyle = {
     width: '100%',
@@ -56,11 +58,11 @@ const Profile = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
-    const dPosition = CurrentLocationCoordinates()
+    const {latitude,longitude} = useSelector(state=>state.reportRegister.data);
 
     const [position, setPosition] = useState({
-        lat: dPosition.lat,
-        lng: dPosition.lng
+        lat: latitude,
+        lng: longitude
     })
 
     const { user } = useSelector((state) => ({ ...state.user }));
@@ -77,6 +79,11 @@ const Profile = () => {
             })
         }
     }, [user])
+
+    const onLoad = async(Map) => {
+          const {latitude:lat,longitude:lng} = await getLocationCoords();
+          dispatch(setPage({latitude:lat,longitude:lng}));
+        }
 
     return (
         <Page title={user && user.name}>
@@ -164,6 +171,7 @@ const Profile = () => {
                                         marginBottom: '30px'
                                     }}>{user && user.address}</BodyTypography>
                                     <GoogleMap
+                                        onLoad={onLoad}
                                         mapContainerStyle={containerStyle}
                                         center={position}
                                         zoom={10}

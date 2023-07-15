@@ -43,7 +43,6 @@ function Page1() {
   
     selectedTime.setHours(hours);
     selectedTime.setMinutes(minutes);
-    console.log(futureTimeWarning);
     dispatch(setPage({ date_time: selectedTime.toISOString()}));
   };
 
@@ -72,10 +71,11 @@ function Page1() {
   ];
   const years = Array.from({ length: 2 }, (_, index) => dateNow.getFullYear() - index);
 
+const dateTime=new Date(datetime||dateNow)
   
-const [dateValue, setDateValue] = useState(dateNow); // Set the initial date value to the current local date
-const [timeValue, setTimeValue] = useState(dateNow); // Set the initial time value to the current local time
-const [amPmValue, setAmPmValue] = useState(dateNow.getHours() >= 12 ? 'pm' : 'am'); // Set the initial amPmValue based on the current local time
+const [dateValue, setDateValue] = useState(dateTime); // Set the initial date value to the current local date
+const [timeValue, setTimeValue] = useState(dateTime); // Set the initial time value to the current local time
+const [amPmValue, setAmPmValue] = useState(dateTime.getHours() >= 12 ? 'pm' : 'am'); // Set the initial amPmValue based on the current local time
 const [futureDateWarning, setFutureDateWarning] = useState(false); 
 const [futureTimeWarning, setFutureTimeWarning] = useState(false);
 

@@ -26,8 +26,8 @@ function Page7() {
 
   const theme = useTheme();
   const handleChange = (event) => {
-    const value = event.target.value;
-    if (value === '0' || value === '2') {
+    const value = Number(event.target.value);
+    if (value === 0 || value === 2) {
       dispatch(setLock(false));
       setCount(null);
     } else {
@@ -70,9 +70,9 @@ function Page7() {
               Select any one
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', my: 4, pl: 14 }}>
-              <FormControlLabel control={<Checkbox checked={value === '0'} value={0} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}}/>} label="Unknown" />
-              <FormControlLabel control={<Checkbox checked={value === '1'} value={1} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}} />} label="Yes" />
-              <FormControlLabel control={<Checkbox checked={value === '2'} value={2} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}} />} label="No" />
+              <FormControlLabel control={<Checkbox checked={value === 0} value={0} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}}/>} label="Unknown" />
+              <FormControlLabel control={<Checkbox checked={value === 1} value={1} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}} />} label="Yes" />
+              <FormControlLabel control={<Checkbox checked={value === 2} value={2} onChange={handleChange} sx={{ paddingY: '20px', paddingLeft:'20px'}} />} label="No" />
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', mt: 3 }}>
                 <Select
                   value={count||""}
@@ -87,7 +87,7 @@ function Page7() {
                     }
                     setCount(count);
                   }}
-                  disabled={value === '0' || value === '2'}
+                  disabled={value === 0 || value === 2}
                   
                 >
                   {Array.from({ length: 30 }, (_, index) => index + 1).map((num) => (

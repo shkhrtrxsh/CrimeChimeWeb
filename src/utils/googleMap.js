@@ -1,16 +1,36 @@
 import { setMap, setPage, setZoom } from "src/store/reducers/registerReport";
 
-export const isWithinSAfrica = (latitude,longitude)=>{
-    // Create a polygon representing the boundaries of South Africa
-  const isWithinSouthAfrica=(latitude >= -34.8333 && latitude <= -22.1263 && longitude >= 16.4475 && longitude <= 32.8917);
+export const isWithinSAfrica = async (latitude, longitude) => {
+  const geocoder = new window.google.maps.Geocoder();
+  const latlng = new window.google.maps.LatLng(latitude, longitude);
 
-  if (isWithinSouthAfrica) {
-    return {latitude,longitude};
-  } else {
-    //return coords of JohannesBerg
-    return {latitude:-26.195246,longitude:28.034088};
+  try {
+    const results = await geocodeLatLng(geocoder, latlng);
+    for (let i = 0; i < results.length; i++) {
+      const addressComponents = results[i].address_components;
+      for (let j = 0; j < addressComponents.length; j++) {
+        if (addressComponents[j].types.includes("country") && addressComponents[j].short_name === "ZA") {
+          return [{ latitude, longitude },true];
+        }
+      }
+    }
+    return [{ longitude: 28.034088, latitude: -26.195246 },false];
+  } catch (error) {
+    throw new Error("Geocoder failed due to: " + error.status);
   }
-}
+};
+
+const geocodeLatLng = (geocoder, latlng) => {
+  return new Promise((resolve, reject) => {
+    geocoder.geocode({ location: latlng }, (results, status) => {
+      if (status === window.google.maps.GeocoderStatus.OK) {
+        resolve(results);
+      } else {
+        reject(new Error(status));
+      }
+    });
+  });
+};
 
 export const getLocationCoords = async () => {
   if (navigator.geolocation) {
@@ -21,8 +41,10 @@ export const getLocationCoords = async () => {
       
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
+
+      const [values,_] = await isWithinSAfrica(latitude, longitude);
       
-      return isWithinSAfrica(latitude, longitude);
+      return values;
     } catch (error) {
       console.error("Error:", error);
       return null;
