@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { GoogleMap, LoadScript, Marker, useLoadScript } from '@react-google-maps/api';
-import { Container, FormControl, Grid, Box, Typography, Divider, LinearProgress, Autocomplete, TextField } from '@mui/material';
+import { useRef } from 'react';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import { FormControl, Box, Divider } from '@mui/material';
 import NextButton from 'src/components/Button/NextButton';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { useDispatch, useSelector } from 'react-redux';
@@ -76,7 +76,7 @@ const Page2 = ({setSelectActive}) => {
   }
   return (
         <Box sx={{height:"100%",display:"flex",flexDirection:"column"}}>
-          <Box sx={{flexGrow:1,position:'relative'}}>
+          <Box sx={{flexGrow:1,position:'relative',maxHeight:"85vh"}}>
             <Box id="kbd" sx={{position:"absolute",top:20,right:{sm:0,md:70},
             left:10,zIndex:1000}}>
               <GoogleAutoComplete style={{zIndex:1000}}/>
@@ -92,7 +92,7 @@ const Page2 = ({setSelectActive}) => {
               </GoogleMap>
             </FormControl>
           </Box>
-          <Box style={{ backgroundColor: '#ffe600', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginLeft: 'auto', marginRight: 'auto',width:'100%' }}>
+          <Box style={{ position:'fixed',bottom:0,zIndex:1000,backgroundColor: '#ffe600', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginLeft: 'auto', marginRight: 'auto',width:'100%' }}>
           <NextButton beforeNext={()=>setSelectActive(1)} textValue="GO BACK"/>
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
             <NextButton beforeNext={()=>setSelectActive(edit?4:3)} textValue="CONFIRM PLACE"/>

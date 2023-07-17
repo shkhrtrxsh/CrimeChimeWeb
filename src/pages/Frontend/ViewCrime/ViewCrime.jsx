@@ -100,6 +100,7 @@ const ViewCrime = () => {
               }}
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
+                  <Marker id="mark" zIndex={100} draggable={true} position={position} onDragEnd={markerDragEnd}/>
                   {nearbyData.map(({latitude=null,longitude=null,user_count=0},ind)=>{
                     const position={
                       lat:Number(latitude),
@@ -107,11 +108,11 @@ const ViewCrime = () => {
                     };
                     return(
                       <Marker key={ind} position={position} options={markerOptions}
-                      onClick={()=>onMarkerClick(ind)} label={{text:`${user_count||1}`,fontWeight:"bold",className:"map-label",color:"red"}}
+                      onClick={()=>onMarkerClick(ind)} label={{text:`${user_count||1}`,fontWeight:"bold",className:"map-label",color:"red"}} zIndex={0}
                       />
                       )
                     })}
-                    <Marker id="mark" draggable={true} position={position} onDragEnd={markerDragEnd}/>
+                    
               </GoogleMap>
             </Box>
             

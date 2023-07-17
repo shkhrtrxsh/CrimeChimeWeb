@@ -1,19 +1,13 @@
-import React, { useState, useEffect, useRef} from 'react';
-import { Container, Typography, Grid, Box , Divider, LinearProgress, Checkbox, Select, MenuItem,useMediaQuery,
-  useTheme,
-  TextField,
-  FormHelperText, } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Container, Typography, Grid, Box, Select, MenuItem, useTheme, FormHelperText } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import ak from '../../../assets/images/ak.png'
-import pistol from '../../../assets/images/pistol.png'
-import knife from '../../../assets/images/knife.png'
-import others from '../../../assets/images/others.png'
-import NextButton from 'src/components/Button/NextButton';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import ak from '../../../assets/images/ak.png';
+import pistol from '../../../assets/images/pistol.png';
+import knife from '../../../assets/images/knife.png';
+import others from '../../../assets/images/others.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLock, setPage } from 'src/store/reducers/registerReport';
-import { loadGoogleMaps } from 'src/utils/googleMap';
-import ProgressBar from 'src/layouts/Report/ProgressBar';
 
 function Page4() {
   const data = useSelector(state=>state.reportRegister.data);
@@ -109,7 +103,13 @@ function Page4() {
                   {fields.map((f,ind)=>{
                     return(
                     <li style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3',width:"100%" }} key={ind}>
-                      <TextField type="number" inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} id="outlined-basic" variant="outlined" sx={{width:"80px"}} margin="normal" disabled={weapons>=0} onChange={handleCount} name={f.name} value={data[f.name]||""}/>
+                      <Select sx={{width:"80px",marginBottom:"5px"}} disabled={weapons>=0} name={f.name}  value={data[f.name]||""} onChange={handleCount} >
+                        {[...Array(15).fill(0)].map((_,ind)=>{
+                          return(
+                            <MenuItem value={ind+1} key={ind}>{ind+1}</MenuItem>
+                          )
+                        })}
+                      </Select>
                       <Typography sx={{ fontWeight: 'normal',fontSize:'16px', paddingX: 2, textAlign: 'left' }}>
                         {f.label}
                       </Typography>
