@@ -116,6 +116,9 @@ const registerReport = createSlice({
     //     if(index)state.markers.splice(index,1);
     //     else state.markers=[];
     // },
+    setError:(state,action)=>{
+        state.error=action.payload;
+    },
     setLock:(state,action)=>{
         state.lock=action.payload;
     },
@@ -145,6 +148,7 @@ const registerReport = createSlice({
         [getNearbyCrimes.rejected]: (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.nearbyData = [];
         },
         [getNearbyCrimes2.pending]: (state, action) => {
             state.loading = true;
@@ -172,6 +176,6 @@ const registerReport = createSlice({
 
 });
 
-export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,setWarnings,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports,setDuplicate,setEdit} =registerReport.actions;
+export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,setWarnings,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports,setDuplicate,setEdit,setError} =registerReport.actions;
 
 export const registerReportReducer = registerReport.reducer;

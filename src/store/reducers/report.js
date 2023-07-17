@@ -29,6 +29,11 @@ const initialState = {
 export const report = createSlice({
     name: 'report',
     initialState ,
+    reducers:{
+      setError:(state,action)=>{
+        state.error=null;
+      }
+    },
     extraReducers: {
         // Report Add Api
         [addReport.pending]: (state, action) => {
@@ -79,7 +84,8 @@ export const report = createSlice({
         },
         [editReport.rejected]: (state, action) => {
           state.loading = false;
-          state.error = action.payload.message;
+          state.error = action.payload;
+          state.report=[];
         },
 
         // Change Report Status Api

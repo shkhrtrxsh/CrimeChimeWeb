@@ -38,6 +38,7 @@ import ActionOptions from 'src/components/ActionOptions';
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog';
 import TransparentFab from 'src/layouts/components/TransparentFab';
 import { getNearbyCrimes } from 'src/store/api/registerReport';
+import { NoDataDialog } from 'src/layouts/components/NoDataDialog';
 
 const containerStyle = {
     width: '100%',
@@ -169,6 +170,7 @@ const HomeMap = () => {
     return (
         <>
             <BoxButtonStyle sx={{position: 'absolute',right: '0px',top:'390px'}} onClick={() => setHidden(s => !s)}>
+                <NoDataDialog/>
                 <ConfirmDeleteDialog 
                     openDialog={openDialog} 
                     setOpenDialog={setOpenDialog}
@@ -216,7 +218,7 @@ const HomeMap = () => {
                     component={Link}
                     variant='extended'
                 >
-                        {hidden && <Typography component='h6' sx={{ marginLeft: '3px',width:100 }}>View Crime</Typography>}
+                        {hidden && <Typography component='h6' sx={{ marginLeft: '3px',width:100 }}>View Crimes</Typography>}
                     <VisibilityIcon />
                 </TransparentFab>
                 

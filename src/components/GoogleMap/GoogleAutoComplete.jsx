@@ -12,6 +12,7 @@ const GoogleAutoComplete = ({style}) => {
     const latitude=lat();
     const longitude=lng();
     dispatch(setPage({latitude,longitude,location,google_place_id}));
+    document.webkitExitFullscreen();
   };
   return(
     <ReactGoogleAutocomplete
@@ -21,7 +22,7 @@ const GoogleAutoComplete = ({style}) => {
           new window.google.maps.LatLng(-26.2751, 27.9639),
           new window.google.maps.LatLng(-26.0313, 28.2336)
         ),
-        types: ['geocode'],
+        types: ['geocode','establishment'],
       }}
       style={{height:"50px",padding:"10px",borderRadius:10,width:250,...style}}
       onPlaceSelected={handlePlaceSelected}

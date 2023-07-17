@@ -118,7 +118,7 @@ export default function HeaderMenu(props) {
                             to="/reportscrime"
                             activeclassname="active"
                         >
-                            View Crime
+                            View Crimes
                         </LinkButton>
                         <LinkButton
                             to="/profile"
@@ -191,14 +191,14 @@ export default function HeaderMenu(props) {
                                     onClick={handleDrawerClose}
                                     activeclassname="active"
                                 >
-                                    View Crime
+                                    View Crimes
                                 </LinkDrawerButton>
                                 <LinkDrawerButton
                                     to="/my-report"
                                     onClick={handleDrawerClose}
                                     activeclassname="active"
                                 >
-                                    My Report
+                                    My Reports
                                 </LinkDrawerButton>
                                 {isAdmin === 1 ?
                                     <>

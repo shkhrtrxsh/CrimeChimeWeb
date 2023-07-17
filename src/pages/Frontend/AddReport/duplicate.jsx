@@ -144,7 +144,7 @@ const doFunc=()=>{
               <Box display="flex" alignItems="center" justifyContent="center" paddingTop="10px">
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginRight: '5px', width: '20px' }} />
                 <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
-                  {viewCrime?"View Crime":"Possible Duplicate"}
+                  {viewCrime?"View Crimes":"Possible Duplicate"}
                 </Typography>
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
             </Box>

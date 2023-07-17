@@ -5,7 +5,7 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     return [
         { firstCol: 'Time of Occurence:', secondCol: <p>{date_time}</p> },
         { firstCol: 'Address:', secondCol: <p>{location}</p> },
-        { firstCol: 'Description:', secondCol: <p>{description}</p> },
+        { firstCol: 'Description:', secondCol: <p>{description||"No Description Available."}</p> },
         { firstCol: 'Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"Unknown" },
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){

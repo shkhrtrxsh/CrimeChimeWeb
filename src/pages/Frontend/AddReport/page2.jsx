@@ -62,7 +62,7 @@ const Page2 = ({setSelectActive}) => {
   };
   const mapOptions={
     gestureHandling: "greedy",
-    fullscreenControl:false,
+    fullscreenControl:true,
     zoomControlOptions: {
       position: window.google.maps.ControlPosition.RIGHT_CENTER
     },
@@ -81,7 +81,7 @@ const Page2 = ({setSelectActive}) => {
             left:10,zIndex:1000}}>
               <GoogleAutoComplete style={{zIndex:1000}}/>
             </Box>
-            <FormControl fullWidth sx={{ height:"100%" }}>
+            <Box fullWidth sx={{ height:"100%" }}>
               <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={zoom}
               options={mapOptions}
               onLoad={Map => {
@@ -90,7 +90,7 @@ const Page2 = ({setSelectActive}) => {
               onZoomChanged={handleZoomChanged}>
                 <Marker position={position} draggable={true} onDragEnd={markerDragEnd} />
               </GoogleMap>
-            </FormControl>
+            </Box>
           </Box>
           <Box style={{ position:'fixed',bottom:0,zIndex:1000,backgroundColor: '#ffe600', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginLeft: 'auto', marginRight: 'auto',width:'100%' }}>
           <NextButton beforeNext={()=>setSelectActive(1)} textValue="GO BACK"/>

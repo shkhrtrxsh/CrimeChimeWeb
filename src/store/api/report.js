@@ -230,6 +230,13 @@ export const getMyReport = createAsyncThunk(
     try {
       const response = await API.get(`/report/my`);
       if(response.data.status === 200){
+        try {
+          if(response.data.data===null){
+            throw Error(response.data.message);
+          }
+        } catch (error) {
+          return rejectWithValue(error.message);
+        }
         return response.data.data;
       }
     } catch (err) {
