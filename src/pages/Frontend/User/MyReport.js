@@ -14,25 +14,18 @@ import Typography from '@mui/material/Typography';
 import { setCrimeIndex, setEdit, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
 import { css } from '@emotion/css';
 import ClampLines from 'react-clamp-lines';
-import styled from '@emotion/styled';
 import NoData from 'src/assets/svg/no-data.svg';
-
-const StyledGrid = styled(Grid)`
-    display: flex;
-    flex-direction: column;
-    width:100%;
-    height:calc( 100vh - 65px );
-    max-height:calc( 100vh - 65px );
-    justify-content: center;
-    align-items: center;
-`
+import { useTheme } from '@emotion/react';
+import { NoDataDialogRoot } from 'src/layouts/components/NoDataDialogRoot';
+import { setError } from 'src/store/reducers/report';
+import { StyledGrid } from './StyledGrid';
 
 const MyReport = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { reports } = useSelector((state) => ({ ...state.report }));
+    const { reports,error } = useSelector((state) => ({ ...state.report }));
 
     useEffect(() => {
         dispatch(getMyReport({}))
@@ -68,12 +61,13 @@ const MyReport = () => {
         dispatch(setPage(newReport));
         navigate("/report/add");
     }
-
+    const theme = useTheme();
     return (
-        <Page title="My Report">
+        <Page title="My Reports">
             <Container sx={{
                 marginTop: '20px',
             }}>
+                <NoDataDialogRoot error={error} handleClose={()=>dispatch(setError(""))}/>
                 <Grid container spacing={3}>
                     <UserSideName />
                     {reports?.data?<Grid item md={9} xs={12}>
@@ -106,11 +100,14 @@ const MyReport = () => {
                                         }
                                             <CardContent>
                                                 <Tooltip title={report.location}>
-                                                    <Typography gutterBottom variant="h5" component="div" className={css`
+                                                    <Box className={css`
                                                         max-height:100px;
                                                         min-height:100px;
                                                         height:100px;
-                                                        
+                                                        font-size: 18px;
+                                                        font-weight: bold;
+                                                        margin-top: 0;
+                                                        margin-bottom: 0.5em;
                                                     `}>
                                                         <ClampLines
                                                             text={report.location}
@@ -120,15 +117,18 @@ const MyReport = () => {
                                                             stopPropagation={true}
                                                             buttons={false}
                                                         />
-                                                    </Typography>
+                                                    </Box>
                                                 </Tooltip>
                                                 
                                                 <Tooltip title={report?.description||""}>
-                                                    <Typography variant="body2" color="text.secondary" className={css`
+                                                    <Box className={css`
                                                         margin-top:15px;
                                                         max-height:22px;
                                                         min-height:22px;
                                                         height:22px;
+                                                        font-size:14px;
+                                                        font-weight:light;
+                                                        color:${theme.palette.text.secondary};
                                                     `}>
                                                         <ClampLines
                                                             text={report?.description||"No Description"}
@@ -138,7 +138,7 @@ const MyReport = () => {
                                                             stopPropagation={true}
                                                             buttons={false}
                                                         />
-                                                    </Typography>
+                                                    </Box>
                                                 </Tooltip>
                                             </CardContent>
                                             <CardActions sx={{    paddingLeft: '24px'}}>
@@ -158,9 +158,9 @@ const MyReport = () => {
                             )
                             })}
                         </Grid>
-                    </Grid>:<StyledGrid md={9} xs={12}>
+                    </Grid>:<StyledGrid item md={9} xs={12}>
                         <img src={NoData} alt="No Data Available"/>
-                        <Typography variant="h4">No Records Found</Typography>
+                        <Typography variant="h4">Crime Records doesn't Exist</Typography>
                     </StyledGrid>
                     }
                 </Grid>

@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  Container,
   Typography,
   Grid,
- 
+
   Box,
-  
+
   Button,
-  
-  useMediaQuery,
+
   useTheme,
   Dialog,
   DialogTitle,
@@ -17,20 +15,14 @@ import {
   DialogActions,
   CircularProgress,
 } from '@mui/material';
-import current from '../../../assets/images/current.png';
 import duplicate from '../../../assets/images/duplicate.png';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadGoogleMaps } from 'src/utils/googleMap';
 
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
-import { getNearbyCrimes } from 'src/store/api/registerReport';
-import { fDateTimeSuffix } from 'src/utils/formatTime';
-import { capitalize } from 'src/utils/string';
-import { addMarkers, clearNearbyReports, setLock, setMarker, setPage } from 'src/store/reducers/registerReport';
-import API from 'src/config/api';
+import { setMarker } from 'src/store/reducers/registerReport';
 import { crimeDetails } from 'src/utils/crimeDetails';
 
 const vehicle_theft_choices = ["hijacking", "attempted hijacking", "vehicle theft", "attempted vehicle theft", "does not apply"];
@@ -60,12 +52,12 @@ export const SuccessDialog = ({open,handleClose})=>{
   )
 }
 
-function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
+function CrimeDialog({mapRef,index=0,onClose}) {
   const dispatch = useDispatch();
   const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
   const {latitude:lat,longitude:long} = regData;
   const [open, setOpen] = useState(0)
-  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images,description,user_count}=values[index]||{};
+  const {id,date_time,latitude,longitude,report_images}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 
   useEffect(()=>{
@@ -107,7 +99,6 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
 
 
   const theme = useTheme();
-  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
   function isImage(url) {
     const imageExtensions = ['.apng', '.bmp', '.gif', '.ico', '.cur', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
@@ -121,33 +112,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
     return videoExtensions.some(extension => lowerCaseUrl.endsWith(extension));
   }
   
-  const clickYes = async()=>{
-    dispatch(setLock(true));
-    try {
-      await API.post("report/checkReport",{
-        report_id:id,
-        latitude,
-        longitude,
-        date_time
-      });
-      setOpen(1);
-    } catch (error) {
-      console.error(error);
-      setOpen(2);
-    }
-    dispatch(setLock(false));
-  }
 
-  const markerDragEnd = (e) => {
-    if (e !== null) {
-      const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
-        }
-      });
-    }
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>

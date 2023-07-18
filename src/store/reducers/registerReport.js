@@ -22,10 +22,10 @@ const initialState = {
         perpetrators:-1,
         perpetrators_des:null,
         weapons:0,
-        fully_auto_weapons:0,
-        semi_auto_weapons:0,
-        knife_weapons:0,
-        other_weapons:0,
+        fully_auto_weapons:3,
+        semi_auto_weapons:3,
+        knife_weapons:3,
+        other_weapons:3,
         murders:3,
         murders_people:null,
         rape:0,
@@ -148,7 +148,7 @@ const registerReport = createSlice({
         [getNearbyCrimes.rejected]: (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.nearbyData = [];
+        state.nearbyData=[];
         },
         [getNearbyCrimes2.pending]: (state, action) => {
             state.loading = true;

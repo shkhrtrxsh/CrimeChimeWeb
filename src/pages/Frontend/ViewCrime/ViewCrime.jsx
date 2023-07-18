@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Box, Drawer, useMediaQuery, useTheme } from '@mui/material';
-import { getLocationCoords } from 'src/utils/googleMap';
+import { getLocationCoords, isWithinSAfrica } from 'src/utils/googleMap';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCrimeIndex, setPage, setZoom, } from 'src/store/reducers/registerReport';
 import { GoogleMap, Marker } from '@react-google-maps/api';
@@ -10,6 +10,7 @@ import SearchFilter from '../ViewReport/SearchFilter';
 import CrimeDialog from "./CrimeDialog";
 import { getNearbyCrimes } from 'src/store/api/registerReport';
 import { NoDataDialog } from '../../../layouts/components/NoDataDialog';
+import { toast } from 'react-toastify';
 
 const ViewCrime = () => {
   const register = useSelector(state => state.reportRegister);
@@ -63,13 +64,20 @@ const ViewCrime = () => {
     dispatch(setCrimeIndex({ index: ind, viewCrime: true }));
   }
 
-  const markerDragEnd = (e) => {
+  const markerDragEnd = async(e) => {
     if (e !== null) {
       const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
+      const [lat,lng] = [e.latLng.lat(), e.latLng.lng()];
+      const [{latitude,longitude},isSA] = await isWithinSAfrica(lat,lng);
+      if(!isSA){
+        toast.error("Crimes can be reported only within South Africa");
+        dispatch(setPage({latitude,longitude}))
+        return;
+      }
+      geocoder.geocode({ location: { lat, lng } }, (results, status) => {
         if (status === 'OK' && results[0]) {
-          dispatch(setPage({ location: results[0].formatted_address, longitude: e.latLng.lng(), latitude: e.latLng.lat(), google_place_id: results[0].place_id }));
-          dispatch(getNearbyCrimes({ latitude: e.latLng.lat(), longitude: e.latLng.lng(), fromDate: null, toDate: null }));
+          dispatch(setPage({ location: results[0].formatted_address, longitude: lng, latitude: lat, google_place_id: results[0].place_id }));
+          dispatch(getNearbyCrimes({ latitude: lat, longitude: lng, fromDate: null, toDate: null }));
         }
       });
     }

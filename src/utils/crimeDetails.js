@@ -1,3 +1,5 @@
+import { WeaponChoices } from "src/constants/weapons";
+
 const { capitalize } = require("./string");
 
 export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData)=>{
@@ -11,7 +13,7 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           switch(weapons){
             case 0:return `Unknown`
             case 1:return `None`
-            default:return `Fully Automatic:${fully_auto_weapons}, Semi Automatic:${semi_auto_weapons}, Knife Weapons:${knife_weapons}, Other:${other_weapons}`
+            default:return `Fully Automatic:${WeaponChoices[fully_auto_weapons]}, Semi Automatic:${WeaponChoices[semi_auto_weapons]}, Knife Weapons:${WeaponChoices[knife_weapons]}, Other:${WeaponChoices[other_weapons]}`
           }
         })() },
         { firstCol: 'Rape:', secondCol:(()=>{
@@ -39,7 +41,14 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           if(vehicle_theft===4){
             return null;//capitalize(vehicle_theft_choices[vehicle_theft])
           }else{
-            return capitalize(`${vehicle_theft_choices[vehicle_theft]} of ${vehicle_year||""} ${vehicle_colour||""} ${vehicle_make||""} ${vehicle_model||""}`)
+            return capitalize(`${vehicle_theft_choices[vehicle_theft]}`)
+          }
+        })() },
+        { firstCol: 'Vehicle Type:', secondCol:(()=>{
+          if(vehicle_theft===4){
+            return null;//capitalize(vehicle_theft_choices[vehicle_theft])
+          }else{
+            return (vehicle_year||vehicle_colour||vehicle_make||vehicle_model)?capitalize(`${[vehicle_year,vehicle_colour,vehicle_make,vehicle_model].filter((el)=>el).join(" ")} Vehicle`):"Vehicle Description Unavailable"
           }
         })() },
         { firstCol: 'Burglary:', secondCol:(()=>{
