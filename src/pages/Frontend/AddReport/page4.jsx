@@ -99,7 +99,7 @@ function Page4() {
             `}>
             <FormControlLabel
               control={<Checkbox checked={weapons === -1} value={-1} onChange={handleChange} />}
-              label="Perpetrator Used Weapons"
+              label="Yes, perpetrator had weapons"
               sx={{ paddingBottom: weapons === -1?'0px':'20px' }}
             />
             <Box display={weapons===-1?"block":"none"} mb={4}>
@@ -126,7 +126,7 @@ function Page4() {
             </Box>
             <FormControlLabel
               control={<Checkbox checked={weapons === 1} value={1} onChange={handleChange} />}
-              label="Perpetrator Didn't use Weapons"
+              label="No, perpetrator did not have weapons"
               sx={{ paddingBottom: '20px' }}
             />
             <FormControlLabel

@@ -87,7 +87,6 @@ const Page2 = ({setSelectActive}) => {
               <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={zoom}
               options={mapOptions}
               onLoad={Map => {
-                console.log("loaded");
                 map.current = Map; // Store the map instance in a global variable for access in the event handler
               }}
               onZoomChanged={handleZoomChanged}>
