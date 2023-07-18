@@ -9,6 +9,7 @@ import { setPage, setZoom } from 'src/store/reducers/registerReport';
 import { SatelliteZoom } from 'src/constants/googleMap';
 import { toast } from 'react-toastify';
 import { isWithinSAfrica } from 'src/utils/googleMap';
+import { isIOSSafari } from 'src/utils/checkios';
 const containerStyle = {
   width: '100%',
   height: '100%', // Adjust the height according to your needs
@@ -74,17 +75,19 @@ const Page2 = ({setSelectActive}) => {
     },
     mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE      
   }
+  const isIOS=isIOSSafari();
   return (
         <Box sx={{height:"100%",display:"flex",flexDirection:"column"}}>
           <Box sx={{flexGrow:1,position:'relative',maxHeight:"85vh"}}>
-            <Box id="kbd" sx={{position:"absolute",top:20,right:{sm:0,md:70},
+            {!isIOS&&<Box id="kbd" sx={{position:"absolute",top:20,right:{sm:0,md:70},
             left:10,zIndex:1000}}>
               <GoogleAutoComplete style={{zIndex:1000}}/>
-            </Box>
+            </Box>}
             <Box fullWidth sx={{ height:"100%" }}>
               <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={zoom}
               options={mapOptions}
               onLoad={Map => {
+                console.log("loaded");
                 map.current = Map; // Store the map instance in a global variable for access in the event handler
               }}
               onZoomChanged={handleZoomChanged}>
