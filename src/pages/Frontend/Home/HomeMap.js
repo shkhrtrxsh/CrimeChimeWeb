@@ -43,11 +43,6 @@ import { NoDataDialogRoot } from 'src/layouts/components/NoDataDialogRoot';
 import { setError } from 'src/store/reducers/report';
 import { StyledGrid } from '../User/StyledGrid';
 
-const containerStyle = {
-    width: '100%',
-    height: `calc(100vh - ${APPBAR_DESKTOP + 110}px )`
-};
-
 const BoxButtonStyle = styled(Box)(({ theme }) => ({
     position: 'absolute',
     right: '15px',
@@ -78,6 +73,13 @@ const HomeMap = () => {
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
     const [hidden, setHidden] = React.useState(true);
+    const {show:adShow} = useSelector(state=>state.advertise);
+
+    const containerStyle = {
+        width: '100%',
+        height: `calc(100vh - ${APPBAR_DESKTOP + (adShow?110:0)}px )`
+    };
+
     useEffect(() => {
         dispatch(clearReport());
     }, [])
@@ -239,7 +241,7 @@ const HomeMap = () => {
 
 
 
-            <Box sx={{
+            {adShow&&<Box sx={{
                 background: theme.palette.secondary.main,
                 textAlign: 'center',
                 padding: '40px'
@@ -248,7 +250,7 @@ const HomeMap = () => {
                     Advertisment
                 </Typography>
 
-            </Box>
+            </Box>}
             {!isAuth && showBox && isMobile && (
                 <Box
                     sx={{
@@ -280,7 +282,7 @@ const HomeMap = () => {
 
 
             <Box sx={{ display: 'flex' }}>
-                <Box sx={{
+                {adShow&&<Box sx={{
                     background: theme.palette.secondary.main,
                     textAlign: 'center',
                     width: '30%',
@@ -292,7 +294,7 @@ const HomeMap = () => {
                     <Typography variant='h5' sx={{ paddingTop: '150px' }}>
                         Advertisment
                     </Typography>
-                </Box>
+                </Box>}
                 <MapDivStyle>
 
                     {!hidden ? (
