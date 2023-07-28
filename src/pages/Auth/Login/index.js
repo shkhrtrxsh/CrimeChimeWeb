@@ -66,7 +66,7 @@ export default function Login() {
   };
 
   const methods = useForm({
-    resolver: yupResolver(LoginSchema),
+    //resolver: yupResolver(LoginSchema),
     defaultValues,
   });
 
