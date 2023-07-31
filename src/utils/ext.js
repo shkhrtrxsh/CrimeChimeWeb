@@ -6,4 +6,6 @@ export function isImage(url) {
   
 export function isVideo(url) {
     const videoExtensions = ['.mp4', '.webm', '.ogg', '.ogv', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.m4v', '.3gp'];
+    const lowerCaseUrl = url.toLowerCase();
+    return videoExtensions.some(extension => lowerCaseUrl.endsWith(extension));
   }
