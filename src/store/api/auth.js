@@ -79,7 +79,7 @@ export const logout = createAsyncThunk(
     try {
       const response = await API.post("/auth/logout");
       if(response.data.status === 200){
-        toast.success("User Logout Successfully");
+        toast.success("Logout Successful");
         localStorage.clear();
         navigate("/");
         return response.data;
