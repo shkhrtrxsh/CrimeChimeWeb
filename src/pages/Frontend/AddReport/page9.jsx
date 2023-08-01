@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, useTheme, Typography, Grid, Box, Select, MenuItem, TextField, Autocomplete } from '@mui/material';
+import { Container, useTheme, Typography, Grid, Box, Select, MenuItem, TextField, Autocomplete, FormControlLabel, Checkbox } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -19,7 +19,7 @@ function Page9() {
   const [car_models, setCarModels] = useState([]);
   const car_colors = colors.data;
   const car_years = [...Array(currentYear - 1949)].map((_, i) => String(currentYear - i));
-
+  const [checked,setChecked] = useState(true);
   const fields = [
     {
       name: "vehicle_colour",
@@ -62,6 +62,13 @@ function Page9() {
   const handleChange = (id, newValue) => {
     dispatch(setPage({ [id]: newValue }));
   };
+  const handleUnknown = (e)=>{
+    const checked=e.target.checked;
+    setChecked(checked);
+    if(checked){
+      dispatch(setPage({vehicle_make:null, vehicle_model:null, vehicle_colour:null, vehicle_year:null}));
+    }
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -82,6 +89,11 @@ function Page9() {
 
           <Box sx={{ pl: 5, pt: 5 }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <FormControlLabel
+                control={<Checkbox checked={checked} onChange={handleUnknown} />}
+                label="Unknown"
+                sx={{ paddingBottom: '20px' }}
+              />
               {fields.map((f, ind) => {
                 return (
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, justifyContent: 'center' }} key={ind}>
@@ -89,6 +101,7 @@ function Page9() {
                       {f.label}
                     </Typography>
                     <Autocomplete
+                      freeSolo
                       id={f.name}
                       onChange={(_, newValue) => handleChange(f.name, newValue)}
                       value={data[f.name] || ""}
@@ -97,6 +110,7 @@ function Page9() {
                       renderInput={(params) =>
                         <TextField sx={{ width: 200 }} {...params} name={f.name} />
                       }
+                      disabled={checked}
                     />
                   </Box>
                 )

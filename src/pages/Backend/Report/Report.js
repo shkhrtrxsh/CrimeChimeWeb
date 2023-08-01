@@ -1,13 +1,15 @@
-import React, { Fragment, useEffect} from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getReports, deleteReport, reportStatus} from 'src/store/api/report';
+import { getReports, deleteReport, reportStatus } from 'src/store/api/report';
 import { ActiveInactiveButton } from 'src/components/Button';
 import ActionOptions from 'src/components/ActionOptions'
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog'
 import ChangeStatusDialog from 'src/components/ChangeStatusDialog';
 import { fDateTime } from 'src/utils/formatTime';
-import { 
+import NoData from 'src/assets/svg/no-data.svg';
+
+import {
   Table,
   TableBody,
   TableCell,
@@ -15,46 +17,49 @@ import {
   TablePagination,
   TableHead,
   TableRow,
-  Paper, 
+  Paper,
   Card,
   Tooltip,
-  Link
+  Link,
+  Typography
 } from '@mui/material';
 import BreadcrumbNavigator from 'src/components/BreadcrumbNavigator';
-import {SearchInTable} from 'src/components/Table';
+import { SearchInTable } from 'src/components/Table';
 import { getSearchQueryParams, setSearchQueryParams, recordPerPage } from 'src/helpers/SearchHelper';
+import { StyledGrid } from 'src/pages/Frontend/User/StyledGrid';
+import { NoDataDialogRoot } from 'src/layouts/components/NoDataDialogRoot';
+import { setError } from 'src/store/reducers/report';
 
 export default function Report() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [openDialog, setOpenDialog] = React.useState({
-    status: false, 
-    id: null 
+    status: false,
+    id: null
   });
   const [changeStatusDialog, setChangeStatusDialog] = React.useState({
-    status: false, 
+    status: false,
     id: null,
     condition: null
   });
 
-  const { reports } = useSelector((state) => ({ ...state.report }));
-
+  const { reports,error } = useSelector((state) => ({ ...state.report }));
   useEffect(() => {
     const param = getSearchQueryParams(searchParams)
-    dispatch(getReports({param}))
-  },[searchParams]);
+    dispatch(getReports({ param }))
+  }, [searchParams]);
 
   const callDeleteFunc = (status, id) => {
-    if(status === true){
-      dispatch(deleteReport({id}))
+    if (status === true) {
+      dispatch(deleteReport({ id }))
     }
   }
 
-  const changeStatusFunc = (status, id, condition) => {    
-    if(status === true){
+  const changeStatusFunc = (status, id, condition) => {
+    if (status === true) {
       const formValue = {
-        id : id,
+        id: id,
         status: condition
       }
       dispatch(reportStatus({ formValue }))
@@ -65,7 +70,7 @@ export default function Report() {
     setOpenDialog((prevState) => ({
       ...prevState,
       status: event.status,
-      id:event.id
+      id: event.id
     }));
   }
 
@@ -79,32 +84,33 @@ export default function Report() {
     navigate(`/reports?${param}`)
   }
 
-  
-  const admin = reports?.admin?true:false;
+
+  const admin = reports?.admin ? true : false;
   return (
     <Fragment>
       <BreadcrumbNavigator
-        currentPage="Report List" 
-        rightButton={{name: "add report", link: "/report/add"}} 
+        currentPage="Report List"
+        rightButton={{ name: "add report", link: "/report/add" }}
       />
+      <NoDataDialogRoot error={error} handleClose={()=>dispatch(setError(null))}/>
       <Card>
         <SearchInTable />
-        <TableContainer component={Paper}>
+        {reports ? <React.Fragment><TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                {admin&&<TableCell align="left"></TableCell>}
+                {admin && <TableCell align="left"></TableCell>}
                 <TableCell>Location</TableCell>
-                {admin&&<TableCell align="left">Reporter</TableCell>}
+                {admin && <TableCell align="left">Reporter</TableCell>}
                 <TableCell align="left">Status</TableCell>
                 <TableCell align="left">Created At</TableCell>
                 <TableCell align="right">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {reports.data && reports.data.map((report,index) => (
+              {reports.data && reports.data.map((report, index) => (
                 <TableRow key={report.id}>
-                  {admin&&<TableCell align="left" sx={{fontSize:10,userSelect:"none"}}>{report.is_updated===1&&
+                  {admin && <TableCell align="left" sx={{ fontSize: 10, userSelect: "none" }}>{report.is_updated === 1 &&
                     <Tooltip title="User has edited the crime entry">
                       <Link>
                         (edited)
@@ -112,9 +118,9 @@ export default function Report() {
                     </Tooltip>
                   }</TableCell>}
                   <TableCell component="th" scope="row">{report.location}</TableCell>
-                  {admin&&<TableCell align="left">{report.user.name}</TableCell>}                  
+                  {admin && <TableCell align="left">{report.user.name}</TableCell>}
                   <TableCell align="left">
-                    <ActiveInactiveButton 
+                    <ActiveInactiveButton
                       onClick={() => setChangeStatusDialog({ status: true, id: report.id })}
                       status={report.status}
                     >
@@ -123,11 +129,11 @@ export default function Report() {
                   </TableCell>
                   <TableCell align="left">{fDateTime(report.created_at)}</TableCell>
                   <TableCell align="right">
-                    <ActionOptions 
-                    index={index}
+                    <ActionOptions
+                      index={index}
                       delete_id={report.id}
-                      show_url={'/report?target=single&id='+report.id}
-                      add_note={'/add_not/'+report.id}
+                      show_url={'/report?target=single&id=' + report.id}
+                      add_note={'/add_not/' + report.id}
                       deleteAction={deleteOptionAction}
                     />
                   </TableCell>
@@ -136,24 +142,29 @@ export default function Report() {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={recordPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          component="div"
-          count={reports.total}
-          rowsPerPage={10}//reports.per_page}
-          page={reports.current_page - 1}
-          onPageChange={handlePageChange}
-        />
+          <TablePagination
+            rowsPerPageOptions={recordPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            component="div"
+            count={reports.total}
+            rowsPerPage={10}//reports.per_page}
+            page={reports.current_page - 1}
+            onPageChange={handlePageChange}
+          /></React.Fragment> :
+          <StyledGrid item md={9} xs={12}>
+            <img src={NoData} alt="No Data Available" />
+            <Typography variant="h4">Crime Records doesn't Exist</Typography>
+          </StyledGrid>
+        }
       </Card>
-      <ConfirmDeleteDialog 
-        openDialog={openDialog} 
+      <ConfirmDeleteDialog
+        openDialog={openDialog}
         setOpenDialog={setOpenDialog}
         confirmDialog={callDeleteFunc}
       />
 
-      <ChangeStatusDialog 
-        openDialog={changeStatusDialog} 
+      <ChangeStatusDialog
+        openDialog={changeStatusDialog}
         setOpenDialog={setChangeStatusDialog}
         confirmDialog={changeStatusFunc}
       />

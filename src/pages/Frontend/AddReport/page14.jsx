@@ -16,7 +16,7 @@ const Page14 = () => {
       setChecked(removedChecked)
     }
     else{
-      setChecked([...checked,Number(event.target.value)]);
+      setChecked([...new Set([...checked,Number(event.target.value)])]);
     }
   };
 
@@ -42,13 +42,13 @@ const Page14 = () => {
               <Grid item xs={8} sx={{ pl: 5, pt: 0 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox value={0} onChange={handleChange} />
+                    <Checkbox checked={checked&&checked.includes(0)} value={0} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Crime occurred at ATM
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox value={1} onChange={handleChange} />
+                    <Checkbox checked={checked&&checked.includes(1)} value={1} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be drug-related
                       <br />
@@ -56,13 +56,13 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox  value={2} onChange={handleChange} />
+                    <Checkbox checked={checked&&checked.includes(2)} value={2} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be gang-related
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox  value={3} onChange={handleChange} />
+                    <Checkbox checked={checked&&checked.includes(3)} value={3} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Arson was involved
                       <br />
@@ -70,7 +70,7 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox  value={4} onChange={handleChange} />
+                    <Checkbox checked={checked&&checked.includes(4)} value={4} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Vandalism was involved
                       <br />
@@ -78,9 +78,15 @@ const Page14 = () => {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
-                    <Checkbox  value={5} onChange={handleChange} />
+                    <Checkbox checked={checked&&checked.includes(5)} value={5} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Social unrest
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
+                    <Checkbox checked={checked&&checked.includes(6)} value={6} onChange={handleChange} />
+                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
+                      Bombs were involved
                     </Typography>
                   </Box>
                 </Box>

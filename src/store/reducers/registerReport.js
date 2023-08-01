@@ -22,17 +22,17 @@ const initialState = {
         perpetrators:-1,
         perpetrators_des:null,
         weapons:0,
-        fully_auto_weapons:0,
-        semi_auto_weapons:0,
-        knife_weapons:0,
-        other_weapons:0,
-        murders:"3",
+        fully_auto_weapons:3,
+        semi_auto_weapons:3,
+        knife_weapons:3,
+        other_weapons:3,
+        murders:3,
         murders_people:null,
-        rape:"0",
+        rape:0,
         rape_people:null,
-        assault:"0",
+        assault:0,
         assault_people:null,
-        vehicle_theft:"4",
+        vehicle_theft:4,
         vehicle_make:null,
         vehicle_model:null,
         vehicle_colour:null,
@@ -41,9 +41,9 @@ const initialState = {
         burglary_type:"other",
         robbery:0,
         robbery_type:"other",
-        kidnapping:"0",
+        kidnapping:0,
         kidnapping_people:null,
-        bribery:"0",
+        bribery:0,
         various:[],
         police_reporting:2,
         reported_to_the_police:2,
@@ -116,6 +116,9 @@ const registerReport = createSlice({
     //     if(index)state.markers.splice(index,1);
     //     else state.markers=[];
     // },
+    setError:(state,action)=>{
+        state.error=action.payload;
+    },
     setLock:(state,action)=>{
         state.lock=action.payload;
     },
@@ -145,6 +148,7 @@ const registerReport = createSlice({
         [getNearbyCrimes.rejected]: (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.nearbyData=[];
         },
         [getNearbyCrimes2.pending]: (state, action) => {
             state.loading = true;
@@ -172,6 +176,6 @@ const registerReport = createSlice({
 
 });
 
-export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,setWarnings,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports,setDuplicate,setEdit} =registerReport.actions;
+export const {setLock,setZoom,setPage,setProgressBar,clearMarkers,addMarkers,setMap,setMarker,setWarnings,clearReport,clearNearbyReports,setCrimeIndex,setNearbyReports,setDuplicate,setEdit,setError} =registerReport.actions;
 
 export const registerReportReducer = registerReport.reducer;

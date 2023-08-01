@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  Container,
   Typography,
   Grid,
- 
+
   Box,
-  
+
   Button,
-  
-  useMediaQuery,
+
   useTheme,
   Dialog,
   DialogTitle,
@@ -17,20 +15,15 @@ import {
   DialogActions,
   CircularProgress,
 } from '@mui/material';
-import current from '../../../assets/images/current.png';
 import duplicate from '../../../assets/images/duplicate.png';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadGoogleMaps } from 'src/utils/googleMap';
 
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
-import { getNearbyCrimes } from 'src/store/api/registerReport';
-import { fDateTimeSuffix } from 'src/utils/formatTime';
-import { capitalize } from 'src/utils/string';
-import { addMarkers, clearNearbyReports, setLock, setMarker, setPage } from 'src/store/reducers/registerReport';
-import API from 'src/config/api';
+import { setMarker } from 'src/store/reducers/registerReport';
+import { crimeDetails } from 'src/utils/crimeDetails';
 
 const vehicle_theft_choices = ["hijacking", "attempted hijacking", "vehicle theft", "attempted vehicle theft", "does not apply"];
 const various_choices = ["crime occured at ATM", "drug-related crime", "gang-related crime", "Arson was involed", "Vandalism was involed", "social unrest"]
@@ -59,12 +52,12 @@ export const SuccessDialog = ({open,handleClose})=>{
   )
 }
 
-function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
+function CrimeDialog({mapRef,index=0,onClose}) {
   const dispatch = useDispatch();
   const {nearbyData:values=[],data:regData,lock,loading} = useSelector(state=>state.reportRegister);
   const {latitude:lat,longitude:long} = regData;
   const [open, setOpen] = useState(0)
-  const {id,date_time,location,latitude,longitude,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,report_images,description,user_count}=values[index]||{};
+  const {id,date_time,latitude,longitude,report_images}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
 
   useEffect(()=>{
@@ -102,78 +95,10 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
     }
   }, [latitude, longitude,mapRef]);
 
-  const data = values[index]&& [
-    { firstCol: 'Time of Occurence:', secondCol: <p>{date_time}</p> },
-    { firstCol: 'Address:', secondCol: <p>{location}</p> },
-    { firstCol: 'Description:', secondCol: <p>{description}</p> },
-    { firstCol: 'Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"Unknown" },
-    { firstCol: 'Weapons:', secondCol: (()=>{
-      switch(weapons){
-        case 0:return `Unknown`
-        case 1:return `None`
-        default:return `Fully Automatic: ${fully_auto_weapons}, Semi Automatic: ${semi_auto_weapons}, Knife Weapons: ${knife_weapons}, Other: ${other_weapons}`
-      }
-    })() },
-    { firstCol: 'Rape:', secondCol:(()=>{
-      switch(rape){
-        case 0:return null;//`Does not apply`
-        case 1:return `Attempted Rape(${rape_people} involved)`
-        default:return `Rape(${rape_people} involved)`
-      }
-    })() },
-    { firstCol: 'Murder:', secondCol:(()=>{
-      switch(murder){
-        case 0:return `Unknown`
-        case 1:return `Murder(${murder_people} involved)`
-        default:return null;//`No`
-      }
-    })() },
-    { firstCol: 'Assault:', secondCol:(()=>{
-      switch(assault){
-        case 0:return `Unknown`
-        case 1:return `Murder(${assault_people} involved)`
-        default:return null;//`No`
-      }
-    })() },
-    { firstCol: 'Vehicle Theft:', secondCol:(()=>{
-      if(vehicle_theft===4){
-        return null;//capitalize(vehicle_theft_choices[vehicle_theft])
-      }else{
-        return capitalize(`${vehicle_theft_choices[vehicle_theft]} of ${vehicle_year} ${vehicle_colour} ${vehicle_make} ${vehicle_model}`)
-      }
-    })() },
-    { firstCol: 'Burglary:', secondCol:(()=>{
-      switch(burglary){
-        case 0:return null//`Does not apply`
-        case 1:return `Attempted Burglary of ${burglary_type} `
-        default:return `Burglary of ${burglary_type}`
-      }
-    })() },
-    { firstCol: 'Robbery:', secondCol:(()=>{
-      switch(robbery){
-        case 0:return null;//`Does not apply`
-        case 1:return `Attempted Robbery of ${robbery_type} `
-        default:return `Robbery of ${robbery_type} `;//`No`
-      }
-    })() },
-    { firstCol: 'Kidnapping:', secondCol:(()=>{
-      switch(kidnapping){
-        case 0:return null;//`Does not apply`
-        case 1:return `Attempted Kidnapping (${kidnapping_people} involved) `
-        default:return `Kidnapping (${kidnapping_people} involved) `;//`No`
-      }
-    })() },
-    { firstCol: 'Reason for crime:', secondCol: various===null?"Unknown":capitalize(various_choices[various]) },
-    {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"Unknown":(police_reporting===0?"Yes":"No"))},
-    { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"Unknown":(reported_to_police===0?"Yes":"No")) },
-    { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
-    { firstCol: 'Media:', secondCol: mediaData },
-    {firstCol:'No of Reports:',secondCol:user_count||1 }
-  ];
+  const data = values[index]&& crimeDetails(values,index,vehicle_theft_choices,various_choices,mediaData)
 
 
   const theme = useTheme();
-  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
 
   function isImage(url) {
     const imageExtensions = ['.apng', '.bmp', '.gif', '.ico', '.cur', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];
@@ -187,33 +112,7 @@ function CrimeDialog({mapRef,viewCrime=false,index=0,onClose}) {
     return videoExtensions.some(extension => lowerCaseUrl.endsWith(extension));
   }
   
-  const clickYes = async()=>{
-    dispatch(setLock(true));
-    try {
-      await API.post("report/checkReport",{
-        report_id:id,
-        latitude,
-        longitude,
-        date_time
-      });
-      setOpen(1);
-    } catch (error) {
-      console.error(error);
-      setOpen(2);
-    }
-    dispatch(setLock(false));
-  }
 
-  const markerDragEnd = (e) => {
-    if (e !== null) {
-      const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ location: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          dispatch(setPage({location:results[0].formatted_address,longitude:e.latLng.lng(),latitude: e.latLng.lat(),google_place_id:results[0].place_id}));
-        }
-      });
-    }
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>

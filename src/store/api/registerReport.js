@@ -2,17 +2,29 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { format } from 'date-fns';
 import API from 'src/config/api'
 import { objectToFormData } from 'src/utils/formatObject';
+import { clearNearbyReports } from '../reducers/registerReport';
 
-export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes",async({latitude,longitude,toDate=null,fromDate=null})=>{
+export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes",async({latitude,longitude,toDate=null,fromDate=null},{rejectWithValue,dispatch},)=>{
   try {
       const formData = objectToFormData({latitude,longitude,to_date:toDate&&format(toDate,"yyyy-MM-dd"),from_date:fromDate&&
       format(fromDate,"yyyy-MM-dd")})
-      const res = await API({"url":"/report/area",method:"POST",data:formData});
-      return res.data.data.data;
+      var res = await API({"url":"/report/area",method:"POST",data:formData});
     } catch (error) {
         console.error(error);
         throw Error(error.message);
     }
+    try {
+      const data = res.data.data;
+      if(data!==null){
+        return data?.data;
+      }else{
+        dispatch(clearNearbyReports());
+        throw Error(res.data.message);
+      }
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+
 })
 
 export const getNearbyCrimes2 = createAsyncThunk("registerReport/getNearbyCrimes",async({latitude,longitude,doFunc})=>{

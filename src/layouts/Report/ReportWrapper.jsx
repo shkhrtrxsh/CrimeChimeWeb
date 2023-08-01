@@ -41,7 +41,7 @@ const ReportPageRouter = ({selectActive=1,setSelectActive,openState,mapRef})=>{
 const ReportWrapper = () => {
     const register = useSelector(state=>state.reportRegister);
     const {data,zoom,lock,marker,duplicate,nearbyData=[],edit} = register;
-    const {longitude,latitude,vehicle_theft} = data;
+    const {longitude,latitude,vehicle_theft,date_time} = data;
     const [cancel,setCancel] = useState(true);
     const [selectActive, setSelectActive] = useState(1);
     const [open,setOpen] = useState(false);
@@ -53,6 +53,9 @@ const ReportWrapper = () => {
     useEffect(() => {
       if(!edit){
         dispatch(clearReport());
+      }
+      if(date_time===null){
+        dispatch(setPage({date_time:new Date(Date.now()).toISOString()}))
       }
     }, [])
       const markerOptions = {
@@ -87,7 +90,7 @@ const ReportWrapper = () => {
 
     const setActiveStep = (oldStep,newStep)=>{
         if(oldStep===9||oldStep===11){
-            if(newStep===10&&vehicle_theft==="4"){
+            if(newStep===10&&vehicle_theft===4){
                 setSelectActive(oldStep===9?11:9);
                 return;
             }
@@ -163,6 +166,7 @@ const ReportWrapper = () => {
           }
         } catch (error) {
           console.error(error);
+          throw new Error("Unknown Error");
         }
       }
  

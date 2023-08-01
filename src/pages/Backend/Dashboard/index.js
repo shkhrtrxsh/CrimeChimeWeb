@@ -57,7 +57,7 @@ export default function Dashboard() {
               <Typography variant='h4' sx={{ marginTop: '20px' }}>Reports</Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <AppWidgetSummary title="Reported Crime" total={user.user ? user.report.total : 0} icon={'mdi:user'} />
+              <AppWidgetSummary title="Reported Crimes" total={user.user ? user.report.total : 0} icon={'mdi:user'} />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <AppWidgetSummary title="Active Report" total={user.user ? user.report.active : 0} icon={'mdi:user'} />

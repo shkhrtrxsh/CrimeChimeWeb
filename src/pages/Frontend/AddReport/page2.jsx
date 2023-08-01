@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { GoogleMap, LoadScript, Marker, useLoadScript } from '@react-google-maps/api';
-import { Container, FormControl, Grid, Box, Typography, Divider, LinearProgress, Autocomplete, TextField } from '@mui/material';
+import { useRef } from 'react';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import { FormControl, Box, Divider } from '@mui/material';
 import NextButton from 'src/components/Button/NextButton';
 import GoogleAutoComplete from 'src/components/GoogleMap/GoogleAutoComplete';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import { setPage, setZoom } from 'src/store/reducers/registerReport';
 import { SatelliteZoom } from 'src/constants/googleMap';
 import { toast } from 'react-toastify';
 import { isWithinSAfrica } from 'src/utils/googleMap';
+import { isIOSSafari } from 'src/utils/checkios';
 const containerStyle = {
   width: '100%',
   height: '100%', // Adjust the height according to your needs
@@ -62,7 +63,7 @@ const Page2 = ({setSelectActive}) => {
   };
   const mapOptions={
     gestureHandling: "greedy",
-    fullscreenControl:false,
+    fullscreenControl:true,
     zoomControlOptions: {
       position: window.google.maps.ControlPosition.RIGHT_CENTER
     },
@@ -74,14 +75,15 @@ const Page2 = ({setSelectActive}) => {
     },
     mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE      
   }
+  const isIOS=isIOSSafari();
   return (
         <Box sx={{height:"100%",display:"flex",flexDirection:"column"}}>
-          <Box sx={{flexGrow:1,position:'relative'}}>
-            <Box id="kbd" sx={{position:"absolute",top:20,right:{sm:0,md:70},
+          <Box sx={{flexGrow:1,position:'relative',maxHeight:"85vh"}}>
+            {!isIOS&&<Box id="kbd" sx={{position:"absolute",top:20,right:{sm:0,md:70},
             left:10,zIndex:1000}}>
               <GoogleAutoComplete style={{zIndex:1000}}/>
-            </Box>
-            <FormControl fullWidth sx={{ height:"100%" }}>
+            </Box>}
+            <Box fullWidth sx={{ height:"100%" }}>
               <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={zoom}
               options={mapOptions}
               onLoad={Map => {
@@ -90,9 +92,9 @@ const Page2 = ({setSelectActive}) => {
               onZoomChanged={handleZoomChanged}>
                 <Marker position={position} draggable={true} onDragEnd={markerDragEnd} />
               </GoogleMap>
-            </FormControl>
+            </Box>
           </Box>
-          <Box style={{ backgroundColor: '#ffe600', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginLeft: 'auto', marginRight: 'auto',width:'100%' }}>
+          <Box style={{ position:'fixed',bottom:0,zIndex:1000,backgroundColor: '#ffe600', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', color: 'black', padding: '12px', marginLeft: 'auto', marginRight: 'auto',width:'100%' }}>
           <NextButton beforeNext={()=>setSelectActive(1)} textValue="GO BACK"/>
             <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
             <NextButton beforeNext={()=>setSelectActive(edit?4:3)} textValue="CONFIRM PLACE"/>
