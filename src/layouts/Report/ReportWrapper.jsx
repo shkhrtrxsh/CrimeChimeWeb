@@ -166,6 +166,7 @@ const ReportWrapper = () => {
           }
         } catch (error) {
           console.error(error);
+          throw new Error("Unknown Error");
         }
       }
  

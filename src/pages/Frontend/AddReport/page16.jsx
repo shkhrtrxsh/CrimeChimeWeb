@@ -49,8 +49,8 @@ export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button disabled={disable} onClick={error?handleClose:(confirm?handleSuccess:handleClose)}>{confirm?"OK":"Cancel"}</Button>
-          {!confirm&&<Button disabled={disable} onClick={async()=>{
+          <Button disabled={disable} onClick={error?handleClose:(confirm?handleSuccess:handleClose)}>{(confirm||error)?"OK":"Cancel"}</Button>
+          {(!confirm&&!error)&&<Button disabled={disable} onClick={async()=>{
             try {
               setDisable(true);
               await onClickEvent();
