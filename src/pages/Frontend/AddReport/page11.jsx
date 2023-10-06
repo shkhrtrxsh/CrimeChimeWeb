@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Container, Typography,useTheme, Grid, Box, Checkbox, Select, MenuItem } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPage} from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
+import  API from "src/config/api";
 
 function Page11() {
   const {robbery:checked,robbery_type:value} = useSelector(state=>state.reportRegister.data);
@@ -13,7 +14,18 @@ function Page11() {
   const theme = useTheme();
   const setChecked=(robbery)=>dispatch(setPage({robbery}));
   const setValue=(robbery_type)=>dispatch(setPage({robbery_type}));
+  const [robberydata, setrobbery] = useState([]);
+  useEffect(() => {
+    dispatch(setPage({}));
 
+    const fetchCarMakeInfo = async () => {
+      const response = await API.get("/robbery");
+      const result = response.data;
+      console.log(result);
+      setrobbery(result.data.map(data => data));
+    }
+    fetchCarMakeInfo();
+  }, []);
 
   const handleChange = (v) => {
     setChecked(v);
@@ -70,7 +82,12 @@ function Page11() {
                       sx={{ px: 2, width: '50%', borderRadius: 'none', height: '10' }}
                       disabled={checked===0}
                     >
-                      <MenuItem value="bicycle">Bicycle</MenuItem>
+                      {
+                        robberydata.map((option) => (
+                          <MenuItem value={option}>{option}</MenuItem>
+                        ))
+                      }
+                      {/* <MenuItem value="bicycle">Bicycle</MenuItem>
                       <MenuItem value="handbag">Handbag</MenuItem>
                       <MenuItem value="watch">Watch</MenuItem>
                       <MenuItem value="jewellery">Jewellery</MenuItem>
@@ -84,7 +101,7 @@ function Page11() {
                       <MenuItem value="suitcase">Suitcase</MenuItem>
                       <MenuItem value="copper">Cash</MenuItem>
                       <MenuItem value="copper">Cash-in-transit vehicle</MenuItem>
-                      <MenuItem value="other">Other</MenuItem>
+                      <MenuItem value="other">Other</MenuItem> */}
                     </Select>
                   </Box>
                 </Box>

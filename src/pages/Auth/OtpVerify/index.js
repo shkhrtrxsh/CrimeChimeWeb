@@ -57,7 +57,7 @@ export default function OtpVerify() {
   useEffect(() => {
     if(user !== null){
       setValue("id", user.data.id)
-      setValue("otp", user.data.otp)
+      // setValue("otp", user.data.otp)
     }else{
       navigate('/login')
     }
