@@ -1,11 +1,31 @@
 import { WeaponChoices } from "src/constants/weapons";
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 const { capitalize } = require("./string");
 
 export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData)=>{
-    const {date_time,location,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,description}=values[index]||{};
+    const {date_time,user,location,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,description}=values[index]||{};
     return [
         { firstCol: 'Time of Occurence:', secondCol: <p>{date_time}</p> },
+        { firstCol: 'Corporate:', secondCol: 
+        (
+          <div>
+            {user.corporate ? (
+              <>
+                <img
+                  src={user.corporate.logo}
+                  style={{ height: "50px", width: "50px", border: "2px solid #333", borderRadius: "50%" }}
+                  alt="No Data Available"
+                />
+                {user.corporate.name}<br></br>
+                {user.corporate.is_verify == 1 ? <CheckBoxIcon style={{ color: "green" }} /> : ''}
+              </>
+            ) : ''
+            }
+          </div>
+        ),
+        },
+        
         { firstCol: 'Address:', secondCol: <p>{location}</p> },
         { firstCol: 'Description:', secondCol: <p>{description||"No Description Available."}</p> },
         { firstCol: 'Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"Unknown" },

@@ -9,7 +9,7 @@ export const login = createAsyncThunk(
 
       try {
         const response = await API.post("/auth/login", formValue);
-        if(response.data.status === 200){
+        if(response.data.code === 200){
           toast.success("OTP Sent");
           navigate("/auth/verify");
           return response.data;

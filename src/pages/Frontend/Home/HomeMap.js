@@ -6,7 +6,7 @@ import { useMediaQuery, Box, Typography, Fab, Modal, Button } from '@mui/materia
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TableViewIcon from '@mui/icons-material/TableView';
-
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import AddIcon from '@mui/icons-material/Add';
 import { CurrentLocationCoordinates, mapSettings } from 'src/helpers/LocationHelper';
 import useResponsive from 'src/hooks/useResponsive';
@@ -42,6 +42,8 @@ import { NoDataDialog } from 'src/layouts/components/NoDataDialog';
 import { NoDataDialogRoot } from 'src/layouts/components/NoDataDialogRoot';
 import { setError } from 'src/store/reducers/report';
 import { StyledGrid } from '../User/StyledGrid';
+import { size } from 'lodash';
+import { User } from 'src/helpers/RouteHelper';
 
 const BoxButtonStyle = styled(Box)(({ theme }) => ({
     position: 'absolute',
@@ -94,7 +96,7 @@ const HomeMap = () => {
     const [openDialog, setOpenDialog] = React.useState({
         status: false,
         id: null
-    }); const isAuth = IsAuth();
+    }); 
     const markerOptions = {
         icon: {
             url: Image,
@@ -167,6 +169,8 @@ const HomeMap = () => {
     };
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
     const admin = reports?.admin ? true : false;
+    const user = User()
+    const isAuth = IsAuth();
 
     const markerDragEnd = (e) => {
         if (e !== null) {
@@ -299,26 +303,40 @@ const HomeMap = () => {
 
                     {!hidden ? (
                         <Card>
-
+                            {console.log(user)/* <SearchInTable /> */}
                             {(reportedData||!loading)&&(reportedData?.data&&reportedData?.data[0]) ?
                                 <React.Fragment>
                                     <TableContainer component={Paper} sx={{ pr: 7 }}>
                                         <Table aria-label="simple table">
                                             <TableHead>
                                                 <TableRow>
+                                                    <TableCell>Date/Time</TableCell>
                                                     <TableCell>Location</TableCell>
-                                                    {admin && <TableCell align="left">Reporter</TableCell>}
-                                                    <TableCell align="left">Created At</TableCell>
-                                                    <TableCell align="right">Action</TableCell>
+                                                   <TableCell align="left">Crime Type</TableCell>
+                                                    {admin && <TableCell align="left">Mob. #</TableCell>}
+                                                    <TableCell align="left">Username</TableCell>
+                                                    <TableCell align="left">Crop./Group</TableCell>
+                                                    {admin && <TableCell align="right">Action</TableCell>}
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
                                                 {reportedData && (reportedData.data || []).map((report, index) => (
+                                                    
                                                     <TableRow key={report.id}>
+                                                        <TableCell align="left">{fDateTime(report.date_time)}</TableCell>
                                                         <TableCell component="th" scope="row">{report.location}</TableCell>
-                                                        {admin && <TableCell align="left">{report.user.name}</TableCell>}
-                                                        <TableCell align="left">{fDateTime(report.created_at)}</TableCell>
-                                                        <TableCell align="right">
+                                                        <TableCell align="left">
+                                                        {report.robbery != 0 ? "Robbery, " : '' }
+                                                        {report.murders != 0 ? "Murders, " : '' }
+                                                        {report.burglary != 0 ? "Burglary, " : '' }
+                                                        {report.kidnapping != 0 ? "Kidnapping, " : '' }
+                                                        {report.rape != 0 ? "Rape, " : '' }
+                                                        {report.weapons != 0 ? "Weapons, " : '' }
+                                                        </TableCell>
+                                                        {admin && <TableCell align="left">{report.user.phone}</TableCell>}
+                                                        <TableCell align="left">{report.user.username}</TableCell>
+                                                        <TableCell align="left">{report.user.corporate ? <img src={report.user.corporate.logo} style={{ height:"50px",width:"50px",border:"2px solid #333","border-radius": "50%" }} alt="No Data Available" /> :'' } {report.user.corporate ? report.user.corporate.name : '' }{report.user.corporate ? report.user.corporate.is_verify==1 ? <CheckBoxIcon style={{ color: "green" }} /> : '' : ''}</TableCell> 
+                                                        {admin && <TableCell align="right">
                                                             <ActionOptions
                                                                 index={index}
                                                                 delete_id={report.id}
@@ -332,7 +350,7 @@ const HomeMap = () => {
                                                                     }));
                                                                 }}
                                                             />
-                                                        </TableCell>
+                                                        </TableCell>}
                                                     </TableRow>
                                                 ))}
                                             </TableBody>

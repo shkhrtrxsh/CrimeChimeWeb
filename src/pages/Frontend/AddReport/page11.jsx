@@ -44,7 +44,7 @@ function Page11() {
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                (Items stolen in public area)
+                (Theft by force)
                 </Typography>
               </Grid>
 
