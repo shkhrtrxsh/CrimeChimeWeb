@@ -6,24 +6,23 @@ const { capitalize } = require("./string");
 export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData)=>{
     const {date_time,user,location,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,description}=values[index]||{};
     return [
-        { firstCol: 'Time of Occurence:', secondCol: <p>{date_time}</p> },
-        { firstCol: 'Corporate:', secondCol: 
-        (
-          <div>
-            {user.corporate ? (
-              <>
-                <img
-                  src={user.corporate.logo}
-                  style={{ height: "50px", width: "50px", border: "2px solid #333", borderRadius: "50%" }}
-                  alt="No Data Available"
-                />
-                {user.corporate.name}<br></br>
-                {user.corporate.is_verify == 1 ? <CheckBoxIcon style={{ color: "green" }} /> : ''}
-              </>
-            ) : ''
-            }
-          </div>
-        ),
+        { firstCol: 'Time of Occurence:', secondCol:  
+          (
+            <div>
+              <p style={{ position: "absolute" }}>{date_time}</p>
+              {user && user.corporate !== null && user.corporate !== undefined ? (
+                <>
+                  <img
+                    src={user.corporate.logo}
+                    style={{ height: "30px", width: "30px", border: "2px solid #333", borderRadius: "50%", float:"right"}}
+                    alt="No Data Available"
+                  />
+                  {user.corporate.is_verify == 1 ? <CheckBoxIcon style={{ height: "30px", width: "30px", color: "#29C250", float:"right" }} /> : ''}
+                </>
+              ) : ''
+              }
+            </div>
+          ),
         },
         
         { firstCol: 'Address:', secondCol: <p>{location}</p> },

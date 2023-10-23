@@ -303,7 +303,7 @@ const HomeMap = () => {
 
                     {!hidden ? (
                         <Card>
-                            {console.log(user)/* <SearchInTable /> */}
+                            {/* <SearchInTable /> */}
                             {(reportedData||!loading)&&(reportedData?.data&&reportedData?.data[0]) ?
                                 <React.Fragment>
                                     <TableContainer component={Paper} sx={{ pr: 7 }}>
@@ -313,30 +313,35 @@ const HomeMap = () => {
                                                     <TableCell>Date/Time</TableCell>
                                                     <TableCell>Location</TableCell>
                                                    <TableCell align="left">Crime Type</TableCell>
-                                                    {admin && <TableCell align="left">Mob. #</TableCell>}
+                                                    <TableCell align="left">Mob. #</TableCell>
                                                     <TableCell align="left">Username</TableCell>
                                                     <TableCell align="left">Crop./Group</TableCell>
-                                                    {admin && <TableCell align="right">Action</TableCell>}
+                                                    <TableCell align="right">Action</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {reportedData && (reportedData.data || []).map((report, index) => (
+                                                {reportedData && (reportedData.data || []).map((report, index) => {
                                                     
+                                                    const latitude = Number(report.latitude);
+                                                    const longitude = Number(report.longitude);
+                                                    const formattedLatitude = latitude.toFixed(4);
+                                                    const formattedLongitude = longitude.toFixed(4);
+                                                    return (
                                                     <TableRow key={report.id}>
                                                         <TableCell align="left">{fDateTime(report.date_time)}</TableCell>
-                                                        <TableCell component="th" scope="row">{report.location}</TableCell>
+                                                        <TableCell component="th" scope="row">{report.location}<br></br>{formattedLatitude} S,<br></br>{formattedLongitude} E</TableCell>
                                                         <TableCell align="left">
-                                                        {report.robbery != 0 ? "Robbery, " : '' }
-                                                        {report.murders != 0 ? "Murders, " : '' }
-                                                        {report.burglary != 0 ? "Burglary, " : '' }
-                                                        {report.kidnapping != 0 ? "Kidnapping, " : '' }
-                                                        {report.rape != 0 ? "Rape, " : '' }
-                                                        {report.weapons != 0 ? "Weapons, " : '' }
+                                                        {report.robbery != 0 ? (<>Robbery,<br /></>) : null}
+                                                        {report.murders != 0 ? (<>Murders,<br /></>) : null}
+                                                        {report.burglary !=0 ? (<>Burglary,<br /></>) : null}
+                                                        {report.kidnapping != 0 ? (<>Kidnapping,<br /></>) : null}
+                                                        {report.rape != 0 ? (<>Rape,<br /></>) : null}
+                                                        {report.weapons != 0 ? (<>Weapons,<br /></>) : null}
                                                         </TableCell>
-                                                        {admin && <TableCell align="left">{report.user.phone}</TableCell>}
+                                                        <TableCell align="left">{report.user.phone}</TableCell>
                                                         <TableCell align="left">{report.user.username}</TableCell>
-                                                        <TableCell align="left">{report.user.corporate ? <img src={report.user.corporate.logo} style={{ height:"50px",width:"50px",border:"2px solid #333","border-radius": "50%" }} alt="No Data Available" /> :'' } {report.user.corporate ? report.user.corporate.name : '' }{report.user.corporate ? report.user.corporate.is_verify==1 ? <CheckBoxIcon style={{ color: "green" }} /> : '' : ''}</TableCell> 
-                                                        {admin && <TableCell align="right">
+                                                        <TableCell align="left"><div>{report.user.corporate ? report.user.corporate.name : '' }{report.user.corporate ? report.user.corporate.is_verify==1 ? <CheckBoxIcon style={{ color: "#29C250",position: "absolute" }} /> : '' : ''}</div></TableCell> 
+                                                        <TableCell align="right">
                                                             <ActionOptions
                                                                 index={index}
                                                                 delete_id={report.id}
@@ -350,9 +355,10 @@ const HomeMap = () => {
                                                                     }));
                                                                 }}
                                                             />
-                                                        </TableCell>}
-                                                    </TableRow>
-                                                ))}
+                                                        </TableCell>
+                                                    </TableRow>)
+
+                                                })}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
