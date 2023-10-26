@@ -6,7 +6,7 @@ const { capitalize } = require("./string");
 export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData)=>{
     const {date_time,user,location,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,description}=values[index]||{};
     return [
-        { firstCol: 'Time of Occurence:', secondCol:  
+        { firstCol: 'Date/Time Occurred:', secondCol:  
           (
             <div>
               <p style={{ position: "absolute" }}>{date_time}</p>
@@ -26,13 +26,13 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         },
         
         { firstCol: 'Address:', secondCol: <p>{location}</p> },
-        { firstCol: 'Description:', secondCol: <p>{description||"No Description Available."}</p> },
-        { firstCol: 'Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"Unknown" },
+        { firstCol: 'Description of Crime:', secondCol: <p>{description||""}</p> },
+        { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
-            case 0:return `Unknown`
+            case 0:return ``
             case 1:return `None`
-            default:return `Fully Automatic:${WeaponChoices[fully_auto_weapons]}, Semi Automatic:${WeaponChoices[semi_auto_weapons]}, Knife Weapons:${WeaponChoices[knife_weapons]}, Other:${WeaponChoices[other_weapons]}`
+            default:return `Fully Automatic:${WeaponChoices[fully_auto_weapons]}, Semi Automatic:${WeaponChoices[semi_auto_weapons]}, Knife:${WeaponChoices[knife_weapons]}, Other:${WeaponChoices[other_weapons]}`
           }
         })() },
         { firstCol: 'Rape:', secondCol:(()=>{
@@ -44,14 +44,14 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         })() },
         { firstCol: 'Murder:', secondCol:(()=>{
           switch(murder){
-            case 0:return `Unknown`
+            case 0:return ``
             case 1:return `Murder(${murder_people} involved)`
             default:return null;//`No`
           }
         })() },
         { firstCol: 'Assault:', secondCol:(()=>{
           switch(assault){
-            case 0:return `Unknown`
+            case 0:return ``
             case 1:return `Murder(${assault_people} involved)`
             default:return null;//`No`
           }
@@ -91,9 +91,9 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             default:return null;//`No`
           }
         })() },
-        { firstCol: 'Reason for crime:', secondCol: (!various||various?.length===0)?"Unknown":capitalize(various_choices[various]) },
-        {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"Unknown":(police_reporting===0?"Yes":"No"))},
-        { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"Unknown":(reported_to_police===0?"Yes":"No")) },
+        { firstCol: 'Reason for crime:', secondCol: (!various||various?.length===0)?"":capitalize(various_choices[various]) },
+        {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"":(police_reporting===0?"Yes":"No"))},
+        { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"":(reported_to_police===0?"Yes":"No")) },
         { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
         { firstCol: 'Media:', secondCol: mediaData },
       ];

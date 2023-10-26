@@ -59,6 +59,7 @@ const EditProfile = () => {
         if(user != null){
             setValue('name', user.name)
             setValue('email', user.email)
+            setValue('username', user.username)
             setValue('phone', user.phone)
         }
     }, [user])
@@ -82,10 +83,13 @@ const EditProfile = () => {
                                     <AvatarUpload addFiles={addFileHandler} preview={user && process.env.REACT_APP_API_URL + '/' + user.avatar}/>
                                 </Grid>
                                 <Grid item md={9} xs={12}>
-                                    <RHFTextField name="name" label="Username" />
+                                    <RHFTextField name="name" label="Name" />
                                 </Grid>
                                 <Grid item md={9} xs={12}>
                                     <RHFTextField name="email" label="E-mail Address" />
+                                </Grid>
+                                <Grid item md={9} xs={12}>
+                                    <RHFTextField name="username" label="Username" disabled/>
                                 </Grid>
                                 <Grid item md={9} xs={12}>
                                     <RHFTextField name="phone" label="Phone Number" disabled/>

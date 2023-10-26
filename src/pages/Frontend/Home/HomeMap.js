@@ -307,7 +307,7 @@ const HomeMap = () => {
                             {(reportedData||!loading)&&(reportedData?.data&&reportedData?.data[0]) ?
                                 <React.Fragment>
                                     <TableContainer component={Paper} sx={{ pr: 7 }}>
-                                        <Table aria-label="simple table">
+                                        <Table aria-label="simple table" >
                                             <TableHead>
                                                 <TableRow>
                                                     <TableCell>Date/Time</TableCell>
@@ -315,7 +315,7 @@ const HomeMap = () => {
                                                    <TableCell align="left">Crime Type</TableCell>
                                                     <TableCell align="left">Mob. #</TableCell>
                                                     <TableCell align="left">Username</TableCell>
-                                                    <TableCell align="left">Crop./Group</TableCell>
+                                                    <TableCell align="left">Corp./Group</TableCell>
                                                     <TableCell align="right">Action</TableCell>
                                                 </TableRow>
                                             </TableHead>

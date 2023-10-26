@@ -3,7 +3,7 @@ import { Container, Typography, Grid, Box, Select, MenuItem, useTheme, FormHelpe
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import ak from '../../../assets/images/ak.png';
-import pistol from '../../../assets/images/pistolnew.png';
+import pistol from '../../../assets/images/pistol.png';
 import knife from '../../../assets/images/knife.png';
 import others from '../../../assets/images/others.png';
 import { useDispatch, useSelector } from 'react-redux';
@@ -60,7 +60,7 @@ function Page4() {
       ),
       imageSrc: pistol,
       imageAlt: "Semi automatic(pistol, handgun)",
-      imageStyle: { width: "40px", height: "40px", transform: "scaleX(-1)" }
+      imageStyle: { width: "40px", height: "40px", transform: "scaleX(1)" }
     },
     {
       name: "knife_weapons",
