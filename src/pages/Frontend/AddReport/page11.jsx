@@ -51,13 +51,13 @@ function Page11() {
               <Box sx={{ pl: 8}}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked===0} onChange={()=>handleChange(0)} />
+                    <Checkbox checked={checked===0} value={0} onChange={()=>handleChange(0)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Does not apply
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked===1} onChange={()=>handleChange(1)} />
+                    <Checkbox checked={checked===1} value={1} onChange={()=>handleChange(1)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                     Attempted Robbery
                       <br />
@@ -65,7 +65,7 @@ function Page11() {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked===2} onChange={()=>handleChange(2)} />
+                    <Checkbox checked={checked===2} value={2} onChange={()=>handleChange(2)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Robbery
                       <br />

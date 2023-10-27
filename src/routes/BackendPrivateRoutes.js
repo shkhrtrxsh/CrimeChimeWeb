@@ -15,10 +15,10 @@ import Addnote from '../pages/Backend/Report/Addnote';
 
 
 const BackendPrivateRoutes = [
-    // {
-    //     path: 'user/add',
-    //     element: <AddUser />,
-    // },
+    {
+        path: 'user/add',
+        element: <AddUser />,
+    },
     {
         path: 'user',
         element: <User />,
@@ -27,10 +27,10 @@ const BackendPrivateRoutes = [
         path: 'user/:id',
         element: <ShowUser />,
     },
-    // {
-    //     path: 'user/:id/edit', 
-    //     element: <EditUser />
-    // },
+    {
+        path: 'user/:id/edit', 
+        element: <EditUser />
+    },
     {
         path: 'dashboard',
         element: <Dashboard />

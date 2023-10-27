@@ -97,8 +97,13 @@ function Page4() {
           <Box paddingLeft="40px" display="flex" className={css`
               flex-direction: column;
             `}>
+              <FormControlLabel
+                control={<Checkbox checked={weapons === 0} value={0} onChange={handleChange} />}
+                label="Unknown"
+                sx={{ paddingBottom: '20px' }}
+              />
             <FormControlLabel
-              control={<Checkbox checked={weapons === -1} value={-1} onChange={handleChange} />}
+              control={<Checkbox checked={weapons === 1} value={1} onChange={handleChange} />}
               label="Perpetrator used or fired this weapon"
               sx={{ paddingBottom: weapons === -1?'0px':'20px' }}
             />
@@ -125,15 +130,11 @@ function Page4() {
               </Box>
             </Box>
             <FormControlLabel
-              control={<Checkbox checked={weapons === 1} value={1} onChange={handleChange} />}
+              control={<Checkbox checked={weapons === 2} value={2} onChange={handleChange} />}
               label="Perpetrator did not use or fire this weapon"
               sx={{ paddingBottom: '20px' }}
             />
-            <FormControlLabel
-              control={<Checkbox checked={weapons === 0} value={0} onChange={handleChange} />}
-              label="Unknown if weapon was used or fired"
-              sx={{ paddingBottom: '20px' }}
-            />
+            
 
 
           </Box>

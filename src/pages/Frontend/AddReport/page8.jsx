@@ -28,11 +28,11 @@ function Page8() {
   };
 
   const fields=[
+    {value:4,main:"Does Not Apply"},
     {value:0,main:"Hijacking",sub:"occupied vehicle was stolen"},
     {value:1,main:"Attempted Hijacking",sub:"unsuccessful hijacking not stolen"},
     {value:2,main:"Vehicle Theft",sub:"unoccupied vehicle vehicle was stolen"},
     {value:3,main:"Attempted Vehicle Theft",sub:"unsuccessful vehicle theft not stolen"},
-    {value:4,main:"Does Not Apply"},
   ]
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
