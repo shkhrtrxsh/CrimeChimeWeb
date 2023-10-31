@@ -28,6 +28,8 @@ const initialState = {
         other_weapons:3,
         murders:0,
         murders_people:null,
+        farm_murder:0,
+        victim_name:"unknown",
         rape:0,
         rape_people:null,
         assault:0,
