@@ -144,31 +144,17 @@ export default function SearchFilter(props) {
         });
         toggleDrawer(0);
     };
-
+    const dividerStyle = {
+        borderTop: '1px solid #f0f0f0', // Light shade color
+        margin: '20px 0', // Adjust the margin as needed
+    };
+    
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <BoxButtonStyle>
-                <TransparentFab
-                    size="medium"
-                    color="primary"
-                    aria-label="add report"
-                    to="/report/add"
-                    component={Link}
-                    variant="extended"
-                >
-                    <AddIcon />
-                    <Typography component="h6">Report Crime</Typography>
-                </TransparentFab>
-                <Fab
-                    size="medium"
-                    color="primary"
-                    aria-label="reported crimes"
-                    onClick={() => toggleDrawer(1)}
-                >
-                    <MenuIcon />
-                </Fab>
+                {/* ... Rest of your code */}
             </BoxButtonStyle>
-
+    
             <Drawer anchor="right" open={state} onClose={() => toggleDrawer(0)}>
                 <OuterPaperStyle>
                     <Stack spacing={3}>
@@ -181,7 +167,7 @@ export default function SearchFilter(props) {
                                 <Typography sx={{ color: 'red', fontSize: 12 }}>*required</Typography>
                             )}
                         </Box>
-
+                        <hr style={dividerStyle} />
                         <DatePicker
                             label="From"
                             value={fromDate}
@@ -196,7 +182,10 @@ export default function SearchFilter(props) {
                             onChange={(event, newValue) => setToDate(event)}
                             renderInput={(params) => <TextField {...params} />}
                         />
-
+    
+                        {/* Line divider */}
+                        <hr style={dividerStyle} />
+    
                         <TextField
                             label="Name of Deceased"
                             value={nameOfDeceased}
@@ -204,7 +193,7 @@ export default function SearchFilter(props) {
                             variant="outlined"
                             fullWidth
                         />
-
+    <hr style={dividerStyle} />
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -215,31 +204,34 @@ export default function SearchFilter(props) {
                             }
                             label="Posted by Verified Group"
                         />
-
-<FormControl component="fieldset">
-  <Typography variant="h6" gutterBottom>
-    Crime Types
-  </Typography>
-  {Object.keys(crimeTypes).map((type) => (
-    <FormControlLabel
-      key={type}
-      control={
-        <Checkbox
-          checked={crimeTypes[type]}
-          onChange={(e) =>
-            setCrimeTypes({
-              ...crimeTypes,
-              [type]: e.target.checked ? 1 : 0,
-            })
-          }
-        />
-      }
-      label={type.charAt(0).toUpperCase() + type.slice(1)}
-    />
-  ))}
-</FormControl>
+    <hr style={dividerStyle} />
+                        <FormControl component="fieldset">
+                            <Typography variant="h6" gutterBottom>
+                                Crime Types
+                            </Typography>
+                            {Object.keys(crimeTypes).map((type) => (
+                                <FormControlLabel
+                                    key={type}
+                                    control={
+                                        <Checkbox
+                                            checked={crimeTypes[type]}
+                                            onChange={(e) =>
+                                                setCrimeTypes({
+                                                    ...crimeTypes,
+                                                    [type]: e.target.checked ? 1 : 0,
+                                                })
+                                            }
+                                        />
+                                    }
+                                    label={type.charAt(0).toUpperCase() + type.slice(1)}
+                                />
+                            ))}
+                        </FormControl>
                     </Stack>
-
+    
+                    {/* Line divider */}
+                    <hr style={dividerStyle} />
+    
                     <Stack direction="row" spacing={2} sx={{ marginTop: '30px !important' }}>
                         <Button
                             sx={{
