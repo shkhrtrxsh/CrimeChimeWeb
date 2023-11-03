@@ -152,7 +152,25 @@ export default function SearchFilter(props) {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <BoxButtonStyle>
-                {/* ... Rest of your code */}
+            <TransparentFab
+                    size="medium"
+                    color="primary"
+                    aria-label="add report"
+                    to="/report/add"
+                    component={Link}
+                    variant="extended"
+                >
+                    <AddIcon />
+                    <Typography component="h6">Report Crime</Typography>
+                </TransparentFab>
+                <Fab
+                    size="medium"
+                    color="primary"
+                    aria-label="reported crimes"
+                    onClick={() => toggleDrawer(1)}
+                >
+                    <MenuIcon />
+                </Fab>
             </BoxButtonStyle>
     
             <Drawer anchor="right" open={state} onClose={() => toggleDrawer(0)}>
