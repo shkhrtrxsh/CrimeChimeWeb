@@ -235,28 +235,31 @@ export default function SearchFilter(props) {
                             label="Posted by Verified Group"
                         />
     <hr style={dividerStyle} />
-                        <FormControl component="fieldset">
-                            <Typography variant="h6" gutterBottom>
-                                Crime Types
-                            </Typography>
-                            {Object.keys(crimeTypes).map((type) => (
-                                <FormControlLabel
-                                    key={type}
-                                    control={
-                                        <Checkbox
-                                            checked={crimeTypes[type]}
-                                            onChange={(e) =>
-                                                setCrimeTypes({
-                                                    ...crimeTypes,
-                                                    [type]: e.target.checked ? 1 : 0,
-                                                })
-                                            }
-                                        />
-                                    }
-                                    label={type.charAt(0).toUpperCase() + type.slice(1)}
-                                />
-                            ))}
-                        </FormControl>
+    <Typography variant="h6" gutterBottom>
+        Crime Types
+    </Typography>
+    <FormControl component="fieldset" sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+    
+    {Object.keys(crimeTypes).map((type) => (
+        <FormControlLabel
+            key={type}
+            control={
+                <Checkbox
+                    checked={crimeTypes[type]}
+                    onChange={(e) =>
+                        setCrimeTypes({
+                            ...crimeTypes,
+                            [type]: e.target.checked ? 1 : 0,
+                        })
+                    }
+                />
+            }
+            label={type.charAt(0).toUpperCase() + type.slice(1)}
+            sx={{ flexBasis: '30%', maxWidth: '30%' }}
+        />
+    ))}
+</FormControl>
+
                     </Stack>
     
                     {/* Line divider */}
