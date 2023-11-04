@@ -8,6 +8,7 @@ import {
   Select,
   MenuItem,
   TextField,
+  FormHelperText,
   FormControlLabel,
 } from "@mui/material";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -260,11 +261,10 @@ function Page5() {
               >
                 Name of the person(s) killed?
               </Typography>
-              <box
+              <Box
                 style={{
                   display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center", // Center horizontally
+                  flexDirection: "column",
                   alignItems: "center",
                 }}
               >
@@ -278,16 +278,21 @@ function Page5() {
                   label="Unknown"
                   sx={{ paddingTop: "10px" }}
                 />
-              </box>
-
-              <TextField
-                value={unknownVictimName ? "" : victim_name}
-                onChange={handleVictimNameChange}
-                label="name (use , if more than one name)"
-                placeholder=""
-                fullWidth
-                disabled={unknownVictimName}
-              />
+                <Typography variant="body1" color="textSecondary">
+                  or
+                </Typography>
+                <TextField
+                  value={unknownVictimName ? "" : victim_name}
+                  onChange={handleVictimNameChange}
+                  label="Surname Forename, Surname Forename..."
+                  placeholder=""
+                  fullWidth
+                  disabled={unknownVictimName}
+                />
+                <FormHelperText>
+                  * For multiple deceased, separate full names by commas
+                </FormHelperText>
+              </Box>
             </Box>
           </div>
         </Grid>

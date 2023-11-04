@@ -23,7 +23,7 @@ export default function SearchInTable(props) {
   const navigate=useNavigate();
 
   const setSearchByParam = (param) => {
-    navigate(`/reports?${param}`)
+    search && navigate(`/reports?${param}`)
   }
 
   useEffect(() => {

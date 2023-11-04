@@ -146,7 +146,7 @@ export default function SearchFilter(props) {
     };
     const dividerStyle = {
         borderTop: '1px solid #f0f0f0', // Light shade color
-        margin: '20px 0', // Adjust the margin as needed
+        margin: '20px 0px', // Adjust the margin as needed
     };
     
     return (
@@ -179,13 +179,20 @@ export default function SearchFilter(props) {
                         <Typography variant="h4" component="h4" sx={{ marginBottom: '20px' }}>
                             Filter your report
                         </Typography>
-                        <Box>
-                            <GoogleAutoComplete style={{}} />
-                            {!(latitude && longitude) && (
-                                <Typography sx={{ color: 'red', fontSize: 12 }}>*required</Typography>
-                            )}
-                        </Box>
+                        <Typography variant="h6" gutterBottom>
+                                By Location
+                            </Typography>
+                            <Box>
+    <GoogleAutoComplete style={{ width: '100%' }} />
+    {!(latitude && longitude) && (
+        <Typography sx={{ color: 'red', fontSize: 12 }}>*required</Typography>
+    )}
+</Box>
+
                         <hr style={dividerStyle} />
+                        <Typography variant="h6" gutterBottom>
+                                By Date
+                            </Typography>
                         <DatePicker
                             label="From"
                             value={fromDate}
@@ -203,7 +210,9 @@ export default function SearchFilter(props) {
     
                         {/* Line divider */}
                         <hr style={dividerStyle} />
-    
+                        <Typography variant="h6" gutterBottom>
+                                By Deceased Name
+                            </Typography>
                         <TextField
                             label="Name of Deceased"
                             value={nameOfDeceased}
@@ -212,6 +221,9 @@ export default function SearchFilter(props) {
                             fullWidth
                         />
     <hr style={dividerStyle} />
+    <Typography variant="h6" gutterBottom>
+                                Posted by Verified Group
+                            </Typography>
                         <FormControlLabel
                             control={
                                 <Checkbox
