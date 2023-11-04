@@ -4,7 +4,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const { capitalize } = require("./string");
 
 export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData)=>{
-    const {date_time,user,location,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murder,murder_people,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,description}=values[index]||{};
+    const {date_time,user,location,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murders,murders_people,farm_murder,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,description}=values[index]||{};
     return [
         { firstCol: 'Date/Time Occurred:', secondCol:  
           (
@@ -26,7 +26,7 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         },
         
         { firstCol: 'Address:', secondCol: <p>{location}</p> },
-        { firstCol: 'Description of Crime:', secondCol: <p>{description||""}</p> },
+        { firstCol: 'Description of Crime:', secondCol: <p>{description||"No description available"}</p> },
         { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
@@ -36,18 +36,31 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           }
         })() },
         { firstCol: 'Rape:', secondCol:(()=>{
-          switch(rape){
+          switch(rape && rape_people > 0){
             case 0:return null;//`Does not apply`
             case 1:return `Attempted Rape(${rape_people} involved)`
-            default:return `Rape(${rape_people} involved)`
+            default:return null//`Rape(${rape_people} involved)`
           }
         })() },
         { firstCol: 'Murder:', secondCol:(()=>{
-          switch(murder){
-            case 0:return ``
-            case 1:return `Murder(${murder_people} involved)`
-            default:return null;//`No`
+          if(murders==1) {
+            return `Murder(${murders_people} involved)`
           }
+          // switch(murders){
+          //   case 0:return ``
+          //   case 1:return `Murder(${murders_people} involved)`
+          //   default:return null;//`No`
+          // }
+        } )() },
+        { firstCol: 'Farm Murder:', secondCol:(()=>{
+          if(farm_murder==1) {
+            return `It was a farm murder`
+          }
+          // switch(farm_murder){
+          //   case 0:return ``
+          //   case 1:return `It was a farm murder`
+          //   default:return null;
+          // }
         })() },
         { firstCol: 'Assault:', secondCol:(()=>{
           switch(assault){

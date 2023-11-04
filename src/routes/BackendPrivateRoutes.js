@@ -11,7 +11,11 @@ import EditRole from 'src/pages/Backend/Role/EditRole';
 //Report
 import Report from '../pages/Backend/Report/Report'
 import Addnote from '../pages/Backend/Report/Addnote';
-
+//corporate
+import AddCorporate from '../pages/Backend/Corporate/AddCorporate'
+import Corporate from '../pages/Backend/Corporate/ListCorporate.jsx'
+import EditCorporate from '../pages/Backend/Corporate/EditCorporate'
+import ShowCorporate from '../pages/Backend/Corporate/ShowCorporate'
 
 
 const BackendPrivateRoutes = [
@@ -54,6 +58,22 @@ const BackendPrivateRoutes = [
     {
         path: 'add_not/:id',
         element: <Addnote />
+    },
+    {
+        path: 'user/add',
+        element: <AddUser />,
+    },
+    {
+        path: 'Corporate',
+        element: <Corporate />,
+    },
+    {
+        path: 'user/:id',
+        element: <ShowUser />,
+    },
+    {
+        path: 'user/:id/edit', 
+        element: <EditUser />
     },
 ]
 
