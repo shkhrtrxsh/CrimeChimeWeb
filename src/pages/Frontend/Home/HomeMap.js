@@ -18,6 +18,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ActiveInactiveButton } from 'src/components/Button';
 import { fDateTime } from 'src/utils/formatTime';
 import Image from 'src/assets/images/duplicate.png'
+import Image1 from 'src/assets/images/corporateCrime.png'
 import { IsAuth } from 'src/helpers/RouteHelper';
 import NoData from 'src/assets/svg/no-data.svg';
 import {
@@ -101,6 +102,14 @@ const HomeMap = () => {
         icon: {
             url: Image,
             scaledSize: new window.google.maps.Size(80, 80),
+            origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(25, 50)
+        }
+    };
+    const markerOptions1 = {
+        icon: {
+            url: Image1,
+            scaledSize: new window.google.maps.Size(30, 75),
             origin: new window.google.maps.Point(0, 0),
             anchor: new window.google.maps.Point(25, 50)
         }
@@ -405,7 +414,7 @@ const HomeMap = () => {
                                             lng: Number(report.longitude)
                                         }}
                                         // icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
-                                        options={markerOptions}
+                                        options={report.user.corporate!=undefined ? markerOptions1 : markerOptions}
                                         label={{ text: `${report?.user_count || 1}`, fontWeight: "bold", className: "map-label", color: "red" }}
                                     />
                                 ))}
