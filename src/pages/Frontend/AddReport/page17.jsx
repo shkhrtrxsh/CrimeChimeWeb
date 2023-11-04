@@ -10,7 +10,6 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import Vehicle from "../../../assets/images/vehiclee.png";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import TypoSub from "src/components/Typography/TypoSub";
@@ -18,37 +17,26 @@ import { useDispatch, useSelector } from "react-redux";
 import ProgressBar from "src/layouts/Report/ProgressBar";
 import { setPage } from "src/store/reducers/registerReport";
 
-function Page8() {
-  const { vehicle_theft: value } = useSelector(
+function Page17() {
+  const { shoplifting: value } = useSelector(
     (state) => state.reportRegister.data
   );
   const dispatch = useDispatch();
   const theme = useTheme();
-  const setValue = (vehicle_theft) => dispatch(setPage({ vehicle_theft }));
+  const setValue = (shoplifting) => dispatch(setPage({ shoplifting }));
 
   const handleChange = (event) => {
     setValue(Number(event.target.value));
   };
 
+  const defaultCheckedValue = 0; // Default value for "Does Not Apply"
+
   const fields = [
-    { value: 4, main: "Does Not Apply" },
-    { value: 0, main: "Hijacking", sub: "occupied vehicle was stolen" },
-    {
-      value: 1,
-      main: "Attempted Hijacking",
-      sub: "unsuccessful hijacking not stolen",
-    },
-    {
-      value: 2,
-      main: "Vehicle Theft",
-      sub: "unoccupied vehicle vehicle was stolen",
-    },
-    {
-      value: 3,
-      main: "Attempted Vehicle Theft",
-      sub: "unsuccessful vehicle theft not stolen",
-    },
+    { value: 0, main: "Does Not Apply" },
+    { value: 1, main: "Attempted Shoplifting", sub: "goods were not stolen" },
+    { value: 2, main: "Shoplifting", sub: "goods were stolen" },
   ];
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Container>
@@ -69,7 +57,7 @@ function Page8() {
                   fontSize: "24px",
                 }}
               >
-                Vehicle Theft
+                Shoplifting
               </Typography>
               <Box
                 borderBottom={2}
@@ -77,41 +65,16 @@ function Page8() {
                 style={{ marginLeft: "5px", width: "20px" }}
               />
             </Box>
-            <Typography
-              variant="h2"
-              align="center"
-              style={{
-                fontWeight: "bold",
-                paddingBottom: "0px",
-                fontSize: "12px",
-              }}
-            >
-              (Excluding cash in-transit vehicles)
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                mt: "10px",
-              }}
-            >
-              <img
-                src={Vehicle}
-                alt="Vehicle Theft"
-                style={{ height: "80px" }}
-              />
-            </Box>
           </Grid>
 
-          <Box sx={{ pl: 3, pt: 0 }}>
+          <Box sx={{ pl: 3, pt: 5 }}>
             <div sx={{ display: "flex", flexDirection: "column" }}>
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  my: 2,
+                  my: 5,
                   pl: 8,
                 }}
               >
@@ -120,7 +83,10 @@ function Page8() {
                     return (
                       <FormControlLabel
                         control={<Checkbox />}
-                        checked={value === f.value}
+                        checked={
+                          value === f.value ||
+                          (f.value === defaultCheckedValue && value === null)
+                        }
                         value={f.value}
                         key={ind}
                         label={
@@ -148,4 +114,4 @@ function Page8() {
   );
 }
 
-export default Page8;
+export default Page17;

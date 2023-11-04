@@ -291,9 +291,9 @@ const ViewReportMap = (props) => {
                                         {(reportDetail&&reportDetail?.report_images) ? reportDetail.report_images.map((image, index) => (
                                             
                                             image&&image?.path!==null&&image.path !== '' && (image.path.toString().endsWith("png") || image.path.toString().endsWith("jpeg") || image.path.toString().endsWith("jpg")) ? (
-                                                <ImageList width="100%" src={reportDetail && process.env.REACT_APP_API_URL + '/' + image.path} key={index} />
+                                                <ImageList width="100%" src={image.path} key={index} />
                                             ) : (
-                                                <video className="VideoInput_video" width="60%" height="auto" controls src={image.path ? process.env.REACT_APP_API_URL + '/' + image.path : 'no video'} />
+                                                <video className="VideoInput_video" width="60%" height="auto" controls src={image.path ? image.path : 'no video'} />
                                             )
                                             
                                         )) : 

@@ -110,13 +110,13 @@ export default function Login() {
                   Sign up for Crime report
                 </Typography>
                 <Typography variant="p">
-                  Your details are kept anonymous and will NEVER be disclosed.
+                  Your details are kept anonymous and will never be disclosed.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={3}>
-                  <RHFTextField name="name" label="Name" errorOther={errors?.name} />
-                  <RHFTextField name="email" label="E-mail Address" errorOther={errors?.email} />
+                  <RHFTextField name="name" label="Name (Will not be displayed publicly)" errorOther={errors?.name} />
+                  <RHFTextField name="email" label="Email Address" errorOther={errors?.email} />
                   <RHFTextField 
                     name="phone" 
                     label="Phone Number"

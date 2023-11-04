@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPage } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
+import  API from "src/config/api";
 
 function Page10() {
   const {burglary:checked,burglary_type:value} = useSelector(state=>state.reportRegister.data);
@@ -14,12 +15,24 @@ function Page10() {
   const theme = useTheme();
   const setChecked=(burglary)=>dispatch(setPage({burglary}));
   const setValue=(burglary_type)=>dispatch(setPage({burglary_type}));
+  const [burglarydata, setBurglary] = useState([]);
 
 
   const handleChange = (value) => {
     setChecked(value);
   };
 
+  useEffect(() => {
+    dispatch(setPage({}));
+
+    const fetchCarMakeInfo = async () => {
+      const response = await API.get("/burglary");
+      const result = response.data;
+      console.log(result);
+      setBurglary(result.data.map(data => data));
+    }
+    fetchCarMakeInfo();
+  }, []);
   
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -34,20 +47,20 @@ function Page10() {
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                  (Perpetrator enters home or business)
+                  (Perpetrator enters building, no threat of violence)
                 </Typography>
               </Grid>
 
               <Box sx={{ pl: 8, }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked===0} onChange={()=>handleChange(0)} />
+                    <Checkbox checked={checked===0} value={0} onChange={()=>handleChange(0)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Does not apply
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked===1} onChange={()=>handleChange(1)} />
+                    <Checkbox checked={checked===1} value={1} onChange={()=>handleChange(1)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Attempted Burglary
                       <br />
@@ -55,7 +68,7 @@ function Page10() {
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
-                    <Checkbox checked={checked===2} onChange={()=>handleChange(2)} />
+                    <Checkbox checked={checked===2} value={2} onChange={()=>handleChange(2)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Burglary
                       <br />
@@ -72,7 +85,12 @@ function Page10() {
                       sx={{ px: 2, width: '50%', borderRadius: 'none', height: '10', }}
                       disabled={checked===0}
                     >
-                      <MenuItem value="bicycle">Bicycle</MenuItem>
+                    {
+                      burglarydata.map((option) => (
+                        <MenuItem value={option}>{option}</MenuItem>
+                      ))
+                    }
+                      {/* <MenuItem value="bicycle">Bicycle</MenuItem>
                       <MenuItem value="handbag">Handbag</MenuItem>
                       <MenuItem value="watch">Watch</MenuItem>
                       <MenuItem value="jewellery">Jewellery</MenuItem>
@@ -86,7 +104,7 @@ function Page10() {
                       <MenuItem value="suitcase">Suitcase</MenuItem>
                       <MenuItem value="suitcase">Cash-in-Transit Vehicle</MenuItem>
                       <MenuItem value="copper">Cash</MenuItem>
-                      <MenuItem value="other">Other</MenuItem>
+                      <MenuItem value="other">Other</MenuItem> */}
                     </Select>
                   </Box>
                 </Box>

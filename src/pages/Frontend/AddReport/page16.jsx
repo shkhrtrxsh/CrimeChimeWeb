@@ -122,9 +122,9 @@ const Page16 = ({selectActive,setActiveStep}) => {
                       Did the police attend the scene of crime?
                     </Typography>
                     <Select name="police_reporting" value={value.police_reporting!==null?value.police_reporting:""} onChange={handleChange} sx={{ paddingX: 2,width:'95%',maxWidth:'310px',height:"50px" }}>
-                      <MenuItem value={0}>Yes</MenuItem>
-                      <MenuItem value={1}>No</MenuItem>
-                      <MenuItem value={2}>Unknown</MenuItem>
+                      <MenuItem value={0}>Unknown</MenuItem>
+                      <MenuItem value={1}>Yes</MenuItem>
+                      <MenuItem value={2}>No</MenuItem>
                     </Select>
                   </Box>
 

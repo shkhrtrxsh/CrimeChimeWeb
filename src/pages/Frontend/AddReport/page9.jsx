@@ -8,16 +8,19 @@ import { setPage } from 'src/store/reducers/registerReport';
 import make from "src/car_makes.json";
 import colors from "src/car_colors.json";
 import axios from 'axios';
+import  API from "src/config/api";
 
 function Page9() {
   const data = useSelector(state => state.reportRegister.data);
-  const car_makes = make.data;
+  // const car_makes = make.data;
   const { vehicle_make, vehicle_model, vehicle_colour, vehicle_year } = data;
   const dispatch = useDispatch();
   const theme = useTheme();
   var currentYear = new Date().getFullYear();
   const [car_models, setCarModels] = useState([]);
-  const car_colors = colors.data;
+  const [car_colors, setCarColors] = useState([]);
+  const [car_makes, setCarMakes] = useState([]);
+  // const car_colors = colors.data;
   const car_years = [...Array(currentYear - 1949)].map((_, i) => String(currentYear - i));
   const [checked,setChecked] = useState(true);
   const fields = [
@@ -42,25 +45,48 @@ function Page9() {
       options: car_years
     },
   ];
+  const fetchCarModelInfo = async (newValue) => {
+    const response = await API.get("/CarModel/"+newValue);
+    const result = response;
+    setCarModels(result.data.Results.map(data => data.Model_Name));
+  }
+  useEffect(() => {
+    dispatch(setPage({}));
+      //get list of vehicle models 
+      // const fetchCarModelInfo = async () => {
+      //   const response = await API.get("/CarModel/"+vehicle_make);
+      //   const result = response;
+      //   setCarModels(result.data.Results.map(data => data.Model_Name));
+      // }
+      // fetchCarModelInfo();
+    
+  }, []);
 
   useEffect(() => {
     dispatch(setPage({}));
 
-    if (vehicle_make) {
-      //get list of vehicle models
-      axios.get(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${vehicle_make}?format=json`)
-        .then(res => {
-          const result = res.data.Results;
-          setCarModels(result.map(data => data.Model_Name));
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      const fetchCarColorInfo = async () => {
+        const response = await API.get("/carColor");
+        const result = response.data;
+        setCarColors(result.data.map(data => data));
+      }
+      fetchCarColorInfo();
+  }, []);
+  
+  useEffect(() => {
+    dispatch(setPage({}));
+
+    const fetchCarMakeInfo = async () => {
+      const response = await API.get("/carMake");
+      const result = response.data;
+      setCarMakes(result.data.map(data => data));
     }
-  }, [vehicle_make, dispatch]);
+    fetchCarMakeInfo();
+  }, []);
 
   const handleChange = (id, newValue) => {
-    dispatch(setPage({ [id]: newValue }));
+    console.log(newValue);
+    dispatch(setPage({ [id]: newValue }),fetchCarModelInfo(newValue));
   };
   const handleUnknown = (e)=>{
     const checked=e.target.checked;

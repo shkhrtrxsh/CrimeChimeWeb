@@ -93,7 +93,7 @@ export default function User() {
     <Fragment>
       <BreadcrumbNavigator
         currentPage="User List" 
-        // rightButton={{name: "add user", link: "/user/add"}} 
+        rightButton={{name: "add user", link: "/user/add"}} 
       />
       <Card>
         <SearchInTable searchByParam={setSearchByParam} />

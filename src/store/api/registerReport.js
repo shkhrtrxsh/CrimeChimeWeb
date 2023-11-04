@@ -4,10 +4,29 @@ import API from 'src/config/api'
 import { objectToFormData } from 'src/utils/formatObject';
 import { clearNearbyReports } from '../reducers/registerReport';
 
-export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes",async({latitude,longitude,toDate=null,fromDate=null},{rejectWithValue,dispatch},)=>{
+export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes",async({latitude,longitude,toDate=null,fromDate=null,nameOfDeceased,
+  verifiedGroup,murder,
+  rape,
+  assault,
+  burglary,
+  robbery,
+  kidnapping,
+  bribery,
+  shoplifting,},{rejectWithValue,dispatch},)=>{
   try {
-      const formData = objectToFormData({latitude,longitude,to_date:toDate&&format(toDate,"yyyy-MM-dd"),from_date:fromDate&&
+      const formData = objectToFormData({latitude,longitude,nameOfDeceased,
+        verifiedGroup,murder,
+        rape,
+        assault,
+        burglary,
+        robbery,
+        kidnapping,
+        bribery,
+        shoplifting,to_date:toDate&&format(toDate,"yyyy-MM-dd"),from_date:fromDate&&
       format(fromDate,"yyyy-MM-dd")})
+      for (const pair of formData.entries()) {
+        console.log(pair[0] + ', ' + pair[1]);
+      }
       var res = await API({"url":"/report/area",method:"POST",data:formData});
     } catch (error) {
         console.error(error);

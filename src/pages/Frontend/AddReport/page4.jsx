@@ -60,7 +60,7 @@ function Page4() {
       ),
       imageSrc: pistol,
       imageAlt: "Semi automatic(pistol, handgun)",
-      imageStyle: { width: "40px", height: "40px", transform: "scaleX(-1)" }
+      imageStyle: { width: "40px", height: "40px", transform: "scaleX(1)" }
     },
     {
       name: "knife_weapons",
@@ -97,9 +97,14 @@ function Page4() {
           <Box paddingLeft="40px" display="flex" className={css`
               flex-direction: column;
             `}>
+              <FormControlLabel
+                control={<Checkbox checked={weapons === 0} value={0} onChange={handleChange} />}
+                label="Unknown"
+                sx={{ paddingBottom: '20px' }}
+              />
             <FormControlLabel
-              control={<Checkbox checked={weapons === -1} value={-1} onChange={handleChange} />}
-              label="Yes, perpetrator had weapons"
+              control={<Checkbox checked={weapons === 1} value={1} onChange={handleChange} />}
+              label="Perpetrator used or fired this weapon"
               sx={{ paddingBottom: weapons === -1?'0px':'20px' }}
             />
             <Box display={weapons===-1?"block":"none"} mb={4}>
@@ -125,15 +130,11 @@ function Page4() {
               </Box>
             </Box>
             <FormControlLabel
-              control={<Checkbox checked={weapons === 1} value={1} onChange={handleChange} />}
-              label="No, perpetrator did not have weapons"
+              control={<Checkbox checked={weapons === 2} value={2} onChange={handleChange} />}
+              label="Perpetrator did not use or fire this weapon"
               sx={{ paddingBottom: '20px' }}
             />
-            <FormControlLabel
-              control={<Checkbox checked={weapons === 0} value={0} onChange={handleChange} />}
-              label="Unknown"
-              sx={{ paddingBottom: '20px' }}
-            />
+            
 
 
           </Box>

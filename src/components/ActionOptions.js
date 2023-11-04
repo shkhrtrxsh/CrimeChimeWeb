@@ -32,6 +32,7 @@ const ActionOptions = (props) => {
     id: null 
   });
   const {delete_id, edit_url, show_url, extra_url, add_note,index} = props;
+  const admin = reports?.admin ? true : false;
 
   useEffect(() => {
     props.deleteAction(openDialog)
@@ -54,7 +55,7 @@ const ActionOptions = (props) => {
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
     >
-      {delete_id !== undefined ? 
+      {admin && delete_id !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }} 
         onClick={() => setOpenDialog({ status: true, id: delete_id })}>
         <ListItemIcon>
@@ -64,7 +65,7 @@ const ActionOptions = (props) => {
       </MenuItem>
       : '' }
 
-      {edit_url !== undefined ? 
+      {admin && edit_url !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }}>
         <LinkToEdit to={edit_url}>
           <ListItemIcon>
@@ -90,7 +91,7 @@ const ActionOptions = (props) => {
       </MenuItem>
       : '' }
 
-        {add_note !== undefined ? 
+        {admin && add_note !== undefined ? 
         <MenuItem sx={{ color: 'text.secondary' }}>
             <LinkToEdit to={add_note}>
             <ListItemIcon>

@@ -132,12 +132,16 @@ const Profile = () => {
                                         <EditIcon />
                                     </IconButtonStyle>
                                     <InfoBox>
-                                        <HeadTypography variant="h5" component="h5">Username: </HeadTypography>
+                                        <HeadTypography variant="h5" component="h5">Name: </HeadTypography>
                                         <BodyTypography variant="h5" component="h5">{user && user.name}</BodyTypography>
                                     </InfoBox>
                                     <InfoBox>
                                         <HeadTypography variant="h5" component="h5">Email: </HeadTypography>
                                         <BodyTypography variant="h5" component="h5">{user && user.email}</BodyTypography>
+                                    </InfoBox>
+                                    <InfoBox>
+                                        <HeadTypography variant="h5" component="h5">Username: </HeadTypography>
+                                        <BodyTypography variant="h5" component="h5">{user && user.username}</BodyTypography>
                                     </InfoBox>
                                     <InfoBox>
                                         <HeadTypography variant="h5" component="h5">Phone: </HeadTypography>

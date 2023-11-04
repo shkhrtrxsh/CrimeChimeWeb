@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -10,17 +10,19 @@ import {
   MenuItem,
   Checkbox,
   FormControlLabel,
-} from '@mui/material';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { useDispatch, useSelector } from 'react-redux';
-import { setLock, setPage } from 'src/store/reducers/registerReport';
-import ProgressBar from 'src/layouts/Report/ProgressBar';
+} from "@mui/material";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { setLock, setPage } from "src/store/reducers/registerReport";
+import ProgressBar from "src/layouts/Report/ProgressBar";
 
 const Page6 = () => {
-  const { rape: value, rape_people: count } = useSelector((state) => state.reportRegister.data);
+  const { rape: value, rape_people: count } = useSelector(
+    (state) => state.reportRegister.data
+  );
   const dispatch = useDispatch();
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const theme = useTheme();
   const setValue = (rape) => dispatch(setPage({ rape }));
   const setCount = (rape_people) => dispatch(setPage({ rape_people }));
@@ -45,58 +47,90 @@ const Page6 = () => {
               <Box
                 borderBottom={2}
                 borderColor={theme.palette.warning.main}
-                style={{ marginRight: '5px', width: '20px' }}
+                style={{ marginRight: "5px", width: "20px" }}
               />
               <Typography
                 variant="h1"
                 align="center"
-                style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}
+                style={{
+                  fontWeight: "bold",
+                  paddingBottom: "5px",
+                  fontSize: "24px",
+                }}
               >
                 Rape
               </Typography>
               <Box
                 borderBottom={2}
                 borderColor={theme.palette.warning.main}
-                style={{ marginLeft: '5px', width: '20px' }}
+                style={{ marginLeft: "5px", width: "20px" }}
               />
             </Box>
           </Grid>
 
           <Box sx={{ py: 1 }}>
-          <Typography
-              variant="h2"
-              align="center"
-              style={{ fontWeight: 'normal', paddingBottom: '0px', fontSize: '15px', paddingLeft: '5px', paddingTop: '40px' }}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "COLUMN",
+                justifyContent: "center",
+                my: 4,
+                pl: 2,
+              }}
             >
-              Select any one
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'COLUMN', justifyContent: 'center', my: 4, pl: 2 }}>
               <FormControlLabel
-                control={<Checkbox checked={value === 0} value={0} onChange={handleChange} />}
+                control={
+                  <Checkbox
+                    checked={value === 0}
+                    value={0}
+                    onChange={handleChange}
+                  />
+                }
                 label="Does Not Apply"
-                sx={{ paddingBottom: '20px' }}
+                sx={{ paddingBottom: "20px" }}
               />
               <FormControlLabel
-                control={<Checkbox checked={value === 1} value={1} onChange={handleChange} />}
+                control={
+                  <Checkbox
+                    checked={value === 1}
+                    value={1}
+                    onChange={handleChange}
+                  />
+                }
                 label="Attempted Rape"
-                sx={{ paddingTop: '20px', paddingBottom: '20px' }}
+                sx={{ paddingTop: "20px", paddingBottom: "20px" }}
               />
               <FormControlLabel
-                control={<Checkbox checked={value === 2} value={2} onChange={handleChange} />}
+                control={
+                  <Checkbox
+                    checked={value === 2}
+                    value={2}
+                    onChange={handleChange}
+                  />
+                }
                 label="Rape"
-                sx={{ paddingTop: '10px' }}
+                sx={{ paddingTop: "10px" }}
               />
-              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3' ,paddingTop:'15px'}}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "start",
+                  alignItems: "center",
+                  margin: "3",
+                  paddingTop: "15px",
+                }}
+              >
                 <Select
-                  value={count||""}
+                  value={count || ""}
                   onChange={(e) => {
                     const count = e.target.value;
                     if (!count || count <= 0) {
                       dispatch(setLock(true));
-                      setError('*required');
+                      setError("*required");
                     } else {
                       dispatch(setLock(false));
-                      setError('');
+                      setError("");
                     }
                     setCount(count);
                   }}
@@ -109,7 +143,10 @@ const Page6 = () => {
                     </MenuItem>
                   ))}
                 </Select>
-                <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: "normal", px: 2, textAlign: "center" }}
+                >
                   Multiple Rape
                 </Typography>
               </div>
@@ -122,4 +159,3 @@ const Page6 = () => {
 };
 
 export default Page6;
-

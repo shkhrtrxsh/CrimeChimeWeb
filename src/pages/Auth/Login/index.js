@@ -103,7 +103,7 @@ export default function Login() {
                   Sign in
                 </Typography>
                 <Typography variant="p">
-                  Your details are kept anonymous and will NEVER be disclosed.
+                  Your details are kept anonymous and will never be disclosed.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
