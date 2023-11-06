@@ -8,11 +8,12 @@ import searchReducer from './reducers/permission-module'
 import reportReducer from './reducers/report'
 import { registerReportReducer } from './reducers/registerReport'
 import { advertiseReducer } from './reducers/advertise'
-
+import corporateReducer from './reducers/corporate'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
+    corporate: corporateReducer,
     role: roleReducer,
     permission: permissionReducer,
     permissionModule: permissionModuleReducer, 

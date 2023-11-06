@@ -77,7 +77,7 @@ export const showCorporate = createAsyncThunk(
   async ({ rejectWithValue }) => {
     try {
       const response = await API.get(`corporateList`);
-      if(response.data.success == true){
+      if(response.data.success === true){
         console.log(response);
         return response.data.data;
       }
