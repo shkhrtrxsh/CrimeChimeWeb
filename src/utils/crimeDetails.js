@@ -4,12 +4,16 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const { capitalize } = require("./string");
 
 export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData)=>{
-    const {date_time,user,location,perpetrators,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murders,murders_people,farm_murder,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_police,police_case_num,description}=values[index]||{};
+    const {date_time,user,location,perpetrators,perpetrators_des,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murders,murders_people,farm_murder,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_the_police,police_case_num,description}=values[index]||{};
+    const utcDate = new Date(date_time);
+    // Convert to local date and time string
+    const localDateString = utcDate.toLocaleString();
+    // Set the local date and time in the state
     return [
         { firstCol: 'Date/Time Occurred:', secondCol:  
           (
             <div>
-              <p style={{ position: "absolute" }}>{date_time}</p>
+              <p style={{ position: "absolute" }}>{localDateString}</p>
               {user && user.corporate !== null && user.corporate !== undefined ? (
                 <>
                   <img
@@ -27,7 +31,8 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         
         { firstCol: 'Address:', secondCol: <p>{location}</p> },
         { firstCol: 'Description of Crime:', secondCol: <p>{description||"No description available"}</p> },
-        { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
+        // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
+        { firstCol: 'Perpetrators:', secondCol: perpetrators?[perpetrators,' , ',perpetrators_des]:"" },
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
             case 0:return ``
@@ -36,15 +41,13 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           }
         })() },
         { firstCol: 'Rape:', secondCol:(()=>{
-          switch(rape && rape_people > 0){
-            case 0:return null;//`Does not apply`
-            case 1:return `Attempted Rape(${rape_people} involved)`
-            default:return null//`Rape(${rape_people} involved)`
+          if(rape && rape_people > 0){
+            return `Attempted Rape (${rape_people})`
           }
         })() },
         { firstCol: 'Murder:', secondCol:(()=>{
           if(murders==1) {
-            return `Murder(${murders_people} involved)`
+            return `Murder (${murders_people})`
           }
           // switch(murders){
           //   case 0:return ``
@@ -69,7 +72,7 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             default:return null;//`No`
           }
         })() },
-        { firstCol: 'Vehicle Theft:', secondCol:(()=>{
+        { firstCol: 'Vehicle related:', secondCol:(()=>{
           if(vehicle_theft===4){
             return null;//capitalize(vehicle_theft_choices[vehicle_theft])
           }else{
@@ -105,8 +108,8 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           }
         })() },
         { firstCol: 'Reason for crime:', secondCol: (!various||various?.length===0)?"":capitalize(various_choices[various]) },
-        {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting===0?"":(police_reporting===0?"Yes":"No"))},
-        { firstCol: 'Formally reported to the police:', secondCol: (reported_to_police===0?"":(reported_to_police===0?"Yes":"No")) },
+        {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes":"No")},
+        { firstCol: 'Formally reported to the police:', secondCol: (reported_to_the_police==1?"Yes":"No") },
         { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
         { firstCol: 'Media:', secondCol: mediaData },
       ];
