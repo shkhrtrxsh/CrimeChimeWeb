@@ -70,7 +70,7 @@ function Page4() {
     },
     {
       name: "other_weapons",
-      label: "Others",
+      label: "Unusual Weapon",
       imageSrc: others,
       imageAlt: "Others",
     },
@@ -107,13 +107,13 @@ function Page4() {
               label="Perpetrator used or fired this weapon"
               sx={{ paddingBottom: weapons === -1?'0px':'20px' }}
             />
-            <Box display={weapons===-1?"block":"none"} mb={4}>
+            <Box display={weapons===1?"block":"none"} mb={4}>
               {error && <FormHelperText sx={{ color: 'red', ml: 2 }}>{error}</FormHelperText>}
               <Box component={"ul"} sx={{ mt: 4 }}>
                 {fields.map((f, ind) => {
                   return (
                     <li style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3', width: "100%" }} key={ind}>
-                      <Select sx={{ width: "80px", marginBottom: "5px" }} disabled={weapons >= 0} name={f.name} value={data[f.name] || 3} onChange={handleCount} >
+                      <Select sx={{ width: "80px", marginBottom: "5px" }} name={f.name} value={data[f.name] || 3} onChange={handleCount} >
                         {WeaponChoices.map((_, ind) => {
                           return (
                             <MenuItem value={ind + 1} key={ind}>{WeaponChoices[ind]}</MenuItem>
