@@ -2,13 +2,24 @@ import { WeaponChoices } from "src/constants/weapons";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 const { capitalize } = require("./string");
+const various_choices = ["Does not apply","crime occured at ATM" ,"i believe crime to be drug-related","i believe crime to be gang-related" ,"Arson was involed"," Vandalism was involed" ,"social an unrest","Bombs were involved"]
 
 export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData)=>{
-    const {date_time,user,location,perpetrators,perpetrators_des,shoplifting,bribery,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murders,murders_people,farm_murder,victim_name,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_the_police,police_case_num,description}=values[index]||{};
+    const {date_time,user,location,latitude,longitude,perpetrators,perpetrators_des,shoplifting,bribery,weapons,fully_auto_weapons,semi_auto_weapons,knife_weapons,other_weapons,rape,rape_people,murders,murders_people,farm_murder,victim_name,assault,assault_people,vehicle_theft,vehicle_colour,vehicle_make,vehicle_model,vehicle_year,burglary,burglary_type,robbery,robbery_type,kidnapping,kidnapping_people,various,police_reporting,reported_to_the_police,police_case_num,description}=values[index]||{};
     const utcDate = new Date(date_time);
-    // Convert to local date and time string
     const localDateString = utcDate.toLocaleString();
-    // Set the local date and time in the state
+    
+    const cleanedString = various.replace(/[\[\]"]/g, '');
+    const cleanedArray = cleanedString.split(',').map(Number);
+
+    // Check if variousnew is an array before using map
+    // if (Array.isArray(cleanedArray)) {
+      const mappedChoices = cleanedArray.map(index => various_choices[index]);
+      const resultString = mappedChoices.join(', ');
+    // } else {
+    //   console.error('variousnew is not an array:', cleanedArray);
+    // }
+
     return [
         { firstCol: 'Date/Time Occurred:', secondCol:  
           (
@@ -29,7 +40,14 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           ),
         },
         
-        { firstCol: 'Address:', secondCol: <p>{location}</p> },
+        { firstCol: 'Address:', secondCol: (()=>{ return (
+          <div>
+            <p>{location}</p><br></br>
+            <p>{latitude}</p>
+            <p>{longitude}</p>
+          </div>
+        ); 
+        })() },
         { firstCol: 'Description of Crime:', secondCol: <p>{description||"No description available"}</p> },
         // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
         { firstCol: 'Perpetrators:', secondCol: perpetrators?[perpetrators,' , ',perpetrators_des]:"" },
@@ -119,7 +137,7 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             return `Attempted Burglary of ${robbery_type} `
           }
           if(robbery==2){
-            return `robbery (${robbery_type})`;
+            return `Robbery (${robbery_type})`;
           }
         })() },
         { firstCol: 'Kidnapping:', secondCol:(()=>{
@@ -127,10 +145,10 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             return null;
           }
           if(kidnapping==1){
-            return `Attempted Burglary of ${kidnapping_people} `
+            return `Attempted Kidnapping of ${kidnapping_people} `
           }
           if(kidnapping==2){
-            return `kidnapping (${kidnapping_people})`;
+            return `Number of person(s) kidnapped (${kidnapping_people})`;
           }
         })() },
         { firstCol: 'Bribery:', secondCol:(()=>{
@@ -144,7 +162,7 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             return `Bribe request by civil servant,`;
           }
           if(bribery==3){
-            return `bribe request by politician`;
+            return `Bribe request by politician`;
           }
         })() },
         { firstCol: 'Shoplifting:', secondCol:(()=>{
@@ -158,8 +176,9 @@ export const crimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             return `Shoplifting`;
           }
         })() },
-        { firstCol: 'Reason for crime:', secondCol: (!various||various?.length===0)?"":capitalize(various_choices[various]) },
-        {firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes":"No")},
+        // { firstCol: 'Reason for crime:', secondCol: (various)?capitalize(various_choices[various]):"" },
+        { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? resultString : "" },
+        { firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes":"No") },
         { firstCol: 'Formally reported to the police:', secondCol: (reported_to_the_police==1?"Yes":"No") },
         { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
         { firstCol: 'Media:', secondCol: mediaData },
