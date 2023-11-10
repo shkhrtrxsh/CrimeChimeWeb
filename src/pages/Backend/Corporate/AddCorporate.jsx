@@ -1,71 +1,73 @@
 import * as Yup from 'yup';
 import { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
-// form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-
 import { useSelector, useDispatch } from 'react-redux';
-import { addUser } from 'src/store/api/user';
-import { getRoles } from 'src/store/api/role';
-import { SaveButton } from 'src/components/Button'
+import { addCorporate } from 'src/store/api/corporate';
+import { SaveButton } from 'src/components/Button';
 import { slugConvertor } from 'src/helpers/StringHelper';
 import Iconify from 'src/components/Iconify';
+import { listIndustryType } from 'src/store/api/corporate';
 
-// @mui
 import {
   Grid,
-  IconButton, 
+  Button,
+  IconButton,
   InputAdornment,
-  InputLabel,
-  Select,
-  Box,
-  OutlinedInput,
-  MenuItem,
   FormControl,
-  ListItemText,
-  Checkbox,
-  Chip
+  OutlinedInput,
+  InputLabel,
+  MenuItem,
+  Select,
+  Chip,
+  Box,
+  Typography,
+  Paper,
 } from '@mui/material';
-// components
-import BreadcrumbNavigator from 'src/components/BreadcrumbNavigator'
 
+import BreadcrumbNavigator from 'src/components/BreadcrumbNavigator';
 import { FormProvider, RHFTextField } from 'src/components/hook-form';
-// ----------------------------------------------------------------------
+import { list } from 'postcss';
 
-export default function AddUser() {
+export default function AddCorporate() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [userRole, setUserRole] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
-
-  
-  const { roles } = useSelector((state) => ({ ...state.role }));
-
+  const [industryType, setIndustryType] = useState('');
+  const [logoFile, setLogoFile] = useState(null);
+  const listData = useSelector((state) => state?.industrytypelist.industryTypes);
   const UserSchema = Yup.object().shape({
-    name: Yup.string().required('User is required'),
-    email: Yup.string().required('E-mail is required'),
-    password: Yup.string().required('Password is required')
+    corporate_name: Yup.string().required('Corporate Name is required'),
+    address: Yup.string().required('Address is required'),
+    user_name: Yup.string().required('Username is required'),
+    corpgroup_mailing_address: Yup.string().email('Invalid email address').required('Corporate Mail is required'),
+   corp_group_branch: Yup.string().required('Corporate Branch is required'),
+     phone: Yup.string().required('Phone is required'),
+     email: Yup.string().email('Invalid email address').required('Email is required'),
+    // logo: Yup.mixed().test('file', 'Please upload a logo', (value) => !!value),
   });
+  
 
   useEffect(() => {
-    dispatch(getRoles({}))
-  }, [])
-  const handleChangeRole = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setUserRole(
-      // On autofill we get a the stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    dispatch(listIndustryType({}));
+    console.log(listData)
+  }, []);
+
+  const handleChangeIndustryType = (event) => {
+    setIndustryType(event.target.value);
+    console.log(industryType)
   };
 
   const defaultValues = {
-    name: '',
+    corporate_name: '',
+    address: '',
+    user_name: '',
+    phone: '',
     email: '',
-    mobile: '',
-    password: '',
+    corpgroup_mailing_address: '',
+    corp_group_branch: '',
+    corp_group_branch_phone: ''
   };
 
   const methods = useForm({
@@ -73,91 +75,98 @@ export default function AddUser() {
     defaultValues,
   });
 
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+  const { handleSubmit } = methods;
+
+  const handleChangeLogo = (event) => {
+    const file = event.target.files[0];
+    setLogoFile(file);
+  };
 
   const onSubmit = (formValue) => {
-    formValue.slug = slugConvertor(formValue.name)
-    formValue.user_roles = userRole
-    dispatch(addUser({formValue, navigate}))
+    formValue.industry_types_id = industryType;
+    console.log(logoFile)
+    formValue.logo = logoFile;
+    // formValue.slug = slugConvertor(formValue.corporate_name);
+    dispatch(addCorporate({ formValue, navigate }));
   };
 
   const breadcrumbNavigate = [
     {
-      name : "user",
-      link :  "/user"
-    }
-  ]
+      name: 'corporate',
+      link: '/corporate',
+    },
+  ];
 
   return (
-    <Fragment >
-      <BreadcrumbNavigator 
-        navigate={breadcrumbNavigate} 
-        currentPage="Add User"
-      />
+    <Fragment>
+      <BreadcrumbNavigator navigate={breadcrumbNavigate} currentPage="Add Corporate" />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <RHFTextField name="name" label="Name" />
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="corporate_name" label="Corporate Name" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="address" label="Address" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="user_name" label="Username" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl sx={{ width: '100%' }}>
+              <InputLabel id="industry-type-label">Industry Type</InputLabel>
+              <Select
+                labelId="industry-type-label"
+                id="industry-type"
+                value={industryType}
+                label="Industry Type"
+                onChange={handleChangeIndustryType}
+              >
+                {listData.map((item) => (
+                  <MenuItem key={item[1]} value={item[0]}>
+                    {item[1]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="corpgroup_mailing_address" label="Corporate Mailing Address" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="corp_group_branch" label="Corporate Branch" />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="phone" label="Phone" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="email" label="Email" type="email" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="corp_group_branch_phone" label="Corporate Group Branch Phone" />
+          </Grid>
+          <Grid item xs={12} >
+            <Paper elevation={2} sx={{ p: 2 }}>
+              <Typography variant="subtitle2">Logo</Typography>
+              <input
+                type="file"
+                accept="image/*"
+                id="logo-file"
+                style={{ display: 'none' }}
+                onChange={handleChangeLogo}
+              />
+              <label htmlFor="logo-file">
+                <Button component="span" color="primary" variant="outlined">
+                  Upload Logo
+                </Button>
+                {logoFile && <span>{logoFile.name}</span>}
+              </label>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <SaveButton type="submit">Save</SaveButton>
+          </Grid>
         </Grid>
-        <Grid item xs={7}>
-          <RHFTextField name="email" label="E-mail Address" type="email" />
-        </Grid>
-        <Grid item xs={5}>
-          <RHFTextField name="mobile" label="Mobile" />
-        </Grid>
-        <Grid item xs={7}>
-          <RHFTextField
-            name="password"
-            label="Password"
-            type={showPassword ? 'text' : 'password'}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-        <Grid item xs={7}>
-          <FormControl sx={{width:'100%'}}>
-            <InputLabel id="demo-multiple-checkbox-label" color="form">Select User Roles</InputLabel>
-            <Select
-              labelId="demo-multiple-checkbox-label"
-              id="demo-multiple-checkbox"
-              multiple
-              color="form"
-              value={userRole}
-              onChange={handleChangeRole}
-              input={<OutlinedInput label="Select User Roles" />}
-              renderValue={(selected) => (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} />
-                  ))}
-                </Box>
-              )}
-            >
-              {roles.data && roles.data.map((role) => (
-                <MenuItem key={role.id} value={role.name}>
-                  <Checkbox checked={userRole.indexOf(role.name) > -1} color="form"/>
-                  <ListItemText primary={role.name} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={7}>
-          <SaveButton type="submit">
-            Save
-          </SaveButton>
-        </Grid>
-      </Grid>
       </FormProvider>
     </Fragment>
   );

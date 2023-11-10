@@ -31,6 +31,7 @@ import {
   Card,
 } from "@mui/material";
 import { SearchInTable } from "src/components/Table";
+import corporate from "src/store/reducers/corporate";
 
 export default function CorporateList() {
   const dispatch = useDispatch();
@@ -79,26 +80,26 @@ export default function CorporateList() {
 
   const handlePageChange = (event, onPage) => {
     let param = setSearchQueryParams(searchParams, onPage);
-    navigate(`/user?${param}`);
+    navigate(`/corporate?${param}`);
   };
 
   const handleChangeRowsPerPage = (event) => {
     let param = setSearchQueryParams(searchParams, 0, event.target.value);
-    navigate(`/user?${param}`);
+    navigate(`/corporate?${param}`);
   };
 
   const setSearchByParam = (param) => {
-    navigate(`/user?${param}`);
+    navigate(`/corporate?${param}`);
   };
   console.log(corporateData);
   return (
     <Fragment>
       <BreadcrumbNavigator
         currentPage="Corporate List"
-        rightButton={{ name: "add Corporate", link: "addCorAdmin" }}
+        rightButton={{ name: "add Corporate", link: "/corporate/add" }}
       />
       <Card>
-        <SearchInTable searchByParam={setSearchByParam} />
+        <SearchInTable searchByParam={setSearchByParam}/>
         <TableContainer>
           <Table aria-label="simple table">
             <TableHead>
@@ -121,10 +122,10 @@ export default function CorporateList() {
                       {cor.name}
                     </TableCell>
                     <TableCell align="left">{cor.address}</TableCell>
-                    <TableCell align="left">{cor.cor_admon.name}</TableCell>
-                    <TableCell align="left">{cor.cor_admon.phone}</TableCell>
-                    <TableCell align="left">{cor.cor_admon.email}</TableCell>
-                    <TableCell align="left">{cor.industry.name}</TableCell>
+                    <TableCell align="left">{cor.cor_admon?.name}</TableCell>
+                    <TableCell align="left">{cor.cor_admon?.phone}</TableCell>
+                    <TableCell align="left">{cor.cor_admon?.email}</TableCell>
+                    <TableCell align="left">{cor.industry?.name}</TableCell>
                     <TableCell align="left">
                       <img
                         src={cor.logo}
@@ -150,15 +151,15 @@ export default function CorporateList() {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* <TablePagination
+        <TablePagination
           rowsPerPageOptions={recordPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           component="div"
-          count={users.total}
-          rowsPerPage={users.per_page}
-          page={users.current_page - 1}
+          count={corporateData?.total}
+          rowsPerPage={corporateData?.per_page}
+          page={corporateData?.current_page - 1}
           onPageChange={handlePageChange}
-        /> */}
+        />
       </Card>
       <ConfirmDeleteDialog
         openDialog={openDialog}

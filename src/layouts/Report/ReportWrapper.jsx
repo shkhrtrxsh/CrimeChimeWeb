@@ -72,7 +72,7 @@ const ReportPageRouter = ({
     <Page15 />,
     <Page16 setSelectActive={setSelectActive} openState={openState} />,
   ];
-  return ReportPages[selectActive - 1];
+  return ReportPages[selectActive];
 };
 
 const ReportWrapper = () => {

@@ -68,6 +68,10 @@ const BackendPrivateRoutes = [
         element: <Corporate />,
     },
     {
+        path: 'Corporate/add',
+        element: <AddCorporate />,
+    },
+    {
         path: 'user/:id',
         element: <ShowUser />,
     },

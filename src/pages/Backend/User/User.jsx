@@ -96,7 +96,7 @@ export default function User() {
         rightButton={{name: "add user", link: "/user/add"}} 
       />
       <Card>
-        <SearchInTable searchByParam={setSearchByParam} />
+        <SearchInTable searchByParam={setSearchByParam}/>
         <TableContainer>
           <Table aria-label="simple table">
             <TableHead>

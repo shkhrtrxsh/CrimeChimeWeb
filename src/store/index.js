@@ -9,6 +9,7 @@ import reportReducer from './reducers/report'
 import { registerReportReducer } from './reducers/registerReport'
 import { advertiseReducer } from './reducers/advertise'
 import corporateReducer from './reducers/corporate'
+import listReducer from './reducers/industrytypelist'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -21,5 +22,6 @@ export const store = configureStore({
     report: reportReducer,
     reportRegister:registerReportReducer,
     advertise:advertiseReducer,
+    industrytypelist: listReducer,
   },
 })

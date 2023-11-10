@@ -8,12 +8,13 @@ export const addCorporate = createAsyncThunk(
     async ({ formValue, navigate }, { rejectWithValue }) => {
       try {
         const response = await API.post("/addCorAdmin", formValue);
-        if(response.data.status === 200){
+        console.log(response);
+        if(response.status === 200){
           toast.success(response.data.message);
-          navigate("/user");
+          navigate("/corporate");
           return response.data;
         }
-        toast.error("Something went wrong");
+        // toast.error("Something went wrong");
 
       } catch (err) {
         return rejectWithValue(err.response.data);
@@ -21,7 +22,21 @@ export const addCorporate = createAsyncThunk(
     }
 );
 
-
+export const listIndustryType = createAsyncThunk(
+  'industryType/list',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await API.get('/listIndustryType'); // Replace with your actual API endpoint
+      if (response.data.success === true) {
+        // Process the response data into the desired format
+        const processedData = response.data.data.map((item) => [item.id, item.name]);
+        return processedData;
+      }
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 export const editUser = createAsyncThunk(
   "user/edit",
   async ({ formValue, navigate }, { rejectWithValue }) => {

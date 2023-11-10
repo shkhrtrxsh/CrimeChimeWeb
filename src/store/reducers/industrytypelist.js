@@ -1,37 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { 
-  showCorporate,listIndustryType
+  listIndustryType
 } from '../api/corporate'
 
 const initialState = {
-  data: null, // This will hold the fetched data
-  loading: 'idle', // You can use 'idle', 'pending', 'succeeded', or 'failed'
-  error: "", // Holds any error that occurs during the API call
-  
+ 
+  industryTypes: [],
 };
 
-export const corporate = createSlice({
-  name: 'corporate',
+
+export const industrytypelist = createSlice({
+  name: 'industrytypelist',
   initialState,
-  reducers: {},
+  reducers: {
+    // ... other reducers
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(showCorporate.pending, (state) => {
-        state.loading = 'pending';
+      .addCase(listIndustryType.fulfilled, (state, action) => {
+        state.industryTypes = action.payload; // Update the industryTypes with the processed data
       })
-      .addCase(showCorporate.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
-        state.data = action.payload;
-      })
-      .addCase(showCorporate.rejected, (state, action) => {
-        state.loading = 'failed';
-        state.error = action.payload;
+      .addCase(listIndustryType.rejected, (state, action) => {
+        // Handle rejection if needed
       });
   },
 });
 
-
-export default corporate.reducer;
+export default industrytypelist.reducer;
 
 
 
