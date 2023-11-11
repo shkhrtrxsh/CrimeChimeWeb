@@ -26,11 +26,11 @@ const navConfig = [
     path: '/reports',
     icon: getIcon('eva:lock-fill'),
   },
-  {
-    title: 'Corporates/Groups',
-    path: '/Corporate',
-    icon: getIcon('eva:group-fill'),
-  },
+  // {
+  //   title: 'Corporates/Groups',
+  //   path: '/Corporate',
+  //   icon: getIcon('eva:group-fill'),
+  // },
 ];
 
 export default navConfig;
