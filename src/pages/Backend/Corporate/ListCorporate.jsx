@@ -141,8 +141,8 @@ export default function CorporateList() {
                     </TableCell>
                     <TableCell align="right">
                       <ActionOptions
-                        delete_id={cor.id}
-                        show_url={"/user/" + cor.id}
+                        // delete_id={cor.id}
+                        edit_url={"/corporate/" + cor.id}
                         deleteAction={deleteOptionAction}
                       />
                     </TableCell>
@@ -151,7 +151,7 @@ export default function CorporateList() {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
+        {/* <TablePagination
           rowsPerPageOptions={recordPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           component="div"
@@ -159,7 +159,7 @@ export default function CorporateList() {
           rowsPerPage={corporateData?.per_page}
           page={corporateData?.current_page - 1}
           onPageChange={handlePageChange}
-        />
+        /> */}
       </Card>
       <ConfirmDeleteDialog
         openDialog={openDialog}

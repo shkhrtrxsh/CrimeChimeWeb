@@ -72,7 +72,7 @@ const ProgressBar = ({
         </Box>
         <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: useMediaQuery(theme.breakpoints.up('md')) ? '33.3%' : '20%' }}>
-          <Typography variant="h6" sx={{ cursor: 'default' }}>#{activeStep}/17</Typography>
+          <Typography variant="h6" sx={{ cursor: 'default' }}>#{activeStep}/18</Typography>
         </Box>
         <Divider orientation="vertical" flexItem style={{ backgroundColor: 'black', marginLeft: '8px', marginRight: '8px' }} />
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: useMediaQuery(theme.breakpoints.up('md')) ? '33.3%' : '20%' }}>
