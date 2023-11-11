@@ -99,7 +99,7 @@ export default function CorporateList() {
         rightButton={{ name: "add Corporate", link: "/corporate/add" }}
       />
       <Card>
-        <SearchInTable searchByParam={setSearchByParam}/>
+        {/* <SearchInTable searchByParam={setSearchByParam}/> */}
         <TableContainer>
           <Table aria-label="simple table">
             <TableHead>

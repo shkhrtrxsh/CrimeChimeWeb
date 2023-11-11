@@ -72,7 +72,7 @@ const ReportPageRouter = ({
     <Page15 />,
     <Page16 setSelectActive={setSelectActive} openState={openState} />,
   ];
-  return ReportPages[selectActive];
+  return ReportPages[selectActive -1 ];
 };
 
 const ReportWrapper = () => {
@@ -182,7 +182,7 @@ const ReportWrapper = () => {
         }
         dispatch(setDuplicate({ index: index + 1 }));
         return;
-      case 17:
+      case 18:
         setOpen(true);
         return;
       default:
@@ -327,7 +327,7 @@ const ReportWrapper = () => {
           lock={lock}
           beforeNext={beforeNext}
           beforeBack={beforeBack}
-          submit={selectActive === 17}
+          submit={selectActive === 18}
           textNext={textNext}
           textBack={textBack}
         />
