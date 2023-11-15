@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Typography,
@@ -23,7 +23,7 @@ function Page5() {
     farm_murder,
     victim_name,
   } = useSelector((state) => state.reportRegister.data);
-  console.log(farm_murder);
+
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const setCount = (murders_people) => dispatch(setPage({ murders_people }));
@@ -49,21 +49,22 @@ function Page5() {
     // Toggling between 1 and 0
     const isFarmMurder = farm_murder === 1 ? 0 : 1;
     setFarm(isFarmMurder);
+    if (isFarmMurder === 0) {
+      // If "No" is selected, disable the victim_name input field
+      setUnknownVictimName(true);
+      setVictim("");
+    }
   };
 
-  // Handle "Unknown" checkbox change
   const handleUnknownChange = () => {
     setUnknownVictimName(!unknownVictimName);
     if (unknownVictimName) {
-      // If unchecking "Unknown," set an empty string for victim_name
       setVictim("");
     } else {
-      // If checking "Unknown," set "unknown" for victim_name
       setVictim("unknown");
     }
   };
 
-  // Handle victim name input change
   const handleVictimNameChange = (event) => {
     const name = event.target.value;
     dispatch(setPage({ victim_name: name }));
@@ -119,7 +120,6 @@ function Page5() {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                //justifyItems="center",
                 my: 3,
                 pl: 1,
               }}
@@ -213,7 +213,7 @@ function Page5() {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "center", // Center horizontally
+                  justifyContent: "center",
                   alignItems: "center",
                 }}
               >
@@ -259,7 +259,7 @@ function Page5() {
                   paddingTop: "20px",
                 }}
               >
-                Name of the person(s) killed?
+                Name(s) of person(s) killed?
               </Typography>
               <Box
                 style={{
@@ -281,14 +281,16 @@ function Page5() {
                 <Typography variant="body1" color="textSecondary">
                   or
                 </Typography>
-                <TextField
-                  value={unknownVictimName ? "" : victim_name}
-                  onChange={handleVictimNameChange}
-                  label="Surname Forename, Surname Forename..."
-                  placeholder=""
-                  fullWidth
-                  disabled={unknownVictimName}
-                />
+               <TextField
+  value={unknownVictimName ? "" : victim_name}
+  onChange={handleVictimNameChange}
+  label={<Typography variant="body2">Surname Forename, Surname Forename....</Typography>}
+  placeholder=""
+  fullWidth
+  disabled={unknownVictimName || farm_murder === 0}
+/>
+
+
                 <FormHelperText>
                   * For multiple deceased, separate full names by commas
                 </FormHelperText>

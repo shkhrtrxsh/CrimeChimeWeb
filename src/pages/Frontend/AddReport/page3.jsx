@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLock, setPage } from 'src/store/reducers/registerReport';
 import { loadGoogleMaps } from 'src/utils/googleMap';
 import ProgressBar from 'src/layouts/Report/ProgressBar';
-import Perps from "src/assets/images/perps.png"
+import Perps from "../../../assets/images/perps.png"
 
 function Page3() {
   const { perpetrators, perpetrators_des } = useSelector((state) => state.reportRegister.data);
