@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 // form
 import { useForm } from 'react-hook-form';
@@ -15,6 +15,7 @@ import Page from '../../../components/Page';
 
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { useEffect } from 'react';
+import { IsAuth } from 'src/helpers/RouteHelper';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -81,7 +82,7 @@ export default function OtpVerify() {
     formValue.id = user.data.id
     dispatch(otpVerify({formValue, navigate}))
   };
-
+  if (IsAuth())return <Navigate to="/"/>;
   return (
     <Page title="Otp Verify">
       <RootStyle>
@@ -90,10 +91,10 @@ export default function OtpVerify() {
             <PaperStyle>
               <HeaderStyle>
                 <Typography variant="h4">
-                  Otp Verification
+                  OTP Verification
                 </Typography>
                 <Typography variant="p">
-                  Please enter the OTP send to your mobile number to login.
+                  Please enter the OTP sent to your mobile number to login.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

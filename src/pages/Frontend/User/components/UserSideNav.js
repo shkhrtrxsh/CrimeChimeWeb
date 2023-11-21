@@ -16,11 +16,13 @@ export default function UserSideName() {
     <Grid item md={3} sx={{
       background: "#fff",
       borderRight: '1px solid #ddd',
+      height:"calc( 100vh - 65px )",
+      maxHeight:"calc( 100vh - 65px )",
       [theme.breakpoints.down('md')]: {
         display: 'none'
       }
     }}>
-      <Paper sx={{ maxWidth: '100%', }}>
+      <Paper sx={{ maxWidth: '100%', }} id="user-side">
         <MenuList>
           <MenuItem component={Link} to="/profile">
             <ListItemIcon sx={{  }}>

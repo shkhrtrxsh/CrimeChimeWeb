@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { showAuthUser } from 'src/store/api/user';
@@ -11,7 +11,10 @@ import Page from '../../../components/Page';
 import { APPBAR_DESKTOP } from 'src/constants/theme'
 import EditIcon from '@mui/icons-material/Edit';
 import { mapSettings, CurrentLocationCoordinates } from 'src/helpers/LocationHelper';
-
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import { getLocationCoords } from 'src/utils/googleMap';
+import { setPage } from 'src/store/reducers/registerReport';
 
 const containerStyle = {
     width: '100%',
@@ -53,12 +56,13 @@ const IconButtonStyle = styled(IconButton)(({ theme }) => ({
 const Profile = () => {
     const theme = useTheme()
     const dispatch = useDispatch()
+    const navigate = useNavigate();
 
-    const dPosition = CurrentLocationCoordinates()
+    const {latitude,longitude} = useSelector(state=>state.reportRegister.data);
 
     const [position, setPosition] = useState({
-        lat: dPosition.lat,
-        lng: dPosition.lng
+        lat: latitude,
+        lng: longitude
     })
 
     const { user } = useSelector((state) => ({ ...state.user }));
@@ -76,8 +80,16 @@ const Profile = () => {
         }
     }, [user])
 
+    const onLoad = async(Map) => {
+          const {latitude:lat,longitude:lng} = await getLocationCoords();
+          dispatch(setPage({latitude:lat,longitude:lng}));
+        }
+
     return (
         <Page title={user && user.name}>
+            <Fab color="primary" aria-label="add" sx={{position:"fixed",bottom:16,right:16}} onClick={()=>navigate("/report/add")}>
+                <AddIcon />
+            </Fab>
             <Container sx={{
                 marginTop: '20px'
             }}>
@@ -120,12 +132,16 @@ const Profile = () => {
                                         <EditIcon />
                                     </IconButtonStyle>
                                     <InfoBox>
-                                        <HeadTypography variant="h5" component="h5">Username: </HeadTypography>
+                                        <HeadTypography variant="h5" component="h5">Name: </HeadTypography>
                                         <BodyTypography variant="h5" component="h5">{user && user.name}</BodyTypography>
                                     </InfoBox>
                                     <InfoBox>
                                         <HeadTypography variant="h5" component="h5">Email: </HeadTypography>
                                         <BodyTypography variant="h5" component="h5">{user && user.email}</BodyTypography>
+                                    </InfoBox>
+                                    <InfoBox>
+                                        <HeadTypography variant="h5" component="h5">Username: </HeadTypography>
+                                        <BodyTypography variant="h5" component="h5">{user && user.username}</BodyTypography>
                                     </InfoBox>
                                     <InfoBox>
                                         <HeadTypography variant="h5" component="h5">Phone: </HeadTypography>
@@ -159,6 +175,7 @@ const Profile = () => {
                                         marginBottom: '30px'
                                     }}>{user && user.address}</BodyTypography>
                                     <GoogleMap
+                                        onLoad={onLoad}
                                         mapContainerStyle={containerStyle}
                                         center={position}
                                         zoom={10}

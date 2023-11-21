@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Iconify from 'src/components/Iconify';
 import { styled } from '@mui/material/styles';
 
@@ -9,7 +9,10 @@ import {
   IconButton, 
   ListItemIcon, 
   ListItemText,
+  Box,
 } from '@mui/material';
+import { setCrimeIndex, setNearbyReports } from 'src/store/reducers/registerReport';
+import { useDispatch, useSelector } from 'react-redux';
 
 const LinkToEdit = styled(Link)(({ theme }) => ({
     width: '100%',
@@ -20,18 +23,22 @@ const LinkToEdit = styled(Link)(({ theme }) => ({
 
 const ActionOptions = (props) => {
   const ref = useRef(null);
+  const {reports} = useSelector(state=>state.report);
+  const data = reports.data||[];
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [openDialog, setOpenDialog] = React.useState({
     status: false, 
     id: null 
   });
-  const {delete_id, edit_url, show_url, extra_url, add_note} = props;
+  const {delete_id, edit_url, show_url, extra_url, add_note,index} = props;
+  const admin = reports?.admin ? true : false;
 
   useEffect(() => {
     props.deleteAction(openDialog)
     setIsOpen(false)
   }, [openDialog])
-
+  const navigate = useNavigate();
   return(
     <>
     <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -48,7 +55,7 @@ const ActionOptions = (props) => {
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
     >
-      {delete_id !== undefined ? 
+      {admin && delete_id !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }} 
         onClick={() => setOpenDialog({ status: true, id: delete_id })}>
         <ListItemIcon>
@@ -58,7 +65,7 @@ const ActionOptions = (props) => {
       </MenuItem>
       : '' }
 
-      {edit_url !== undefined ? 
+      {admin && edit_url !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }}>
         <LinkToEdit to={edit_url}>
           <ListItemIcon>
@@ -71,16 +78,20 @@ const ActionOptions = (props) => {
 
       {show_url !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }}>
-        <LinkToEdit to={show_url}>
+        <Box sx={{display:"flex"}} onClick={()=>{
+          dispatch(setNearbyReports(data));
+          dispatch(setCrimeIndex({index,viewCrime:true}))
+          navigate("/reportscrime")
+        }}>
           <ListItemIcon>
             <Iconify icon="clarity:eye-line" sx={{fontSize : 22}} />
           </ListItemIcon>
           <ListItemText primary="Show" primaryTypographyProps={{ variant: 'body2' }} />
-        </LinkToEdit>
+        </Box>
       </MenuItem>
       : '' }
 
-        {add_note !== undefined ? 
+        {admin && add_note !== undefined ? 
         <MenuItem sx={{ color: 'text.secondary' }}>
             <LinkToEdit to={add_note}>
             <ListItemIcon>

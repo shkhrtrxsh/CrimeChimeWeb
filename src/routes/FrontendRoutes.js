@@ -4,6 +4,7 @@ import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import OtpVerify from '../pages/Auth/OtpVerify';
 import ViewReportMap from 'src/pages/Frontend/ViewReport/ViewReportMap';
+import ViewCrime from 'src/pages/Frontend/ViewCrime/ViewCrime';
 
 const FrontendRoutes = [
     {
@@ -16,7 +17,7 @@ const FrontendRoutes = [
     },
     {
         path: 'reportscrime', 
-        element: <ViewReportMap />
+        element: <ViewCrime />
     },
     {
         path: '/report',

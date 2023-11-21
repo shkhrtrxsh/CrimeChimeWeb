@@ -7,13 +7,14 @@ export const addUser = createAsyncThunk(
     "user/add",
     async ({ formValue, navigate }, { rejectWithValue }) => {
       try {
-        const response = await API.post("/user", formValue);
-        if(response.data.status === 200){
-          toast.success(response.data.message);
+        const response = await API.post("/auth/register", formValue);
+        if(response.code == 200){
+          toast.success('User save successfully');
           navigate("/user");
-          return response.data;
+        } else {
+          toast.error(response.data.message);
         }
-        toast.error("Something went wrong");
+        
 
       } catch (err) {
         return rejectWithValue(err.response.data);

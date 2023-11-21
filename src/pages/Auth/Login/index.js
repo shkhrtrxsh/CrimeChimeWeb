@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import "yup-phone";
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate, Link as RouterLink, Navigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 // form
 import { useForm } from 'react-hook-form';
@@ -21,6 +21,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import axios from 'axios';
 import  API from "../../../config/api";
 import { toast } from "react-toastify";
+import { IsAuth } from 'src/helpers/RouteHelper';
 
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -65,7 +66,7 @@ export default function Login() {
   };
 
   const methods = useForm({
-    resolver: yupResolver(LoginSchema),
+    //resolver: yupResolver(LoginSchema),
     defaultValues,
   });
 
@@ -75,21 +76,22 @@ export default function Login() {
   } = methods;
 
   const onSubmit = (formValue) => {
-      let token = captchaRef.current.getValue();
+      // let token = captchaRef.current.getValue();
 
-      if(token){
-          dispatch(verifyToken({token})).then((response)=>{
-          if(response.payload.success == true){
-            dispatch(login({formValue, navigate}))
-          }else{
-            toast.error("Something wrong!");
-          }
-        })
-      }else{
-        toast.error("Something wrong!");
-      }
+      // if(token){
+      //     dispatch(verifyToken({token})).then((response)=>{
+      //     if(response.payload.success == true){
+            
+      //     }else{
+      //       toast.error("Something wrong!");
+      //     }
+      //   })
+      // }else{
+      //   toast.error("Something wrong!");
+      // }
+      dispatch(login({formValue, navigate}))
   };
-
+  if (IsAuth())return <Navigate to="/"/>;
   return (
     <Page title="Login">
       <RootStyle>
@@ -101,7 +103,7 @@ export default function Login() {
                   Sign in
                 </Typography>
                 <Typography variant="p">
-                  Your details are kept anonymous and will NEVER be disclosed.
+                  Your details are kept anonymous and will never be disclosed.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -112,7 +114,7 @@ export default function Login() {
                   />
                 </Stack><br></br>
                 <Stack spacing={3}>
-                <ReCAPTCHA sitekey={process.env.REACT_APP_SITE_KEY} ref={captchaRef}  />
+                {/* <ReCAPTCHA sitekey={process.env.REACT_APP_SITE_KEY} ref={captchaRef}  /> */}
                 </Stack>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>

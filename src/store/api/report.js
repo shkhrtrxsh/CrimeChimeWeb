@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import  API from "../../config/api";
 import { toast } from "react-toastify";
+import { setError } from '../reducers/report';
 
 
 export const addReport = createAsyncThunk(
@@ -43,11 +44,18 @@ export const editReport = createAsyncThunk(
 
 export const getReports = createAsyncThunk(
   "report",
-  async ({param, id}, { rejectWithValue }) => {
+  async ({param, id}, { rejectWithValue,dispatch }) => {
     try {
       const response = await API.get(`/report?${param}`);
       if(response.data.status === 200){
-        return response.data.data;
+        const allData = response.data.data;
+        if(allData.report.data.length===0){
+          dispatch(setError(response.data.message));
+          return rejectWithValue({message:response.data.message});
+        }
+        const admin = allData?.admin?true:false;
+        const user = (admin&&allData?.user)?allData.user:null;
+        return {...allData.report,admin,user} ;
       }
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -180,7 +188,6 @@ export const getCrimes = createAsyncThunk(
 export const getSpecificCrimesById = createAsyncThunk(
     "specific-crime-by-id",
     async ({id}, { rejectWithValue }) => {
-        console.log(id)
       try {
         const response = await API.get(`/crime/${id}`);
         if(response.data.status === 200){
@@ -195,7 +202,6 @@ export const getSpecificCrimesById = createAsyncThunk(
 export const uploadReportImage = createAsyncThunk(
     "upload report image",
     async ({file}, { rejectWithValue }) => {
-        console.log(file)
       try {
         const response = await API.post(`/report/image-upload`, {file:file}, {headers: {
             'content-type': 'multipart/form-data',
@@ -229,6 +235,14 @@ export const getMyReport = createAsyncThunk(
     try {
       const response = await API.get(`/report/my`);
       if(response.data.status === 200){
+        try {
+          if(response.data.data.data.length===0){
+            throw Error(response.data.message);
+          }
+        } catch (error) {
+          console.log(error.message)
+          return rejectWithValue(error.message);
+        }
         return response.data.data;
       }
     } catch (err) {

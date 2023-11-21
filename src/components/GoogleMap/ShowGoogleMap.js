@@ -88,24 +88,10 @@ const ShowGoogleMap = () => {
         lng: 1
     })
 
-    // function showPosition(position) {
-    //     setCurrentLocation({
-    //         lat: position.coords.latitude,
-    //         lng: position.coords.longitude
-    //     })
-    // }
-    // navigator.geolocation.getCurrentPosition(showPosition)
 
     const markerMovementStart = (e) => {
         console.log(e)
     }
-
-    // useEffect(() => {
-    //     if(position.lat === 0 && position.lng === 0){
-    //         setPosition(currentLocation)
-    //         console.log(position)
-    //     }
-    // }, [])
 
     useEffect(() => {
         if(map !== null){
@@ -128,9 +114,6 @@ const ShowGoogleMap = () => {
             console.log(e.latLng.lat())
             console.log(e.latLng.lng())
         }
-        // console.log(e.latLng.lat())
-        // console.log(e.latlng.lng())
-        console.log(e)
     }
 
     return (

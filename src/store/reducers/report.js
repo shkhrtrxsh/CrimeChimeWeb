@@ -29,6 +29,12 @@ const initialState = {
 export const report = createSlice({
     name: 'report',
     initialState ,
+    reducers:{
+      setError:(state,action)=>{
+        state.error=action.payload;
+        if(action.payload)state.reports=null;
+      }
+    },
     extraReducers: {
         // Report Add Api
         [addReport.pending]: (state, action) => {
@@ -54,6 +60,7 @@ export const report = createSlice({
         [getReports.rejected]: (state, action) => {
           state.loading = false;
           state.error = action.payload.message;
+          state.reports=null;
         },
 
         // Show Report Api
@@ -79,7 +86,8 @@ export const report = createSlice({
         },
         [editReport.rejected]: (state, action) => {
           state.loading = false;
-          state.error = action.payload.message;
+          state.error = action.payload;
+          state.report=[];
         },
 
         // Change Report Status Api
@@ -123,8 +131,7 @@ export const report = createSlice({
         },
         [getCrimes.fulfilled]: (state, action) => {
             state.loading = false;
-            state.crime_list = action.payload;
-            console.log(action.payload)
+            state.crime_list = String(action.payload);
         },
         [getCrimes.rejected]: (state, action) => {
             state.loading = false;
@@ -168,10 +175,11 @@ export const report = createSlice({
         },
         [getMyReport.rejected]: (state, action) => {
           state.loading = false;
-          state.error = action.payload.message;
+          state.error = action.payload;
         },
         
     }
 })
 
+export const {setError} = report.actions;
 export default report.reducer;

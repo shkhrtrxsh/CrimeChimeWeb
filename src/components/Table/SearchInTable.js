@@ -20,6 +20,11 @@ export default function SearchInTable(props) {
   const [orderBy, setOrderBy] = useState("latest");
   const [status, setStatus] = useState("");
   const [searchParams] = useSearchParams();
+  const navigate=useNavigate();
+
+  const setSearchByParam = (param) => {
+    search && navigate(`/reports?${param}`)
+  }
 
   useEffect(() => {
     let query = `order-by=${orderBy}`;
@@ -29,8 +34,8 @@ export default function SearchInTable(props) {
     if(status !== ""){
       query += `&status=${status}`;
     }
+    setSearchByParam(query)
 
-    props.searchByParam(query)
 
   }, [orderBy, status])
 
@@ -44,7 +49,7 @@ export default function SearchInTable(props) {
         query += `&status=${status}`;
       }
 
-      props.searchByParam(query)
+      setSearchByParam(query)
     }
 
   }, [search])

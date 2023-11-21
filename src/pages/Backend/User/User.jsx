@@ -93,28 +93,28 @@ export default function User() {
     <Fragment>
       <BreadcrumbNavigator
         currentPage="User List" 
-        // rightButton={{name: "add user", link: "/user/add"}} 
+        rightButton={{name: "add user", link: "/user/add"}} 
       />
       <Card>
-        <SearchInTable searchByParam={setSearchByParam} />
+        <SearchInTable searchByParam={setSearchByParam}/>
         <TableContainer>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="left">E-mail</TableCell>
-                <TableCell align="left">Phone</TableCell>
-                <TableCell align="left">Roles</TableCell>
-                <TableCell align="left">Status</TableCell>
-                <TableCell align="right">Action</TableCell>
+                <TableCell align="left">Mobile Number</TableCell>
+                <TableCell align="left">Username</TableCell>
+                <TableCell align="left">Email</TableCell>
+                <TableCell align="left">Corp./Groups</TableCell>
+                <TableCell align="left">Active</TableCell>
+                <TableCell align="right">Report</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users.data && users.data.map((user) => (
                 <TableRow key={user.id}>
-                  <TableCell component="th" scope="row">{user.name}</TableCell>
+                  <TableCell component="th" scope="row">{user.phone}</TableCell>
+                  <TableCell align="left">{user.username}</TableCell>
                   <TableCell align="left">{user.email}</TableCell>
-                  <TableCell align="left">{user.phone}</TableCell>
                   <TableCell align="left">
                   { user.roles && user.roles.map((role, index) => (
                     <ActiveInactiveButton 
@@ -124,23 +124,32 @@ export default function User() {
                     >
                       {role.name}
                     </ActiveInactiveButton>
-                    ))}
+                    ))}<br></br>
+                    { user.corporate && user.corporate ? 
+                      <label 
+                        status={1}
+                      >
+                      {user.corporate.name}
+                      </label>
+                    :''}
                   </TableCell>  
                   <TableCell align="left">
                     <ActiveInactiveButton 
                       onClick={() => setChangeStatusDialog({ status: true, id: user.id })}
                       status={user.status}
                     >
-                      {user.status ? "Active" : "Inactive"}
+                      {user.status==1 ? "Active" : "Inactive"}
                     </ActiveInactiveButton>
-                  </TableCell>                
-                  <TableCell align="right">
+                  </TableCell>
+                  <TableCell align="left">{user.report_count}</TableCell>
+
+                  {/* <TableCell align="right">
                     <ActionOptions 
                       delete_id={user.id}
                       show_url={'/user/'+user.id} 
                       deleteAction={deleteOptionAction}
                     />
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>

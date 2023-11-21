@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { SatelliteZoom } from 'src/constants/googleMap';
 
 export const CurrentLocationCoordinates = () => {
 
@@ -24,10 +25,8 @@ export const CurrentLocationCoordinates = () => {
         if(position.lat === positionLatitude && position.lng === positionLongitude){
             setTimeout(function(){
                 setPosition(currentLocation)
-                // console.log("GPS with time out")
             },500)
 
-            // console.log("GPS")
             
         }
 
@@ -40,10 +39,8 @@ export const CurrentLocationCoordinates = () => {
                     lat: positionLatitude,
                     lng: positionLongitude
                 })
-                // console.log("No GPS with time out")
             },1000)
             
-            // console.log('No GPS')
         }
     }, [])
 
@@ -55,9 +52,11 @@ export const positionLatitude = -26.2041028;
 export const positionLongitude = 28.0473051;
 
 
-export const mapSettings =  {
+export const mapSettings = (zoom)=> ({
     // zoomControl: false,
     streetViewControl: false,
     mapTypeControl: false,
+    gestureHandling: "greedy",
     fullscreenControl: false,
-}
+    mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.TERRAIN
+})

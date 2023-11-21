@@ -167,7 +167,7 @@ const ViewReportMap = (props) => {
     }
     const [hidden, setHidden] = React.useState(true);
     const isDesktop = useResponsive('up', 'md');
-
+    const admin = reports?.admin?true:false;
     return (
         <>
             
@@ -178,12 +178,10 @@ const ViewReportMap = (props) => {
                         color="primary"
                         aria-label="view report"
                         title="Map view" 
-                        variant={isDesktop ? 'extended' : 'circular'}
+                        variant='extended'
                         >
+                        <Typography component='h6'>Listed Crimes</Typography>
                         <LocationOnIcon />
-                        {isDesktop &&
-                            <Typography component='h6'></Typography>
-                        }
                     </Fab>
                     : 
                     <Fab
@@ -191,12 +189,10 @@ const ViewReportMap = (props) => {
                         color="primary"
                         aria-label="view report"
                         title="Table view" 
-                        variant={isDesktop ? 'extended' : 'circular'}
+                        variant='extended'
                         >
                         <TableViewIcon />
-                        {isDesktop &&
-                            <Typography component='h6'></Typography>
-                        }
+                        <Typography component='h6'>Listed Crimes</Typography>
                     </Fab>
                 }
             </BoxButtonStyle>
@@ -210,7 +206,7 @@ const ViewReportMap = (props) => {
                                             <TableCell>Location</TableCell>
                                             <TableCell align="left">Crime</TableCell>
                                             <TableCell align="left">Specific Crime</TableCell>
-                                            <TableCell align="left">Reporter</TableCell>
+                                            {admin&&<TableCell align="left">Reporter</TableCell>}
                                             <TableCell align="left">Status</TableCell>
                                             <TableCell align="left">Created At</TableCell>
                                             {/* <TableCell align="right">Action</TableCell> */}
@@ -221,7 +217,7 @@ const ViewReportMap = (props) => {
                                             <TableRow key={report.id}>
                                             <TableCell component="th" scope="row">{report.location}</TableCell>
                                             <TableCell align="left">{report.crime.name}</TableCell>
-                                            <TableCell align="left">{report.specific_crime.name}</TableCell>  
+                                            {admin&&<TableCell align="left">{report.specific_crime.name}</TableCell>}  
                                             <TableCell align="left">{report.user.name}</TableCell>                  
                                             <TableCell align="left">
                                                 <ActiveInactiveButton 
@@ -277,6 +273,7 @@ const ViewReportMap = (props) => {
                                             paddingTop: '4px',
                                             float: 'left'
                                         }}
+                                        alt=""
                                             src={reportDetail && process.env.REACT_APP_API_URL + '/' + reportDetail.crime.icon_3d} />
                                         <Typography variant="h6" component="h6">
                                             {reportDetail && reportDetail.crime.name}
@@ -291,12 +288,12 @@ const ViewReportMap = (props) => {
                                     </Typography>
                                     <Box>
                                         <Typography component="h4" color="text.secondary">Images & Attachments: </Typography>
-                                        {reportDetail ? reportDetail.report_images.map((image, index) => (
+                                        {(reportDetail&&reportDetail?.report_images) ? reportDetail.report_images.map((image, index) => (
                                             
-                                            image.path !== '' && image.path.toString().endsWith("png") || image.path.toString().endsWith("jpeg") || image.path.toString().endsWith("jpg") ? (
-                                                <ImageList width="100%" src={reportDetail && process.env.REACT_APP_API_URL + '/' + image.path} key={index} />
+                                            image&&image?.path!==null&&image.path !== '' && (image.path.toString().endsWith("png") || image.path.toString().endsWith("jpeg") || image.path.toString().endsWith("jpg")) ? (
+                                                <ImageList width="100%" src={image.path} key={index} />
                                             ) : (
-                                                <video className="VideoInput_video" width="60%" height="auto" controls src={image.path ? process.env.REACT_APP_API_URL + '/' + image.path : 'no video'} />
+                                                <video className="VideoInput_video" width="60%" height="auto" controls src={image.path ? image.path : 'no video'} />
                                             )
                                             
                                         )) : 
@@ -321,8 +318,6 @@ const ViewReportMap = (props) => {
                                     }}
                                     icon={process.env.REACT_APP_API_URL + '/' + report.crime.icon_3d}
                                     onClick={() => { reportDetails(report) }}
-                                    // onMouseOver={() => {console.log('mouse over')}}
-                                    // onMouseDown={() => {console.log('mouse down')}}
 
                                 />
                             ))}

@@ -71,7 +71,6 @@ const EditAddress = () => {
     }, [user])
 
     const saveAddress = () => {
-        console.log(value)
         dispatch(updateUserAddress({value, navigate}))
     }
 
@@ -84,7 +83,6 @@ const EditAddress = () => {
             }))
 
             axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${e.latLng.lat()},${e.latLng.lng()}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`).then(response => {
-                console.log(response.data.results) 
                 setFormattedAddress(response.data.results[0].formatted_address)
                 setValue(prev => ({
                     ...prev,

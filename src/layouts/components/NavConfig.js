@@ -22,9 +22,14 @@ const navConfig = [
   //   icon: getIcon('eva:lock-fill'),
   // },
   {
-    title: 'Reported Crime',
+    title: 'Reported Crimes',
     path: '/reports',
     icon: getIcon('eva:lock-fill'),
+  },
+  {
+    title: 'Corporates/Groups',
+    path: '/Corporate',
+    icon: getIcon('eva:group-fill'),
   },
 ];
 

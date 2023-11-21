@@ -3,11 +3,12 @@ import Profile from "src/pages/Frontend/User/Profile";
 import EditProfile from "src/pages/Frontend/User/EditProfile";
 import EditAddress from "src/pages/Frontend/User/EditAddress";
 import MyReport from "src/pages/Frontend/User/MyReport";
+import ReportWrapper from "src/layouts/Report/ReportWrapper";
 
 const FrontendPrivateRoutes = [
     {
         path: '/report/add',
-        element: <AddReport />
+        element: <ReportWrapper/>
     },
     {
         path: '/profile',

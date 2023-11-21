@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-// material
-import { styled } from '@mui/material/styles';
-//
+import { styled, useMediaQuery } from '@mui/material';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import { DRAWER_WIDTH, APPBAR_MOBILE, APPBAR_DESKTOP, WEB_WIDTH} from 'src/constants/theme'
-
-
-// ----------------------------------------------------------------------
+import { DRAWER_WIDTH, APPBAR_MOBILE, APPBAR_DESKTOP, WEB_WIDTH } from 'src/constants/theme';
 
 const RootStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -35,18 +30,31 @@ const MainStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-// ----------------------------------------------------------------------
-
 export default function AppLayoutWithSidebar() {
-  const [open, setOpen] = useState(false);
+  const isBelow1200 = useMediaQuery((theme) => theme.breakpoints.down(1200));
+  const [open, setOpen] = useState(!isBelow1200);
+
+  const handleSidebarOpen = () => {
+    if (isBelow1200) {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }
+  };
+
+  const handleSidebarClose = () => {
+    setOpen(false);
+  };
 
   return (
     <RootStyle>
-      <Navbar onOpenSidebar={() => setOpen(true)} />
-      <Sidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+      <Navbar onOpenSidebar={handleSidebarOpen} />
+      {!isBelow1200 && <Sidebar isOpenSidebar={open} onCloseSidebar={handleSidebarClose} />}
       <MainStyle>
         <Outlet />
       </MainStyle>
     </RootStyle>
   );
 }
+
+
