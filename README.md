@@ -1,3 +1,0 @@
-## CrimeChime
-
-FrontEnd ReactJs App
