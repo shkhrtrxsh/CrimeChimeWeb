@@ -1,0 +1,173 @@
+import * as Yup from 'yup';
+import { useState, useEffect, Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useSelector, useDispatch } from 'react-redux';
+import { addCorporate } from 'src/store/api/corporate';
+import { SaveButton } from 'src/components/Button';
+import { slugConvertor } from 'src/helpers/StringHelper';
+import Iconify from 'src/components/Iconify';
+import { listIndustryType } from 'src/store/api/corporate';
+
+import {
+  Grid,
+  Button,
+  IconButton,
+  InputAdornment,
+  FormControl,
+  OutlinedInput,
+  InputLabel,
+  MenuItem,
+  Select,
+  Chip,
+  Box,
+  Typography,
+  Paper,
+} from '@mui/material';
+
+import BreadcrumbNavigator from 'src/components/BreadcrumbNavigator';
+import { FormProvider, RHFTextField } from 'src/components/hook-form';
+import { list } from 'postcss';
+
+export default function AddCorporate() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [industryType, setIndustryType] = useState('');
+  const [logoFile, setLogoFile] = useState(null);
+  const listData = useSelector((state) => state?.industrytypelist.industryTypes);
+  const UserSchema = Yup.object().shape({
+    corporate_name: Yup.string().required('Corporate Name is required'),
+    address: Yup.string().required('Address is required'),
+    user_name: Yup.string().required('Username is required'),
+    corpgroup_mailing_address: Yup.string().email('Invalid email address').required('Corporate Mail is required'),
+   corp_group_branch: Yup.string().required('Corporate Branch is required'),
+     phone: Yup.string().required('Phone is required'),
+     email: Yup.string().email('Invalid email address').required('Email is required'),
+    // logo: Yup.mixed().test('file', 'Please upload a logo', (value) => !!value),
+  });
+  
+
+  useEffect(() => {
+    dispatch(listIndustryType({}));
+    console.log(listData)
+  }, []);
+
+  const handleChangeIndustryType = (event) => {
+    setIndustryType(event.target.value);
+    console.log(industryType)
+  };
+
+  const defaultValues = {
+    corporate_name: '',
+    address: '',
+    user_name: '',
+    phone: '',
+    email: '',
+    corpgroup_mailing_address: '',
+    corp_group_branch: '',
+    corp_group_branch_phone: ''
+  };
+
+  const methods = useForm({
+    resolver: yupResolver(UserSchema),
+    defaultValues,
+  });
+
+  const { handleSubmit } = methods;
+
+  const handleChangeLogo = (event) => {
+    const file = event.target.files[0];
+    setLogoFile(file);
+  };
+
+  const onSubmit = (formValue) => {
+    formValue.industry_types_id = industryType;
+    console.log(logoFile)
+    formValue.logo = logoFile;
+    // formValue.slug = slugConvertor(formValue.corporate_name);
+    dispatch(addCorporate({ formValue, navigate }));
+  };
+
+  const breadcrumbNavigate = [
+    {
+      name: 'corporate',
+      link: '/corporate',
+    },
+  ];
+
+  return (
+    <Fragment>
+      <BreadcrumbNavigator navigate={breadcrumbNavigate} currentPage="Add Corporate" />
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="corporate_name" label="Corporate Name" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="address" label="Address" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="user_name" label="Username" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl sx={{ width: '100%' }}>
+              <InputLabel id="industry-type-label">Industry Type</InputLabel>
+              <Select
+                labelId="industry-type-label"
+                id="industry-type"
+                value={industryType}
+                label="Industry Type"
+                onChange={handleChangeIndustryType}
+              >
+                {listData.map((item) => (
+                  <MenuItem key={item[1]} value={item[0]}>
+                    {item[1]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="corpgroup_mailing_address" label="Corporate Mailing Address" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="corp_group_branch" label="Corporate Branch" />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="phone" label="Phone" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="email" label="Email" type="email" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="corp_group_branch_phone" label="Corporate Group Branch Phone" />
+          </Grid>
+          <Grid item xs={12} >
+            <Paper elevation={2} sx={{ p: 2 }}>
+              <Typography variant="subtitle2">Logo</Typography>
+              <input
+                type="file"
+                accept="image/*"
+                id="logo-file"
+                style={{ display: 'none' }}
+                onChange={handleChangeLogo}
+              />
+              <label htmlFor="logo-file">
+                <Button component="span" color="primary" variant="outlined">
+                  Upload Logo
+                </Button>
+                {logoFile && <span>{logoFile.name}</span>}
+              </label>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <SaveButton type="submit">Save</SaveButton>
+          </Grid>
+        </Grid>
+      </FormProvider>
+    </Fragment>
+  );
+}
