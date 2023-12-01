@@ -75,7 +75,8 @@ const MyReport = () => {
                             {reports.data && reports.data.map((report, index) => {
                                 let path = (report?.report_image&&report.report_image?.path);
                                 if(!(path===null||path === '')){
-                                    path=process.env.REACT_APP_API_URL+"/"+path;
+                                    // path=process.env.REACT_APP_API_URL+"/"+path;
+                                    path=path;
                                 }
                                 return(
                                 <Grid item lg={4} md={6} xs={12} key={index}>

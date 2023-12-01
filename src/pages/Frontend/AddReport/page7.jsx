@@ -85,6 +85,9 @@ function Page7() {
           </Grid>
 
           <Box sx={{ py: 1 }}>
+            <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+              Was anyone assaulted?
+            </Typography>
             <Box
               sx={{
                 display: "flex",

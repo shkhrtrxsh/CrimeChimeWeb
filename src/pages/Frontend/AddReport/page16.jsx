@@ -88,7 +88,7 @@ const Page16 = ({selectActive,setActiveStep}) => {
   
 
   useEffect(()=>{
-    if(police_case_num||reported_to_the_police===2){
+    if(police_case_num||reported_to_the_police===0){
       dispatch(setLock(false));
       setError("")
     }else if(reported_to_the_police===1){

@@ -90,13 +90,13 @@ function Page4() {
               </Typography>
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
             </Box>
-            <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-              Perpetrator(s) had weapon(s)?
-            </Typography>
           </Grid>
           <Box paddingLeft="40px" display="flex" className={css`
               flex-direction: column;
             `}>
+            <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+              Perpetrator(s) had weapon(s)?
+            </Typography>
               <FormControlLabel
                 control={<Checkbox checked={weapons === 0} value={0} onChange={handleChange} />}
                 label="Unknown"

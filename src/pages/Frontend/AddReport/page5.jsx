@@ -102,17 +102,6 @@ function Page5() {
                 style={{ marginLeft: "5px", width: "20px" }}
               />
             </Box>
-            <Typography
-              variant="h2"
-              align="center"
-              style={{
-                fontWeight: "bold",
-                paddingBottom: "20px",
-                fontSize: "12px",
-              }}
-            >
-              Was anyone killed?
-            </Typography>
           </Grid>
 
           <div>
@@ -124,6 +113,9 @@ function Page5() {
                 pl: 1,
               }}
             >
+              <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+                Was anyone killed?
+              </Typography>
               <FormControlLabel
                 control={
                   <Checkbox

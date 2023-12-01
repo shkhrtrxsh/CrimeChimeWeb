@@ -53,8 +53,12 @@ const Page15 = () => {
               <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '24px' }}>
                   Media/Description
                 </Typography>
+               
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
+                <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
+                  Describe or upload the media here
+                </Typography>
               </Grid>
 
               <Grid item xs={10} sx={{ pl: 5}}>

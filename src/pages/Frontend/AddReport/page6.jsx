@@ -78,6 +78,9 @@ const Page6 = () => {
                 pl: 2,
               }}
             >
+              <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+                Was anyone raped?
+              </Typography>
               <FormControlLabel
                 control={
                   <Checkbox

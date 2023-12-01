@@ -49,7 +49,7 @@ const initialState = {
         shoplifting:0,
         various:[2],
         police_reporting:0,
-        reported_to_the_police:2,
+        reported_to_the_police:0,
         police_case_num:null,
         fileName:null,
         date_time:null,

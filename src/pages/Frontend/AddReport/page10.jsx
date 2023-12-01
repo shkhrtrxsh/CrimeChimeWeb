@@ -49,9 +49,15 @@ function Page10() {
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
                   (Perpetrator(s) entered building)
                 </Typography>
+                <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px', color: 'red' }}>
+                  next page is Robbery i.e.perpetrators did not enter a building
+                </Typography>
               </Grid>
 
               <Box sx={{ pl: 8, }}>
+                <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+                  was burglary or shoplifting involved?
+                </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
                     <Checkbox checked={checked===0} value={0} onChange={()=>handleChange(0)} />
