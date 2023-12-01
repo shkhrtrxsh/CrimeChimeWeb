@@ -50,7 +50,7 @@ function Page11() {
 
               <Box sx={{ pl: 8}}>
                 <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
-                  was robbery involved?
+                  Was robbery involved?
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>

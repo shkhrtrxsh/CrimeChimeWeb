@@ -230,9 +230,15 @@ const ReportWrapper = () => {
               formData.delete("fileName");
             }
             const url = edit ? "/report/update/" + data?.id : "/report";
-            await API.post(url, formData);
-            setConfirm(true);
-            dispatch(setEdit(false));
+            const response = await API.post(url, formData);
+            if(response.data.code == 200){
+              setConfirm(true);
+              dispatch(setEdit(false));
+            }else{
+              toast.error(response.data.message,{
+                toastId:'shjdnvd'
+              })
+            }
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
@@ -265,9 +271,15 @@ const ReportWrapper = () => {
             formData.delete("fileName");
           }
           const url = edit ? "/report/update/" + data?.id : "/report";
-          await API.post(url, formData);
-          setConfirm(true);
-          dispatch(setEdit(false));
+          const response = await API.post(url, formData);
+          if(response.data.code == 200){
+            setConfirm(true);
+            dispatch(setEdit(false));
+          }else{
+            toast.error(response.data.message,{
+              toastId:'shjdnvd'
+            })
+          }
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

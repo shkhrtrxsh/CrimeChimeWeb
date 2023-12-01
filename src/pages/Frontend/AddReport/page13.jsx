@@ -36,7 +36,7 @@ const Page13 = () => {
               <Grid item xs={8} >
                 <Box sx={{ display: 'flex', flexDirection: 'column' , paddingTop:'5%' }}>
                 <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
-                  was bribery involved?
+                  Was bribery involved?
                 </Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
                     <Checkbox checked={checked===0} value={0} onChange={handleChange} />

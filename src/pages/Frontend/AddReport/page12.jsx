@@ -91,7 +91,7 @@ const Page12 = () => {
 
           <Grid item xs={8} style={{ paddingLeft: "40px" }}>
             <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
-              was kidnapping involved?
+              Was kidnapping involved?
             </Typography>
             <Box
               sx={{

@@ -111,7 +111,6 @@ export default function EditCorporate() {
   useEffect(()=>{
     corporateData.map((item)=>{
       if(item.id == params.id){
-        console.log(item)
         setValue("corporate_name", item?.name != null ? item?.name : '')
         setValue("address", item?.address != null ? item?.address : '')
         setValue("user_name", item?.cor_admin.username != null ? item?.cor_admin.username : '')
@@ -152,9 +151,9 @@ export default function EditCorporate() {
               <Select
                 labelId="industry-type-label"
                 id="industry-type"
-                value={''}
+                // value={''}
                 label="Industry Type"
-                placeholder="Select"
+                placeholder={listData[0].user.username}
                 onChange={handleChangeIndustryType}
               >
                 {listData.map((item) => (

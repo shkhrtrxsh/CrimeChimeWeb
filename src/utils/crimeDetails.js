@@ -1,13 +1,21 @@
 import { WeaponChoices } from "src/constants/weapons";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import AK from '../assets/images/ak.png'
-import Knife from '../assets/images/knife1.png'
+import Knife from '../assets/images/knife.png'
 import Others from '../assets/images/others.png'
 import Pistol from '../assets/images/pistol.png'
 import API from "src/config/api";
 import { useEffect, useState } from "react";
+import {
+  FormControl,
+  MenuItem,
+  Select,
+  InputLabel
+} from '@mui/material';
+
 const { capitalize } = require("./string");
 const various_choices = ["Does not apply","crime occured at ATM" ,"i believe crime to be drug-related","i believe crime to be gang-related" ,"Arson was involed"," Vandalism was involed" ,"social an unrest","Bombs were involved"]
+
 
 export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData,reportType)=>{
     const [data,setData] = useState('')
@@ -102,27 +110,57 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
       setdescription(data.description)
 
     }
+    const [wholeData,setWholeData] = useState(null)
     const getReport = async () => {
       const response = await API.get(`/reportDetails/${temp.id}`);
       if(response.data.data.edit_report.length > 0){
         if(reportType){
           setData(values[index])
           myFunction(values[index]);
-          console.log(values[index])
-
+          if(response.data.data.edit_report != null){
+            setWholeData(response.data.data.edit_report)
+          }
         }else{
+          setWholeData(response.data.data.edit_report)
           setData(response.data.data.edit_report[0])
           myFunction(response.data.data.edit_report[0])
-          console.log(response.data.data.edit_report[0])
         }
+      }else{
+        setData(values[index])
+        myFunction(values[index]);
       }
+    }
+    const handlerChangeUser = (e) => {
+      const temp = e.currentTarget.getAttribute("value")
+      setData(temp)
+      myFunction(temp)
     }
     useEffect(()=>{
       getReport();
     },[reportType])
     if(!data){
       return [
-          { firstCol: 'Edited by:', secondCol: <p>{user.username}</p> },
+        { firstCol: 'Edited by:', secondCol: (()=>{ return (<>
+          {wholeData && wholeData.length > 1 && <FormControl sx={{ width: '100%' }}>
+            <InputLabel id="industry-type-label" style={{color:"white !important"}}>Users</InputLabel>
+            <Select
+              labelId="Users"
+              id="edited-users"
+              value={wholeData != null ? wholeData[0].user.username:"Select"}
+              label="Users"
+              placeholder={wholeData != null ? wholeData[0].user.username:"Select"}
+              onChange={handlerChangeUser}
+            >
+              {wholeData?.map((item,index) => (
+                <MenuItem key={index} value={wholeData[index]}>
+                  {item.user.username}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>}
+          {wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>}
+          </>); 
+        })() },
           { firstCol: 'Time of occurrence:', secondCol:  
             (
               <div>
@@ -259,7 +297,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
               return `Attempted Kidnapping of ${kidnapping_people} `
             }
             if(kidnapping==2){
-              return `Number of person(s) kidnapped (${kidnapping_people})`;
+              return `kidnapped (${kidnapping_people})`;
             }
           })() },
           { firstCol: 'Bribery:', secondCol:(()=>{
@@ -288,7 +326,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             }
           })() },
           // { firstCol: 'Reason for crime:', secondCol: (various)?capitalize(various_choices[various]):"" },
-          { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? resultString : "" },
+          { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? resultString : null },
           { firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes":"No") },
           { firstCol: 'Formally reported to the police:', secondCol: (reported_to_the_police==1?"Yes":"No") },
           { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
@@ -296,7 +334,27 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
       ];
     }else{
       return [
-        { firstCol: 'Edited by:', secondCol: <p>{user.username}</p> },
+        { firstCol: 'Edited by:', secondCol: (()=>{ return (<>
+          {wholeData && wholeData.length > 1 && <FormControl sx={{ width: '100%' }}>
+            <InputLabel id="industry-type-label" style={{color:"white !important"}}>Users</InputLabel>
+            <Select
+              labelId="Users"
+              id="edited-users"
+              value={wholeData != null ? wholeData[0].user.username:"Select"}
+              label="Users"
+              placeholder={wholeData != null ? wholeData[0].user.username:"Select"}
+              onChange={handlerChangeUser}
+            >
+              {wholeData?.map((item,index) => (
+                <MenuItem key={index} value={wholeData[index]}>
+                  {item.user.username}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>}
+          {wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>}
+          </>); 
+        })() },
         { firstCol: 'Time of occurrence:', secondCol:  
           (
             <div>
@@ -329,8 +387,8 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         { firstCol: 'Perpetrators:', secondCol: perpetrators?[perpetrators,' , ',perpetrators_des]:"" },
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
-            case 0:return ``
-            case 1:return `None`
+            case '0':return ``
+            case '1':return `None`
             default:return (
               <div>
                 <div style={{display:"flex"}}>
@@ -433,7 +491,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             return `Attempted Kidnapping of ${kidnapping_people} `
           }
           if(kidnapping==2){
-            return `Number of person(s) kidnapped (${kidnapping_people})`;
+            return `kidnapped (${kidnapping_people})`;
           }
         })() },
         { firstCol: 'Bribery:', secondCol:(()=>{
@@ -462,7 +520,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           }
         })() },
         // { firstCol: 'Reason for crime:', secondCol: (various)?capitalize(various_choices[various]):"" },
-        { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? resultString : "" },
+        { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? resultString : null },
         { firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes":"No") },
         { firstCol: 'Formally reported to the police:', secondCol: (reported_to_the_police==1?"Yes":"No") },
         { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },

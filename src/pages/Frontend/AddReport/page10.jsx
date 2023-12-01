@@ -56,7 +56,7 @@ function Page10() {
 
               <Box sx={{ pl: 8, }}>
                 <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
-                  was burglary or shoplifting involved?
+                  Was burglary or shoplifting involved?
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>

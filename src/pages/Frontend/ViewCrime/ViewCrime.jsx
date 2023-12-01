@@ -263,12 +263,13 @@ const ViewCrime = () => {
                 lat: Number(latitude),
                 lng: Number(longitude)
               };
+              console.log(user_count)
               return (
                 <>
-                  {user_count == 1 && <Marker key={ind} position={position} options={markerOptions}
+                  {user_count == '1' && <Marker key={ind} position={position} options={markerOptions}
                     onClick={() => onMarkerClick(ind)} zIndex={0}
                   />}
-                  {user_count != 1 && <Marker key={ind} position={position} options={markerOptions}
+                  {user_count != '1' && <Marker key={ind} position={position} options={markerOptions}
                     onClick={() => onMarkerClick(ind)} label={{ text: `${user_count}`, fontWeight: "bold", className: "map-label", color: "red" }} zIndex={0}
                   />}
                 </>
