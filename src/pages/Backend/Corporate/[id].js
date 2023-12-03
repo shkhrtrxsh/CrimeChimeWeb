@@ -135,15 +135,10 @@ export default function EditCorporate() {
     <Fragment>
       <BreadcrumbNavigator navigate={breadcrumbNavigate} currentPage="Edit Corporate" />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <Typography variant="h4" style={{padding:"0 0 20px 0"}} >Corporate/Group Name</Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <RHFTextField name="corporate_name" label="Corporate Name" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <RHFTextField name="address" label="Address" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <RHFTextField name="user_name" label="Username" />
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl sx={{ width: '100%' }}>
@@ -151,9 +146,8 @@ export default function EditCorporate() {
               <Select
                 labelId="industry-type-label"
                 id="industry-type"
-                // value={''}
+                value={industryType}
                 label="Industry Type"
-                placeholder={listData[0].user.username}
                 onChange={handleChangeIndustryType}
               >
                 {listData.map((item) => (
@@ -168,19 +162,15 @@ export default function EditCorporate() {
             <RHFTextField name="corpgroup_mailing_address" label="Corporate Mailing Address" />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <RHFTextField name="corp_group_branch" label="Corporate Branch" />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <RHFTextField name="phone" label="Phone" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <RHFTextField name="email" label="Email" type="email" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
             <RHFTextField name="corp_group_branch_phone" label="Corporate Group Branch Phone" />
           </Grid>
-          <Grid item xs={12} >
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="address" label="Address" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="corp_group_branch" label="Corporate Branch" />
+          </Grid>
+          <Grid item xs={12} sm={12} >
             <Paper elevation={2} sx={{ p: 2 }}>
               <Typography variant="subtitle2">Logo</Typography>
               <input
@@ -198,6 +188,18 @@ export default function EditCorporate() {
               </label>
             </Paper>
           </Grid>
+
+          <Typography variant="h4" style={{padding:"30px 0 0 24px "}}>Key Contact at Corp/Group (Providing associated mobile numbers)</Typography>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="user_name" label="Username" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="phone" label="Phone" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <RHFTextField name="email" label="Email" type="email" />
+          </Grid>
+          
           <Grid item xs={12}>
             <SaveButton type="submit">Save</SaveButton>
           </Grid>

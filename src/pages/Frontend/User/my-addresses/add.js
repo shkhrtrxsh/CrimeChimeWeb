@@ -110,6 +110,18 @@ const EditAddress = () => {
           geocoder.geocode({ location: { lat, lng } }, (results, status) => {
             if (status === 'OK' && results[0]) {
               dispatch(setPage({location:results[0].formatted_address,longitude:lng,latitude: lat,google_place_id:results[0].place_id}));
+              setValue({
+                'latitude' : lat,
+                'longitude' : lng,
+                'google_place_id' : results[0].place_id,
+                'address' : results[0].formatted_address
+                })
+                setTimeout(function(){
+                    setPosition({
+                        lat: Number(lat),
+                        lng: Number(lng)
+                    })
+                }, 500)
             }
           });
         }

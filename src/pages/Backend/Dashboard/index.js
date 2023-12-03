@@ -55,13 +55,13 @@ export default function Dashboard() {
             <Grid item xs={12} sm={12} md={12}>
               <Typography variant='h4'>Users</Typography>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/user')}>
+            <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/user')}>
               <AppWidgetSummary title="Registered Users" total={user.user ? user.user.total : 0} icon={'mdi:user'} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/user')}>
+            <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/user')}>
               <AppWidgetSummary title="Active Users" total={user.user ? user.user.active : 0} icon={'mdi:user'} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/user')}>
+            <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/user')}>
               <AppWidgetSummary title="Inactive Users" total={user.user ? user.user.inactive : 0} icon={'mdi:user'} />
             </Grid>
 
@@ -69,10 +69,10 @@ export default function Dashboard() {
             <Grid item xs={12} sm={12} md={12}>
               <Typography variant='h4'>Corporate/Groups</Typography>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/corporate')}>
+            <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/corporate')}>
               <AppWidgetSummary title="Registered Groups" total={corporate ? corporate.corporateCount : 0} icon={'mdi:user'} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/corporate')}>
+            <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/corporate')}>
               <AppWidgetSummary title="Active Groups" total={corporate ? corporate.industryCount : 0} icon={'mdi:user'} />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/corporate')}>
@@ -83,13 +83,13 @@ export default function Dashboard() {
             <Grid item xs={12} sm={12} md={12}>
               <Typography variant='h4'>Reports</Typography>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/reports')}>
+            <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/reports')}>
               <AppWidgetSummary title="Reported Crimes" total={user.user ? user.report.total : 0} icon={'mdi:user'} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/reports')}>
+            <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/reports')}>
               <AppWidgetSummary title="Active Report" total={user.user ? user.report.active : 0} icon={'mdi:user'} />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/reports')}>
+            <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/reports')}>
               <AppWidgetSummary title="Inactive Report" total={user.user ? user.report.inactive : 0} icon={'mdi:user'} />
             </Grid>
           </Grid>

@@ -6,6 +6,7 @@ import { setCrimeIndex, setPage, setZoom, } from 'src/store/reducers/registerRep
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import { SatelliteZoom } from 'src/constants/googleMap';
 import Image from '../../../assets/images/duplicate.png';
+import Image1 from 'src/assets/images/corporateCrime.png'
 import SearchFilter from '../ViewReport/SearchFilter';
 import CrimeDialog from "./CrimeDialog";
 import { getNearbyCrimes } from 'src/store/api/registerReport';
@@ -78,6 +79,14 @@ const ViewCrime = () => {
       scaledSize: new window.google.maps.Size(80, 80),
       origin: new window.google.maps.Point(0, 0),
       anchor: new window.google.maps.Point(25, 50)
+    }
+  };
+  const markerOptions1 = {
+    icon: {
+        url: Image1,
+        scaledSize: new window.google.maps.Size(30, 75),
+        origin: new window.google.maps.Point(0, 0),
+        anchor: new window.google.maps.Point(25, 50)
     }
   };
   const handlePageChange = (event, onPage) => {
@@ -178,7 +187,7 @@ const ViewCrime = () => {
                                         <TableCell>Date/Time</TableCell>
                                         <TableCell>Location</TableCell>
                                         <TableCell align="left">Crime Type</TableCell>
-                                        <TableCell align="left">Mob. #</TableCell>
+                                        {parseInt(reportedData?.user?.role_id) == 1 && <TableCell align="left">Mob. #</TableCell>}
                                         <TableCell align="left">Username</TableCell>
                                         <TableCell align="left">Corp./Group</TableCell>
                                         <TableCell align="right">Action</TableCell>
@@ -203,7 +212,7 @@ const ViewCrime = () => {
                                             {report.rape != 0 ? (<>Rape,<br /></>) : null}
                                             {report.weapons != 0 ? (<>Weapons,<br /></>) : null}
                                             </TableCell>
-                                            <TableCell align="left">{report.user.phone}</TableCell>
+                                            {parseInt(reportedData?.user?.role_id) == 1 && <TableCell align="left">{report.user.phone}</TableCell>}
                                             <TableCell align="left">{report.user.username}</TableCell>
                                             <TableCell align="left"><div>{report.user.corporate ? report.user.corporate.name : '' }{report.user.corporate ? report.user.corporate.is_verify==1 ? <CheckBoxIcon style={{ color: "#29C250",position: "absolute" }} /> : '' : ''}</div></TableCell> 
                                             <TableCell align="right">
@@ -258,7 +267,7 @@ const ViewCrime = () => {
             onLoad={onLoad}
             onZoomChanged={handleZoomChanged}>
             <Marker id="mark" zIndex={100} draggable={true} position={position} onDragEnd={markerDragEnd} />
-            {nearbyData.map(({ latitude = null, longitude = null, user_count }, ind) => {
+            {nearbyData.map(({ latitude = null, longitude = null, user_count,user }, ind) => {
               const position = {
                 lat: Number(latitude),
                 lng: Number(longitude)
@@ -266,12 +275,16 @@ const ViewCrime = () => {
               console.log(user_count)
               return (
                 <>
-                  {user_count == '1' && <Marker key={ind} position={position} options={markerOptions}
+                  {user_count == '1' && user.corporat_id == null &&  <Marker key={ind} position={position} options={markerOptions}
                     onClick={() => onMarkerClick(ind)} zIndex={0}
                   />}
-                  {user_count != '1' && <Marker key={ind} position={position} options={markerOptions}
+                  {user_count != '1' && user.corporat_id == null && <Marker key={ind} position={position} options={markerOptions}
                     onClick={() => onMarkerClick(ind)} label={{ text: `${user_count}`, fontWeight: "bold", className: "map-label", color: "red" }} zIndex={0}
                   />}
+                  {user.corporat_id != null &&  <Marker key={ind} position={position} options={markerOptions1}
+                    onClick={() => onMarkerClick(ind)} zIndex={0}
+                  />}
+
                 </>
               )
             })}

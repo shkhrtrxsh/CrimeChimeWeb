@@ -114,12 +114,12 @@ export default function HeaderMenu(props) {
                             </LinkButton>
                             : ''
                         }
-                        <LinkButton
+                        {/* <LinkButton
                             to="/reportscrime"
                             activeclassname="active"
                         >
                             View Crimes
-                        </LinkButton>
+                        </LinkButton> */}
                         <LinkButton
                             to="/profile"
                             activeclassname="active"

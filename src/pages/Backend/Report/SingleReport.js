@@ -27,9 +27,9 @@ import ActionOptions from 'src/components/ActionOptions'
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog'
 import ChangeStatusDialog from 'src/components/ChangeStatusDialog';
 export default function SingleReport({report,formattedLatitude,formattedLongitude,index,handler}) {
-    const [toggle,setToggle] = useState(report.is_approve == '1' ? true : false)
+    const [toggle,setToggle] = useState(parseInt(report.is_approve) == 1 ? true : false)
     const dispatch = useDispatch();
-    const [show,setShow] = useState(report.is_show == '1' ? true : false)
+    const [show,setShow] = useState(parseInt(report.is_show) == 1 ? true : false)
     const [openDialog, setOpenDialog] = useState({
         status: false,
         id: null

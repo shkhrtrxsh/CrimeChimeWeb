@@ -83,19 +83,19 @@ export default function Dashboard() {
           Public User Ability to Report Crimes
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
-          <Checkbox checked={checked == 0 ? true:false} name="Reports" value={1} onChange={checkboxHnadler} />
+          <Checkbox checked={checked == 1 ? true:false} name="Reports" value={1} onChange={checkboxHnadler} />
           <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
             Show All Public  User Reports
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
-          <Checkbox checked={checked == 1 ? true:false} name="Reports" value={2} onChange={checkboxHnadler} />
+          <Checkbox checked={checked == 2 ? true:false} name="Reports" value={2} onChange={checkboxHnadler} />
           <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
             Only Show Approved Public Reports
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
-          <Checkbox checked={checked == 2 ? true:false} name="Reports" value={3} onChange={checkboxHnadler} />
+          <Checkbox checked={checked == 3 ? true:false} name="Reports" value={3} onChange={checkboxHnadler} />
           <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>
             Do Not Show Any Public Reports
           </Typography>

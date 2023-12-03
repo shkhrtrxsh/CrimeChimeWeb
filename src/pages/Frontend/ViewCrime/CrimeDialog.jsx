@@ -160,6 +160,7 @@ function CrimeDialog({mapRef,index=0,onClose}) {
       }
     }
   }
+  console.log(data)
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SuccessDialog open={open} handleClose = {()=>setOpen(0)}/>
@@ -170,7 +171,7 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', paddingBottom: '10px', fontSize: '24px' }}>
                   {"Crime Details"}
                 </Typography>
-                {!reportType && <Button variant="contained" color="primary" style={{position:"absolute",right:"16px",top:"36px" }} onClick={reportTypeHandler}>
+                {buttonShow && <Button variant="contained" color="primary" style={{position:"absolute",right:"16px",top:"36px" }} onClick={reportTypeHandler}>
                   {!reportType ? "Main":"Edited"} Report
                 </Button>}
               </Box>
@@ -239,7 +240,7 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                                     profile.role_id === '1' ? row.secondCol[0] : row.secondCol[2]
                                     )}
                                 </TableCell>}
-                                {buttonShow && row.firstCol == "Edited by:" && <TableCell style={{background:"grey",color:"white",borderRadius:"0"}} >{row.secondCol}</TableCell>}
+                                {buttonShow && row.firstCol === "Edited by:" && <TableCell style={{background:"grey",color:"white",borderRadius:"0"}} >{row.secondCol}</TableCell>}
 
                               </TableRow>}
                               {typeof(row.secondCol) === "string" && <TableRow key={index}>
@@ -286,7 +287,7 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                                   profile.role_id === '1' ? row.secondCol[0] : row.secondCol[2]
                                 )}
                               </TableCell>}
-                              {buttonShow && row.firstCol == "Edited by:" && <TableCell style={{background:"grey",color:"white",borderRadius:"0"}} >{row.secondCol}</TableCell>}
+                              {buttonShow && row.firstCol === "Edited by:" && <TableCell style={{background:"grey",color:"white",borderRadius:"0"}} >{row.secondCol}</TableCell>}
 
                             </TableRow>}
                             </>)
@@ -298,9 +299,9 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                     <Box sx={{ paddingTop: '5px',mb:10 }}>
                   
                       <Box display="flex" justifyContent="center">
-                        {buttonShow && <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={reportTypeHandler}>
+                        {/* {buttonShow && <Button variant="contained" color="primary" style={{ marginRight: '10px' }} onClick={reportTypeHandler}>
                           {!reportType ? "Main":"Edited"} Report
-                        </Button>}
+                        </Button>} */}
                         <Button onClick={() => {
                             handleEdit(values[index]);
                         }} size="small">Edit Report</Button>

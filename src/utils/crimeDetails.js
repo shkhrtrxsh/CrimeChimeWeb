@@ -69,6 +69,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     // } else {
     //   console.error('variousnew is not an array:', cleanedArray);
     // }
+    const [edited,setEdited] = useState(false)
     const myFunction = (data) => {
       set_date_time(data.date_time)
       setUser(data.user)
@@ -117,6 +118,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         if(reportType){
           setData(values[index])
           myFunction(values[index]);
+          setEdited(false)
           if(response.data.data.edit_report != null){
             setWholeData(response.data.data.edit_report)
           }
@@ -124,8 +126,10 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           setWholeData(response.data.data.edit_report)
           setData(response.data.data.edit_report[0])
           myFunction(response.data.data.edit_report[0])
+          setEdited(true)
         }
       }else{
+        setEdited(false)
         setData(values[index])
         myFunction(values[index]);
       }
@@ -140,8 +144,8 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     },[reportType])
     if(!data){
       return [
-        { firstCol: 'Edited by:', secondCol: (()=>{ return (<>
-          {wholeData && wholeData.length > 1 && <FormControl sx={{ width: '100%' }}>
+        { firstCol: `Edited by:${wholeData ? wholeData.length > 0 ? '('+wholeData.length+')' : "" : ""}`, secondCol: (()=>{ return (<>
+          {edited && wholeData && wholeData.length > 1 && <FormControl sx={{ width: '100%' }}>
             <InputLabel id="industry-type-label" style={{color:"white !important"}}>Users</InputLabel>
             <Select
               labelId="Users"
@@ -158,7 +162,8 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
               ))}
             </Select>
           </FormControl>}
-          {wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>}
+          {edited && wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>}
+          {!edited && wholeData && wholeData.length == 1 && <p>This reported is edited , you can check new.</p>}
           </>); 
         })() },
           { firstCol: 'Time of occurrence:', secondCol:  
@@ -334,8 +339,8 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
       ];
     }else{
       return [
-        { firstCol: 'Edited by:', secondCol: (()=>{ return (<>
-          {wholeData && wholeData.length > 1 && <FormControl sx={{ width: '100%' }}>
+        { firstCol: `Edited by:${wholeData ? wholeData.length > 0 ? '('+wholeData.length+')' : "" : ""}`, secondCol: (()=>{ return (<>
+          {edited && wholeData && wholeData.length > 1 && <FormControl sx={{ width: '100%' }}>
             <InputLabel id="industry-type-label" style={{color:"white !important"}}>Users</InputLabel>
             <Select
               labelId="Users"
@@ -352,7 +357,8 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
               ))}
             </Select>
           </FormControl>}
-          {wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>}
+          {edited && wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>}
+          {!edited && wholeData && wholeData.length == 1 && <p>This reported is edited , you can check new.</p>}
           </>); 
         })() },
         { firstCol: 'Time of occurrence:', secondCol:  
