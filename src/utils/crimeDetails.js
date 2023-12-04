@@ -1,7 +1,7 @@
 import { WeaponChoices } from "src/constants/weapons";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import AK from '../assets/images/ak.png'
-import Knife from '../assets/images/knife.png'
+import Knife from '../assets/images/knife2.png'
 import Others from '../assets/images/others.png'
 import Pistol from '../assets/images/pistol.png'
 import API from "src/config/api";

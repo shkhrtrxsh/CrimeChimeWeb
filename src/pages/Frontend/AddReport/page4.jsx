@@ -4,7 +4,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import ak from '../../../assets/images/ak.png';
 import pistol from '../../../assets/images/pistol.png';
-import knife from '../../../assets/images/knife.png';
+import knife from '../../../assets/images/knife2.png';
 import others from '../../../assets/images/others.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLock, setPage } from 'src/store/reducers/registerReport';
