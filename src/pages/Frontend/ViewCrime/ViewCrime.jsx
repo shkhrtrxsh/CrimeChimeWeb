@@ -73,6 +73,7 @@ const ViewCrime = () => {
     status: false,
     id: null
   }); 
+
   const markerOptions = {
     icon: {
       url: Image,
@@ -89,14 +90,24 @@ const ViewCrime = () => {
         anchor: new window.google.maps.Point(25, 50)
     }
   };
+  useEffect(() => {
+    if (!hidden) {
+      const param = getSearchQueryParams(searchParams)
+      dispatch(getReports({ param }));
+    }
+  }, [searchParams,hidden])
+
+  const setSearchByParam = (param) => {
+    navigate(`/?${param}`)
+  }
   const handlePageChange = (event, onPage) => {
     let param = setSearchQueryParams(searchParams, onPage)
-    navigate(`/reportshome?${param}`)
+    navigate(`/?${param}`)
   }
 
   const handleChangeRowsPerPage = (event) => {
-      let param = setSearchQueryParams(searchParams, 0, event.target.value)
-      navigate(`/reportshome?${param}`)
+    let param = setSearchQueryParams(searchParams, 0, event.target.value)
+    navigate(`/?${param}`)
   }
   useEffect(() => {
     if (!crimeIndex.viewCrime) {
@@ -272,7 +283,6 @@ const ViewCrime = () => {
                 lat: Number(latitude),
                 lng: Number(longitude)
               };
-              console.log(user_count)
               return (
                 <>
                   {user_count == '1' && user.corporat_id == null &&  <Marker key={ind} position={position} options={markerOptions}

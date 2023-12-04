@@ -29,6 +29,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { format } from 'date-fns';
 import { getNearbyCrimes } from 'src/store/api/registerReport';
+import { getReports } from 'src/store/api/report';
 import { clearReport } from 'src/store/reducers/registerReport';
 import TransparentFab from 'src/layouts/components/TransparentFab';
 
@@ -71,6 +72,7 @@ export default function SearchFilter(props) {
 
     const dateNow = new Date(Date.now());
     const { data } = useSelector((state) => state.reportRegister);
+    const { reports: reportedData = {}, error,loading } = useSelector(state => state.report);
     const { latitude, longitude } = data;
     const dispatch = useDispatch();
     const [state, setState] = React.useState(0);
@@ -122,6 +124,16 @@ export default function SearchFilter(props) {
                     ...crimeTypes, // Send crime types individually
                 })
             );
+            // dispatch(
+            //     getReports({
+            //         latitude,
+            //         longitude,
+            //         toDate,
+            //         fromDate,
+            //         nameOfDeceased,
+            //         verifiedGroup,
+            //         ...crimeTypes, // Send crime types individually
+            //     }))
             toggleDrawer(0);
         }
     };

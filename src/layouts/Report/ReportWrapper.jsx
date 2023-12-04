@@ -198,7 +198,7 @@ const ReportWrapper = () => {
         }
         dispatch(setDuplicate({ index: index + 1 }));
         return;
-      case 18:
+      case 17:
         setOpen(true);
         return;
       default:
@@ -394,7 +394,7 @@ const ReportWrapper = () => {
           lock={lock}
           beforeNext={beforeNext}
           beforeBack={beforeBack}
-          submit={selectActive === 18}
+          submit={selectActive === 17}
           textNext={textNext}
           textBack={textBack}
         />

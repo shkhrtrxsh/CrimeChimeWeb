@@ -94,7 +94,7 @@ export default function CorporateList() {
   return (
     <Fragment>
       <BreadcrumbNavigator
-        currentPage="Corporate List"
+        currentPage="Corporates/Groups"
         rightButton={{ name: "add Corporate", link: "/corporate/add" }}
       />
       <Card>

@@ -77,34 +77,7 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
   return (
     <>
         <TableRow>
-            {/* {admin && <TableCell align="left" sx={{ fontSize: 10, userSelect: "none" }}>{report.is_updated === 1 &&
-            <Tooltip title="User has edited the crime entry">
-                <Link>
-                (edited)
-                </Link>
-            </Tooltip>
-            }</TableCell>}
-            <TableCell component="th" scope="row">{report.location}</TableCell>
-            {admin && <TableCell align="left">{report.user.name}</TableCell>}
-            <TableCell align="left">
-            <ActiveInactiveButton
-                onClick={() => setChangeStatusDialog({ status: true, id: report.id })}
-                status={report.status}
-            >
-                {report.status ? "Active" : "Inactive"}
-            </ActiveInactiveButton>
-            </TableCell>
-            <TableCell align="left">{fDateTime(report.created_at)}</TableCell>
-            <TableCell align="right">
-            <ActionOptions
-                index={index}
-                delete_id={report.id}
-                show_url={'/report?target=single&id=' + report.id}
-                add_note={'/add_not/' + report.id}
-                deleteAction={deleteOptionAction}
-            />
-            </TableCell> */}
-            <TableCell>
+            {/* <TableCell>
             <ToggleButtonGroup
                 color="success"
                 value={toggle}
@@ -115,7 +88,7 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
                 <ToggleButton value={true}>Yes</ToggleButton>
                 <ToggleButton value={false}>No</ToggleButton>
             </ToggleButtonGroup>
-            </TableCell>
+            </TableCell> */}
             <TableCell align="left">{fDateTime(report.date_time)}</TableCell>
             <TableCell component="th" scope="row">{report.location}<br></br>{formattedLatitude} S,<br></br>{formattedLongitude} E</TableCell>
             <TableCell align="left">
@@ -145,10 +118,10 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
                     }}
                 />
             </TableCell> 
-            <TableCell align="center">
+            {/* <TableCell align="center">
                 {!show && <img src={redEye} onClick={showHandler} />}
                 {show && <img src={greenEye} onClick={showHandler} />}
-            </TableCell>                                
+            </TableCell>                                 */}
         </TableRow>
         <ConfirmDeleteDialog
             openDialog={openDialog}

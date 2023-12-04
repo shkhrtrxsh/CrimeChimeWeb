@@ -13,7 +13,7 @@ const FrontendRoutes = [
     },
     {
         path: 'reportshome', 
-        element: <Home />
+        element: <ViewCrime />
     },
     {
         path: 'reportscrime', 

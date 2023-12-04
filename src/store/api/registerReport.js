@@ -35,7 +35,7 @@ export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes"
     try {
       const data = res.data.data;
       if(data!==null){
-        return data?.data;
+        return data;
       }else{
         dispatch(clearNearbyReports());
         throw Error(res.data.message);

@@ -195,7 +195,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           })() },
           { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
           // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-          { firstCol: 'Perpetrators:', secondCol: perpetrators?[perpetrators,' , ',perpetrators_des]:"" },
+          { firstCol: 'Perpetrators:', secondCol: perpetrators?[`#${parseInt(perpetrators) >= 0 ? perpetrators : -(perpetrators)}`,' , ',perpetrators_des]:"" },
           { firstCol: 'Weapons:', secondCol: (()=>{
             switch(weapons){
               case 0:return ``
@@ -390,7 +390,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         })() },
         { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
         // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-        { firstCol: 'Perpetrators:', secondCol: perpetrators?[perpetrators,' , ',perpetrators_des]:"" },
+        { firstCol: 'Perpetrators:', secondCol: perpetrators?[`#${parseInt(perpetrators) >= 0 ? perpetrators : -(perpetrators)}`,' , ',perpetrators_des]:"" },
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
             case '0':return ``

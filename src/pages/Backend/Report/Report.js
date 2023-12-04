@@ -113,7 +113,7 @@ export default function Report() {
               </TableRow> */}
               
               <TableRow>
-                <TableCell>Public Report Approval</TableCell>
+                {/* <TableCell>Public Report Approval</TableCell> */}
                 <TableCell>Date/Time</TableCell>
                 <TableCell>Location</TableCell>
                 <TableCell align="left">Crime Type</TableCell>
@@ -121,7 +121,7 @@ export default function Report() {
                 <TableCell align="left">Username</TableCell>
                 <TableCell align="left">Corp./Group</TableCell>
                 <TableCell align="right">Action</TableCell>
-                <TableCell align="right">Edit</TableCell>
+                {/* <TableCell align="right">Show/Hide</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>

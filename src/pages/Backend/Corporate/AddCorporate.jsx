@@ -99,7 +99,7 @@ export default function AddCorporate() {
 
   return (
     <Fragment>
-      <BreadcrumbNavigator navigate={breadcrumbNavigate} currentPage="Add Corporate" />
+      <BreadcrumbNavigator navigate={breadcrumbNavigate} currentPage="Add Corporate/Group" />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Typography variant="h4" style={{padding:"0 0 20px 0"}} >Corporate/Group Name</Typography>
         <Grid container spacing={3}>
