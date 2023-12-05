@@ -25,6 +25,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     const [latitude,setlatitude] = useState('')
     const [longitude,setLongitude] = useState('')
     const [perpetrators, setperpetrators] = useState('')
+    const [roleID, setroleID] = useState('')
     const [perpetrators_des, setperpetrators_des] = useState('')
     const [shoplifting, setshoplifting] =  useState('')
     const [bribery,setbribery ] = useState('')
@@ -71,12 +72,14 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     // }
     const [edited,setEdited] = useState(false)
     const myFunction = (data) => {
+      console.log(data.role_id)
       set_date_time(data.date_time)
       setUser(data.user)
       setLocation(data.location)
       setlatitude(data.latitude)
       setLongitude(data.longitude)
       setperpetrators(data.perpetrators)
+      setroleID(data.role_id)
       setperpetrators_des(data.perpetrators_des)
       setshoplifting(data.shoplifting)
       setbribery(data.bribery)
@@ -195,7 +198,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           })() },
           { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
           // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-          { firstCol: 'Perpetrators:', secondCol: perpetrators?[`#${parseInt(perpetrators) >= 0 ? perpetrators : -(perpetrators)}`,' , ',perpetrators_des]:"" },
+          { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : -(perpetrators)})`,' , ',roleID==1 ? perpetrators_des :'']:"Preperator(s) detail not available" },
           { firstCol: 'Weapons:', secondCol: (()=>{
             switch(weapons){
               case 0:return ``
@@ -390,7 +393,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         })() },
         { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
         // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-        { firstCol: 'Perpetrators:', secondCol: perpetrators?[`#${parseInt(perpetrators) >= 0 ? perpetrators : -(perpetrators)}`,' , ',perpetrators_des]:"" },
+        { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : -(perpetrators)})`,' , ',perpetrators_des]:"Preperator(s) detail not available" },
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
             case '0':return ``

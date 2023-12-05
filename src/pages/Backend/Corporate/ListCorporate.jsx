@@ -105,8 +105,8 @@ export default function CorporateList() {
               <TableRow>
                 <TableCell>Corporate Name</TableCell>
                 <TableCell align="left">Address</TableCell>
-                <TableCell align="left">User Name</TableCell>
-                <TableCell align="left">Phone</TableCell>
+                <TableCell align="left">Admin Name</TableCell>
+                <TableCell align="left">Mobile</TableCell>
                 <TableCell align="left">Email</TableCell>
                 <TableCell align="left">Industry Types</TableCell>
                 <TableCell align="left">Logo</TableCell>

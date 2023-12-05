@@ -191,10 +191,10 @@ export default function EditCorporate() {
 
           <Typography variant="h4" style={{padding:"30px 0 0 24px "}}>Key Contact at Corp/Group (Providing associated mobile numbers)</Typography>
           <Grid item xs={12} sm={6}>
-            <RHFTextField name="user_name" label="Username" />
+            <RHFTextField name="user_name" label="Name" />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <RHFTextField name="phone" label="Phone" />
+            <RHFTextField name="phone" label="Mobile" />
           </Grid>
           <Grid item xs={12} sm={6}>
             <RHFTextField name="email" label="Email" type="email" />
