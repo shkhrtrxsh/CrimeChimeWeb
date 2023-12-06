@@ -36,6 +36,7 @@ export default function AddCorporate() {
   const [showPassword, setShowPassword] = useState(false);
   const [industryType, setIndustryType] = useState('');
   const [logoFile, setLogoFile] = useState(null);
+  const [logoFile2, setLogoFile2] = useState(null);
   const listData = useSelector((state) => state?.industrytypelist.industryTypes);
   const UserSchema = Yup.object().shape({
     corporate_name: Yup.string().required('Corporate Name is required'),
@@ -51,12 +52,10 @@ export default function AddCorporate() {
 
   useEffect(() => {
     dispatch(listIndustryType({}));
-    console.log(listData)
   }, []);
 
   const handleChangeIndustryType = (event) => {
     setIndustryType(event.target.value);
-    console.log(industryType)
   };
 
   const defaultValues = {
@@ -80,12 +79,13 @@ export default function AddCorporate() {
   const handleChangeLogo = (event) => {
     const file = event.target.files[0];
     setLogoFile(file);
+    setLogoFile2({name:file.name});
+
   };
 
   const onSubmit = (formValue) => {
     formValue.industry_types_id = industryType;
-    console.log(logoFile)
-    formValue.logo = logoFile;
+    formValue.logo = logoFile2;
     // formValue.slug = slugConvertor(formValue.corporate_name);
     dispatch(addCorporate({ formValue, navigate }));
   };

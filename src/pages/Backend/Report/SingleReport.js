@@ -26,6 +26,7 @@ import { ActiveInactiveButton } from 'src/components/Button';
 import ActionOptions from 'src/components/ActionOptions'
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog'
 import ChangeStatusDialog from 'src/components/ChangeStatusDialog';
+import { toast } from 'react-toastify';
 export default function SingleReport({report,formattedLatitude,formattedLongitude,index,handler}) {
     const [toggle,setToggle] = useState(parseInt(report.is_approve) == 1 ? true : false)
     const dispatch = useDispatch();
@@ -48,6 +49,11 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
             is_approve: !val ? 1:0
         }
         const response = await API.post(`/setReportApproved`,formValue);
+        if(response.data.code == 200){
+            toast.success(response.data.message,{
+                toastId:'skjdjj'
+            })
+        }
     };
     const callDeleteFunc = (status, id) => {
         if (status === true) {
@@ -72,12 +78,17 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
             showHide: !val ? 1:0
         }
         const response = await API.post(`/setShowReport`,formValue);
+        if(response.data.code == 200){
+            toast.success(response.data.message,{
+                toastId:'skjdjj'
+            })
+        }
     };
     
   return (
     <>
         <TableRow>
-            {/* <TableCell>
+            <TableCell>
             <ToggleButtonGroup
                 color="success"
                 value={toggle}
@@ -88,7 +99,7 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
                 <ToggleButton value={true}>Yes</ToggleButton>
                 <ToggleButton value={false}>No</ToggleButton>
             </ToggleButtonGroup>
-            </TableCell> */}
+            </TableCell>
             <TableCell align="left">{fDateTime(report.date_time)}</TableCell>
             <TableCell component="th" scope="row">{report.location}<br></br>{formattedLatitude} S,<br></br>{formattedLongitude} E</TableCell>
             <TableCell align="left">
@@ -118,10 +129,10 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
                     }}
                 />
             </TableCell> 
-            {/* <TableCell align="center">
-                {!show && <img src={redEye} onClick={showHandler} />}
-                {show && <img src={greenEye} onClick={showHandler} />}
-            </TableCell>                                 */}
+            <TableCell align="center">
+                {!show && <img src={redEye} style={{height:"16px",width:"24px"}} onClick={showHandler} />}
+                {show && <img src={greenEye} style={{height:"16px",width:"24px"}} onClick={showHandler} />}
+            </TableCell>                                
         </TableRow>
         <ConfirmDeleteDialog
             openDialog={openDialog}

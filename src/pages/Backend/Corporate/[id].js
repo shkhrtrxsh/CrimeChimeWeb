@@ -36,8 +36,10 @@ export default function EditCorporate() {
   const [showPassword, setShowPassword] = useState(false);
   const [industryType, setIndustryType] = useState('');
   const [logoFile, setLogoFile] = useState(null);
+  const [logoFile2, setLogoFile2] = useState(null);
   const params = useParams();
   const listData = useSelector((state) => state?.industrytypelist.industryTypes);
+  const [industryId,setIndustryId] = useState(null)
   const UserSchema = Yup.object().shape({
     corporate_name: Yup.string().required('Corporate Name is required'),
     address: Yup.string().required('Address is required'),
@@ -83,11 +85,12 @@ export default function EditCorporate() {
   const handleChangeLogo = (event) => {
     const file = event.target.files[0];
     setLogoFile(file);
+    setLogoFile2({name:file.name});
   };
 
   const onSubmit = (formValue) => {
     formValue.industry_types_id = industryType;
-    formValue.logo = logoFile;
+    formValue.logo = logoFile2;
     // formValue.slug = slugConvertor(formValue.corporate_name);
     dispatch(updateCorporate({ formValue, navigate }));
   };
@@ -123,7 +126,8 @@ export default function EditCorporate() {
         const urlParts = item.logo.split('/');
         const imageName = urlParts[urlParts.length - 1];
         setLogoFile({name:imageName})
-        setIndustryType(item.industry.name)
+        setIndustryType(item.industry?.name)
+        setIndustryId(item.industry?.id)
         // dispatch(getRoles({}))
         // const value = [];
         // user.roles.forEach(element => {          
@@ -148,7 +152,7 @@ export default function EditCorporate() {
               <Select
                 labelId="industry-type-label"
                 id="industry-type"
-                value={industryType}
+                value={industryId}
                 label="Industry Type"
                 onChange={handleChangeIndustryType}
               >
@@ -210,4 +214,9 @@ export default function EditCorporate() {
       </FormProvider>
     </Fragment>
   );
+}
+export async function getServerSideProps(context) {
+  return {
+    props: {}, // will be passed to the page component as props
+  };
 }

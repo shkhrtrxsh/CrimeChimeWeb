@@ -139,11 +139,15 @@ const EditAddress = () => {
             address:value.address
         }
         const response = await API.post(`/user/addAddress`,formValue);
-        if(response.data.success){
+        if(response.data.code == 200){
             toast.success(response.data.message,{
                 toastId:'jjjs'
             })
             navigate('/my-addresses');
+        }else{
+            toast.error(response.data.message,{
+                toastId:'djjii'
+            })
         }
     }
     const handlePlaceSelected = async(place) => {

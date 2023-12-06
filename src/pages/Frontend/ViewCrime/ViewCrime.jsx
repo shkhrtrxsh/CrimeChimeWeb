@@ -7,6 +7,9 @@ import { GoogleMap, Marker } from '@react-google-maps/api';
 import { SatelliteZoom } from 'src/constants/googleMap';
 import Image from '../../../assets/images/duplicate.png';
 import Image1 from 'src/assets/images/corporateCrime.png'
+import Legend from 'src/assets/images/legend.png'
+import Legend2 from 'src/assets/images/legend2.png'
+import Legend3 from 'src/assets/images/legend3.png'
 import SearchFilter from '../ViewReport/SearchFilter';
 import CrimeDialog from "./CrimeDialog";
 import { getNearbyCrimes } from 'src/store/api/registerReport';
@@ -304,6 +307,20 @@ const ViewCrime = () => {
         </MapDivStyle>
 
       </Box>
+      <div style={{padding:"20px",backdropFilter:"blur(10px)", position: 'absolute', left: '20px', bottom: '20px',background:"rgba(255,255,255,.6)",height:"200px",width:"300px",borderRadius:"16px"}}>
+        <div style={{display:"flex",alignItems:"center",gap:"10px"}} >
+          <img src={Legend3}/>
+          {<Typography component='h6'>Reported Crime</Typography>}
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:"10px",marginTop:"12px"}} >
+          <img src={Legend}/>
+          {<Typography component='h6'>Reported by multiple users</Typography>}
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:"10px",marginTop:"12px"}} >
+          <img src={Legend2}/>
+          {<Typography component='h6'>Reported by verified source</Typography>}
+        </div>
+      </div>
       <BoxButtonStyle sx={{ position: 'absolute', right: '0px', top: '390px' }}>
           <NoDataDialog />
           <NoDataDialogRoot error={error} handleClose={() => dispatch(setError(null))} />

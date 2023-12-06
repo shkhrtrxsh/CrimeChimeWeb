@@ -65,6 +65,7 @@ function CrimeDialog({mapRef,index=0,onClose}) {
   const {id,date_time,latitude,longitude,report_images}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
   const [buttonShow,setButtonShow] = useState(false)
+  const [count,setCount] = useState('')
   useEffect(()=>{
     dispatch(setMarker({latitude,longitude}));
   },[latitude,longitude,index])
@@ -157,10 +158,10 @@ function CrimeDialog({mapRef,index=0,onClose}) {
     if(response.data){
       if(parseInt(response.data.data.edited_by) > 0){
         setButtonShow(true)
+        setCount(response.data.data.edited_by)
       }
     }
   }
-  console.log(data)
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SuccessDialog open={open} handleClose = {()=>setOpen(0)}/>
@@ -192,16 +193,21 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                   <Box>
                       <Box>
                       <TableContainer component={Paper}>
+                        {buttonShow &&
+                          <h5 style={{background:"#e4e3e3",padding:"8px 12px",textAlign:"center"}} > This report is edited by {count} user{count>1 && 's'}. Check edited report{count>1 && 's'}.</h5>
+                        }
                         <Table>
+                          
                           <TableBody>
                             {data.map((row, index) => {
                               return (<>
                               {typeof(row.secondCol) === "object" && <TableRow key={index}>
-                                {row.secondCol != null && row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by:" && <TableCell>{row.firstCol}</TableCell>}
-                                {buttonShow && row.firstCol == "Edited by:" && <TableCell style={{background:"grey",color:"white",borderRadius:"0"}} >{row.firstCol}</TableCell>}
-                                {row.firstCol == "Description" && profile.role_id === '1' &&  <TableCell>{row.firstCol}</TableCell>}
+                                {row.secondCol != null && row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by" && row.firstCol != "Media" && <TableCell>{row.firstCol}</TableCell>}
+                                {buttonShow && !reportType &&  row.firstCol == "Edited by" && <TableCell >{row.firstCol}</TableCell>}
+                                {row.firstCol == "Description" && parseInt(profile.role_id) === 1 &&  <TableCell>{row.firstCol}</TableCell>}
                                 {row.firstCol == "Perpetrators" &&  <TableCell>{row.firstCol}</TableCell>}
-                                {row.secondCol != null && row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by:" &&  <TableCell>
+                                {parseInt(profile.role_id) === 1 && row.firstCol == "Media" &&  <TableCell>{row.firstCol}</TableCell>}
+                                {row.secondCol != null && row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by" && row.firstCol != "Media" && <TableCell>
                                   {row.firstCol === 'Media:' && mediaData ? (
                                     isImage(mediaData) ? (
                                       <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
@@ -214,41 +220,36 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                                     row.secondCol
                                   )}
                                 </TableCell>}
-                                {row.firstCol == "Description" && profile.role_id === '1' &&  <TableCell>
-                                  {row.firstCol === 'Media:' && mediaData ? (
-                                    isImage(mediaData) ? (
-                                      <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
-                                    ) : isVideo(mediaData) ? (
-                                      <video src={mediaData} controls style={{ width: '100%', height: 'auto' }} />
-                                    ) : (
-                                      'No media available'
-                                    )
-                                  ) : (
-                                    row.secondCol
-                                  )}
+                                {row.firstCol == "Description" && parseInt(profile.role_id) === 1 &&  <TableCell>
+                                  row.secondCol
                                 </TableCell>}
                                 {row.firstCol == "Perpetrators" && <TableCell>
-                                  {row.firstCol === 'Media:' && mediaData ? (
-                                    isImage(mediaData) ? (
-                                      <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
-                                    ) : isVideo(mediaData) ? (
-                                      <video src={mediaData} controls style={{ width: '100%', height: 'auto' }} />
-                                    ) : (
-                                      'No media available'
-                                    )
-                                  ) : (
-                                    profile.role_id === '1' ? row.secondCol[0] : row.secondCol[2]
-                                    )}
+                                    parseInt(profile.role_id) === 1 ? row.secondCol[0] : row.secondCol[2]
                                 </TableCell>}
-                                {buttonShow && row.firstCol === "Edited by:" && <TableCell style={{background:"grey",color:"white",borderRadius:"0"}} >{row.secondCol}</TableCell>}
+                              {parseInt(profile.role_id) === 1 && row.firstCol == "Media" && <TableCell>
+                                {row.firstCol === 'Media:' && mediaData ? (
+                                  isImage(mediaData) ? (
+                                    <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
+                                  ) : isVideo(mediaData) ? (
+                                    <video src={mediaData} controls style={{ width: '100%', height: 'auto' }} />
+                                  ) : (
+                                    'No media available'
+                                  )
+                                ) : (
+                                  row.secondCol
+                                )}
+                                </TableCell>}
+                                {buttonShow && !reportType &&  row.firstCol === "Edited by" && <TableCell >{row.secondCol}</TableCell>}
 
                               </TableRow>}
                               {typeof(row.secondCol) === "string" && <TableRow key={index}>
-                              {!row.secondCol.includes("Unavailable") && !row.secondCol.includes("Does not apply") && !row.secondCol.includes(null) && row.secondCol != "" &&  row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by:" && <TableCell>{row.firstCol}</TableCell>}
-                              {buttonShow && row.firstCol == "Edited by:" && <TableCell style={{background:"grey",color:"white",borderRadius:"0"}} >{row.firstCol}</TableCell>}
-                              {row.firstCol == "Description" && profile.role_id === '1' &&  <TableCell>{row.firstCol}</TableCell>}
+                              {!row.secondCol.includes("Unavailable") && !row.secondCol.includes("Does not apply") && !row.secondCol.includes(null) && row.secondCol != "" &&  row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by" && row.firstCol != "Media" && <TableCell>{row.firstCol}</TableCell>}
+                              {buttonShow && !reportType &&  row.firstCol == "Edited by" && <TableCell >{row.firstCol}</TableCell>}
+                              {row.firstCol == "Description" && parseInt(profile.role_id) === 1 &&  <TableCell>{row.firstCol}</TableCell>}
                               {row.firstCol == "Perpetrators" &&  <TableCell>{row.firstCol}</TableCell>}
-                              {!row.secondCol.includes("Unavailable") &&!row.secondCol.includes("Does not apply") && !row.secondCol.includes(null) && row.secondCol != "" &&  row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by:" &&  <TableCell>
+                              {parseInt(profile.role_id) === 1 && row.firstCol == "Media" &&  <TableCell>{row.firstCol}</TableCell>}
+
+                              {!row.secondCol.includes("Unavailable") &&!row.secondCol.includes("Does not apply") && !row.secondCol.includes(null) && row.secondCol != "" &&  row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by" && row.firstCol != "Media" &&  <TableCell>
                                 {row.firstCol === 'Media:' && mediaData ? (
                                   isImage(mediaData) ? (
                                     <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
@@ -261,20 +262,13 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                                   row.secondCol
                                 )}
                               </TableCell>}
-                              {row.firstCol == "Description" && profile.role_id === '1' &&  <TableCell>
-                                {row.firstCol === 'Media:' && mediaData ? (
-                                  isImage(mediaData) ? (
-                                    <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
-                                  ) : isVideo(mediaData) ? (
-                                    <video src={mediaData} controls style={{ width: '100%', height: 'auto' }} />
-                                  ) : (
-                                    'No media available'
-                                  )
-                                ) : (
-                                  row.secondCol
-                                )}
+                              {row.firstCol == "Description" && parseInt(profile.role_id) === 1 &&  <TableCell>
+                                row.secondCol
                               </TableCell>}
                               {row.firstCol == "Perpetrators" && <TableCell>
+                                parseInt(profile.role_id) === 1 ? row.secondCol[0] : row.secondCol[2]
+                              </TableCell>}
+                              {parseInt(profile.role_id) === 1 && row.firstCol == "Media" && <TableCell>
                                 {row.firstCol === 'Media:' && mediaData ? (
                                   isImage(mediaData) ? (
                                     <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
@@ -284,10 +278,10 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                                     'No media available'
                                   )
                                 ) : (
-                                  profile.role_id === '1' ? row.secondCol[0] : row.secondCol[2]
+                                  row.secondCol
                                 )}
-                              </TableCell>}
-                              {buttonShow && row.firstCol === "Edited by:" && <TableCell style={{background:"grey",color:"white",borderRadius:"0"}} >{row.secondCol}</TableCell>}
+                                </TableCell>}
+                              {buttonShow && !reportType &&  row.firstCol === "Edited by" && <TableCell >{row.secondCol}</TableCell>}
 
                             </TableRow>}
                             </>)

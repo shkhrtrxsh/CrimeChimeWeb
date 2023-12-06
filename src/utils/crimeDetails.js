@@ -72,7 +72,6 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     // }
     const [edited,setEdited] = useState(false)
     const myFunction = (data) => {
-      console.log(data.role_id)
       set_date_time(data.date_time)
       setUser(data.user)
       setLocation(data.location)
@@ -145,17 +144,17 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     useEffect(()=>{
       getReport();
     },[reportType])
+
     if(!data){
       return [
-        { firstCol: `Edited by:${wholeData ? wholeData.length > 0 ? '('+wholeData.length+')' : "" : ""}`, secondCol: (()=>{ return (<>
-          {edited && wholeData && wholeData.length > 1 && <FormControl sx={{ width: '100%' }}>
+        { firstCol: `Edited by`, secondCol: (()=>{ return (<>
+          {edited && wholeData && wholeData.length >= 1 && <FormControl sx={{ width: '100%' }}>
             <InputLabel id="industry-type-label" style={{color:"white !important"}}>Users</InputLabel>
             <Select
               labelId="Users"
               id="edited-users"
-              value={wholeData != null ? wholeData[0].user.username:"Select"}
+              value={wholeData != null ? wholeData[0]:"Select"}
               label="Users"
-              placeholder={wholeData != null ? wholeData[0].user.username:"Select"}
               onChange={handlerChangeUser}
             >
               {wholeData?.map((item,index) => (
@@ -165,8 +164,8 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
               ))}
             </Select>
           </FormControl>}
-          {edited && wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>}
-          {!edited && wholeData && wholeData.length == 1 && <p>This reported is edited , you can check new.</p>}
+          {/* {!edited && wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>} */}
+          {/* {!edited && wholeData && wholeData.length == 1 && <p>This reported is edited , you can check new.</p>} */}
           </>); 
         })() },
           { firstCol: 'Time of occurrence:', secondCol:  
@@ -205,18 +204,18 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
               case 1:return `None`
               default:return (
                 <div>
-                  <div style={{display:"flex"}}>
+                  {WeaponChoices[fully_auto_weapons] != undefined && <div style={{display:"flex"}}>
                     Fully Automatic: {WeaponChoices[fully_auto_weapons]} <img src={AK} style={{height:"35px",width:"35px"}} /> <br />
-                  </div>
-                  <div style={{display:"flex"}}>
+                  </div>}
+                  {WeaponChoices[semi_auto_weapons] != undefined && <div style={{display:"flex"}}>
                   Semi Automatic: {WeaponChoices[semi_auto_weapons]} <img src={Pistol} style={{height:"25px",width:"25px"}} /><br />
-                  </div>
-                  <div style={{display:"flex"}}>
+                  </div>}
+                  {WeaponChoices[knife_weapons] != undefined && <div style={{display:"flex"}}>
                   Knife: {WeaponChoices[knife_weapons]} <img src={Knife} style={{height:"20px",width:"25px"}} /> <br />
-                  </div>
-                  <div style={{display:"flex"}}>
-                    Other: {WeaponChoices[other_weapons]} <img src={Others} style={{height:"20px",width:"25px"}} /><br />
-                  </div>
+                  </div>}
+                  {WeaponChoices[other_weapons] != undefined && <div style={{display:"flex"}}>
+                  Unusual weapon: {WeaponChoices[other_weapons]} <img src={Others} style={{height:"20px",width:"25px"}} /><br />
+                  </div>}
 
                 </div>
               );
@@ -342,15 +341,14 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
       ];
     }else{
       return [
-        { firstCol: `Edited by:${wholeData ? wholeData.length > 0 ? '('+wholeData.length+')' : "" : ""}`, secondCol: (()=>{ return (<>
-          {edited && wholeData && wholeData.length > 1 && <FormControl sx={{ width: '100%' }}>
+        { firstCol: `Edited by`, secondCol: (()=>{ return (<>
+          {edited && wholeData && wholeData.length >= 1 && <FormControl sx={{ width: '100%' }}>
             <InputLabel id="industry-type-label" style={{color:"white !important"}}>Users</InputLabel>
             <Select
               labelId="Users"
               id="edited-users"
-              value={wholeData != null ? wholeData[0].user.username:"Select"}
+              value={wholeData != null ? wholeData[0]:"Select"}
               label="Users"
-              placeholder={wholeData != null ? wholeData[0].user.username:"Select"}
               onChange={handlerChangeUser}
             >
               {wholeData?.map((item,index) => (
@@ -360,8 +358,8 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
               ))}
             </Select>
           </FormControl>}
-          {edited && wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>}
-          {!edited && wholeData && wholeData.length == 1 && <p>This reported is edited , you can check new.</p>}
+          {/* {!edited && wholeData && wholeData.length == 1 && <p style={{border:"1px solid white",padding:"12px"}}>{wholeData[0].user.username}</p>} */}
+          {/* {!edited && wholeData && wholeData.length == 1 && <p>This reported is edited , you can check new.</p>} */}
           </>); 
         })() },
         { firstCol: 'Time of occurrence:', secondCol:  
@@ -400,18 +398,18 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             case '1':return `None`
             default:return (
               <div>
-                <div style={{display:"flex"}}>
+                {WeaponChoices[fully_auto_weapons] != undefined && <div style={{display:"flex"}}>
                   Fully Automatic: {WeaponChoices[fully_auto_weapons]} <img src={AK} style={{height:"35px",width:"35px"}} /> <br />
-                </div>
-                <div style={{display:"flex"}}>
+                </div>}
+                {WeaponChoices[semi_auto_weapons] != undefined && <div style={{display:"flex"}}>
                 Semi Automatic: {WeaponChoices[semi_auto_weapons]} <img src={Pistol} style={{height:"25px",width:"25px"}} /><br />
-                </div>
-                <div style={{display:"flex"}}>
+                </div>}
+                {WeaponChoices[knife_weapons] != undefined && <div style={{display:"flex"}}>
                 Knife: {WeaponChoices[knife_weapons]} <img src={Knife} style={{height:"20px",width:"25px"}} /> <br />
-                </div>
-                <div style={{display:"flex"}}>
-                  Other: {WeaponChoices[other_weapons]} <img src={Others} style={{height:"20px",width:"25px"}} /><br />
-                </div>
+                </div>}
+                {WeaponChoices[other_weapons] != undefined && <div style={{display:"flex"}}>
+                  Unusual weapon: {WeaponChoices[other_weapons]} <img src={Others} style={{height:"20px",width:"25px"}} /><br />
+                </div>}
 
               </div>
             );

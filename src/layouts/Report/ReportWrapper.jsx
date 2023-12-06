@@ -155,7 +155,7 @@ const ReportWrapper = () => {
   const setActiveStep = (oldStep, newStep) => {
     if (oldStep === 9 || oldStep === 11) {
       if (newStep === 10 && vehicle_theft === 4) {
-        setSelectActive(oldStep === 9 ? 10 : 9);
+        setSelectActive(oldStep === 9 ? 11 : 9);
         return;
       }
     }
