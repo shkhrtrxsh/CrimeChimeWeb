@@ -32,9 +32,14 @@ export default function Dashboard() {
     const response = await API.get(`/reportPermission`);
     setToggle(response.data.data == 1 ? true : false)
   }
+  const reportDisplayPermissionHandler = async () => {
+    const response = await API.get(`/getDisplayPermission`);
+    setChecked(response.data.data)
+  }
   useEffect(() => {
     dispatch(dashboard({}));
     reportPermissionHandler();
+    reportDisplayPermissionHandler();
   }, []);
   const handleChange = async () => {
     const val = toggle;
@@ -82,6 +87,7 @@ export default function Dashboard() {
         <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
           Public User Ability to Report Crimes
         </Typography>
+        {console.log(checked)}
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
           <Checkbox checked={checked == 1 ? true:false} name="Reports" value={1} onChange={checkboxHnadler} />
           <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>

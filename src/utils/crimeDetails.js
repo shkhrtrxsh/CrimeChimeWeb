@@ -259,7 +259,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             }
           })() },
           { firstCol: 'Vehicle related:', secondCol:(()=>{
-            if(vehicle_theft===4){
+            if(vehicle_theft==4){
               return null;//capitalize(vehicle_theft_choices[vehicle_theft])
             }else{
               return( <div>
@@ -269,7 +269,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             }
           })() },
           { firstCol: 'Vehicle Type:', secondCol:(()=>{
-            if(vehicle_theft===4){
+            if(vehicle_theft==4){
               return null;//capitalize(vehicle_theft_choices[vehicle_theft])
             }else{
               return (vehicle_year||vehicle_colour||vehicle_make||vehicle_model)?capitalize(`${[vehicle_year,vehicle_colour,vehicle_make,vehicle_model].filter((el)=>el).join(" ")} Vehicle`):"Vehicle Description Unavailable"
@@ -454,7 +454,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           }
         })() },
         { firstCol: 'Vehicle related:', secondCol:(()=>{
-          if(vehicle_theft===4){
+          if(vehicle_theft==4){
             return null;//capitalize(vehicle_theft_choices[vehicle_theft])
           }else{
             return( <div>
@@ -464,7 +464,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           }
         })() },
         { firstCol: 'Vehicle Type:', secondCol:(()=>{
-          if(vehicle_theft===4){
+          if(vehicle_theft==4){
             return null;//capitalize(vehicle_theft_choices[vehicle_theft])
           }else{
             return (vehicle_year||vehicle_colour||vehicle_make||vehicle_model)?capitalize(`${[vehicle_year,vehicle_colour,vehicle_make,vehicle_model].filter((el)=>el).join(" ")} Vehicle`):"Vehicle Description Unavailable"

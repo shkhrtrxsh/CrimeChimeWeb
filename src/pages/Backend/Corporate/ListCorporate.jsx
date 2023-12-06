@@ -103,10 +103,10 @@ export default function CorporateList() {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Corporate Name</TableCell>
+                <TableCell>Corp./Group Name</TableCell>
                 <TableCell align="left">Address</TableCell>
-                <TableCell align="left">Admin Name</TableCell>
-                <TableCell align="left">Mobile</TableCell>
+                <TableCell align="left">Corp./Group Admin</TableCell>
+                <TableCell align="left">Mobile Number</TableCell>
                 <TableCell align="left">Email</TableCell>
                 <TableCell align="left">Industry Types</TableCell>
                 <TableCell align="left">Logo</TableCell>

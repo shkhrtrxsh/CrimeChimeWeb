@@ -113,14 +113,16 @@ export default function EditCorporate() {
       if(item.id == params.id){
         setValue("corporate_name", item?.name != null ? item?.name : '')
         setValue("address", item?.address != null ? item?.address : '')
-        setValue("user_name", item?.cor_admin.username != null ? item?.cor_admin.username : '')
+        setValue("user_name", item?.cor_admin.name != null ? item?.cor_admin.name : '')
         setValue("phone", item?.cor_admin.phone != null ? item?.cor_admin.phone : '')
         setValue("email", item?.cor_admin.email != null ? item?.cor_admin.email : '')
         setValue("corpgroup_mailing_address", item?.corp_group_mailing_address != null ? item?.corp_group_mailing_address : '')
         setValue("corp_group_branch", item?.corp_group_branch != null ? item?.corp_group_branch : '')
         setValue("corp_group_branch_phone", item?.corp_group_branch_phone != null ? item?.corp_group_branch_phone : '')
-        setLogoFile({
-          name:item.logo})
+
+        const urlParts = item.logo.split('/');
+        const imageName = urlParts[urlParts.length - 1];
+        setLogoFile({name:imageName})
         setIndustryType(item.industry.name)
         // dispatch(getRoles({}))
         // const value = [];
@@ -133,12 +135,12 @@ export default function EditCorporate() {
   }, [corporateData])
   return (
     <Fragment>
-      <BreadcrumbNavigator navigate={breadcrumbNavigate} currentPage="Edit Corporate" />
+      <BreadcrumbNavigator navigate={breadcrumbNavigate} currentPage="Update Corporate/Group" />
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Typography variant="h4" style={{padding:"0 0 20px 0"}} >Corporate/Group Name</Typography>
+        <Typography variant="h4" style={{padding:"0 0 20px 0"}} >Corporate/Group Details</Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
-            <RHFTextField name="corporate_name" label="Corporate Name" />
+            <RHFTextField name="corporate_name" label="Corp./Group Name" />
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl sx={{ width: '100%' }}>
@@ -158,17 +160,18 @@ export default function EditCorporate() {
               </Select>
             </FormControl>
           </Grid>
+          {/* will remove billo field */}
+          {/* <Grid item xs={12} sm={6}>
+            <RHFTextField name="corpgroup_mailing_address" label="Corp./Group Mailing Address" />
+          </Grid> */}
           <Grid item xs={12} sm={6}>
-            <RHFTextField name="corpgroup_mailing_address" label="Corporate Mailing Address" />
+            <RHFTextField name="corp_group_branch_phone" label="Corp./Group Branch Phone Number" />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <RHFTextField name="corp_group_branch_phone" label="Corporate Group Branch Phone" />
+            <RHFTextField name="address" label="Corp./Group Mailing Address" />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <RHFTextField name="address" label="Address" />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <RHFTextField name="corp_group_branch" label="Corporate Branch" />
+            <RHFTextField name="corp_group_branch" label="Corp./Group Branch" />
           </Grid>
           <Grid item xs={12} sm={12} >
             <Paper elevation={2} sx={{ p: 2 }}>
@@ -189,15 +192,15 @@ export default function EditCorporate() {
             </Paper>
           </Grid>
 
-          <Typography variant="h4" style={{padding:"30px 0 0 24px "}}>Key Contact at Corp/Group (Providing associated mobile numbers)</Typography>
+          <Typography variant="h4" style={{padding:"30px 0 0 24px "}}>Key Contact at Corp./Group (Providing associated mobile numbers)</Typography>
           <Grid item xs={12} sm={6}>
             <RHFTextField name="user_name" label="Name" />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <RHFTextField name="phone" label="Mobile" />
+            <RHFTextField name="phone" label="Mobile Number" />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <RHFTextField name="email" label="Email" type="email" />
+            <RHFTextField name="email" label="Email Address" type="email" />
           </Grid>
           
           <Grid item xs={12}>
