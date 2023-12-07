@@ -35,7 +35,7 @@ const Page14 = () => {
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                  Check all that apply
+                  Check all boxes that apply.
                 </Typography>
               </Grid>
 

@@ -70,10 +70,10 @@ export default function Dashboard() {
               <Typography variant='h4'>Corporate/Groups</Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/corporate')}>
-              <AppWidgetSummary title="Registered Groups" total={corporate ? corporate.corporateCount : 0} icon={'mdi:user'} />
+              <AppWidgetSummary title="Corporates/Groups" total={corporate ? corporate.corporateCount : 0} icon={'mdi:user'} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} style={{cursor:"pointer"}} onClick={() => handleCardClick('/corporate')}>
-              <AppWidgetSummary title="Active Groups" total={corporate ? corporate.industryCount : 0} icon={'mdi:user'} />
+              <AppWidgetSummary title="Industry Type" total={corporate ? corporate.industryCount : 0} icon={'mdi:user'} />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={4} onClick={() => handleCardClick('/corporate')}>
               <AppWidgetSummary title="Inactive Groups" total={user.user ? user.user.inactive : 0} icon={'mdi:user'} />

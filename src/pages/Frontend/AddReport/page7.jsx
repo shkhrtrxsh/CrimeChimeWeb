@@ -80,7 +80,7 @@ function Page7() {
                 fontSize: "12px",
               }}
             >
-              (Injuries due to violence)
+              (i.e. injuries due to violence)
             </Typography>
           </Grid>
 

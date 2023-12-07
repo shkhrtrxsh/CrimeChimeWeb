@@ -47,15 +47,15 @@ function Page10() {
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                  (Perpetrator(s) entered building)
+                  (i.e. perpetrator(s) entered building)
                 </Typography>
                 <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px', color: 'red' }}>
-                  next page is Robbery i.e.perpetrators did not enter a building
+                  next page is Robbery, i.e. perpetrator(s) did not enter a building and the crime took place outdoors
                 </Typography>
               </Grid>
 
               <Box sx={{ pl: 8, }}>
-                <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+                <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '100%' }}>
                   Was burglary or shoplifting involved?
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>

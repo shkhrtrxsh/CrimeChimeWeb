@@ -111,8 +111,8 @@ const Page16 = ({selectActive,setActiveStep}) => {
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '20px' }}>
-      <img src={police} alt="Vehicle Theft" style={{ height: '100px' }} />
-    </Box>
+                  <img src={police} alt="Vehicle Theft" style={{ height: '100px' }} />
+                </Box>
               </Grid>
 
               <Grid item xs={10}>
@@ -123,18 +123,19 @@ const Page16 = ({selectActive,setActiveStep}) => {
                     </Typography>
                     <Select name="police_reporting" value={value.police_reporting!==null?value.police_reporting:""} onChange={handleChange} sx={{ paddingX: 2,width:'95%',maxWidth:'310px',height:"50px" }}>
                       <MenuItem value={0}>Unknown</MenuItem>
-                      <MenuItem value={1}>Yes</MenuItem>
                       <MenuItem value={2}>No</MenuItem>
+                      <MenuItem value={1}>Yes</MenuItem>
                     </Select>
                   </Box>
 
                   <Box sx={{ display: 'flex',alignItems:'center',mt:3,paddingTop:'10%',paddingBottom:'10%'   }}>
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 1,  textAlign: 'left' }}>
-                      Was the crime formally reported to the police?
+                      Was this crime reported to the police?
                     </Typography>
                     <Select value={value.reported_to_the_police!==null?value.reported_to_the_police:""} name="reported_to_the_police" onChange={handleChange} sx={{ paddingX: 2,width:'95%',maxWidth:'310px', height:"50px" }}>
-                      <MenuItem value={1}>Yes</MenuItem>
+                      <MenuItem value={0}>Unknown</MenuItem>
                       <MenuItem value={2}>No</MenuItem>
+                      <MenuItem value={1}>Yes</MenuItem>
                     </Select>
                   </Box>
 

@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 const { capitalize } = require("./string");
-const various_choices = ["Does not apply","crime occured at ATM" ,"i believe crime to be drug-related","i believe crime to be gang-related" ,"Arson was involed"," Vandalism was involed" ,"social an unrest","Bombs were involved"]
+const various_choices = ["Does not apply","Crime occured at ATM" ,"i believe crime to be drug-related","i believe crime to be gang-related" ,"Arson was involed"," Vandalism was involed" ,"social an unrest","Bombs were involved"]
 
 
 export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData,reportType)=>{

@@ -86,7 +86,7 @@ function Page8() {
                 fontSize: "12px",
               }}
             >
-              (Excluding cash in-transit vehicles)
+              (excluding cash-in-transit vehicles)
             </Typography>
             <Box
               sx={{
@@ -102,6 +102,9 @@ function Page8() {
                 style={{ height: "80px" }}
               />
             </Box>
+            <Typography variant="h1" align="center" style={{ fontWeight: 'bold', paddingBottom: '5px', fontSize: '14px' }}>
+              Was vehicle theft involved?
+            </Typography>
           </Grid>
 
           <Box sx={{ pl: 3, pt: 0 }}>

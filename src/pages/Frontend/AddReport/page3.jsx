@@ -66,12 +66,12 @@ function Page3() {
               <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
             </Box>
             <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-              (Persons who committed the crime)
+              (i.e. persons who committed the crime)
             </Typography>
           </Grid>
 
           <div style={{paddingTop: '30px', paddingBottom: '30px' }}>
-            <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+            <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '100%' }}>
               How many perpetrators?
             </Typography>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: '20px' }}>
@@ -116,7 +116,7 @@ function Page3() {
           </Grid>
           <Grid item xs={10} style={{ textAlign: 'center', paddingTop: '40px' }}>
             <TextField
-              label="Describe their appearance.."
+              label="Describe perpetrator(s) appearance in as much detail as possible..."
               name="perpetrator_des"
               multiline
               rows={4}

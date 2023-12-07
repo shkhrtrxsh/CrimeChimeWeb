@@ -29,8 +29,8 @@ const Page13 = () => {
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: '20px' }}>
-      <img src={bribe} alt="Vehicle Theft" style={{ height: '100px' }} />
-    </Box>
+                  <img src={bribe} alt="Vehicle Theft" style={{ height: '100px' }} />
+                </Box>
               </Grid>
 
               <Grid item xs={8} >
