@@ -307,17 +307,17 @@ const ViewCrime = () => {
         </MapDivStyle>
 
       </Box>
-      <div style={{padding:"20px",backdropFilter:"blur(10px)", position: 'absolute', left: '20px', bottom: '20px',background:"rgba(255,255,255,.6)",height:"200px",width:"300px",borderRadius:"16px"}}>
+      <div style={{padding:"20px 10px", position: 'absolute', left: '20px', bottom: '20px',background:"rgba(255,255,255,.6)",height:"130px",width:"260px",borderRadius:"16px"}}>
         <div style={{display:"flex",alignItems:"center",gap:"10px"}} >
-          <img src={Legend3}/>
+          <img src={Legend3} style={{height:"20px",width:"20px"}}  />
           {<Typography component='h6'>Reported Crime</Typography>}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:"10px",marginTop:"12px"}} >
-          <img src={Legend}/>
+          <img src={Legend} style={{height:"20px",width:"20px"}}/>
           {<Typography component='h6'>Reported by multiple users</Typography>}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:"10px",marginTop:"12px"}} >
-          <img src={Legend2}/>
+          <img src={Legend2} style={{height:"20px",width:"20px"}}/>
           {<Typography component='h6'>Reported by verified source</Typography>}
         </div>
       </div>

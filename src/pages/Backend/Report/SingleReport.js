@@ -53,6 +53,8 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
             toast.success(response.data.message,{
                 toastId:'skjdjj'
             })
+            window.location.reload();
+
         }
     };
     const callDeleteFunc = (status, id) => {
@@ -82,9 +84,11 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
             toast.success(response.data.message,{
                 toastId:'skjdjj'
             })
+            window.location.reload();
         }
+        
     };
-    
+
   return (
     <>
         <TableRow>

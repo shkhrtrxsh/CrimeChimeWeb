@@ -65,7 +65,7 @@ const ActionOptions = (props) => {
       </MenuItem>
       : '' }
 
-      {admin && edit_url !== undefined ? 
+      {edit_url !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }}>
         <LinkToEdit to={edit_url}>
           <ListItemIcon>

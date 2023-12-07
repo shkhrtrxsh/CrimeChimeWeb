@@ -9,10 +9,14 @@ export const addCorporate = createAsyncThunk(
       try {
         const response = await API.post("/addCorAdmin", formValue);
         console.log(response);
-        if(response.status === 200){
-          toast.success(response.data.message);
+        if(response.data.code === 200){
+          toast.success(response.data.data.message);
           navigate("/corporate");
           return response.data;
+        }else{
+          toast.error(response.data.message,{
+            toastId:'sjsjj'
+          })
         }
         // toast.error("Something went wrong");
 

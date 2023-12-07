@@ -42,7 +42,7 @@ export default function AddCorporate() {
     corporate_name: Yup.string().required('Corporate Name is required'),
     address: Yup.string().required('Address is required'),
     user_name: Yup.string().required('Username is required'),
-    corpgroup_mailing_address: Yup.string().email('Invalid email address').required('Corporate Mail is required'),
+    // corpgroup_mailing_address: Yup.string().email('Invalid email address').required('Corporate Mail is required'),
    corp_group_branch: Yup.string().required('Corporate Branch is required'),
      phone: Yup.string().required('Phone is required'),
      email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -80,13 +80,13 @@ export default function AddCorporate() {
     const file = event.target.files[0];
     setLogoFile(file);
     setLogoFile2({name:file.name});
-
   };
 
   const onSubmit = (formValue) => {
     formValue.industry_types_id = industryType;
     formValue.logo = logoFile2;
     // formValue.slug = slugConvertor(formValue.corporate_name);
+    console.log("in")
     dispatch(addCorporate({ formValue, navigate }));
   };
 

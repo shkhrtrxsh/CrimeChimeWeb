@@ -9,7 +9,8 @@ import palette from 'src/theme/palette';
 import { logout } from 'src/store/api/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import Bell from 'src/assets/images/bell.png'
+import NotificationsModal from './NotificationsModal';
 
 const LinkButton = styled(NavLink)(({ theme }) => ({
     textDecoration: 'none',
@@ -76,8 +77,10 @@ export default function HeaderMenu(props) {
     const logoutSession = () => {
         dispatch(logout({ navigate }))
     }
-
-
+    const [notificationModal,setNotificationModal] = useState(false)
+    const notificationModalHandler = () => {
+        setNotificationModal(p=>!p)
+    }
     return (
         isDesktop ?
             <>
@@ -126,6 +129,10 @@ export default function HeaderMenu(props) {
                         >
                             Profile
                         </LinkButton>
+                        <div style={{position:"relative"}}>
+                            <img src={Bell} style={{height:"16px",width:"16px",cursor:"pointer"}} onClick={notificationModalHandler} />
+                            {notificationModal && <NotificationsModal/>}
+                        </div>
                         <Button
                             onClick={logoutSession}
                             activeclassname="active"
