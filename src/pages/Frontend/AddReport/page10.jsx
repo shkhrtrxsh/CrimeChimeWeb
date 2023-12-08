@@ -70,7 +70,7 @@ function Page10() {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Attempted Burglary
                       <br />
-                      <span sx={{ fontSize: 'sm' }}>(goods were not stolen)</span>
+                      <span sx={{ fontSize: 'sm' }}>(Goods were not stolen)</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
@@ -78,7 +78,23 @@ function Page10() {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                       Burglary
                       <br />
-                      <span sx={{ fontSize: 'sm' }}>(goods were stolen)</span>
+                      <span sx={{ fontSize: 'sm' }}>(Goods were stolen)</span>
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
+                    <Checkbox checked={checked===3} value={3} onChange={()=>handleChange(3)} />
+                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
+                        Attempted Shoplifting
+                      <br />
+                      <span sx={{ fontSize: 'sm' }}>(Goods were not stolen)</span>
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
+                    <Checkbox checked={checked===4} value={4} onChange={()=>handleChange(4)} />
+                    <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
+                        Shoplifting
+                      <br />
+                      <span sx={{ fontSize: 'sm' }}>(Goods were stolen)</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', my: 2 }}>
