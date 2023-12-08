@@ -67,9 +67,10 @@ const BoxButtonStyle = styled(Box)(({ theme }) => ({
 }));
 
 export default function SearchFilter(props) {
-    const [nameOfDeceased, setNameOfDeceased] = useState('');
-    const [verifiedGroup, setVerifiedGroup] = useState(0);
-
+    const [search, setNameOfDeceased] = useState('');
+    const [is_verify_corporate, setVerifiedGroup] = useState(0);
+    const [is_general_public, setGeneralPublic] = useState(0);
+    const paginate = 0;
     const dateNow = new Date(Date.now());
     const { data } = useSelector((state) => state.reportRegister);
     const { reports: reportedData = {}, error,loading } = useSelector(state => state.report);
@@ -86,7 +87,7 @@ export default function SearchFilter(props) {
         robbery: 0,
         kidnapping: 0,
         bribery: 0,
-        shoplifting: 0,
+        // shoplifting: 0,
       });
     const isDesktop = useResponsive('up', 'md');
     const toggleDrawer = (event) => {
@@ -95,6 +96,7 @@ export default function SearchFilter(props) {
             setFromDate(dateNow);
             setNameOfDeceased('');
             setVerifiedGroup(0);
+            setGeneralPublic(0);
             // Set crime types to 0 individually
             setCrimeTypes({
                 murder: 0,
@@ -104,7 +106,7 @@ export default function SearchFilter(props) {
                 robbery: 0,
                 kidnapping: 0,
                 bribery: 0,
-                shoplifting: 0,
+                // shoplifting: 0,
             });
         }
         setState(event);
@@ -119,8 +121,10 @@ export default function SearchFilter(props) {
                     longitude,
                     toDate,
                     fromDate,
-                    nameOfDeceased,
-                    verifiedGroup,
+                    search,
+                    paginate,
+                    is_verify_corporate,
+                    is_general_public,
                     ...crimeTypes, // Send crime types individually
                 })
             );
@@ -143,6 +147,7 @@ export default function SearchFilter(props) {
         setFromDate(dateNow);
         setNameOfDeceased('');
         setVerifiedGroup(0);
+        setGeneralPublic(0);
         // Set crime types to 0 individually
         setCrimeTypes({
             murder: 0,
@@ -152,7 +157,7 @@ export default function SearchFilter(props) {
             robbery: 0,
             kidnapping: 0,
             bribery: 0,
-            shoplifting: 0,
+            // shoplifting: 0,
         });
         toggleDrawer(0);
     };
@@ -227,7 +232,7 @@ export default function SearchFilter(props) {
                             </Typography>
                         <TextField
                             label="Name of Deceased"
-                            value={nameOfDeceased}
+                            value={search}
                             onChange={(e) => setNameOfDeceased(e.target.value)}
                             variant="outlined"
                             fullWidth
@@ -239,12 +244,25 @@ export default function SearchFilter(props) {
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={verifiedGroup}
+                                    checked={is_verify_corporate}
                                     onChange={(e) => setVerifiedGroup(e.target.checked)}
                                     color="primary"
                                 />
                             }
                             label="Posted by Verified Group"
+                        />
+                        <Typography variant="h6" gutterBottom>
+                                Posted by general public
+                            </Typography>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={is_general_public}
+                                    onChange={(e) => setGeneralPublic(e.target.checked)}
+                                    color="primary"
+                                />
+                            }
+                            label="Posted by general public"
                         />
     <hr style={dividerStyle} />
     <Typography variant="h6" gutterBottom>

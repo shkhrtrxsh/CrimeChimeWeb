@@ -26,11 +26,18 @@ export default function NotificationsModal() {
   return (
     <div style={modal} >
         {data.length == 0 && <h5 style={{color:"black",fontWeight:"400",padding:"0 16px 6px"}} >
-            No new notification
+            1. Select  "Crime tracker" profile section 
+            2. Add up to three locations
+
+            Receive a notification whenever a crime is reported within 500 meters (0.5 Km ) of your selected locations
+            You can change selected location at any time
         </h5>}
         {data.length > 0 && data.map((item,index)=><h5 key={index} style={{color:"black",fontWeight:"400",borderBottom:"1px solid #e6e6e6",padding:"0 16px 6px"}} >
-            notification
-        </h5>)}
+            <p>
+                New crime reported at {item.address} @ {item.created_at} <br></br> {item.distance} meters away from {item.location_name},
+            </p>
+        </h5>
+    )}
     </div>
   )
 }

@@ -110,7 +110,7 @@ export default function Login() {
                 <Stack spacing={3}>
                   <RHFTextField 
                     name="phone" 
-                    label="Phone Number"
+                    label="Za mobile number"
                   />
                 </Stack><br></br>
                 <Stack spacing={3}>
@@ -122,7 +122,7 @@ export default function Login() {
                   </LoadingButton>
                 </Stack>
               </FormProvider>
-              <Typography variant="body2" sx={{ mb: 3, textAlign: 'center' }}>
+              {/* <Typography variant="body2" sx={{ mb: 3, textAlign: 'center' }}>
                 Don't have an account?{' '}
                 <Link variant="subtitle2" to="/register" component={RouterLink} style={{
                     color: theme.palette.primary.main,
@@ -130,7 +130,7 @@ export default function Login() {
                   }}>
                   Register
                 </Link>
-              </Typography>
+              </Typography> */}
             </PaperStyle>
           </ContentStyle>
         </Container>
