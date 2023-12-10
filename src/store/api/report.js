@@ -281,3 +281,37 @@ export const allowAddReport = createAsyncThunk(
     }
   }
 );
+export const showReportStatus = createAsyncThunk(
+  "setShowReport",
+  async ({ formValue }, { rejectWithValue }) => {
+    try {
+      const response = await API.post("/setShowReport", formValue);
+      if(response.data.code === 200){
+        toast.success(response.data.message);
+        return response.data;
+      }else{
+        toast.error(response.data.message);
+      }
+
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+export const reportApproved = createAsyncThunk(
+  "setReportApproved",
+  async ({ formValue }, { rejectWithValue }) => {
+    try {
+      const response = await API.post("/setReportApproved", formValue);
+      if(response.data.code === 200){
+        toast.success(response.data.message);
+        return response.data;
+      }else{
+        toast.error(response.data.message);
+      }
+
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);

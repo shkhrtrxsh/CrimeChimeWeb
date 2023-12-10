@@ -96,7 +96,10 @@ const ViewCrime = () => {
   useEffect(() => {
     if (!hidden) {
       const param = getSearchQueryParams(searchParams)
-      dispatch(getReports({ param }));
+      const f1 = param.split("&")
+      const f2 = f1[0].split("=")
+      // dispatch(getReports({ param }));
+      dispatch(getNearbyCrimes({ paginate:1,page:f2[1],latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
     }
   }, [searchParams,hidden])
 
@@ -114,16 +117,21 @@ const ViewCrime = () => {
   }
   useEffect(() => {
     if (!crimeIndex.viewCrime) {
-      dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
+      dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()),paginate:0 }));
     }
   }, [])
-  useEffect(() => {
-    dispatch(clearReport());
-  }, [])
+  // useEffect(() => {
+  //   dispatch(clearReport());
+  // }, [])
 
   useEffect(() => {
       if (!hidden) {
-          dispatch(getReports({ param: `per_page=10&order_by=latest` }));
+        dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()),paginate:1 }));
+
+          // dispatch(getReports({ param: `per_page=10&order_by=latest` }));
+      }else{
+        dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now())}));
+
       }
   }, [hidden])
   useEffect(() => {
@@ -178,6 +186,7 @@ const ViewCrime = () => {
       });
     }
   };
+  console.log(nearbyData)
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
       <NoDataDialog/>
@@ -192,7 +201,7 @@ const ViewCrime = () => {
           {!hidden ? (
               <Card>
                   {/* <SearchInTable /> */}
-                  {(reportedData||!loading)&&(reportedData?.data&&reportedData?.data[0]) ?
+                  {(nearbyData||!loading)&&(nearbyData?.data&&nearbyData?.data[0]) ?
                     <React.Fragment>
                         <TableContainer component={Paper} sx={{ pr: 7 }}>
                             <Table aria-label="simple table" >
@@ -208,7 +217,7 @@ const ViewCrime = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {reportedData && (reportedData.data || []).map((report, index) => {
+                                    {nearbyData && (nearbyData.data || []).map((report, index) => {
                                         
                                         const latitude = Number(report.latitude);
                                         const longitude = Number(report.longitude);
@@ -250,13 +259,13 @@ const ViewCrime = () => {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        {reportedData && <TablePagination
+                        {nearbyData && <TablePagination
                             rowsPerPageOptions={recordPerPage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                             component="div"
-                            count={reportedData.total}
-                            rowsPerPage={reportedData.per_page}
-                            page={reportedData.current_page - 1}
+                            count={nearbyData.total}
+                            rowsPerPage={nearbyData.per_page}
+                            page={nearbyData.current_page - 1}
                             onPageChange={handlePageChange}
                             />
                         }
@@ -270,44 +279,43 @@ const ViewCrime = () => {
             )
             : (
             <GoogleMap center={position} zoom={zoom}
-            mapContainerStyle={{ width: "100%", height: "100%" }}
-            options={{
-              mapTypeId: (zoom < SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
-              gestureHandling: "greedy",
-              mapTypeControlOptions: {
-                position: isMdBreakpoint ? window.google.maps.ControlPosition.LEFT_TOP : window.google.maps.ControlPosition.LEFT_BOTTOM
-              }
-            }}
-            onLoad={onLoad}
-            onZoomChanged={handleZoomChanged}>
-            <Marker id="mark" zIndex={100} draggable={true} position={position} onDragEnd={markerDragEnd} />
-            {nearbyData.map(({ latitude = null, longitude = null, user_count,user }, ind) => {
-              const position = {
-                lat: Number(latitude),
-                lng: Number(longitude)
-              };
-              return (
-                <>
-                  {user_count == '1' && user.corporat_id == null &&  <Marker key={ind} position={position} options={markerOptions}
-                    onClick={() => onMarkerClick(ind)} zIndex={0}
-                  />}
-                  {user_count != '1' && user.corporat_id == null && <Marker key={ind} position={position} options={markerOptions}
-                    onClick={() => onMarkerClick(ind)} label={{ text: `${user_count}`, fontWeight: "bold", className: "map-label", color: "red" }} zIndex={0}
-                  />}
-                  {user.corporat_id != null &&  <Marker key={ind} position={position} options={markerOptions1}
-                    onClick={() => onMarkerClick(ind)} zIndex={0}
-                  />}
+              mapContainerStyle={{ width: "100%", height: "100%" }}
+              options={{
+                mapTypeId: (zoom < SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
+                gestureHandling: "greedy",
+                mapTypeControlOptions: {
+                  position: isMdBreakpoint ? window.google.maps.ControlPosition.LEFT_TOP : window.google.maps.ControlPosition.LEFT_BOTTOM
+                }
+              }}
+              onLoad={onLoad}
+              onZoomChanged={handleZoomChanged}>
+                <Marker id="mark" zIndex={100} draggable={true} position={position} onDragEnd={markerDragEnd} />
+                {nearbyData && nearbyData.map(({ latitude = null, longitude = null, user_count,user }, ind) => {
+                  const position = {
+                    lat: Number(latitude),
+                    lng: Number(longitude)
+                  };
+                  return (
+                    <>
+                      {user_count == '1' && user.corporat_id == null &&  <Marker key={ind} position={position} options={markerOptions}
+                        onClick={() => onMarkerClick(ind)} zIndex={0}
+                      />}
+                      {user_count != '1' && user.corporat_id == null && <Marker key={ind} position={position} options={markerOptions}
+                        onClick={() => onMarkerClick(ind)} label={{ text: `${user_count}`, fontWeight: "bold", className: "map-label", color: "red" }} zIndex={0}
+                      />}
+                      {user.corporat_id != null &&  <Marker key={ind} position={position} options={markerOptions1}
+                        onClick={() => onMarkerClick(ind)} zIndex={0}
+                      />}
 
-                </>
-              )
-            })}
-
+                    </>
+                  )
+                })}
             </GoogleMap>
           )}
         </MapDivStyle>
 
       </Box>
-      <div style={{padding:"20px 10px", position: 'absolute', left: '20px', bottom: '20px',background:"rgba(255,255,255,.6)",height:"130px",width:"260px",borderRadius:"16px"}}>
+      {hidden && <div style={{padding:"20px 10px", position: 'absolute', left: '20px', bottom: '20px',background:"rgba(255,255,255,.6)",height:"130px",width:"260px",borderRadius:"16px"}}>
         <div style={{display:"flex",alignItems:"center",gap:"10px"}} >
           <img src={Legend3} style={{height:"20px",width:"20px"}}  />
           {<Typography component='h6'>Reported Crime</Typography>}
@@ -320,7 +328,7 @@ const ViewCrime = () => {
           <img src={Legend2} style={{height:"20px",width:"20px"}}/>
           {<Typography component='h6'>Reported by verified source</Typography>}
         </div>
-      </div>
+      </div>}
       <BoxButtonStyle sx={{ position: 'absolute', right: '0px', top: '390px' }}>
           <NoDataDialog />
           <NoDataDialogRoot error={error} handleClose={() => dispatch(setError(null))} />
@@ -334,7 +342,15 @@ const ViewCrime = () => {
               color="primary"
               aria-label="view report"
               variant='extended'
-              onClick={() => setHidden(s => !s)}
+              onClick={() => {
+                dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now())}));
+                toast.info("Fetching details",{
+                  toastId:"skkskks"
+                })
+                setTimeout(() => {
+                  setHidden(s => !s)
+                }, [2000]);
+              }}
           >
               {<Typography component='h6'>Map View</Typography>}
               <LocationOnIcon />
@@ -375,7 +391,7 @@ const ViewCrime = () => {
             <VisibilityIcon />
         </TransparentFab>
       </BoxButtonStyle> */}
-      <SearchFilter />
+      <SearchFilter paginate={!hidden ? 1:0} />
     </Box>
   );
 }

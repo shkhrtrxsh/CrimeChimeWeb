@@ -8,7 +8,7 @@ import {
     ListItemIcon,
     ListItemText 
 } from '@mui/material'
-const BreadcrumbNavigator = ({navigate, currentPage, rightButton}) => {
+const BreadcrumbNavigator = ({navigate, currentPage, rightButton,centerButton}) => {
 
     const RightLinkButton = styled(Link)(({ theme }) => ({
         display: 'inherit',
@@ -41,7 +41,8 @@ const BreadcrumbNavigator = ({navigate, currentPage, rightButton}) => {
             justifyContent="space-between" 
             mb={5}
             sx={{
-                margin: '15px 15px 30px 15px'
+                margin: rightButton?'15px 15px 30px 15px':'0 15px 30px 15px',
+                width:rightButton?"100%":"90%"
             }}
 
         >
@@ -69,6 +70,17 @@ const BreadcrumbNavigator = ({navigate, currentPage, rightButton}) => {
                         <Iconify icon="carbon:add" sx={{fontSize : 30, color:'#fff'}} />
                     </ListItemIcon>
                     <ListItemText primary={rightButton.name} primaryTypographyProps={{ variant: 'body2' }} />
+                </RightLinkButton>
+                : ''
+            }
+            { centerButton ?
+                <RightLinkButton
+                    to={centerButton.link}
+                >
+                    <ListItemIcon sx={{minWidth: 'auto'}}>
+                        <Iconify icon="carbon:add" sx={{fontSize : 30, color:'#fff'}} />
+                    </ListItemIcon>
+                    <ListItemText primary={centerButton.name} primaryTypographyProps={{ variant: 'body2' }} />
                 </RightLinkButton>
                 : ''
             }

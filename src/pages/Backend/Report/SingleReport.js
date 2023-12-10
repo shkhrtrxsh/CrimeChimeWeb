@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import {  deleteReport, reportStatus } from 'src/store/api/report';
+import {  getReports,deleteReport, reportStatus, showReportStatus, reportApproved } from 'src/store/api/report';
 import {
     Table,
     TableBody,
@@ -27,7 +27,7 @@ import ActionOptions from 'src/components/ActionOptions'
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog'
 import ChangeStatusDialog from 'src/components/ChangeStatusDialog';
 import { toast } from 'react-toastify';
-export default function SingleReport({report,formattedLatitude,formattedLongitude,index,handler}) {
+export default function SingleReport({report,formattedLatitude,formattedLongitude,index,handler,refresh}) {
     const [toggle,setToggle] = useState(parseInt(report.is_approve) == 1 ? true : false)
     const dispatch = useDispatch();
     const [show,setShow] = useState(parseInt(report.is_show) == 1 ? true : false)
@@ -40,7 +40,8 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
         id: null,
         condition: null
     });
-    
+    const { reports,error } = useSelector((state) => ({ ...state.report }));
+
     const handleChange = async () => {
         const val = toggle;
         setToggle(p=>!p);
@@ -48,14 +49,17 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
             id:report.id,
             is_approve: !val ? 1:0
         }
-        const response = await API.post(`/setReportApproved`,formValue);
-        if(response.data.code == 200){
-            toast.success(response.data.message,{
-                toastId:'skjdjj'
-            })
-            window.location.reload();
+        dispatch(reportApproved({ formValue }))
+        refresh();
 
-        }
+        // const response = await API.post(`/setReportApproved`,formValue);
+        // if(response.data.code == 200){
+        //     toast.success(response.data.message,{
+        //         toastId:'skjdjj'
+        //     })
+        //     // window.location.reload();
+
+        // }
     };
     const callDeleteFunc = (status, id) => {
         if (status === true) {
@@ -79,16 +83,20 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
             id:report.id,
             showHide: !val ? 1:0
         }
-        const response = await API.post(`/setShowReport`,formValue);
-        if(response.data.code == 200){
-            toast.success(response.data.message,{
-                toastId:'skjdjj'
-            })
-            window.location.reload();
-        }
+        dispatch(showReportStatus({ formValue }))
+        refresh();
+        // const response = await API.post(`/setShowReport`,formValue);
+        // if(response.data.code == 200){
+        //     toast.success(response.data.message,{
+        //         toastId:'skjdjj'
+        //     })
+        //     // window.location.reload();
+        // }
         
     };
-
+    useEffect(()=>{
+        dispatch(getReports())
+    },[toggle,show])
   return (
     <>
         <TableRow>

@@ -7,8 +7,11 @@ export const addCorporate = createAsyncThunk(
     "addCorAdmin",
     async ({ formValue, navigate }, { rejectWithValue }) => {
       try {
-        const response = await API.post("/addCorAdmin", formValue);
-        console.log(response);
+        const response = await API.post("/addCorAdmin", formValue, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
         if(response.data.code === 200){
           toast.success(response.data.data.message);
           navigate("/corporate");
@@ -62,8 +65,9 @@ export const updateUser = createAsyncThunk(
   "user/update",
   async ({ formValue, navigate }, { rejectWithValue }) => {
     try {
-      const response = await API.post("/user/update", formValue, {headers: {
-        'content-type': 'multipart/form-data',
+      const response = await API.post("/user/update", formValue, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
       }});
       if(response.data.status === 200){
         toast.success(response.data.message);

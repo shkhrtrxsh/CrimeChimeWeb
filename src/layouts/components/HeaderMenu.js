@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink } from "react-router-dom";
 import { styled, useTheme, theme } from '@mui/material/styles';
 import { Box, Drawer, Button, IconButton, Divider } from '@mui/material';
@@ -11,6 +11,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Bell from 'src/assets/images/bell.png'
 import NotificationsModal from './NotificationsModal';
+import API from 'src/config/api';
+import { toast } from 'react-toastify';
 
 const LinkButton = styled(NavLink)(({ theme }) => ({
     textDecoration: 'none',
@@ -81,6 +83,22 @@ export default function HeaderMenu(props) {
     const notificationModalHandler = () => {
         setNotificationModal(p=>!p)
     }
+    const [count,setCount] = useState(null)
+    const getCount = async () => {
+        const response = await API.get('/countNotification')
+        if(response.data.code == 200){
+            setCount(response.data.data)
+        }else{
+            toast.error(response.data.message,{
+                toastId:'skjjs999'
+            })
+        }
+    }
+    useEffect(()=>{
+        if(isAuth == 1){
+            getCount();
+        }
+    },[])
     return (
         isDesktop ?
             <>
@@ -130,7 +148,8 @@ export default function HeaderMenu(props) {
                             Profile
                         </LinkButton>
                         <div style={{position:"relative"}}>
-                            <img src={Bell} style={{height:"16px",width:"16px",cursor:"pointer"}} onClick={notificationModalHandler} />
+                            <h6 style={{display:"flex",alignItems:"center",justifyContent:"center",position:"absolute",right:"-4px",top:"-4px",background:"red",height:"12px",width:"12px",borderRadius:"12px"}}>{count}</h6>
+                            <img src={Bell} style={{height:"24px",width:"24px",cursor:"pointer"}} onClick={notificationModalHandler} />
                             {notificationModal && <NotificationsModal/>}
                         </div>
                         <Button

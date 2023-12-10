@@ -110,7 +110,7 @@ export default function Login() {
                 <Stack spacing={3}>
                   <RHFTextField 
                     name="phone" 
-                    label="Za mobile number"
+                    label="ZA mobile number"
                   />
                 </Stack><br></br>
                 <Stack spacing={3}>

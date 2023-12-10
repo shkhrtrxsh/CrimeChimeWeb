@@ -79,14 +79,14 @@ export default function AddCorporate() {
   const handleChangeLogo = (event) => {
     const file = event.target.files[0];
     setLogoFile(file);
-    setLogoFile2({name:file.name});
+    // setLogoFile2({name:file.name});
   };
 
   const onSubmit = (formValue) => {
     formValue.industry_types_id = industryType;
-    formValue.logo = logoFile2;
+    formValue.logo = logoFile;
     // formValue.slug = slugConvertor(formValue.corporate_name);
-    console.log("in")
+    console.log(formValue)
     dispatch(addCorporate({ formValue, navigate }));
   };
 

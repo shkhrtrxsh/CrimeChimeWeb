@@ -32,6 +32,7 @@ import { getNearbyCrimes } from 'src/store/api/registerReport';
 import { getReports } from 'src/store/api/report';
 import { clearReport } from 'src/store/reducers/registerReport';
 import TransparentFab from 'src/layouts/components/TransparentFab';
+import { date } from 'yup';
 
 const OuterPaperStyle = styled(Paper)(({ theme }) => ({
     [theme.breakpoints.up('sm')]: {
@@ -70,7 +71,7 @@ export default function SearchFilter(props) {
     const [search, setNameOfDeceased] = useState('');
     const [is_verify_corporate, setVerifiedGroup] = useState(0);
     const [is_general_public, setGeneralPublic] = useState(0);
-    const paginate = 0;
+    const paginate = props.paginate;
     const dateNow = new Date(Date.now());
     const { data } = useSelector((state) => state.reportRegister);
     const { reports: reportedData = {}, error,loading } = useSelector(state => state.report);
@@ -78,7 +79,7 @@ export default function SearchFilter(props) {
     const dispatch = useDispatch();
     const [state, setState] = React.useState(0);
     const [toDate, setToDate] = useState(dateNow);
-    const [fromDate, setFromDate] = useState(dateNow);
+    const [fromDate, setFromDate] = useState('');
     const [crimeTypes, setCrimeTypes] = useState({
         murder: 0,
         rape: 0,
