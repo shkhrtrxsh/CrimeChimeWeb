@@ -58,7 +58,7 @@ const Page14 = () => {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       I believe this crime to be drug-related
                       <br />
-                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(perpetrator involved with or under influence of drugs)</span>
+                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>perpetrator involved with or under influence of drugs</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
@@ -72,7 +72,7 @@ const Page14 = () => {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Arson was involved
                       <br />
-                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(Setting fire to a property on purpose)</span>
+                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>deliberately setting fire to property</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
@@ -80,13 +80,15 @@ const Page14 = () => {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Vandalism was involved
                       <br />
-                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>(Malicious destruction or defacement of property)</span>
+                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>deliberately damage or destruction of property</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
                     <Checkbox checked={checked&&checked.includes(6)} value={6} onChange={handleChange} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
                       Social unrest
+                      <br />
+                      <span style={{ textAlign: 'left', fontSize: '0.8rem' }}>barricades, tire burning, riots</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>

@@ -68,17 +68,17 @@ function Page10() {
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
                     <Checkbox checked={checked===1} value={1} onChange={()=>handleChange(1)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
-                      Attempted Burglary
+                      Attempted Burglary (not shoplifting)
                       <br />
-                      <span sx={{ fontSize: 'sm' }}>(Goods were not stolen)</span>
+                      <span sx={{ fontSize: 's' }}>goods were not stolen</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
                     <Checkbox checked={checked===2} value={2} onChange={()=>handleChange(2)} />
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
-                      Burglary
+                      Burglary (not shoplifting)
                       <br />
-                      <span sx={{ fontSize: 'sm' }}>(Goods were stolen)</span>
+                      <span sx={{ fontSize: 's' }}>goods were stolen</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
@@ -86,7 +86,7 @@ function Page10() {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                         Attempted Shoplifting
                       <br />
-                      <span sx={{ fontSize: 'sm' }}>(Goods were not stolen)</span>
+                      <span sx={{ fontSize: 'sm' }}>goods were not stolen</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2 }}>
@@ -94,7 +94,7 @@ function Page10() {
                     <Typography variant="h6" sx={{ fontWeight: 'normal', px: 5, textAlign: 'left' }}>
                         Shoplifting
                       <br />
-                      <span sx={{ fontSize: 'sm' }}>(Goods were stolen)</span>
+                      <span sx={{ fontSize: 'sm' }}>goods were stolen</span>
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', my: 2 }}>

@@ -94,12 +94,12 @@ export default function OtpVerify() {
                   OTP Verification
                 </Typography>
                 <Typography variant="p">
-                  Please enter the OTP sent to your mobile number to login.
+                Enter OTP sent to your mobile.
                 </Typography>
               </HeaderStyle>
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={3}>
-                  <RHFTextField name="otp" label="Phone Otp" />
+                  <RHFTextField name="otp" label="Enter OTP" />
                 </Stack>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 3 }}>
                   <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
