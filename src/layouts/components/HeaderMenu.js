@@ -110,12 +110,12 @@ export default function HeaderMenu(props) {
                 </LinkButton>
                 {isAuth == 0 ?
                     <>
-                        <LinkButton
+                        {/* <LinkButton
                             to="/register"
                             activeclassname="active"
                         >
                             Register
-                        </LinkButton>
+                        </LinkButton> */}
                         <LinkButton
                             to="/login"
                             activeclassname="active"

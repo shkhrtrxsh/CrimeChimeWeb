@@ -52,10 +52,8 @@ const initialErrorState = {
 };
 
 const reducer = (state, action) => {
-  console.log("here")
   switch (action.type) {
     case "SETTER":
-      console.log("action")
       return {...state,...action.payload}
     case "CLEAR":
       return initialErrorState;

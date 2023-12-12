@@ -85,7 +85,6 @@ function Page9() {
   }, []);
 
   const handleChange = (id, newValue) => {
-    console.log(newValue);
     dispatch(setPage({ [id]: newValue }),fetchCarModelInfo(newValue));
   };
   const handleUnknown = (e)=>{

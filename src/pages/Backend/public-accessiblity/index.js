@@ -87,7 +87,6 @@ export default function Dashboard() {
         <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
           Public User Ability to Report Crimes
         </Typography>
-        {console.log(checked)}
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
           <Checkbox checked={checked == 1 ? true:false} name="Reports" value={1} onChange={checkboxHnadler} />
           <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'center' }}>

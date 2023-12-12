@@ -39,7 +39,7 @@ const Page15 = () => {
     
     const fileName = files.name;
     if (files) {
-      setValue({files:fileURL,fileName,fileSet:true});
+      setValue(files);
     }
   };
 

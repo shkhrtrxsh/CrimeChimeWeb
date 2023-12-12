@@ -38,7 +38,6 @@ export default function Dashboard() {
     getCorporatesData();
   }, []);
 
-  console.log(corporate)
   const handleCardClick = (path) => {
     navigate(path);
   };

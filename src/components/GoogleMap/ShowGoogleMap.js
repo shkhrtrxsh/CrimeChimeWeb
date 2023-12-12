@@ -90,29 +90,29 @@ const ShowGoogleMap = () => {
 
 
     const markerMovementStart = (e) => {
-        console.log(e)
+        // console.log(e)
     }
 
     useEffect(() => {
         if(map !== null){
-            console.log('map lat', map.center.lat())
-            console.log('map lng', map.center.lng())
+            // console.log('map lat', map.center.lat())
+            // console.log('map lng', map.center.lng())
         }        
     }, [map])
 
     const onLoad = (e) => {
-        console.log('on-load lat', e.position.lat())
-        console.log('on-load lng', e.position.lng())
+        // console.log('on-load lat', e.position.lat())
+        // console.log('on-load lng', e.position.lng())
     }
 
     const markerDragStart = (e) => {
-        console.log(e)
+        // console.log(e)
     }
 
     const markerDragEnd = (e) => {
         if(e !== null){
-            console.log(e.latLng.lat())
-            console.log(e.latLng.lng())
+            // console.log(e.latLng.lat())
+            // console.log(e.latLng.lng())
         }
     }
 

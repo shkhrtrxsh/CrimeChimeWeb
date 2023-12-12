@@ -29,6 +29,7 @@ import {
 import BreadcrumbNavigator from 'src/components/BreadcrumbNavigator';
 import { FormProvider, RHFTextField } from 'src/components/hook-form';
 import { list } from 'postcss';
+import { fil } from 'date-fns/locale';
 
 export default function AddCorporate() {
   const dispatch = useDispatch();
@@ -86,7 +87,6 @@ export default function AddCorporate() {
     formValue.industry_types_id = industryType;
     formValue.logo = logoFile;
     // formValue.slug = slugConvertor(formValue.corporate_name);
-    console.log(formValue)
     dispatch(addCorporate({ formValue, navigate }));
   };
 

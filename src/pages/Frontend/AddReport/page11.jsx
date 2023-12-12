@@ -21,7 +21,6 @@ function Page11() {
     const fetchCarMakeInfo = async () => {
       const response = await API.get("/robbery");
       const result = response.data;
-      console.log(result);
       setrobbery(result.data.map(data => data));
     }
     fetchCarMakeInfo();

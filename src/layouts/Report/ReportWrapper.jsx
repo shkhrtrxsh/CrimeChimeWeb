@@ -230,14 +230,16 @@ const ReportWrapper = () => {
               formData.delete("fileName");
             }
             const url = edit ? "/report/update/" + data?.id : "/report";
-            const response = await API.post(url, formData);
-            if(response.data.code == 200){
-              setConfirm(true);
-              dispatch(setEdit(false));
-            }else{
-              toast.error(response.data.message,{
-                toastId:'shjdnvd'
-              })
+            const response = await API.post(url, formData)
+            if(response){
+              if(response.data.code == 200){
+                setConfirm(true);
+                dispatch(setEdit(false));
+              }else{
+                toast.error(response.data.message,{
+                  toastId:'shjdnvd'
+                })
+              }
             }
           } else {
             throw new Error(`HTTP error! Status: ${response.status}`);

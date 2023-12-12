@@ -30,6 +30,8 @@ import BreadcrumbNavigator from 'src/components/BreadcrumbNavigator';
 import { FormProvider, RHFTextField } from 'src/components/hook-form';
 import { list } from 'postcss';
 import { showCorporate } from 'src/store/api/corporate';
+import API from 'src/config/api';
+import { toast } from 'react-toastify';
 export default function EditCorporate() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,6 +42,7 @@ export default function EditCorporate() {
   const params = useParams();
   const listData = useSelector((state) => state?.industrytypelist.industryTypes);
   const [industryId,setIndustryId] = useState(null)
+  const [data,setData] = useState(null)
   const UserSchema = Yup.object().shape({
     corporate_name: Yup.string().required('Corporate Name is required'),
     address: Yup.string().required('Address is required'),
@@ -85,14 +88,62 @@ export default function EditCorporate() {
   const handleChangeLogo = (event) => {
     const file = event.target.files[0];
     setLogoFile(file);
-    setLogoFile2({name:file.name});
   };
 
-  const onSubmit = (formValue) => {
+  const onSubmit = async (formValue) => {
     formValue.industry_types_id = industryType;
-    formValue.logo = logoFile2;
+    formValue.logo = logoFile;
+    formValue.id = params.id
     // formValue.slug = slugConvertor(formValue.corporate_name);
-    dispatch(updateCorporate({ formValue, navigate }));
+    // dispatch(updateCorporate({ formValue, navigate }));
+    var formdata = new FormData();
+      formdata.append("id", data.id);
+      if(data.name != formValue.corporate_name){
+        formdata.append("corporate_name", formValue.corporate_name);
+      }
+      if(data.address != formValue.address){
+        formdata.append("address",formValue.address);
+      }
+      if(data.cor_admin.name != formValue.user_name){
+        formdata.append("user_name", formValue.user_name);
+      }
+      if(data.cor_admin.phone != formValue.phone){
+        formdata.append("phone", formValue.phone);
+      }
+      if(data.cor_admin.email != formValue.email){
+        formdata.append("email", formValue.email);
+      }
+      if(data.industry_types_id != formValue.industry_types_id){
+        formdata.append("industry_types_id", formValue.industry_types_id);
+      }
+      if(data.corpgroup_mailing_address != formValue.corpgroup_mailing_address){
+        formdata.append("corp/group_mailing_address", formValue.corpgroup_mailing_address);
+      }
+      if(data.corp_group_branch != formValue.corp_group_branch){
+        formdata.append("corp/group_branch", formValue.corp_group_branch);
+      }
+      if(data.corp_group_branch_phone != formValue.corp_group_branch_phone){
+        formdata.append("corp_group_branch_phone",formValue.corp_group_branch_phone)
+      }
+      if(data.logo != formValue.logo){
+        formdata.append("logo", formValue.logo);
+      }
+      const response = await API.post("/updateCorAdmin", formdata, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      if(response.status === 200){
+        toast.success(response.data.message);
+        navigate("/corporate");
+        
+        return response.data;
+      }else{
+        toast.error(response.data.message,{
+          toastId:'wjhdgaja'
+        })
+        
+      }
   };
 
   const breadcrumbNavigate = [
@@ -114,6 +165,8 @@ export default function EditCorporate() {
   useEffect(()=>{
     corporateData?.map((item)=>{
       if(item.id == params.id){
+        setData(item)
+        setIndustryId(item.industry.id)
         setValue("corporate_name", item?.name != null ? item?.name : '')
         setValue("address", item?.address != null ? item?.address : '')
         setValue("user_name", item?.cor_admin.name != null ? item?.cor_admin.name : '')
@@ -127,7 +180,6 @@ export default function EditCorporate() {
         const imageName = urlParts[urlParts.length - 1];
         setLogoFile({name:imageName})
         setIndustryType(item.industry?.name)
-        setIndustryId(item.industry?.id)
         // dispatch(getRoles({}))
         // const value = [];
         // user.roles.forEach(element => {          
@@ -147,7 +199,23 @@ export default function EditCorporate() {
             <RHFTextField name="corporate_name" label="Corp./Group Name" />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: '100%' }}>
+            {industryId == null && <FormControl sx={{ width: '100%' }}>
+              <InputLabel id="industry-type-label">Industry Type</InputLabel>
+              <Select
+                labelId="industry-type-label"
+                id="industry-type"
+                value=""
+                label="Industry Type"
+                onChange={handleChangeIndustryType}
+              >
+                {listData.map((item) => (
+                  <MenuItem key={item[1]} value={item[0]}>
+                    {item[1]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>}
+            {industryId != null && <FormControl sx={{ width: '100%' }}>
               <InputLabel id="industry-type-label">Industry Type</InputLabel>
               <Select
                 labelId="industry-type-label"
@@ -162,7 +230,7 @@ export default function EditCorporate() {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl>}
           </Grid>
           {/* will remove billo field */}
           {/* <Grid item xs={12} sm={6}>

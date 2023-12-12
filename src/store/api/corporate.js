@@ -7,7 +7,21 @@ export const addCorporate = createAsyncThunk(
     "addCorAdmin",
     async ({ formValue, navigate }, { rejectWithValue }) => {
       try {
-        const response = await API.post("/addCorAdmin", formValue, {
+        var formdata = new FormData();
+        // Append form fields to the FormData object
+        // formdata.append('field1', 'value1');
+        // formdata.append('field2', 'value2');
+        formdata.append("corporate_name", formValue.corporate_name);
+        formdata.append("address",formValue.address);
+        formdata.append("user_name", formValue.user_name);
+        formdata.append("phone", formValue.phone);
+        formdata.append("email", formValue.email);
+        formdata.append("industry_types_id", formValue.industry_types_id);
+        formdata.append("corp/group_mailing_address", formValue.corpgroup_mailing_address);
+        formdata.append("corp/group_branch", formValue.corp_group_branch);
+        formdata.append("corp_group_branch_phone",formValue.corp_group_branch_phone)
+        formdata.append("logo", formValue.logo);
+        const response = await API.post("/addCorAdmin", formdata, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -101,7 +115,6 @@ export const showCorporate = createAsyncThunk(
     try {
       const response = await API.get(`corporateList`);
       if(response.data.success === true){
-        console.log(response);
         return response.data.data;
       }
     } catch (err) {
@@ -206,7 +219,23 @@ export const updateCorporate = createAsyncThunk(
   "updateCorAdmin",
   async ({ formValue, navigate }, { rejectWithValue }) => {
     try {
-      const response = await API.post("/updateCorAdmin", formValue);
+      var formdata = new FormData();
+      formdata.append("id", formValue.id);
+      formdata.append("corporate_name", formValue.corporate_name);
+      formdata.append("address",formValue.address);
+      formdata.append("user_name", formValue.user_name);
+      formdata.append("phone", formValue.phone);
+      formdata.append("email", formValue.email);
+      formdata.append("industry_types_id", formValue.industry_types_id);
+      formdata.append("corp/group_mailing_address", formValue.corpgroup_mailing_address);
+      formdata.append("corp/group_branch", formValue.corp_group_branch);
+      formdata.append("corp_group_branch_phone",formValue.corp_group_branch_phone)
+      formdata.append("logo", formValue.logo);
+      const response = await API.post("/updateCorAdmin", formdata, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       if(response.status === 200){
         toast.success(response.data.message);
         navigate("/corporate");

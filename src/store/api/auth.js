@@ -36,7 +36,6 @@ export const otpVerify = createAsyncThunk(
       toast.error("Your account does not exist. Please register to report a crime.");
 
     } catch (err) {
-      console.log(err)
       throw Error(err.message);
     }
   }
@@ -47,17 +46,14 @@ export const register = createAsyncThunk(
   async ({ formValue, navigate,dispatchError }, { rejectWithValue }) => {
     try {
       const response = await API.post("/auth/register", formValue);
-      console.log(response.data.success,response.status)
       if(response.status === 200){
         if(response.data.success===false){
           toast.error("Something went wrong");
           const data=response.data.data;
           const errors={};
-          console.log(data)
           data&&["name","email","phone"].forEach((key)=>{
             errors[key]=data[key]?(data[key][0]?data[key][0]:''):'';
           })
-          console.log(errors)
           dispatchError({type:"SETTER",payload:errors});
           throw Error("Response failed due to validation error!")
         }

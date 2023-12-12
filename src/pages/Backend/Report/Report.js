@@ -62,7 +62,7 @@ export default function Report() {
   const map = useRef(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [hidden, setHidden] = React.useState(true);
+  const [hidden, setHidden] = React.useState(false);
   const { reports: reportedData = {}, error,loading } = useSelector(state => state.report);
   const [openDialog, setOpenDialog] = React.useState({
     status: false,
@@ -101,17 +101,19 @@ export default function Report() {
   }
   const handlePageChange = (event, onPage) => {
     let param = setSearchQueryParams(searchParams, onPage)
-    navigate(`/?${param}`)
+    navigate(`/reports?${param}`)
   }
 
   const handleChangeRowsPerPage = (event) => {
     let param = setSearchQueryParams(searchParams, 0, event.target.value)
-    navigate(`/?${param}`)
+    navigate(`/reports?${param}`)
   }
   useEffect(() => {
-    if (!crimeIndex.viewCrime) {
-      dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
-    }
+    // if (!crimeIndex.viewCrime) {
+    //   dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
+    // }else{
+      dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()),paginate:1 }));
+    // }
   }, [])
   // useEffect(() => {
   //   dispatch(clearReport());
@@ -125,7 +127,8 @@ export default function Report() {
       }
   }, [hidden])
   useEffect(() => {
-    if (!crimeIndex.viewCrime) {
+    if (crimeIndex.viewCrime) {
+
       (async () => {
         const { latitude, longitude } = await getLocationCoords();
         dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
@@ -184,11 +187,18 @@ export default function Report() {
         })
         setTimeout(() => {
           setHidden(s => !s)
-        }, [2000]);
+        }, [3000]);
       }else{
         setHidden(s => !s)
       }
       
+  }
+  const deleteOptionAction = (event) => {
+    setOpenDialog((prevState) => ({
+      ...prevState,
+      status: event.status,
+      id: event.id
+    }));
   }
   return (
     <Fragment>
@@ -222,15 +232,17 @@ export default function Report() {
                           <TableContainer component={Paper} sx={{ pr: 7 }}>
                               <Table aria-label="simple table" >
                                   <TableHead>
-                                      <TableRow>
-                                          <TableCell>Date/Time</TableCell>
-                                          <TableCell>Location</TableCell>
-                                          <TableCell align="left">Crime Type</TableCell>
-                                          {parseInt(reportedData?.user?.role_id) == 1 && <TableCell align="left">Mob. #</TableCell>}
-                                          <TableCell align="left">Username</TableCell>
-                                          <TableCell align="left">Corp./Group</TableCell>
-                                          <TableCell align="right">Action</TableCell>
-                                      </TableRow>
+                                  <TableRow>
+                                    <TableCell>Public Report Approval</TableCell>
+                                    <TableCell>Date/Time</TableCell>
+                                    <TableCell>Location</TableCell>
+                                    <TableCell align="left">Crime Type</TableCell>
+                                    <TableCell align="left">Mob. #</TableCell>
+                                    <TableCell align="left">Username</TableCell>
+                                    <TableCell align="left">Corp./Group</TableCell>
+                                    <TableCell align="right">Action</TableCell>
+                                    <TableCell align="right">Show/Hide</TableCell>
+                                  </TableRow>
                                   </TableHead>
                                   <TableBody>
                                       {nearbyData && (nearbyData.data || []).map((report, index) => {
@@ -240,36 +252,38 @@ export default function Report() {
                                           const formattedLatitude = latitude.toFixed(4);
                                           const formattedLongitude = longitude.toFixed(4);
                                           return (
-                                          <TableRow key={report.id}>
-                                              <TableCell align="left">{fDateTime(report.date_time)}</TableCell>
-                                              <TableCell component="th" scope="row">{report.location}<br></br>{formattedLatitude} S,<br></br>{formattedLongitude} E</TableCell>
-                                              <TableCell align="left">
-                                              {report.robbery != 0 ? (<>Robbery,<br /></>) : null}
-                                              {report.murders != 0 ? (<>Murders,<br /></>) : null}
-                                              {report.burglary !=0 ? (<>Burglary,<br /></>) : null}
-                                              {report.kidnapping != 0 ? (<>Kidnapping,<br /></>) : null}
-                                              {report.rape != 0 ? (<>Rape,<br /></>) : null}
-                                              {report.weapons != 0 ? (<>Weapons,<br /></>) : null}
-                                              </TableCell>
-                                              {parseInt(reportedData?.user?.role_id) == 1 && <TableCell align="left">{report.user.phone}</TableCell>}
-                                              <TableCell align="left">{report.user.username}</TableCell>
-                                              <TableCell align="left"><div>{report.user.corporate ? report.user.corporate.name : '' }{report.user.corporate ? report.user.corporate.is_verify==1 ? <CheckBoxIcon style={{ color: "#29C250",position: "absolute" }} /> : '' : ''}</div></TableCell> 
-                                              <TableCell align="right">
-                                                  <ActionOptions
-                                                      index={index}
-                                                      delete_id={report.id}
-                                                      show_url={'/report?target=single&id=' + report.id}
-                                                      add_note={'/add_not/' + report.id}
-                                                      deleteAction={(event) => {
-                                                          setOpenDialog((prevState) => ({
-                                                              ...prevState,
-                                                              status: event.status,
-                                                              id: event.id
-                                                          }));
-                                                      }}
-                                                  />
-                                              </TableCell>
-                                          </TableRow>)
+                                          // <TableRow key={report.id}>
+                                          //     <TableCell align="left">{fDateTime(report.date_time)}</TableCell>
+                                          //     <TableCell component="th" scope="row">{report.location}<br></br>{formattedLatitude} S,<br></br>{formattedLongitude} E</TableCell>
+                                          //     <TableCell align="left">
+                                          //     {report.robbery != 0 ? (<>Robbery,<br /></>) : null}
+                                          //     {report.murders != 0 ? (<>Murders,<br /></>) : null}
+                                          //     {report.burglary !=0 ? (<>Burglary,<br /></>) : null}
+                                          //     {report.kidnapping != 0 ? (<>Kidnapping,<br /></>) : null}
+                                          //     {report.rape != 0 ? (<>Rape,<br /></>) : null}
+                                          //     {report.weapons != 0 ? (<>Weapons,<br /></>) : null}
+                                          //     </TableCell>
+                                          //     {parseInt(reportedData?.user?.role_id) == 1 && <TableCell align="left">{report.user.phone}</TableCell>}
+                                          //     <TableCell align="left">{report.user.username}</TableCell>
+                                          //     <TableCell align="left"><div>{report.user.corporate ? report.user.corporate.name : '' }{report.user.corporate ? report.user.corporate.is_verify==1 ? <CheckBoxIcon style={{ color: "#29C250",position: "absolute" }} /> : '' : ''}</div></TableCell> 
+                                          //     <TableCell align="right">
+                                          //         <ActionOptions
+                                          //             index={index}
+                                          //             delete_id={report.id}
+                                          //             show_url={'/report?target=single&id=' + report.id}
+                                          //             add_note={'/add_not/' + report.id}
+                                          //             deleteAction={(event) => {
+                                          //                 setOpenDialog((prevState) => ({
+                                          //                     ...prevState,
+                                          //                     status: event.status,
+                                          //                     id: event.id
+                                          //                 }));
+                                          //             }}
+                                          //         />
+                                          //     </TableCell>
+                                          // </TableRow>
+                                            <SingleReport key={index} index={index} handler={deleteOptionAction} report={report} formattedLatitude={formattedLatitude} formattedLongitude={formattedLongitude} />
+                                          )
 
                                       })}
                                   </TableBody>
@@ -297,7 +311,7 @@ export default function Report() {
               <GoogleMap center={position} zoom={zoom}
               mapContainerStyle={{ width: "100%", height: "100%" }}
               options={{
-                mapTypeId: (zoom < SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
+                mapTypeId: (zoom > SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
                 gestureHandling: "greedy",
                 mapTypeControlOptions: {
                   position: isMdBreakpoint ? window.google.maps.ControlPosition.LEFT_TOP : window.google.maps.ControlPosition.LEFT_BOTTOM

@@ -27,7 +27,6 @@ export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes"
         to_date:toDate&&format(toDate,"yyyy-MM-dd"),from_date:fromDate&&
       format(fromDate,"yyyy-MM-dd")})
       for (const pair of formData.entries()) {
-        // console.log(pair[0] + ', ' + pair[1]);
       }
       var res = await API({"url":"/report/area",method:"POST",data:formData});
     } catch (error) {

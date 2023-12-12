@@ -52,7 +52,6 @@ const EditAddress = () => {
     const [latitude,setLatitude] = useState('')
     const [longitude,setLongitude] = useState('')
     // const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
-    //     console.log(latitude,longitude,address)
     //     setValue({
     //         latitude : latitude,
     //         longitude : longitude,

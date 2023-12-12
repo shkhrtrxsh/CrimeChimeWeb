@@ -221,7 +221,6 @@ export const getReportByArea = createAsyncThunk(
     try {
       const response = await API.get(`/report/area?${query}`);
       if(response.data.status === 200){
-        console.log(response.data.data)
         return response.data.data;
       }
     } catch (err) {
@@ -241,7 +240,6 @@ export const getMyReport = createAsyncThunk(
             throw Error(response.data.message);
           }
         } catch (error) {
-          console.log(error.message)
           return rejectWithValue(error.message);
         }
         return response.data.data;

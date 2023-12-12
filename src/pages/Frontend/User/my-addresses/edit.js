@@ -52,7 +52,6 @@ const EditAddress = () => {
     const [latitude,setLatitude] = useState('')
     const [longitude,setLongitude] = useState('')
     // const googleAutoComplete = (latitude, longitude, place_id, address, viewport) => {
-    //     console.log(latitude,longitude,address)
     //     setValue({
     //         latitude : latitude,
     //         longitude : longitude,
@@ -98,7 +97,6 @@ const EditAddress = () => {
     };
 
     const markerDragEnd = async(e) => {
-        console.log(e)
         if (e !== null) {
           //check if within S.Africa
           const [lat,lng] = [e.latLng.lat(), e.latLng.lng()];

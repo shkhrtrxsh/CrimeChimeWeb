@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Box, Drawer, useMediaQuery, useTheme,Typography } from '@mui/material';
 import { getLocationCoords, isWithinSAfrica } from 'src/utils/googleMap';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCrimeIndex, setPage, setZoom, } from 'src/store/reducers/registerReport';
+import { setCrimeIndex, setEdit, setPage, setZoom, } from 'src/store/reducers/registerReport';
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import { SatelliteZoom } from 'src/constants/googleMap';
 import Image from '../../../assets/images/duplicate.png';
@@ -47,6 +47,7 @@ import {
   Paper,
   Card,
 } from '@mui/material';
+import ActionOptionsTwo from 'src/components/ActionOptionsTwo';
 const BoxButtonStyle = styled(Box)(({ theme }) => ({
   position: 'absolute',
   right: '15px',
@@ -142,7 +143,7 @@ const ViewCrime = () => {
         setPage(latitude, longitude);
       })()
     }
-  }, [])
+  }, [setEdit])
   const callDeleteFunc = (status, id) => {
     if (status === true) {
         dispatch(deleteReport({ id }))
@@ -238,11 +239,13 @@ const ViewCrime = () => {
                                             <TableCell align="left">{report.user.username}</TableCell>
                                             <TableCell align="left"><div>{report.user.corporate ? report.user.corporate.name : '' }{report.user.corporate ? report.user.corporate.is_verify==1 ? <CheckBoxIcon style={{ color: "#29C250",position: "absolute" }} /> : '' : ''}</div></TableCell> 
                                             <TableCell align="right">
-                                                <ActionOptions
+                                                <ActionOptionsTwo
                                                     index={index}
+                                                    report={report}
                                                     delete_id={report.id}
-                                                    show_url={'/report?target=single&id=' + report.id}
-                                                    add_note={'/add_not/' + report.id}
+                                                    // edit_url={'/add_not/' + report.id}
+                                                    show_url={onMarkerClick}
+                                                    // add_note={'/add_not/' + report.id}
                                                     deleteAction={(event) => {
                                                         setOpenDialog((prevState) => ({
                                                             ...prevState,
@@ -250,6 +253,9 @@ const ViewCrime = () => {
                                                             id: event.id
                                                         }));
                                                     }}
+                                                    // showAction={()=>{
+                                                    //   dispatch(setCrimeIndex({ index, viewCrime: true }));
+                                                    // }}
                                                 />
                                             </TableCell>
                                         </TableRow>)
@@ -280,7 +286,7 @@ const ViewCrime = () => {
             <GoogleMap center={position} zoom={zoom}
               mapContainerStyle={{ width: "100%", height: "100%" }}
               options={{
-                mapTypeId: (zoom < SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
+                mapTypeId: (zoom > SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
                 gestureHandling: "greedy",
                 mapTypeControlOptions: {
                   position: isMdBreakpoint ? window.google.maps.ControlPosition.LEFT_TOP : window.google.maps.ControlPosition.LEFT_BOTTOM
@@ -289,7 +295,7 @@ const ViewCrime = () => {
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
                 <Marker id="mark" zIndex={100} draggable={true} position={position} onDragEnd={markerDragEnd} />
-                {nearbyData && nearbyData.map(({ latitude = null, longitude = null, user_count,user }, ind) => {
+                {nearbyData && nearbyData?.map(({ latitude = null, longitude = null, user_count,user }, ind) => {
                   const position = {
                     lat: Number(latitude),
                     lng: Number(longitude)
