@@ -34,12 +34,13 @@ const Page14 = () => {
                 </Typography>
                 <Box borderBottom={2} borderColor={theme.palette.warning.main} style={{ marginLeft: '5px', width: '20px' }} />
                 </Box>
-                <Typography variant="h2" align="center" style={{ fontWeight: 'bold', paddingBottom: '20px', fontSize: '12px' }}>
-                  Check all boxes that apply.
-                </Typography>
+                
               </Grid>
 
               <Grid item xs={9} sx={{ pl: 5, pt: 0 }}>
+                <Typography id="number-picker-label" style={{ paddingBottom: '16px', textAlign: 'center', fontSize: '16px' }}>
+                  Check all boxes that apply.
+                </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pl: 2, py: 1 }}>
                     <Checkbox checked={checked&&checked.includes(2)} value={2} onChange={handleChange} />

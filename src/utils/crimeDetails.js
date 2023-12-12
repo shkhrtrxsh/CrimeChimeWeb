@@ -197,12 +197,12 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           })() },
           { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
           // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-          { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : -(perpetrators)})`,' , ',roleID==1 ? perpetrators_des :'']:"Preperator(s) detail not available" },
+          { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : -(perpetrators)})`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
           { firstCol: 'Weapons:', secondCol: (()=>{
             switch(weapons){
               case 0:return ``
-              case 1:return `None`
-              default:return (
+              case 2:return ``
+              case 1:return (
                 <div>
                   {WeaponChoices[fully_auto_weapons] != undefined && <div style={{display:"flex"}}>
                     Fully Automatic: {WeaponChoices[fully_auto_weapons]} <img src={AK} style={{height:"35px",width:"35px"}} /> <br />
@@ -235,26 +235,35 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           })() },
           { firstCol: 'Murder:', secondCol:(()=>{
             if(murders==1) {
-              return `Murder (${murders_people})`
+              return (
+                <div>
+                  {`Murder (${murders_people})`}
+                  <br />
+                  {farm_murder === 1 && `It was a farm murder`}<br />
+                  {victim_name != "unknown" && victim_name != 'null' && victim_name != null (
+                    <span>{victim_name.replace(/"/g, '')}</span>
+                  )}
+                </div>
+              );
             }
           } )() },
-          { firstCol: 'Farm Murder:', secondCol:(()=>{
-            if(farm_murder==1) {
-              return `It was a farm murder`
-            }
-          })() },
-          { firstCol: 'Name(s) of victim(s)', secondCol:(()=>{
-            if(victim_name != "unknown" && victim_name != 'null' && victim_name != null ) {
-              const originalString = victim_name;
-              const stringWithoutQuotes = originalString.replace(/"/g, '');
-              return stringWithoutQuotes
-            }
-          })() },
+          // { firstCol: 'Farm Murder:', secondCol:(()=>{
+          //   if(farm_murder==1) {
+          //     return `It was a farm murder`
+          //   }
+          // })() },
+          // { firstCol: 'Name(s) of victim(s)', secondCol:(()=>{
+          //   if(victim_name != "unknown" && victim_name != 'null' && victim_name != null ) {
+          //     const originalString = victim_name;
+          //     const stringWithoutQuotes = originalString.replace(/"/g, '');
+          //     return stringWithoutQuotes
+          //   }
+          // })() },
           { firstCol: 'Assault:', secondCol:(()=>{
-            switch(assault){
-              case 0:return ``
-              case 1:return `Murder(${assault_people} involved)`
-              default:return null;//`No`
+            if(assault==1){
+              return `Murder (${assault_people} involved)`
+            }else{
+              return null;
             }
           })() },
           { firstCol: 'Vehicle related:', secondCol:(()=>{
@@ -283,6 +292,12 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             }
             if(burglary==2){
               return `Burglary (${burglary_type})`;
+            }
+            if(burglary==3){
+              return `Attempted Shoplifting`
+            }
+            if(burglary==4){
+              return `Shoplifting`;
             }
           })() },
           { firstCol: 'Robbery:', secondCol:(()=>{
@@ -321,17 +336,17 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
               return `Bribe request by politician`;
             }
           })() },
-          { firstCol: 'Shoplifting:', secondCol:(()=>{
-            if(shoplifting==0){
-              return null;
-            }
-            if(shoplifting==1){
-              return `Attempted Shoplifting`
-            }
-            if(shoplifting==2){
-              return `Shoplifting`;
-            }
-          })() },
+          // { firstCol: 'Shoplifting:', secondCol:(()=>{
+          //   if(shoplifting==0){
+          //     return null;
+          //   }
+          //   if(shoplifting==1){
+          //     return `Attempted Shoplifting`
+          //   }
+          //   if(shoplifting==2){
+          //     return `Shoplifting`;
+          //   }
+          // })() },
           // { firstCol: 'Reason for crime:', secondCol: (various)?capitalize(various_choices[various]):"" },
           { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? resultString : null },
           { firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes":"No") },
@@ -391,7 +406,8 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         })() },
         { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
         // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-        { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : -(perpetrators)})`,' , ',perpetrators_des]:"Preperator(s) detail not available" },
+        { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : -(perpetrators)})`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
+        
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
             case '0':return ``
@@ -429,26 +445,37 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         })() },
         { firstCol: 'Murder:', secondCol:(()=>{
           if(murders==1) {
-            return `Murder (${murders_people})`
+            return (
+              <div>
+                {`Murder (${murders_people})`}
+                <br />
+                {farm_murder === 1 && `It was a farm murder`}<br />
+                {victim_name != "unknown" && victim_name != 'null' && victim_name != null && 
+                (
+                  <span>{victim_name.replace(/"/g, '')}</span>
+                )
+                }
+              </div>
+            );
           }
         } )() },
-        { firstCol: 'Farm Murder:', secondCol:(()=>{
-          if(farm_murder==1) {
-            return `It was a farm murder`
-          }
-        })() },
-        { firstCol: 'Name(s) of victim(s)', secondCol:(()=>{
-          if(victim_name != "unknown" && victim_name != 'null' && victim_name != null ) {
-            const originalString = victim_name;
-            const stringWithoutQuotes = originalString.replace(/"/g, '');
-            return stringWithoutQuotes
-          }
-        })() },
+        // { firstCol: 'Farm Murder:', secondCol:(()=>{
+        //   if(farm_murder==1) {
+        //     return `It was a farm murder`
+        //   }
+        // })() },
+        // { firstCol: 'Name(s) of victim(s)', secondCol:(()=>{
+        //   if(victim_name != "unknown" && victim_name != 'null' && victim_name != null ) {
+        //     const originalString = victim_name;
+        //     const stringWithoutQuotes = originalString.replace(/"/g, '');
+        //     return stringWithoutQuotes
+        //   }
+        // })() },
         { firstCol: 'Assault:', secondCol:(()=>{
-          switch(assault){
-            case 0:return ``
-            case 1:return `Murder(${assault_people} involved)`
-            default:return null;//`No`
+          if(assault==1){
+            return `Murder (${assault_people} involved)`
+          }else{
+            return null;
           }
         })() },
         { firstCol: 'Vehicle related:', secondCol:(()=>{
@@ -456,18 +483,18 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             return null;//capitalize(vehicle_theft_choices[vehicle_theft])
           }else{
             return( <div>
-              {capitalize(`${vehicle_theft_choices[vehicle_theft]}`)},<br></br>
-              {(vehicle_year||vehicle_colour||vehicle_make||vehicle_model)?capitalize(`${[vehicle_year,vehicle_colour,vehicle_make,vehicle_model].filter((el)=>el).join(" ")} Vehicle`):"Vehicle Description Unavailable"}
+              {capitalize(`${vehicle_theft_choices[vehicle_theft]}`)}<br></br>
+              {(vehicle_year||vehicle_colour||vehicle_make||vehicle_model)?capitalize(`Vehicle Type(${[vehicle_year,vehicle_colour,vehicle_make,vehicle_model].filter((el)=>el).join(" ")})`):"Vehicle Description Unavailable"}
             </div>);
           }
         })() },
-        { firstCol: 'Vehicle Type:', secondCol:(()=>{
-          if(vehicle_theft==4){
-            return null;//capitalize(vehicle_theft_choices[vehicle_theft])
-          }else{
-            return (vehicle_year||vehicle_colour||vehicle_make||vehicle_model)?capitalize(`${[vehicle_year,vehicle_colour,vehicle_make,vehicle_model].filter((el)=>el).join(" ")} Vehicle`):"Vehicle Description Unavailable"
-          }
-        })() },
+        // { firstCol: 'Vehicle Type:', secondCol:(()=>{
+        //   if(vehicle_theft==4){
+        //     return null;//capitalize(vehicle_theft_choices[vehicle_theft])
+        //   }else{
+        //     return (vehicle_year||vehicle_colour||vehicle_make||vehicle_model)?capitalize(`${[vehicle_year,vehicle_colour,vehicle_make,vehicle_model].filter((el)=>el).join(" ")} Vehicle`):"Vehicle Description Unavailable"
+        //   }
+        // })() },
         { firstCol: 'Burglary/Shoplifting:', secondCol:(()=>{
           if(burglary==0){
             return null;
@@ -477,6 +504,12 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           }
           if(burglary==2){
             return `Burglary (${burglary_type})`;
+          }
+          if(burglary==3){
+            return `Attempted Shoplifting`
+          }
+          if(burglary==4){
+            return `Shoplifting`;
           }
         })() },
         { firstCol: 'Robbery:', secondCol:(()=>{
@@ -515,17 +548,17 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             return `Bribe request by politician`;
           }
         })() },
-        { firstCol: 'Shoplifting:', secondCol:(()=>{
-          if(shoplifting==0){
-            return null;
-          }
-          if(shoplifting==1){
-            return `Attempted Shoplifting`
-          }
-          if(shoplifting==2){
-            return `Shoplifting`;
-          }
-        })() },
+        // { firstCol: 'Shoplifting:', secondCol:(()=>{
+        //   if(shoplifting==0){
+        //     return null;
+        //   }
+        //   if(shoplifting==1){
+        //     return `Attempted Shoplifting`
+        //   }
+        //   if(shoplifting==2){
+        //     return `Shoplifting`;
+        //   }
+        // })() },
         // { firstCol: 'Reason for crime:', secondCol: (various)?capitalize(various_choices[various]):"" },
         { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? resultString : null },
         { firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes":"No") },

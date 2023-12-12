@@ -186,7 +186,6 @@ const ViewCrime = () => {
       });
     }
   };
-  console.log(nearbyData)
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
       <NoDataDialog/>

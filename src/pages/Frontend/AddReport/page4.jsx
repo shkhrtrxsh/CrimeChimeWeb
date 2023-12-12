@@ -113,7 +113,7 @@ function Page4() {
                 {fields.map((f, ind) => {
                   return (
                     <li style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3', width: "100%" }} key={ind}>
-                      <Select sx={{ width: "80px", marginBottom: "5px" }} name={f.name} value={data[f.name] || 3} onChange={handleCount} >
+                      <Select sx={{ width: "80px", marginBottom: "5px" }} name={f.name} value={data[f.name] || 1} onChange={handleCount} >
                         {WeaponChoices.map((_, ind) => {
                           return (
                             <MenuItem value={ind + 1} key={ind}>{WeaponChoices[ind]}</MenuItem>
