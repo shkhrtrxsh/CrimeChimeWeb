@@ -40,11 +40,12 @@ export default function NotificationsModal() {
   return (
     <div style={modal} >
         {data.length == 0 && <h5 style={{color:"black",fontWeight:"400",padding:"0 16px 6px"}} >
-            1. Select  "Crime tracker" profile section <br/>
-            2. Add up to three locations<br/>
+            No new notifications... <br/>
+            1. Select  "Crime tracker" profile section. <br/>
+            2. Add up to three locations.<br/>
 
-            Receive a notification whenever a crime is reported within 500 meters (0.5 Km ) of your selected locations<br/>
-            You can change selected location at any time
+            Receive a notification whenever a crime is reported within 500 meters (0.5 Km ) of your selected locations.<br/>
+            You can change selected location at any time.
         </h5>}
         {data.length > 0 && data.map((item,index)=><h5 key={index} id={item.id} onClick={handler} style={{color:"black",fontWeight:"400",borderBottom:"1px solid #e6e6e6",padding:"0 16px 6px"}} >
             <p>

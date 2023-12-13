@@ -14,8 +14,7 @@ import {
 } from '@mui/material';
 
 const { capitalize } = require("./string");
-const various_choices = ["Does not apply","Crime occured at ATM" ,"i believe crime to be drug-related","i believe crime to be gang-related" ,"Arson was involed"," Vandalism was involed" ,"social an unrest","Bombs were involved"]
-
+const various_choices = ["I believe this crime to be drug-related","Crime occurred at ATM" ,"Does not apply","I believe this crime to be gang-related" ,"Arson was involved","Vandalism was involved" ,"social an unrest","Bombs were involved"]
 
 export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData,reportType)=>{
     const [data,setData] = useState('')
@@ -63,10 +62,11 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     const temp = values[index];
     const cleanedString = various.replace(/[\[\]"]/g, '');
     const cleanedArray = cleanedString.split(',').map(Number);
+    console.log(cleanedArray);
     // Check if variousnew is an array before using map
     // if (Array.isArray(cleanedArray)) {
       const mappedChoices = cleanedArray.map(index => various_choices[index]);
-      const resultString = mappedChoices.join(', ');
+      const resultString = mappedChoices.join('<br />');
     // } else {
     //   console.error('variousnew is not an array:', cleanedArray);
     // }
@@ -197,7 +197,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           })() },
           { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
           // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-          { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : -(perpetrators)})`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
+          { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : "unknown"})`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
           { firstCol: 'Weapons:', secondCol: (()=>{
             switch(weapons){
               case 0:return ``
@@ -348,9 +348,9 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           //   }
           // })() },
           // { firstCol: 'Reason for crime:', secondCol: (various)?capitalize(various_choices[various]):"" },
-          { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? resultString : null },
-          { firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes":"No") },
-          { firstCol: 'Formally reported to the police:', secondCol: (reported_to_the_police==1?"Yes":"No") },
+          { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? <div dangerouslySetInnerHTML={{ __html: resultString }} />  : null },
+          { firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes": police_reporting == 0 ? "unknown" : "No") },
+          { firstCol: 'Formally reported to the police:', secondCol: (reported_to_the_police==1?"Yes": police_reporting == 0 ? "unknown" : "No") },
           { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
           { firstCol: 'Media:', secondCol: mediaData },
       ];
@@ -406,7 +406,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         })() },
         { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
         // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-        { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : -(perpetrators)})`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
+        { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : "unknown" })`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
         
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
@@ -560,7 +560,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
         //   }
         // })() },
         // { firstCol: 'Reason for crime:', secondCol: (various)?capitalize(various_choices[various]):"" },
-        { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? resultString : null },
+        { firstCol: 'Reason for crime:', secondCol: cleanedArray.length > 0 ? <div dangerouslySetInnerHTML={{ __html: resultString }} /> : null },
         { firstCol: 'Police Visited Crime Scene:', secondCol: (police_reporting==1?"Yes":"No") },
         { firstCol: 'Formally reported to the police:', secondCol: (reported_to_the_police==1?"Yes":"No") },
         { firstCol: 'Police Case Number:', secondCol: police_case_num?police_case_num:null },
