@@ -221,8 +221,8 @@ const ViewCrime = () => {
                                         
                                         const latitude = Number(report.latitude);
                                         const longitude = Number(report.longitude);
-                                        const formattedLatitude = latitude.toFixed(4);
-                                        const formattedLongitude = longitude.toFixed(4);
+                                        const formattedLatitude = latitude.toFixed(5);
+                                        const formattedLongitude = longitude.toFixed(5);
                                         return (
                                         <TableRow key={report.id}>
                                             <TableCell align="left">{fDateTime(report.date_time)}</TableCell>

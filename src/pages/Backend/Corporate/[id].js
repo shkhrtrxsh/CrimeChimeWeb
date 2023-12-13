@@ -117,10 +117,10 @@ export default function EditCorporate() {
         formdata.append("industry_types_id", formValue.industry_types_id);
       }
       if(data.corpgroup_mailing_address != formValue.corpgroup_mailing_address){
-        formdata.append("corp/group_mailing_address", formValue.corpgroup_mailing_address);
+        formdata.append("corp_group_mailing_address", formValue.corpgroup_mailing_address);
       }
       if(data.corp_group_branch != formValue.corp_group_branch){
-        formdata.append("corp/group_branch", formValue.corp_group_branch);
+        formdata.append("corp_group_branch", formValue.corp_group_branch);
       }
       if(data.corp_group_branch_phone != formValue.corp_group_branch_phone){
         formdata.append("corp_group_branch_phone",formValue.corp_group_branch_phone)

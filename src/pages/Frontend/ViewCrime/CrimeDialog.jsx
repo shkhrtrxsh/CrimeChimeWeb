@@ -29,8 +29,7 @@ import { CrimeDetails } from 'src/utils/crimeDetails';
 import API from 'src/config/api';
 import { setDate } from 'date-fns';
 const vehicle_theft_choices = ["hijacking", "attempted hijacking", "vehicle theft", "attempted vehicle theft", "does not apply"];
-// const various_choices = ["Crime occured at ATM", "drug-related crime", "gang-related crime", "Arson was involed", "Vandalism was involed", "social unrest"]
-const various_choices = ["Does not apply","Crime occurred at ATM" ,"I believe this crime to be drug-related","I believe this crime to be gang-related" ,"Arson was involved","Vandalism was involved" ,"social an unrest","Bombs were involved"]
+const various_choices = ["I believe this crime to be drug-related","Crime occurred at ATM","Does not apply","I believe this crime to be gang-related" ,"Arson was involved","Vandalism was involved" ,"Social an unrest","Bombs were involved"]
 
 export const SuccessDialog = ({open,handleClose})=>{
   return(

@@ -60,8 +60,8 @@ const MyAddresses = () => {
                     <UserSideName />
                     <Grid item md={9} xs={12}>
                         <BreadcrumbNavigator
-                            currentPage="Addresses List" 
-                            rightButton={{name: "add address", link: "/my-addresses/add"}} 
+                            currentPage="My Crime Tracker Locations" 
+                            rightButton={{name: "add Location", link: "/my-addresses/add"}} 
                         />
                         <TableContainer>
                             <Table aria-label="simple table">

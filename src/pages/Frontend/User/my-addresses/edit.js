@@ -200,7 +200,7 @@ const EditAddress = () => {
                                         Save
                                     </SaveButton>
                                 </Grid>
-                                <Typography variant="h5" sx={{px:5,pt:3,fontWeight:"500"}}>Add a tag for your replace</Typography>
+                                {/* <Typography variant="h5" sx={{px:5,pt:3,fontWeight:"500"}}>Add a tag for your replace</Typography> */}
                                 <Grid item md={12} sx={{display:"flex",justifyContent:"center",gap:"20px"}}>
                                     <Button value="Home" onClick={typeHandler} variant={type !== "Home" ? "contained":"outlined"}>Home</Button>
                                     <Button value="Office" onClick={typeHandler}  variant={type !== "Office" ? "contained":"outlined"}>Office</Button>

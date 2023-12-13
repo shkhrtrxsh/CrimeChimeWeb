@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 const { capitalize } = require("./string");
-const various_choices = ["I believe this crime to be drug-related","Crime occurred at ATM" ,"Does not apply","I believe this crime to be gang-related" ,"Arson was involved","Vandalism was involved" ,"social an unrest","Bombs were involved"]
+const various_choices = ["I believe this crime to be drug-related","Crime occurred at ATM","Does not apply","I believe this crime to be gang-related" ,"Arson was involved","Vandalism was involved" ,"Social an unrest","Bombs were involved"]
 
 export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,mediaData,reportType)=>{
     const [data,setData] = useState('')
@@ -62,7 +62,6 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     const temp = values[index];
     const cleanedString = various.replace(/[\[\]"]/g, '');
     const cleanedArray = cleanedString.split(',').map(Number);
-    console.log(cleanedArray);
     // Check if variousnew is an array before using map
     // if (Array.isArray(cleanedArray)) {
       const mappedChoices = cleanedArray.map(index => various_choices[index]);
@@ -187,17 +186,20 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             ),
           },
           
-          { firstCol: 'Address:', secondCol: (()=>{ return (
-            <div>
-              <p>{location}</p><br></br>
-              <p>{latitude}</p>
-              <p>{longitude}</p>
-            </div>
-          ); 
+          { firstCol: 'Address:', secondCol: (()=>{ 
+            const formattedLatitude = parseFloat(latitude).toFixed(5);
+            const formattedLongitude = parseFloat(longitude).toFixed(5);  
+            return (
+              <div>
+                <p>{location}</p><br></br>
+                <p>{formattedLatitude}</p>
+                <p>{formattedLongitude}</p>
+              </div>
+            ); 
           })() },
           { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
           // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-          { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : "unknown"})`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
+          { firstCol: 'Perpetrators:', secondCol: perpetrators?[`${parseInt(perpetrators) >= 0 ? (perpetrators) : "Preperator(s) detail not available"}`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
           { firstCol: 'Weapons:', secondCol: (()=>{
             switch(weapons){
               case 0:return ``
@@ -241,7 +243,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
                   <br />
                   {farm_murder === 1 && `It was a farm murder`}<br />
                   {victim_name != "unknown" && victim_name != 'null' && victim_name != null (
-                    <span>{victim_name.replace(/"/g, '')}</span>
+                    <span>{'Name(s) of victim(s)'}{victim_name.replace(/"/g, '')}</span>
                   )}
                 </div>
               );
@@ -396,17 +398,20 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
           ),
         },
         
-        { firstCol: 'Address:', secondCol: (()=>{ return (
-          <div>
-            <p>{location}</p><br></br>
-            <p>{latitude}</p>
-            <p>{longitude}</p>
-          </div>
-        ); 
+        { firstCol: 'Address:', secondCol: (()=>{ 
+          const formattedLatitude = parseFloat(latitude).toFixed(5);
+          const formattedLongitude = parseFloat(longitude).toFixed(5);  
+          return (
+            <div>
+              <p>{location}</p><br></br>
+              <p>{formattedLatitude}</p>
+              <p>{formattedLongitude}</p>
+            </div>
+          ); 
         })() },
         { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
         // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
-        { firstCol: 'Perpetrators:', secondCol: perpetrators?[`(${parseInt(perpetrators) >= 0 ? (perpetrators) : "unknown" })`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
+        { firstCol: 'Perpetrators:', secondCol: perpetrators?[`${parseInt(perpetrators) >= 0 ? (perpetrators) : "Preperator(s) detail not available" }`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
         
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
@@ -452,7 +457,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
                 {farm_murder === 1 && `It was a farm murder`}<br />
                 {victim_name != "unknown" && victim_name != 'null' && victim_name != null && 
                 (
-                  <span>{victim_name.replace(/"/g, '')}</span>
+                  <span>{'Name(s) of victim(s)'}<br />{victim_name.replace(/"/g, '')}</span>
                 )
                 }
               </div>

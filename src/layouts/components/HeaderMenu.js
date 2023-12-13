@@ -131,7 +131,7 @@ export default function HeaderMenu(props) {
                                 to="/dashboard"
                                 activeclassname="active"
                             >
-                                Dashboard
+                                Admin Dashboard
                             </LinkButton>
                             : ''
                         }
