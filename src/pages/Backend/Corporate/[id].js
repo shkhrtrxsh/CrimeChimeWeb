@@ -179,7 +179,7 @@ export default function EditCorporate() {
         const urlParts = item.logo.split('/');
         const imageName = urlParts[urlParts.length - 1];
         setLogoFile(item.logo)
-        setIndustryType(item.industry?.name)
+        setIndustryType(item.industry?.id)
         // dispatch(getRoles({}))
         // const value = [];
         // user.roles.forEach(element => {          

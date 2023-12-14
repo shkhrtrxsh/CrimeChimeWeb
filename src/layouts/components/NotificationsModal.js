@@ -55,7 +55,7 @@ export default function NotificationsModal(props) {
                 You can change your selected locations at any time
                 <br/><br/>
             </h5>
-            <Button size="small" style={{marginLeft:"20%"}} onClick={buttonHandler}>+ Add a new location</Button>
+            <Button size="small" style={{marginLeft:"20%"}} onClick={buttonHandler}>+ add a new location</Button>
         </div>}
         {data.length > 0 && data.map((item,index)=><h5 key={index} id={item.id} onClick={handler} style={{color:"black",fontWeight:"400",borderBottom:"1px solid #e6e6e6",padding:"10px 16px "}} >
             <p>

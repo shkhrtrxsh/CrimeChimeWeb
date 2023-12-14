@@ -85,7 +85,7 @@ export default function Dashboard() {
         
         <Box sx={{ my: 5, pl: 2 ,border:"1px solid black",py:5 }}>
         <Typography variant="h6" sx={{ fontWeight: 'normal', px: 2, textAlign: 'left' }}>
-          Public User Ability to Report Crimes
+        Display Public User Crime Reports
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', my: 2, pl: 2 }}>
           <Checkbox checked={checked == 1 ? true:false} name="Reports" value={1} onChange={checkboxHnadler} />
