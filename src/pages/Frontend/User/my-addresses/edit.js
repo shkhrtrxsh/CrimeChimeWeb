@@ -18,6 +18,7 @@ import API from 'src/config/api';
 import { toast } from 'react-toastify';
 import { isWithinSAfrica } from 'src/utils/googleMap';
 import ReactGoogleAutocomplete from 'react-google-autocomplete';
+import { SatelliteZoom } from "src/constants/googleMap";
 
 import {Typography} from '@mui/material';const containerStyle = {
     width: '100%',
@@ -30,6 +31,28 @@ const EditAddress = () => {
     const navigate = useNavigate();
     const params = useParams();
     // const [formattedAddress, setFormattedAddress] =useState(null)
+    const register = useSelector((state) => state.reportRegister);
+    const {
+        data,
+        zoom,
+        lock,
+        marker,
+        duplicate,
+        nearbyData = [],
+        edit,
+      } = register;
+    const mapOptions = {
+        zoomControlOptions: {
+          position: window.google.maps.ControlPosition.RIGHT_CENTER,
+        },
+        streetViewControlOptions: {
+          position: window.google.maps.ControlPosition.RIGHT_CENTER,
+        },
+        mapTypeId:
+          zoom > SatelliteZoom
+            ? window.google.maps.MapTypeId.TERRAIN
+            : window.google.maps.MapTypeId.SATELLITE,
+    }
     const [value, setValue] = useState({
         latitude : 0,
         longitude : 0,
@@ -211,7 +234,7 @@ const EditAddress = () => {
                                         mapContainerStyle={containerStyle}
                                         center={position}
                                         zoom={10}
-                                        options={mapSettings}
+                                        options={mapOptions}
                                         yesIWantToUseGoogleMapApiInternals
                                     >
                                         <Marker

@@ -12,6 +12,8 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { setCrimeIndex, setEdit, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
+import { getNearbyCrimes } from 'src/store/api/registerReport';
+
 import { css } from '@emotion/css';
 import ClampLines from 'react-clamp-lines';
 import NoData from 'src/assets/svg/no-data.svg';
@@ -62,6 +64,10 @@ const MyReport = () => {
         navigate("/report/add");
     }
     const theme = useTheme();
+    
+  const register = useSelector(state => state.reportRegister);
+  const { data, zoom, nearbyData, crimeIndex } = register;
+  const { longitude, latitude } = data;
     return (
         <Page title="My Reports">
             <Container sx={{
@@ -144,9 +150,15 @@ const MyReport = () => {
                                             </CardContent>
                                             <CardActions sx={{    paddingLeft: '24px'}}>
                                                 <Button onClick={() => {
+                                                    dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
+                                                    dispatch(setCrimeIndex({index,viewCrime:false}))
+                                                    navigate("/")
+                                                    
+                                                }} size="small">Show on map</Button>
+                                                <Button onClick={() => {
                                                     dispatch(setNearbyReports(reports.data));
                                                     dispatch(setCrimeIndex({index,viewCrime:true}))
-                                                    navigate("/reportscrime")
+                                                    navigate("/")
                                                     
                                                 }} size="small">View Report</Button>
                                                 <Button onClick={() => {

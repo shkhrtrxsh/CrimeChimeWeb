@@ -14,7 +14,8 @@ import {
 } from '@mui/material';
 import { setCrimeIndex, setNearbyReports,setPage,setEdit } from 'src/store/reducers/registerReport';
 import { useDispatch, useSelector } from 'react-redux';
-
+import API from 'src/config/api';
+import { getNearbyCrimes } from 'src/store/api/registerReport';
 const LinkToEdit = styled(Link)(({ theme }) => ({
     width: '100%',
     display: 'inherit',
@@ -25,8 +26,9 @@ const LinkToEdit = styled(Link)(({ theme }) => ({
 
 const ActionOptionsTwo = (props) => {
   const ref = useRef(null);
-  const {reports} = useSelector(state=>state.report);
-  const data = reports.data||[];
+  const register = useSelector(state => state.reportRegister);
+  const { data, zoom, nearbyData, crimeIndex } = register;
+  const { longitude, latitude } = data;
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [openDialog, setOpenDialog] = React.useState({
@@ -34,10 +36,17 @@ const ActionOptionsTwo = (props) => {
     id: null 
   });
   const {delete_id, edit_url, show_url, extra_url, add_note,index,report} = props;
-  const admin = reports?.admin ? true : false;
+  const admin = nearbyData?.admin ? true : false;
+  const [permission,setPermission] = useState(0)
+  const getPermissionHandler = async () => {
+    const response = await API.get(`/reportPermission`)
+    setPermission(response.data.data)
+  }
   useEffect(() => {
     props.deleteAction(openDialog)
     setIsOpen(false)
+
+    // getPermissionHandler();
   }, [openDialog])
   const navigate = useNavigate();
   return(
@@ -97,12 +106,12 @@ const ActionOptionsTwo = (props) => {
       {show_url !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }}>
         <Box sx={{display:"flex"}} onClick={()=>{
-          // dispatch(setNearbyReports(data));
-          // dispatch(setCrimeIndex({ index: index, viewCrime: true }));
+          dispatch(getNearbyCrimes(data[index]));
+          dispatch(setCrimeIndex({ index, viewCrime: true }));
           // props.showAction()
-          show_url(index)
+          // show_url(index)
           // dispatch(setCrimeIndex({index,viewCrime:true}))
-          navigate("/")
+          // navigate("/")
         }}>
           <ListItemIcon>
             <Iconify icon="clarity:eye-line" sx={{fontSize : 22}} />
@@ -112,7 +121,7 @@ const ActionOptionsTwo = (props) => {
       </MenuItem>
       : '' }
 
-        {add_note !== undefined ? 
+        {permission == 1 && add_note !== undefined ? 
         <MenuItem sx={{ color: 'text.secondary' }}>
             <LinkToEdit to={add_note}>
             <ListItemIcon>

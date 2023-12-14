@@ -98,36 +98,36 @@ export default function EditCorporate() {
     // dispatch(updateCorporate({ formValue, navigate }));
     var formdata = new FormData();
       formdata.append("id", data.id);
-      if(data.name != formValue.corporate_name){
+      // if(data.name != formValue.corporate_name){
         formdata.append("corporate_name", formValue.corporate_name);
-      }
-      if(data.address != formValue.address){
+      // }
+      // if(data.address != formValue.address){
         formdata.append("address",formValue.address);
-      }
-      if(data.cor_admin.name != formValue.user_name){
+      // }
+      // if(data.cor_admin.name != formValue.user_name){
         formdata.append("user_name", formValue.user_name);
-      }
-      if(data.cor_admin.phone != formValue.phone){
+      // }
+      // if(data.cor_admin.phone != formValue.phone){
         formdata.append("phone", formValue.phone);
-      }
-      if(data.cor_admin.email != formValue.email){
+      // }
+      // if(data.cor_admin.email != formValue.email){
         formdata.append("email", formValue.email);
-      }
-      if(data.industry_types_id != formValue.industry_types_id){
+      // }
+      // if(data.industry_types_id != formValue.industry_types_id){
         formdata.append("industry_types_id", formValue.industry_types_id);
-      }
-      if(data.corpgroup_mailing_address != formValue.corpgroup_mailing_address){
+      // }
+      // if(data.corpgroup_mailing_address != formValue.corpgroup_mailing_address){
         formdata.append("corp_group_mailing_address", formValue.corpgroup_mailing_address);
-      }
-      if(data.corp_group_branch != formValue.corp_group_branch){
+      // }
+      // if(data.corp_group_branch != formValue.corp_group_branch){
         formdata.append("corp_group_branch", formValue.corp_group_branch);
-      }
-      if(data.corp_group_branch_phone != formValue.corp_group_branch_phone){
+      // }
+      // if(data.corp_group_branch_phone != formValue.corp_group_branch_phone){
         formdata.append("corp_group_branch_phone",formValue.corp_group_branch_phone)
-      }
-      if(data.logo != formValue.logo){
+      // }
+      // if(data.logo != formValue.logo){
         formdata.append("logo", formValue.logo);
-      }
+      // }
       const response = await API.post("/updateCorAdmin", formdata, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -178,7 +178,7 @@ export default function EditCorporate() {
 
         const urlParts = item.logo.split('/');
         const imageName = urlParts[urlParts.length - 1];
-        setLogoFile({name:imageName})
+        setLogoFile(item.logo)
         setIndustryType(item.industry?.name)
         // dispatch(getRoles({}))
         // const value = [];

@@ -200,6 +200,12 @@ export default function Report() {
       id: event.id
     }));
   }
+  const refreshHandler = () => {
+    navigate('/reports?page=2')
+    setTimeout(()=>{
+      navigate('/reports')
+    },[200])
+  }
   return (
     <Fragment>
       <BreadcrumbNavigator
@@ -229,7 +235,7 @@ export default function Report() {
                     {/* <SearchInTable /> */}
                     {(nearbyData||!loading)&&(nearbyData?.data&&nearbyData?.data[0]) ?
                       <React.Fragment>
-                          <TableContainer component={Paper} sx={{ pr: 7 }}>
+                          <TableContainer component={Paper}>
                               <Table aria-label="simple table" >
                                   <TableHead>
                                   <TableRow>
@@ -282,7 +288,7 @@ export default function Report() {
                                           //         />
                                           //     </TableCell>
                                           // </TableRow>
-                                            <SingleReport key={index} index={index} handler={deleteOptionAction} report={report} formattedLatitude={formattedLatitude} formattedLongitude={formattedLongitude} />
+                                            <SingleReport key={index} refresh={refreshHandler} index={index} handler={deleteOptionAction} report={report} formattedLatitude={formattedLatitude} formattedLongitude={formattedLongitude} />
                                           )
 
                                       })}
@@ -311,7 +317,7 @@ export default function Report() {
               <GoogleMap center={position} zoom={zoom}
               mapContainerStyle={{ width: "100%", height: "100%" }}
               options={{
-                mapTypeId: (zoom > SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
+                mapTypeId: (zoom < SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
                 gestureHandling: "greedy",
                 mapTypeControlOptions: {
                   position: isMdBreakpoint ? window.google.maps.ControlPosition.LEFT_TOP : window.google.maps.ControlPosition.LEFT_BOTTOM

@@ -187,6 +187,7 @@ const ViewCrime = () => {
       });
     }
   };
+  console.log(crimeIndex)
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
       <NoDataDialog/>
@@ -241,11 +242,10 @@ const ViewCrime = () => {
                                             <TableCell align="right">
                                                 <ActionOptionsTwo
                                                     index={index}
-                                                    report={report}
                                                     delete_id={report.id}
-                                                    // edit_url={'/add_not/' + report.id}
-                                                    show_url={onMarkerClick}
-                                                    // add_note={'/add_not/' + report.id}
+                                                    edit_url={'/add_not/' + report.id}
+                                                    // show_url={'/?target=single&id=' + report.id}
+                                                    add_note={'/add_not/' + report.id}
                                                     deleteAction={(event) => {
                                                         setOpenDialog((prevState) => ({
                                                             ...prevState,
@@ -254,7 +254,18 @@ const ViewCrime = () => {
                                                         }));
                                                     }}
                                                     // showAction={()=>{
-                                                    //   dispatch(setCrimeIndex({ index, viewCrime: true }));
+                                                    //   onMarkerClick(report.id)
+                                                    //   // dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
+                                                    //   // dispatch(setCrimeIndex({ index, viewCrime: true }));
+                                                    //   // dispatch(setCrimeIndex({ index, viewCrime: true }));
+                                                    //   // navigate(`/?report=${report.id}`)
+                                                    //   // dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now())}));
+                                                    //   // toast.info("Fetching details",{
+                                                    //   //   toastId:"skkskks"
+                                                    //   // })
+                                                    //   // setTimeout(() => {
+                                                    //   //   setHidden(s => !s)
+                                                    //   // }, [3000]);
                                                     // }}
                                                 />
                                             </TableCell>
@@ -286,7 +297,7 @@ const ViewCrime = () => {
             <GoogleMap center={position} zoom={zoom}
               mapContainerStyle={{ width: "100%", height: "100%" }}
               options={{
-                mapTypeId: (zoom > SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
+                mapTypeId: (zoom < SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
                 gestureHandling: "greedy",
                 mapTypeControlOptions: {
                   position: isMdBreakpoint ? window.google.maps.ControlPosition.LEFT_TOP : window.google.maps.ControlPosition.LEFT_BOTTOM
@@ -302,13 +313,13 @@ const ViewCrime = () => {
                   };
                   return (
                     <>
-                      {user_count == '1' && user.corporat_id == null &&  <Marker key={ind} position={position} options={markerOptions}
+                      {user_count == '1' && user?.corporat_id == null &&  <Marker key={ind} position={position} options={markerOptions}
                         onClick={() => onMarkerClick(ind)} zIndex={0}
                       />}
-                      {user_count != '1' && user.corporat_id == null && <Marker key={ind} position={position} options={markerOptions}
+                      {user_count != '1' && user?.corporat_id == null && <Marker key={ind} position={position} options={markerOptions}
                         onClick={() => onMarkerClick(ind)} label={{ text: `${user_count}`, fontWeight: "bold", className: "map-label", color: "red" }} zIndex={0}
                       />}
-                      {user.corporat_id != null &&  <Marker key={ind} position={position} options={markerOptions1}
+                      {user?.corporat_id != null &&  <Marker key={ind} position={position} options={markerOptions1}
                         onClick={() => onMarkerClick(ind)} zIndex={0}
                       />}
 

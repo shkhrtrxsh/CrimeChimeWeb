@@ -73,7 +73,7 @@ const Page2 = ({setSelectActive}) => {
     mapTypeControlOptions: {
       position: window.google.maps.ControlPosition.RIGHT_BOTTOM
     },
-    mapTypeId: (zoom<SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE      
+    mapTypeId: (zoom>SatelliteZoom)?window.google.maps.MapTypeId.TERRAIN:window.google.maps.MapTypeId.SATELLITE      
   }
   const isIOS=isIOSSafari();
   return (

@@ -18,7 +18,7 @@ export const addCorporate = createAsyncThunk(
         formdata.append("email", formValue.email);
         formdata.append("industry_types_id", formValue.industry_types_id);
         formdata.append("corp/group_mailing_address", formValue.corpgroup_mailing_address);
-        formdata.append("corp/group_branch", formValue.corp_group_branch);
+        formdata.append("corp_group_branch", formValue.corp_group_branch);
         formdata.append("corp_group_branch_phone",formValue.corp_group_branch_phone)
         formdata.append("logo", formValue.logo);
         const response = await API.post("/addCorAdmin", formdata, {

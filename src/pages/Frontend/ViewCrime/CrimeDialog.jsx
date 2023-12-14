@@ -154,7 +154,7 @@ function CrimeDialog({mapRef,index=0,onClose}) {
     setReportType(p=>!p)
   }
   const getReport = async () => {
-    const response = await API.get(`/reportDetails/${values[index].id}`);
+    const response = await API.get(`/reportDetails/${values[index]?.id}`);
     if(response.data){
       if(parseInt(response.data.data.edited_by) > 0){
         setButtonShow(true)

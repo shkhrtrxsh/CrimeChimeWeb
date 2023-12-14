@@ -13,6 +13,7 @@ import Bell from 'src/assets/images/bell.png'
 import NotificationsModal from './NotificationsModal';
 import API from 'src/config/api';
 import { toast } from 'react-toastify';
+import PushNotification from 'src/components/pushNotification';
 
 const LinkButton = styled(NavLink)(({ theme }) => ({
     textDecoration: 'none',
@@ -148,9 +149,10 @@ export default function HeaderMenu(props) {
                             Profile
                         </LinkButton>
                         <div style={{position:"relative"}}>
-                            <h6 style={{display:"flex",alignItems:"center",justifyContent:"center",position:"absolute",right:"-4px",top:"-4px",background:"red",height:"12px",width:"12px",borderRadius:"12px"}}>{count}</h6>
+                            {count != null && <h6 style={{display:"flex",alignItems:"center",justifyContent:"center",position:"absolute",right:"-4px",top:"-4px",background:"yellow",color:"black",height:"12px",width:"12px",borderRadius:"12px"}}>{count}</h6>}
+                            {count != null && <PushNotification/>}
                             <img src={Bell} style={{height:"24px",width:"24px",cursor:"pointer"}} onClick={notificationModalHandler} />
-                            {notificationModal && <NotificationsModal/>}
+                            {notificationModal && <NotificationsModal handler={notificationModalHandler} />}
                         </div>
                         <Button
                             onClick={logoutSession}

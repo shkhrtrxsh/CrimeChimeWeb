@@ -4,7 +4,7 @@ import { useNavigate,useParams} from 'react-router-dom';
 import { GoogleMap, Marker} from '@react-google-maps/api';
 import { SaveButton } from 'src/components/Button'
 import axios from 'axios';
-import { setPage, setZoom } from 'src/store/reducers/registerReport';
+import { setPage, setZoom, } from 'src/store/reducers/registerReport';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUserAddress, showAuthUser,updateSingleAddress } from 'src/store/api/user';
@@ -18,6 +18,7 @@ import API from 'src/config/api';
 import { toast } from 'react-toastify';
 import { isWithinSAfrica } from 'src/utils/googleMap';
 import ReactGoogleAutocomplete from 'react-google-autocomplete';
+import { SatelliteZoom } from "src/constants/googleMap";
 
 import {Typography} from '@mui/material';const containerStyle = {
     width: '100%',
@@ -29,6 +30,16 @@ const EditAddress = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const params = useParams();
+    const register = useSelector((state) => state.reportRegister);
+    const {
+        data,
+        zoom,
+        lock,
+        marker,
+        duplicate,
+        nearbyData = [],
+        edit,
+      } = register;
     // const [formattedAddress, setFormattedAddress] =useState(null)
     const [value, setValue] = useState({
         latitude : 0,
@@ -94,7 +105,18 @@ const EditAddress = () => {
     //         })
     //     }
     // };
-
+    const mapOptions = {
+        zoomControlOptions: {
+          position: window.google.maps.ControlPosition.RIGHT_CENTER,
+        },
+        streetViewControlOptions: {
+          position: window.google.maps.ControlPosition.RIGHT_CENTER,
+        },
+        mapTypeId:
+          zoom > SatelliteZoom
+            ? window.google.maps.MapTypeId.TERRAIN
+            : window.google.maps.MapTypeId.SATELLITE,
+    };
     const markerDragEnd = async(e) => {
         if (e !== null) {
           //check if within S.Africa
@@ -214,7 +236,7 @@ const EditAddress = () => {
                                         mapContainerStyle={containerStyle}
                                         center={position}
                                         zoom={10}
-                                        options={mapSettings}
+                                        options={mapOptions}
                                     >
                                         <Marker
                                             position={position}
