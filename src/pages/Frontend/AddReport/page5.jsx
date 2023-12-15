@@ -36,7 +36,7 @@ function Page5() {
 
   const handleChange = (event) => {
     const value = Number(event.target.value);
-    if (value === 0) {
+    if (value === 1) {
       setCount(1);
     } else {
       dispatch(setLock(false));

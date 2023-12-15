@@ -114,11 +114,11 @@ function Page4() {
                   return (
                     <li style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center', margin: '3', width: "100%" }} key={ind}>
                       <Select sx={{ width: "80px", marginBottom: "5px" }} name={f.name} value={data[f.name] || 1} onChange={handleCount} >
-                        {WeaponChoices.map((_, ind) => {
-                          return (
-                            <MenuItem value={ind + 1} key={ind}>{WeaponChoices[ind]}</MenuItem>
-                          )
-                        })}
+                        {WeaponChoices.map((weapon, ind) => (
+                          <MenuItem value={weapon} key={ind}>
+                            {weapon}
+                          </MenuItem>
+                        ))}
                       </Select>
                       <Typography sx={{ fontWeight: 'normal', fontSize: '16px', paddingX: 2, textAlign: 'left' }}>
                         {f.label}

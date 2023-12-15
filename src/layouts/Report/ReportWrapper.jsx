@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import ProgressBar from "./ProgressBar";
 import {
   Box,
@@ -89,6 +89,7 @@ const ReportWrapper = () => {
     nearbyData = [],
     edit,
   } = register;
+  const navigate=useNavigate();
   const { longitude, latitude, vehicle_theft, date_time } = data;
   const [cancel, setCancel] = useState(true);
   const [selectActive, setSelectActive] = useState(1);
@@ -102,7 +103,12 @@ const ReportWrapper = () => {
   const getPermissionHandler = async () => {
     const response = await API.get(`/reportPermission`)
     setPermission(response.data)
-    // if(response) return response.data.data
+    if(response.data.code==202){
+      navigate("/");
+      toast.error(response.data.message,{
+        toastId:"sahgmndb"
+      })
+    }
   }
   const getProfile = async () => {
     const response = await API.get(`/getProfile`)
