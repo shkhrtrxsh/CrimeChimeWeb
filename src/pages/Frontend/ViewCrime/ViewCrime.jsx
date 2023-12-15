@@ -237,7 +237,7 @@ const ViewCrime = () => {
                                             {report.weapons != 0 ? (<>Weapons,<br /></>) : null}
                                             </TableCell>
                                             {parseInt(reportedData?.user?.role_id) == 1 && <TableCell align="left">{report.user.phone}</TableCell>}
-                                            <TableCell align="left">{report.user.username}({report.user.report_count})</TableCell>
+                                            <TableCell align="left">{report.user.username} ({report.user.report_count})</TableCell>
                                             <TableCell align="left"><div>{report.user.corporate ? report.user.corporate.name : '' }{report.user.corporate ? report.user.corporate.is_verify==1 ? <CheckBoxIcon style={{ color: "#29C250",position: "absolute" }} /> : '' : ''}</div></TableCell> 
                                             <TableCell align="right">
                                                 <ActionOptionsTwo

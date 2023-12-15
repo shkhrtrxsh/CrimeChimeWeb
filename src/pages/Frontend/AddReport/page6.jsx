@@ -114,6 +114,8 @@ const Page6 = () => {
                 label="Rape"
                 sx={{ paddingTop: "10px" }}
               />
+              <br />
+              <br />
               <div
                 style={{
                   display: "flex",
@@ -150,7 +152,7 @@ const Page6 = () => {
                   variant="h6"
                   sx={{ fontWeight: "normal", px: 2, textAlign: "center" }}
                 >
-                  Multiple Rape
+                  Multiple rapes
                 </Typography>
               </div>
             </Box>

@@ -240,8 +240,8 @@ export default function Report() {
                                   <TableHead>
                                   <TableRow>
                                     <TableCell>Public Report Approval</TableCell>
-                                    <TableCell>Date/Time</TableCell>
-                                    <TableCell>Location</TableCell>
+                                    <TableCell>Date/Time Occurred</TableCell>
+                                    <TableCell>Place Occurred</TableCell>
                                     <TableCell align="left">Crime Type</TableCell>
                                     <TableCell align="left">Mob. #</TableCell>
                                     <TableCell align="left">Username</TableCell>
