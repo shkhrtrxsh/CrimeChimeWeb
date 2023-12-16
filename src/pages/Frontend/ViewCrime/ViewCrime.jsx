@@ -187,7 +187,6 @@ const ViewCrime = () => {
       });
     }
   };
-  console.log(crimeIndex)
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: isMdBreakpoint ? 'row' : 'column' }}>
       <NoDataDialog/>
@@ -297,7 +296,7 @@ const ViewCrime = () => {
             <GoogleMap center={position} zoom={zoom}
               mapContainerStyle={{ width: "100%", height: "100%" }}
               options={{
-                mapTypeId: (zoom < SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
+                mapTypeId: (zoom > SatelliteZoom) ? window.google.maps.MapTypeId.TERRAIN : window.google.maps.MapTypeId.SATELLITE,
                 gestureHandling: "greedy",
                 mapTypeControlOptions: {
                   position: isMdBreakpoint ? window.google.maps.ControlPosition.LEFT_TOP : window.google.maps.ControlPosition.LEFT_BOTTOM

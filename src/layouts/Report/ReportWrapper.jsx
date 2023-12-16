@@ -113,6 +113,9 @@ const ReportWrapper = () => {
   const getProfile = async () => {
     const response = await API.get(`/getProfile`)
     setProfile(response.data.data)
+    if(parseInt(response.data.data.role_id) == 2 ){
+      getPermissionHandler();
+    }
     // if(response) return response.data.data
   }
   useEffect(() => {
@@ -122,7 +125,6 @@ const ReportWrapper = () => {
     if (date_time === null) {
       dispatch(setPage({ date_time: new Date(Date.now()).toISOString() }));
     }
-    getPermissionHandler();
     getProfile();
   }, []);
   const markerOptions = {
@@ -148,7 +150,7 @@ const ReportWrapper = () => {
       position: window.google.maps.ControlPosition.RIGHT_CENTER,
     },
     mapTypeId:
-      zoom < SatelliteZoom
+      zoom > SatelliteZoom
         ? window.google.maps.MapTypeId.TERRAIN
         : window.google.maps.MapTypeId.SATELLITE,
   };

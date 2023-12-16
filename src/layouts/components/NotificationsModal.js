@@ -51,17 +51,18 @@ export default function NotificationsModal(props) {
                 1. Tap below or select  "Crime tracker" in menu. <br/><br/>
                 2. Select up to three locations.<br/><br/>
 
-                Receive a notification whenever a crime is reported within 500 meters (0.5 Km ) of your selected locations<br/><br/>
-                You can change your selected locations at any time
+                Receive a notification whenever a crime is reported within 500 meters (0.5 Km ) of your selected locations.<br/><br/>
+                You can change your selected locations at any time.
                 <br/><br/>
             </h5>
-            <Button size="small" style={{marginLeft:"20%"}} onClick={buttonHandler}>+ add a new location</Button>
+            <Button size="small" style={{marginLeft:"20%",textTransform:"lowercase"}} onClick={buttonHandler}>+ add a new location</Button>
         </div>}
         {data.length > 0 && data.map((item,index)=><h5 key={index} id={item.id} onClick={handler} style={{color:"black",fontWeight:"400",borderBottom:"1px solid #e6e6e6",padding:"10px 16px "}} >
             <p>
-                New crime reported at {item.address} <br/>{fDateTime(item.created_at)} <br></br> {item.distance} meters away <br/> from {item.location_name},
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span>View on map</span>
+                New crime reported at {item.address} {fDateTime(item.created_at)} <br></br> {item.distance} meters away from {item.location_name},<br/>
+                <div style={{display:"flex",justifyContent:"flex-end",marginTop:"6px"}}>
+                <Button size="small" style={{textTransform:"lowercase"}}>View on map</Button>
+                </div>
             </p>
             {/* <p style={{textAlign:"right"}}></p> */}
         </h5>

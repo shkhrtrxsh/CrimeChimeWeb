@@ -3,13 +3,12 @@ import { getMessaging,getToken,onMessage } from 'firebase/messaging';
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDOA8PJp4mzsrv8wa_JXrzUVps6bjo9o0Y',
-  authDomain: 'crimechime-fddd5.firebase.com',
-  projectId: 'rimechime-fddd5',
-  appId: '1:1055894599370:web:4938f4b80db8cdcb3b2633',
+  apiKey: "AIzaSyBBMSr0ywRcDcVMIa-B7yw_eDvSi7wvGfM",
+  authDomain: "crimechime-fddd5.firebaseapp.com",
+  projectId: "crimechime-fddd5",
   storageBucket: "crimechime-fddd5.appspot.com",
-  messagingSenderId: "AAAA9dg49so:APA91bEDd_7fMsucmn1w2ZTmgtCRnUqfQVEALyP7QvfGyBbKbAUvsjPOMFRuAjqIwsnKl2RTwJdk8EIJzeECP2T21xfJBiReJwNutnB9QztgZwh8KIEGn6nJvGi0iD9uSxMPYIIGqhca",
-
+  messagingSenderId: "1055894599370",
+  appId: "1:1055894599370:web:4e6b3749ad7b846b3b2633"
 };
 
 const app = initializeApp(firebaseConfig);

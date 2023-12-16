@@ -26,7 +26,12 @@ export const setSearchQueryParams = (searchParams, onPage=null, perPage=null) =>
     if(searchParams.get('status')){
         param += `status=${searchParams.get('status')}&`
     }
-
+    if(searchParams.get('incluedPublicUser')){
+        param += `incluedPublicUser=${searchParams.get('incluedPublicUser')}&`
+    }
+    if(searchParams.get('CorporateName')){
+        param += `CorporateName=${searchParams.get('CorporateName')}&`
+    }
     return param;
 
 }
@@ -57,7 +62,12 @@ export const getSearchQueryParams = (searchParams) => {
     if(searchParams.get('status')){
         param += `status=${searchParams.get('status')}&`
     }
-
+    if(searchParams.get('incluedPublicUser')){
+        param += `incluedPublicUser=${searchParams.get('incluedPublicUser')}&`
+    }
+    if(searchParams.get('CorporateName')){
+        param += `CorporateName=${searchParams.get('CorporateName')}&`
+    }
     return param;
 
 }

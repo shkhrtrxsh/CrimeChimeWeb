@@ -99,32 +99,32 @@ export default function CorporateList() {
       />
       <Card>
         {/* <SearchInTable searchByParam={setSearchByParam}/> */}
-        <TableContainer>
+        <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Corp./Group Name</TableCell>
-                <TableCell align="left">Address</TableCell>
-                <TableCell align="left">Corp./Group Admin</TableCell>
-                <TableCell align="left">Mobile Number</TableCell>
-                <TableCell align="left">Email</TableCell>
-                <TableCell align="left">Industry Types</TableCell>
-                <TableCell align="left">Logo</TableCell>
-                <TableCell align="left">Action</TableCell>
+                <TableCell size="small">Corp./Group Name</TableCell>
+                <TableCell align="left" size="small">Address</TableCell>
+                <TableCell align="left" size="small">Corp./Group Admin</TableCell>
+                <TableCell align="left" size="small">Mobile Number</TableCell>
+                <TableCell align="left" size="small">Email</TableCell>
+                <TableCell align="left" size="small">Industry Types</TableCell>
+                <TableCell align="left" size="small">Logo</TableCell>
+                <TableCell align="left" size="small">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {corporateData &&
                 corporateData.map((cor) => (
                   <TableRow key={cor.id}>
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" size="small">
                       {cor.name}
                     </TableCell>
-                    <TableCell align="left">{cor.address}</TableCell>
-                    <TableCell align="left">{cor.cor_admin?.name}</TableCell>
-                    <TableCell align="left">{cor.cor_admin?.phone}</TableCell>
-                    <TableCell align="left">{cor.cor_admin?.email}</TableCell>
-                    <TableCell align="left">{cor.industry?.name}</TableCell>
+                    <TableCell align="left" size="small">{cor.address}</TableCell>
+                    <TableCell align="left" size="small">{cor.cor_admin?.name}</TableCell>
+                    <TableCell align="left" size="small">{cor.cor_admin?.phone}</TableCell>
+                    <TableCell align="left" size="small" >{cor.cor_admin?.email}</TableCell>
+                    <TableCell align="left" size="small">{cor.industry?.name}</TableCell>
                     <TableCell align="left">
                       <img
                         src={cor.logo}
