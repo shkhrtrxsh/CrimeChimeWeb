@@ -39,6 +39,10 @@ export default function AddCorporate() {
   const [logoFile, setLogoFile] = useState(null);
   const [logoFile2, setLogoFile2] = useState(null);
   const listData = useSelector((state) => state?.industrytypelist.industryTypes);
+  const [verify,setVerify] = useState(0)
+  const verifyHandler = (e) => {
+    setVerify(e.target.value)
+  }
   const UserSchema = Yup.object().shape({
     corporate_name: Yup.string().required('Corporate Name is required'),
     address: Yup.string().required('Address is required'),
@@ -67,7 +71,8 @@ export default function AddCorporate() {
     email: '',
     corpgroup_mailing_address: '',
     corp_group_branch: '',
-    corp_group_branch_phone: ''
+    corp_group_branch_phone: '',
+    is_verify:0
   };
 
   const methods = useForm({
@@ -86,6 +91,8 @@ export default function AddCorporate() {
   const onSubmit = (formValue) => {
     formValue.industry_types_id = industryType;
     formValue.logo = logoFile;
+    formValue.is_verify = verify;
+
     // formValue.slug = slugConvertor(formValue.corporate_name);
     dispatch(addCorporate({ formValue, navigate }));
   };
@@ -135,6 +142,21 @@ export default function AddCorporate() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <RHFTextField name="corp_group_branch" label="Corp./Group Branch" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl sx={{ width: '100%' }}>
+              <InputLabel id="is-verify">Verify</InputLabel>
+              <Select
+                labelId="is-verify"
+                id="is-verify"
+                value={verify}
+                label="Verify"
+                onChange={verifyHandler}
+              >
+                  <MenuItem value={1} >Yes</MenuItem>
+                  <MenuItem value={0} >No</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} >
             <Paper elevation={2} sx={{ p: 2 }}>

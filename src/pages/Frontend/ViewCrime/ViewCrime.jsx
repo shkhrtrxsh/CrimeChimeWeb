@@ -125,16 +125,16 @@ const ViewCrime = () => {
   //   dispatch(clearReport());
   // }, [])
 
-  useEffect(() => {
-      if (!hidden) {
-        dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()),paginate:1 }));
+  // useEffect(() => {
+  //     if (!hidden) {
+  //       dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()),paginate:1 }));
 
-          // dispatch(getReports({ param: `per_page=10&order_by=latest` }));
-      }else{
-        dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now())}));
+  //         // dispatch(getReports({ param: `per_page=10&order_by=latest` }));
+  //     }else{
+  //       dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now())}));
 
-      }
-  }, [hidden])
+  //     }
+  // }, [hidden])
   useEffect(() => {
     if (!crimeIndex.viewCrime) {
       (async () => {
@@ -218,11 +218,10 @@ const ViewCrime = () => {
                                 </TableHead>
                                 <TableBody>
                                     {nearbyData && (nearbyData.data || []).map((report, index) => {
-                                        
-                                        const latitude = Number(report.latitude);
-                                        const longitude = Number(report.longitude);
-                                        const formattedLatitude = latitude.toFixed(5);
-                                        const formattedLongitude = longitude.toFixed(5);
+                                        const lat = Number(report.latitude);
+                                        const lang = Number(report.longitude);
+                                        const formattedLatitude = lat.toFixed(5);
+                                        const formattedLongitude = lang.toFixed(5);
                                         return (
                                         <TableRow key={report.id}>
                                             <TableCell align="left">{fDateTime(report.date_time)}</TableCell>
@@ -243,7 +242,7 @@ const ViewCrime = () => {
                                                     index={index}
                                                     delete_id={report.id}
                                                     edit_url={'/add_not/' + report.id}
-                                                    // show_url={'/?target=single&id=' + report.id}
+                                                    show_url={'/?target=single&id=' + report.id}
                                                     add_note={'/add_not/' + report.id}
                                                     deleteAction={(event) => {
                                                         setOpenDialog((prevState) => ({
@@ -252,20 +251,15 @@ const ViewCrime = () => {
                                                             id: event.id
                                                         }));
                                                     }}
-                                                    // showAction={()=>{
-                                                    //   onMarkerClick(report.id)
-                                                    //   // dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
-                                                    //   // dispatch(setCrimeIndex({ index, viewCrime: true }));
-                                                    //   // dispatch(setCrimeIndex({ index, viewCrime: true }));
-                                                    //   // navigate(`/?report=${report.id}`)
-                                                    //   // dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now())}));
-                                                    //   // toast.info("Fetching details",{
-                                                    //   //   toastId:"skkskks"
-                                                    //   // })
-                                                    //   // setTimeout(() => {
-                                                    //   //   setHidden(s => !s)
-                                                    //   // }, [3000]);
-                                                    // }}
+                                                    mapAction={()=>{
+                                                      dispatch(getNearbyCrimes({ latitude: lat, longitude: lang, id: report.id,paginate:0 }));
+                                                      toast.info("Fetching details",{
+                                                        toastId:"skkskks"
+                                                      })
+                                                      setTimeout(() => {
+                                                        setHidden(s => !s)
+                                                      }, [2000]);
+                                                    }}
                                                 />
                                             </TableCell>
                                         </TableRow>)

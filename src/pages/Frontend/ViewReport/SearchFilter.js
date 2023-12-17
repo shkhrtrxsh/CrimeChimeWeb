@@ -79,7 +79,7 @@ export default function SearchFilter(props) {
     const dispatch = useDispatch();
     const [state, setState] = React.useState(0);
     const [toDate, setToDate] = useState(dateNow);
-    const [fromDate, setFromDate] = useState('');
+    const [fromDate, setFromDate] = useState(new Date(Date.now() - 30 * 24 * 3600 * 1000));
     const [crimeTypes, setCrimeTypes] = useState({
         murder: 0,
         rape: 0,
@@ -91,10 +91,12 @@ export default function SearchFilter(props) {
         // shoplifting: 0,
       });
     const isDesktop = useResponsive('up', 'md');
+    const lat1 = latitude;
+    const long1 = longitude
     const toggleDrawer = (event) => {
         if (!event) {
             setToDate(dateNow);
-            setFromDate(dateNow);
+            setFromDate(new Date(Date.now() - 30 * 24 * 3600 * 1000));
             setNameOfDeceased('');
             setVerifiedGroup(0);
             setGeneralPublic(0);
@@ -114,12 +116,15 @@ export default function SearchFilter(props) {
     };
 
     const filterSearchHandler = () => {
+        const lat2 = latitude == lat1 ? 0:latitude;
+        const lang2 = longitude == long1 ? 0:longitude;
+
         if (toDate >= fromDate && latitude && longitude) {
             // Send crime types individually
             dispatch(
                 getNearbyCrimes({
-                    latitude,
-                    longitude,
+                    lat2,
+                    lang2,
                     toDate,
                     fromDate,
                     search,

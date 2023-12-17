@@ -61,7 +61,9 @@ export default function NotificationsModal(props) {
             <p>
                 New crime reported at {item.address} {fDateTime(item.created_at)} <br></br> {item.distance} meters away from {item.location_name},<br/>
                 <div style={{display:"flex",justifyContent:"flex-end",marginTop:"6px"}}>
-                <Button size="small" style={{textTransform:"lowercase"}}>View on map</Button>
+                <Button size="small" style={{textTransform:"lowercase"}} onClick={()=>{
+                    // dispatch(getNearbyCrimes({ latitude: lat, longitude: lang, id: data.id,paginate:0 }));
+                }}>View on map</Button>
                 </div>
             </p>
             {/* <p style={{textAlign:"right"}}></p> */}

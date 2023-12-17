@@ -12,7 +12,8 @@ export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes"
   robbery,
   kidnapping,
   bribery,
-  page
+  page,
+  id
   },{rejectWithValue,dispatch},)=>{
   try {
       const formData = objectToFormData({latitude,longitude,search,paginate,
@@ -24,6 +25,7 @@ export const getNearbyCrimes = createAsyncThunk("registerReport/getNearbyCrimes"
         kidnapping,
         bribery,
         page,
+        id,
         to_date:toDate&&format(toDate,"yyyy-MM-dd"),from_date:fromDate&&
       format(fromDate,"yyyy-MM-dd")})
       for (const pair of formData.entries()) {

@@ -12,7 +12,7 @@ import {
   ListItemText,
   Box,
 } from '@mui/material';
-import { setCrimeIndex, setNearbyReports,setPage,setEdit } from 'src/store/reducers/registerReport';
+import { setCrimeIndex, setEdit, setLock, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
 import { useDispatch, useSelector } from 'react-redux';
 import API from 'src/config/api';
 import { getNearbyCrimes } from 'src/store/api/registerReport';
@@ -46,7 +46,7 @@ const ActionOptionsTwo = (props) => {
     props.deleteAction(openDialog)
     setIsOpen(false)
 
-    // getPermissionHandler();
+    getPermissionHandler();
   }, [openDialog])
   const navigate = useNavigate();
   return(
@@ -102,16 +102,24 @@ const ActionOptionsTwo = (props) => {
         </Box>
       </MenuItem>
       : '' }
+      {show_url !== undefined ? 
+      <MenuItem sx={{ color: 'text.secondary' }}>
+        <Box sx={{display:"flex"}} onClick={()=>{
+            dispatch(setCrimeIndex({index,viewCrime:true}))
+            navigate("/")
+          }}>
+          <ListItemIcon>
+            <Iconify icon="clarity:eye-line" sx={{fontSize : 22}} />
+          </ListItemIcon>
+          <ListItemText primary="View on map" primaryTypographyProps={{ variant: 'body2' }} />
+        </Box>
+      </MenuItem>
+      : '' }
 
       {show_url !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }}>
         <Box sx={{display:"flex"}} onClick={()=>{
-          dispatch(getNearbyCrimes(data[index]));
-          dispatch(setCrimeIndex({ index, viewCrime: true }));
-          // props.showAction()
-          // show_url(index)
-          // dispatch(setCrimeIndex({index,viewCrime:true}))
-          // navigate("/")
+          props.showAction()
         }}>
           <ListItemIcon>
             <Iconify icon="clarity:eye-line" sx={{fontSize : 22}} />

@@ -13,22 +13,23 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
-getToken(messaging)
-  .then((currentToken) => {
-    if (currentToken) {
-      console.log('Current FCM token:', currentToken);
-    } else {
-      console.log('No registration token available. Permission is requested automatically.');
-    }
-  })
-  .catch((error) => {
-    console.error('Error getting FCM token:', error);
-  });
+// getToken(messaging)
+//   .then((currentToken) => {
+//     console.log(currentToken)
+//     if (currentToken) {
+//       console.log('Current FCM token:', currentToken);
+//     } else {
+//       console.log('No registration token available. Permission is requested automatically.');
+//     }
+//   })
+//   .catch((error) => {
+//     console.error('Error getting FCM token:', error);
+//   });
 
-// Handle incoming messages
-onMessage(messaging, (payload) => {
-  console.log('Message received:', payload);
-  // Handle the notification in your app
-});
+// // Handle incoming messages
+// onMessage(messaging, (payload) => {
+//   console.log('Message received:', payload);
+//   // Handle the notification in your app
+// });
 
 export { messaging };

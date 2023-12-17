@@ -43,6 +43,10 @@ export default function EditCorporate() {
   const listData = useSelector((state) => state?.industrytypelist.industryTypes);
   const [industryId,setIndustryId] = useState(null)
   const [data,setData] = useState(null)
+  const [verify,setVerify] = useState(0)
+  const verifyHandler = (e) => {
+    setVerify(e.target.value)
+  }
   const UserSchema = Yup.object().shape({
     corporate_name: Yup.string().required('Corporate Name is required'),
     address: Yup.string().required('Address is required'),
@@ -71,7 +75,8 @@ export default function EditCorporate() {
     email: '',
     corpgroup_mailing_address: '',
     corp_group_branch: '',
-    corp_group_branch_phone: ''
+    corp_group_branch_phone: '',
+    is_verify:0
   };
 
   const methods = useForm({
@@ -93,7 +98,9 @@ export default function EditCorporate() {
   const onSubmit = async (formValue) => {
     formValue.industry_types_id = industryType;
     formValue.logo = logoFile;
-    formValue.id = params.id
+    formValue.id = params.id;
+    formValue.is_verify = verify;
+
     // formValue.slug = slugConvertor(formValue.corporate_name);
     // dispatch(updateCorporate({ formValue, navigate }));
     var formdata = new FormData();
@@ -128,6 +135,8 @@ export default function EditCorporate() {
       // if(data.logo != formValue.logo){
         formdata.append("logo", formValue.logo);
       // }
+      formdata.append("is_verify", formValue.is_verify);
+
       const response = await API.post("/updateCorAdmin", formdata, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -166,7 +175,7 @@ export default function EditCorporate() {
     corporateData?.map((item)=>{
       if(item.id == params.id){
         setData(item)
-        setIndustryId(item.industry.id)
+        setIndustryId(item?.industry?.id)
         setValue("corporate_name", item?.name != null ? item?.name : '')
         setValue("address", item?.address != null ? item?.address : '')
         setValue("user_name", item?.cor_admin.name != null ? item?.cor_admin.name : '')
@@ -179,7 +188,8 @@ export default function EditCorporate() {
         const urlParts = item.logo.split('/');
         const imageName = urlParts[urlParts.length - 1];
         setLogoFile(item.logo)
-        setIndustryType(item.industry?.id)
+        setIndustryType(item?.industry?.id)
+        setVerify(parseInt(item.is_verify))
         // dispatch(getRoles({}))
         // const value = [];
         // user.roles.forEach(element => {          
@@ -244,6 +254,21 @@ export default function EditCorporate() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <RHFTextField name="corp_group_branch" label="Corp./Group Branch" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl sx={{ width: '100%' }}>
+              <InputLabel id="is-verify">Verify</InputLabel>
+              <Select
+                labelId="is-verify"
+                id="is-verify"
+                value={verify}
+                label="Verify"
+                onChange={verifyHandler}
+              >
+                  <MenuItem value={1} >Yes</MenuItem>
+                  <MenuItem value={0} >No</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} >
             <Paper elevation={2} sx={{ p: 2 }}>

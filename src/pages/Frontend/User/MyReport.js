@@ -11,7 +11,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { setCrimeIndex, setEdit, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
+import { setCrimeIndex, setEdit, setLock, setNearbyReports, setPage } from 'src/store/reducers/registerReport';
 import { getNearbyCrimes } from 'src/store/api/registerReport';
 
 import { css } from '@emotion/css';
@@ -150,13 +150,11 @@ const MyReport = () => {
                                             </CardContent>
                                             <CardActions sx={{    paddingLeft: '24px'}}>
                                                 <Button onClick={() => {
-                                                    dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
-                                                    dispatch(setCrimeIndex({index,viewCrime:false}))
+                                                    dispatch(setNearbyReports(reports.data));
                                                     navigate("/")
                                                     
                                                 }} size="small">Show on map</Button>
                                                 <Button onClick={() => {
-                                                    dispatch(setNearbyReports(reports.data));
                                                     dispatch(setCrimeIndex({index,viewCrime:true}))
                                                     navigate("/")
                                                     
