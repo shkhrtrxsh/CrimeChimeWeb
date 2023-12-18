@@ -10,6 +10,9 @@ import police from '../../../assets/images/police.png'
 import ProgressBar from 'src/layouts/Report/ProgressBar';
 import { useNavigate } from 'react-router-dom';
 import { getNearbyCrimes } from 'src/store/api/registerReport';
+import {
+  FormHelperText,
+} from "@mui/material";
 
 export const SubmitDialog = ({open,handleClose,confirm,onClickEvent})=>{
   const [disable, setDisable] = useState(false)
@@ -145,7 +148,10 @@ const Page16 = ({selectActive,setActiveStep}) => {
                     </Typography>
                     <TextField name="police_case_num" variant="outlined" onChange={handleChange} value={value?.police_case_num||""} disabled={value.reported_to_the_police===2} error={error?true:false} helperText={error}/>
                   </Box>
-
+                  <br />
+                  <FormHelperText sx={{ fontWeight: 'normal' }}>
+                    * If known, please put the case number here.
+                  </FormHelperText>
                 </Box>
               </Grid>
             </Grid>

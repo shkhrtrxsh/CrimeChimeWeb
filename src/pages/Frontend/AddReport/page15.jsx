@@ -61,8 +61,8 @@ const Page15 = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={10} sx={{ pl: 5}}>
-                <Box sx={{ display: 'flex', flexDirection: 'column' ,alignItems:"center"}}>
+              <Grid item xs={10} sx={{ pl: 5, width:"400px"}}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' ,alignItems:"center", width:"400px"}}>
                 {value?.fileName&&<Typography>{value?.fileName}</Typography>}
                   <Box sx={{ p: 5,pt:2, display: 'flex', justifyContent: 'center' }}>
                     <input
@@ -84,8 +84,8 @@ const Page15 = () => {
                     <source src="" type="video/mp4"/>
                   </video>
                   <img src="" alt="crime" style={{ display: 'none',width:"300px",height:"150px",maxWidth:"300px",maxHeight:"300px" }} ref={canvas}/>
-                  <Box sx={{ p: 5, display: 'flex', justifyContent: 'center' }}>
-                    <TextField label="Describe the crime..." multiline rows={8} variant="outlined" sx={{ borderRadius: 'none' }} value={value?.description||""} onChange={(e)=>setValue({...value,description:e.target.value})}/>
+                  <Box sx={{ p: 5, display: 'flex', justifyContent: 'center' ,width:"500px"}}>
+                    <TextField label="Describe the crime..." multiline rows={8} variant="outlined" sx={{ borderRadius: 'none'  ,width:"600px"}} value={value?.description||""} onChange={(e)=>setValue({...value,description:e.target.value})}/>
                   </Box>
                 </Box>
               </Grid>

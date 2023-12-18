@@ -204,10 +204,10 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                               {typeof(row.secondCol) === "object" && <TableRow key={index}>
                                 {row.secondCol != null && row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by" && row.firstCol != "Media" && row.firstCol != "Reason for crime:" && <TableCell>{row.firstCol}</TableCell>}
                                 {buttonShow && !reportType &&  row.firstCol == "Edited by" && <TableCell >{row.firstCol}</TableCell>}
-                                {row.firstCol == "Description" && parseInt(profile.role_id) === 1 &&  <TableCell>{row.firstCol}</TableCell>}
+                                {parseInt(profile?.role_id) !== "2" && row.firstCol == "Description" && parseInt(profile?.role_id) === 1 &&  <TableCell>{row.firstCol}</TableCell>}
                                 {row.firstCol == "Perpetrators" &&  <TableCell>{row.firstCol}</TableCell>}
                                 { row.firstCol == "Reason for crime:" && row.secondCol.props.dangerouslySetInnerHTML.__html != "Does not apply" && <TableCell>{row.firstCol}</TableCell>}
-                                {parseInt(profile.role_id) === 1 && row.firstCol == "Media" &&  <TableCell>{row.firstCol}</TableCell>}
+                                {parseInt(profile?.role_id) === 1 && row.firstCol == "Media" &&  <TableCell>{row.firstCol}</TableCell>}
                                 {row.secondCol != null && row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by" && row.firstCol != "Media" && row.firstCol != "Reason for crime:" &&  <TableCell>
                                   {row.firstCol === 'Media:' && mediaData ? (
                                     isImage(mediaData) ? (
@@ -221,15 +221,15 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                                     row.secondCol
                                   )}
                                 </TableCell>}
-                                {row.firstCol == "Description" && parseInt(profile.role_id) === 1 &&  <TableCell>
+                                {parseInt(profile?.role_id) !== "2" && row.firstCol == "Description" && parseInt(profile?.role_id) === 1 &&  <TableCell>
                                   row.secondCol
                                 </TableCell>}
                                 {row.firstCol == "Perpetrators" && <TableCell>
-                                    parseInt(profile.role_id) === 1 ? row.secondCol[0] : row.secondCol[2]
+                                    parseInt(profile?.role_id) === 1 ? row.secondCol[0] : row.secondCol[2]
                                 </TableCell>}
                                 { row.firstCol == "Reason for crime:" && row.secondCol.props.dangerouslySetInnerHTML.__html != "Does not apply" &&  <TableCell>{row.secondCol}</TableCell>}
 
-                              {parseInt(profile.role_id) === 1 && row.firstCol == "Media" && <TableCell>
+                              {parseInt(profile?.role_id) === 1 && row.firstCol == "Media" && <TableCell>
                                 {row.firstCol === 'Media:' && mediaData ? (
                                   isImage(mediaData) ? (
                                     <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />
@@ -248,9 +248,9 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                               {typeof(row.secondCol) === "string" && <TableRow key={index}>
                               {!row.secondCol.includes("Unavailable") && !row.secondCol.includes("Does not apply") && !row.secondCol.includes(null) && row.secondCol != "" &&  row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by" && row.firstCol != "Media" && <TableCell>{row.firstCol}</TableCell>}
                               {buttonShow && !reportType &&  row.firstCol == "Edited by" && <TableCell >{row.firstCol}</TableCell>}
-                              {row.firstCol == "Description" && parseInt(profile.role_id) === 1 &&  <TableCell>{row.firstCol}</TableCell>}
+                              {parseInt(profile?.role_id) !== "2" && row.firstCol == "Description" && parseInt(profile?.role_id) === 1 &&  <TableCell>{row.firstCol}</TableCell>}
                               {row.firstCol == "Perpetrators" &&  <TableCell>{row.firstCol}</TableCell>}
-                              {parseInt(profile.role_id) === 1 && row.firstCol == "Media" &&  <TableCell>{row.firstCol}</TableCell>}
+                              {parseInt(profile?.role_id) === 1 && row.firstCol == "Media" &&  <TableCell>{row.firstCol}</TableCell>}
 
                               {!row.secondCol.includes("Unavailable") &&!row.secondCol.includes("Does not apply") && !row.secondCol.includes(null) && row.secondCol != "" &&  row.firstCol != "Description" && row.firstCol != "Perpetrators" && row.firstCol != "Edited by" && row.firstCol != "Media" &&  <TableCell>
                                 {row.firstCol === 'Media:' && mediaData ? (
@@ -265,13 +265,13 @@ function CrimeDialog({mapRef,index=0,onClose}) {
                                   row.secondCol
                                 )}
                               </TableCell>}
-                              {row.firstCol == "Description" && parseInt(profile.role_id) === 1 &&  <TableCell>
+                              {parseInt(profile?.role_id) !== "2" && row.firstCol == "Description" && parseInt(profile?.role_id) === 1 &&  <TableCell>
                                 row.secondCol
                               </TableCell>}
                               {row.firstCol == "Perpetrators" && <TableCell>
-                                parseInt(profile.role_id) === 1 ? row.secondCol[0] : row.secondCol[2]
+                                parseInt(profile?.role_id) === 1 ? row.secondCol[0] : row.secondCol[2]
                               </TableCell>}
-                              {parseInt(profile.role_id) === 1 && row.firstCol == "Media" && <TableCell>
+                              {parseInt(profile?.role_id) === 1 && row.firstCol == "Media" && <TableCell>
                                 {row.firstCol === 'Media:' && mediaData ? (
                                   isImage(mediaData) ? (
                                     <img src={mediaData} alt="media" style={{ width: '100%', height: 'auto' }} />

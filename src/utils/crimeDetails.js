@@ -197,7 +197,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
               </div>
             ); 
           })() },
-          { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
+          { firstCol: 'Description:', secondCol: roleID==1 ? <p>{description||"No description available"}</p> : "" },
           // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
           { firstCol: 'Perpetrators:', secondCol: perpetrators?[`${parseInt(perpetrators) >= 0 ? (perpetrators) : "Preperator(s) detail not available"}`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
           { firstCol: 'Weapons:', secondCol: (()=>{
@@ -409,15 +409,15 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             </div>
           ); 
         })() },
-        { firstCol: 'Description:', secondCol: <p>{description||"No description available"}</p> },
+        { firstCol: 'Description:', secondCol: roleID==1 ? <p>{description||"No description available"}</p> : '' },
         // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
         { firstCol: 'Perpetrators:', secondCol: perpetrators?[`${parseInt(perpetrators) >= 0 ? (perpetrators) : "Preperator(s) detail not available" }`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
         
         { firstCol: 'Weapons:', secondCol: (()=>{
           switch(weapons){
-            case '0':return ``
-            case '1':return `None`
-            default:return (
+            case 0:return ``
+            case 2:return ``
+            case 1:return (
               <div>
                 {WeaponChoices[fully_auto_weapons] != undefined && <div style={{display:"flex"}}>
                   Fully Automatic: {WeaponChoices[fully_auto_weapons]} <img src={AK} style={{height:"35px",width:"35px"}} /> <br />
@@ -429,7 +429,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
                 Knife: {WeaponChoices[knife_weapons]} <img src={Knife} style={{height:"20px",width:"25px"}} /> <br />
                 </div>}
                 {WeaponChoices[other_weapons] != undefined && <div style={{display:"flex"}}>
-                  Unusual weapon: {WeaponChoices[other_weapons]} <img src={Others} style={{height:"20px",width:"25px"}} /><br />
+                Unusual weapon: {WeaponChoices[other_weapons]} <img src={Others} style={{height:"20px",width:"25px"}} /><br />
                 </div>}
 
               </div>
