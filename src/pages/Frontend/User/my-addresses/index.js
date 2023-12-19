@@ -74,7 +74,7 @@ const MyAddresses = () => {
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                {list && list.map((address, index) => {
+                                {list.length > 0 ? list.map((address, index) => {
                                     const latitude = Number(address.latitude);
                                     const longitude = Number(address.longitude);
                                     const formattedLatitude = latitude.toFixed(4);
@@ -82,7 +82,14 @@ const MyAddresses = () => {
                                     return (
                                         <SingleAddress key={index} index={index} report={address} formattedLatitude={formattedLatitude} formattedLongitude={formattedLongitude} handler={addressList} />
                                     )
-                                    })}
+                                    }) : 
+                                    <Typography variant="h6" sx={{ fontWeight: 'normal', textAlign: 'center' }}>
+                                        No Location added .......
+                                        <br />
+                                        Add up to three locations.Receive a notification whenever a crime is reported within 500 meters (0.5 Km ) of your selected locations.
+                                        You can change your selected locations at any time.**
+                                    </Typography>
+                                }
                                 </TableBody>
                             </Table>
                         </TableContainer>

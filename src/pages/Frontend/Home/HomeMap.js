@@ -343,12 +343,12 @@ const HomeMap = () => {
                                                         <TableCell align="left">{fDateTime(report.date_time)}</TableCell>
                                                         <TableCell component="th" scope="row">{report.location}<br></br>{formattedLatitude} S,<br></br>{formattedLongitude} E</TableCell>
                                                         <TableCell align="left">
-                                                        {report.robbery != 0 ? (<>Robbery,<br /></>) : null}
-                                                        {report.murders != 0 ? (<>Murders,<br /></>) : null}
-                                                        {report.burglary !=0 ? (<>Burglary,<br /></>) : null}
-                                                        {report.kidnapping != 0 ? (<>Kidnapping,<br /></>) : null}
-                                                        {report.rape != 0 ? (<>Rape,<br /></>) : null}
-                                                        {report.weapons != 0 ? (<>Weapons,<br /></>) : null}
+                                                        {report.robbery != 0 ? (<>Robbery<br /></>) : null}
+                                                        {report.murders != 0 ? (<>Murders<br /></>) : null}
+                                                        {report.burglary !=0 ? (<>Burglary<br /></>) : null}
+                                                        {report.kidnapping != 0 ? (<>Kidnapping<br /></>) : null}
+                                                        {report.rape != 0 ? (<>Rape<br /></>) : null}
+                                                        {report.weapons != 0 ? (<>Weapons<br /></>) : null}
                                                         </TableCell>
                                                         <TableCell align="left">{report.user.phone}</TableCell>
                                                         <TableCell align="left">{report.user.username}</TableCell>

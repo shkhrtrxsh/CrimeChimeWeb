@@ -150,7 +150,7 @@ const MyReport = () => {
                                             </CardContent>
                                             <CardActions sx={{    paddingLeft: '24px'}}>
                                                 <Button onClick={() => {
-                                                    navigate("/crimedetails?id=' + report.id+'&show=false")                                                    
+                                                    navigate(`/crimedetails?id=${report.id}&show=false`)                                                 
                                                 }} size="small">Show on map</Button>
                                                 <Button onClick={() => {
                                                     dispatch(setCrimeIndex({index,viewCrime:true}))

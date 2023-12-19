@@ -257,12 +257,12 @@ export default function EditCorporate() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl sx={{ width: '100%' }}>
-              <InputLabel id="is-verify">Verify</InputLabel>
+              <InputLabel id="is-verify">This is a trusted company, allow verification</InputLabel>
               <Select
                 labelId="is-verify"
                 id="is-verify"
                 value={verify}
-                label="Verify"
+                label="This is a trusted company, allow verification"
                 onChange={verifyHandler}
               >
                   <MenuItem value={1} >Yes</MenuItem>

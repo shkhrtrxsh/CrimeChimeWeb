@@ -15,6 +15,8 @@ import {
   setSearchQueryParams,
   recordPerPage,
 } from "src/helpers/SearchHelper";
+import API from 'src/config/api';
+import { toast } from 'react-toastify';
 
 import {
   Table,
@@ -29,6 +31,9 @@ import {
   Stack,
   Typography,
   Card,
+  FormControl,
+  Select, 
+  MenuItem,
 } from "@mui/material";
 import { SearchInTable } from "src/components/Table";
 import corporate from "src/store/reducers/corporate";
@@ -47,12 +52,17 @@ export default function CorporateList() {
     id: null,
     condition: null,
   });
+  const [industryType,setindustryTypeList] = useState([])
+  const [industryTypeId,setindustryTypeId] = useState('')
 
   const corporateData = useSelector((state) => state?.corporate?.data);
 
   useEffect(() => {
     dispatch(showCorporate({}));
   }, []);
+  useEffect(()=>{
+    getindustryType()
+  },[])
 
   const callDeleteFunc = (status, id) => {
     if (status === true) {
@@ -91,6 +101,18 @@ export default function CorporateList() {
   const setSearchByParam = (param) => {
     navigate(`/corporate?${param}`);
   };
+
+  const getindustryType = async () => {
+    const response = await API.get("/listIndustryType")
+    if(response.data.code == 200){
+      setindustryTypeList(response.data.data)
+    }else{
+      toast.error(response.data.message,{
+        toastId:'lsooo'
+      })
+    }
+  }
+
   return (
     <Fragment>
       <BreadcrumbNavigator
@@ -98,6 +120,18 @@ export default function CorporateList() {
         rightButton={{ name: "add Corporate", link: "/corporate/add" }}
       />
       <Card>
+      <FormControl sx={{ m: 1, minWidth: 120 }} size="small" color="form">
+        <Select
+          value={industryTypeId}
+          onChange={(e) => { setindustryTypeId(e.target.value) }}
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
+          style={{maxHeight:"250px",overflowX:"auto"}}
+        >
+          <MenuItem value="" >All industryType</MenuItem>
+          {industryType?.map((item,index)=><MenuItem key={index} value={item.id}>{item.name}</MenuItem>)}
+        </Select>
+      </FormControl>
         {/* <SearchInTable searchByParam={setSearchByParam}/> */}
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
