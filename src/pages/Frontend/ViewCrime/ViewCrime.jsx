@@ -242,7 +242,8 @@ const ViewCrime = () => {
                                                     index={index}
                                                     delete_id={report.id}
                                                     edit_url={'/add_not/' + report.id}
-                                                    show_url={'/?target=single&id=' + report.id}
+                                                    show_url={'/crimedetails?id=' + report.id+'&show=true'}
+                                                    map_url={'/crimedetails?id=' + report.id+'&show=false'}
                                                     add_note={'/add_not/' + report.id}
                                                     deleteAction={(event) => {
                                                         setOpenDialog((prevState) => ({
@@ -250,15 +251,6 @@ const ViewCrime = () => {
                                                             status: event.status,
                                                             id: event.id
                                                         }));
-                                                    }}
-                                                    mapAction={()=>{
-                                                      dispatch(getNearbyCrimes({ latitude: lat, longitude: lang, id: report.id,paginate:0 }));
-                                                      toast.info("Fetching details",{
-                                                        toastId:"skkskks"
-                                                      })
-                                                      setTimeout(() => {
-                                                        setHidden(s => !s)
-                                                      }, [2000]);
                                                     }}
                                                 />
                                             </TableCell>

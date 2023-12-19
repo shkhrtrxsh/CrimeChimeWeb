@@ -5,7 +5,7 @@ import Register from '../pages/Auth/Register';
 import OtpVerify from '../pages/Auth/OtpVerify';
 import ViewReportMap from 'src/pages/Frontend/ViewReport/ViewReportMap';
 import ViewCrime from 'src/pages/Frontend/ViewCrime/ViewCrime';
-
+import CrimeDetail from 'src/pages/Frontend/ViewCrime/crimeDetail';
 const FrontendRoutes = [
     {
         path: '/',
@@ -18,6 +18,10 @@ const FrontendRoutes = [
     {
         path: 'reportscrime', 
         element: <ViewCrime />
+    },
+    {
+        path: 'crimedetails', 
+        element: <CrimeDetail />
     },
     {
         path: '/report',

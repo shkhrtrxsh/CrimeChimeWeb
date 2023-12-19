@@ -35,7 +35,7 @@ const ActionOptionsTwo = (props) => {
     status: false, 
     id: null 
   });
-  const {delete_id, edit_url, show_url, extra_url, add_note,index,report} = props;
+  const {delete_id, edit_url, show_url,map_url, extra_url, add_note,index,report} = props;
   const admin = nearbyData?.admin ? true : false;
   const [permission,setPermission] = useState(0)
   const getPermissionHandler = async () => {
@@ -102,29 +102,28 @@ const ActionOptionsTwo = (props) => {
         </Box>
       </MenuItem>
       : '' }
-      {show_url !== undefined ? 
+      {map_url !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }}>
-        <Box sx={{display:"flex"}} onClick={()=>{
-            dispatch(setCrimeIndex({index,viewCrime:true}))
-            navigate("/")
-          }}>
-          <ListItemIcon>
-            <Iconify icon="clarity:eye-line" sx={{fontSize : 22}} />
-          </ListItemIcon>
-          <ListItemText primary="View on map" primaryTypographyProps={{ variant: 'body2' }} />
+        <Box sx={{display:"flex"}} >
+          <LinkToEdit to={map_url}>
+            <ListItemIcon>
+              <Iconify icon="clarity:eye-line" sx={{fontSize : 22}} />
+            </ListItemIcon>
+            <ListItemText primary="View on map" primaryTypographyProps={{ variant: 'body2' }} />
+          </LinkToEdit>
         </Box>
       </MenuItem>
       : '' }
 
       {show_url !== undefined ? 
       <MenuItem sx={{ color: 'text.secondary' }}>
-        <Box sx={{display:"flex"}} onClick={()=>{
-          props.showAction()
-        }}>
-          <ListItemIcon>
-            <Iconify icon="clarity:eye-line" sx={{fontSize : 22}} />
-          </ListItemIcon>
-          <ListItemText primary="See details" primaryTypographyProps={{ variant: 'body2' }} />
+        <Box sx={{display:"flex"}}>
+          <LinkToEdit to={show_url}>
+            <ListItemIcon>
+              <Iconify icon="clarity:eye-line" sx={{fontSize : 22}} />
+            </ListItemIcon>
+            <ListItemText primary="See details" primaryTypographyProps={{ variant: 'body2' }} />
+          </LinkToEdit>
         </Box>
       </MenuItem>
       : '' }
