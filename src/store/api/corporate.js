@@ -111,9 +111,14 @@ export const getUsers = createAsyncThunk(
 
 export const showCorporate = createAsyncThunk(
   "corlists/showCorporate",
-  async ({ rejectWithValue }) => {
+  async ({id},{ rejectWithValue }) => {
     try {
-      const response = await API.get(`corporateList`);
+      if(id!=null){
+        id = id;
+      } else {
+        id = '';
+      }
+      const response = await API.get(`corporateList?industryTypeId=${id}`);
       if(response.data.success === true){
         return response.data.data;
       }

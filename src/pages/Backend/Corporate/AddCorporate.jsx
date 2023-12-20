@@ -153,8 +153,8 @@ export default function AddCorporate() {
                 label="This is a trusted company, allow verification"
                 onChange={verifyHandler}
               >
-                  <MenuItem value={1} >Yes</MenuItem>
-                  <MenuItem value={0} >No</MenuItem>
+                  <MenuItem value={1} >Verified</MenuItem>
+                  <MenuItem value={0} >NotVerified</MenuItem>
               </Select>
             </FormControl>
           </Grid>

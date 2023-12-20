@@ -98,9 +98,17 @@ export default function CorporateList() {
     navigate(`/corporate?${param}`);
   };
 
-  const setSearchByParam = (param) => {
-    navigate(`/corporate?${param}`);
-  };
+  const setSearchByParam = async (id) => {
+    dispatch(showCorporate({id}));
+    // const response = await API.get(`/corporateList?industryTypeId=${param}`)
+    // if(response.data.code == 200){
+    //   const corporateData = response.data.data;
+    // }else{
+    //   toast.error(response.data.message,{
+    //     toastId:'lsooo'
+    //   })
+    // }
+  }
 
   const getindustryType = async () => {
     const response = await API.get("/listIndustryType")
@@ -123,7 +131,7 @@ export default function CorporateList() {
       <FormControl sx={{ m: 1, minWidth: 120 }} size="small" color="form">
         <Select
           value={industryTypeId}
-          onChange={(e) => { setindustryTypeId(e.target.value) }}
+          onChange={(e) => { setSearchByParam(e.target.value) }}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
           style={{maxHeight:"250px",overflowX:"auto"}}

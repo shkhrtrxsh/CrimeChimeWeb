@@ -226,6 +226,12 @@ const ViewCrime = () => {
                                         const lang = Number(report.longitude);
                                         const formattedLatitude = lat.toFixed(5);
                                         const formattedLongitude = lang.toFixed(5);
+
+                                        const cleanedString = report.various.replace(/[\[\]"]/g, '');
+                                        const cleanedArray = cleanedString.split(',').map(Number);
+                                        const mappedChoices = cleanedArray.map(index1 => various_choices[index1]);
+                                        const resultString = mappedChoices.join('<br />');
+                                        
                                         return (
                                         <TableRow key={report.id}>
                                             <TableCell align="left">{fDateTime(report.date_time)}</TableCell>
@@ -237,6 +243,9 @@ const ViewCrime = () => {
                                             {report.kidnapping != 0 ? (<>Kidnapping<br /></>) : null}
                                             {report.rape != 0 ? (<>Rape<br /></>) : null}
                                             {report.weapons != 0 ? (<>Weapons<br /></>) : null}
+                                            {cleanedString != '' && cleanedString != [2] ? 
+                                              <div dangerouslySetInnerHTML={{ __html: resultString }} />:''
+                                            }
                                             </TableCell>
                                             {parseInt(reportedData?.user?.role_id) == 1 && <TableCell align="left">{report.user.phone}</TableCell>}
                                             <TableCell align="left">{report.user.username} ({report.user.report_count})</TableCell>

@@ -48,6 +48,7 @@ const Page2 = ({setSelectActive}) => {
       const geocoder = new window.google.maps.Geocoder();
       geocoder.geocode({ location: { lat, lng } }, (results, status) => {
         if (status === 'OK' && results[0]) {
+          console.log(results);
           dispatch(setPage({location:results[0].formatted_address,longitude:lng,latitude: lat,google_place_id:results[0].place_id}));
         }
       });

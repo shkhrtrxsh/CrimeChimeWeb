@@ -136,7 +136,6 @@ const HomeMap = () => {
     useEffect(() => {
         // let returningUser = localStorage.getItem("seenPopUp");
         // setDisplayPopUp(!returningUser);
-        console.log('returningUser');
         dispatch(getNearbyCrimes({ latitude, longitude, fromDate: null, toDate: null }))
     }, [latitude, longitude]);
 

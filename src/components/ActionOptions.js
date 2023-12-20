@@ -97,7 +97,7 @@ const ActionOptions = (props) => {
             <ListItemIcon>
                 <Iconify icon="clarity:plus-line" sx={{fontSize : 22}} />
             </ListItemIcon>
-            <ListItemText primary="Add Note" primaryTypographyProps={{ variant: 'body2' }} />
+            {/* <ListItemText primary="Add Note" primaryTypographyProps={{ variant: 'body2' }} /> */}
             </LinkToEdit>
         </MenuItem>
         : '' }
