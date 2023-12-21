@@ -154,7 +154,7 @@ export default function AddCorporate() {
                 onChange={verifyHandler}
               >
                   <MenuItem value={1} >Verified</MenuItem>
-                  <MenuItem value={0} >NotVerified</MenuItem>
+                  <MenuItem value={0} >Not Verified</MenuItem>
               </Select>
             </FormControl>
           </Grid>

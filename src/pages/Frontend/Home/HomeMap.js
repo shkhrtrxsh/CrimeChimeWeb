@@ -82,6 +82,13 @@ const HomeMap = () => {
         width: '100%',
         height: `calc(100vh - ${APPBAR_DESKTOP + (adShow?110:0)}px )`
     };
+    useEffect(() => {
+        let returningUser = localStorage.getItem("seenPopUp");
+        alert(localStorage);
+        setDisplayPopUp(!returningUser);
+
+    }, []);
+    alert(localStorage);
 
     useEffect(() => {
         dispatch(clearReport());
@@ -128,11 +135,7 @@ const HomeMap = () => {
         // setting state to false to not display pop-up
         setDisplayPopUp(false);
     };
-    useEffect(() => {
-        let returningUser = localStorage.getItem("seenPopUp");
-        setDisplayPopUp(!returningUser);
-
-    }, []);
+    
     useEffect(() => {
         // let returningUser = localStorage.getItem("seenPopUp");
         // setDisplayPopUp(!returningUser);

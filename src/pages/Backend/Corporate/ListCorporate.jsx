@@ -100,14 +100,7 @@ export default function CorporateList() {
 
   const setSearchByParam = async (id) => {
     dispatch(showCorporate({id}));
-    // const response = await API.get(`/corporateList?industryTypeId=${param}`)
-    // if(response.data.code == 200){
-    //   const corporateData = response.data.data;
-    // }else{
-    //   toast.error(response.data.message,{
-    //     toastId:'lsooo'
-    //   })
-    // }
+    setindustryTypeId(id);
   }
 
   const getindustryType = async () => {
@@ -133,9 +126,6 @@ export default function CorporateList() {
           value={industryTypeId}
           onChange={(e) => { setSearchByParam(e.target.value) }}
           displayEmpty
-          // label="Corp/Group type"
-          // labelId="Corp/Group type"
-          // id="Corp/Group type"
           inputProps={{ 'aria-label': 'Without label' }}
           style={{maxHeight:"250px",overflowX:"auto"}}
         >

@@ -266,7 +266,7 @@ export default function EditCorporate() {
                 onChange={verifyHandler}
               >
                   <MenuItem value={1} >Verified</MenuItem>
-                  <MenuItem value={0} >NotVerified</MenuItem>
+                  <MenuItem value={0} >Not Verified</MenuItem>
               </Select>
             </FormControl>
           </Grid>

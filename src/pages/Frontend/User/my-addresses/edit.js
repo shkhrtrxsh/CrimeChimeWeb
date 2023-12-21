@@ -19,6 +19,9 @@ import { toast } from 'react-toastify';
 import { isWithinSAfrica } from 'src/utils/googleMap';
 import ReactGoogleAutocomplete from 'react-google-autocomplete';
 import { SatelliteZoom } from "src/constants/googleMap";
+import home from 'src/assets/images/Home1.png';
+import office from 'src/assets/images/Office.png';
+import favorite from 'src/assets/images/Favourite.png';
 
 import {Typography} from '@mui/material';const containerStyle = {
     width: '100%',
@@ -225,9 +228,9 @@ const EditAddress = () => {
                                 </Grid>
                                 {/* <Typography variant="h5" sx={{px:5,pt:3,fontWeight:"500"}}>Add a tag for your replace</Typography> */}
                                 <Grid item md={12} sx={{display:"flex",justifyContent:"center",gap:"20px"}}>
-                                    <Button value="Home" onClick={typeHandler} variant={type !== "Home" ? "contained":"outlined"}>Home</Button>
-                                    <Button value="Office" onClick={typeHandler}  variant={type !== "Office" ? "contained":"outlined"}>Office</Button>
-                                    <Button value="Favorite" onClick={typeHandler}  variant={type !== "Favorite" ? "contained":"outlined"}>Favorite</Button>
+                                    <Button value="Home" onClick={typeHandler} variant={type !== "Home" ? "contained":"outlined"}><img src={home} style={{height:"25px",width:"25px"}} />Home</Button>
+                                    <Button value="Office" onClick={typeHandler}  variant={type !== "Office" ? "contained":"outlined"}><img src={office} style={{height:"25px",width:"25px"}} />Office</Button>
+                                    <Button value="Favorite" onClick={typeHandler}  variant={type !== "Favorite" ? "contained":"outlined"}><img src={favorite} style={{height:"25px",width:"25px"}} />Favorite</Button>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <GoogleMap
