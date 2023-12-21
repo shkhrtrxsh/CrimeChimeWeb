@@ -135,7 +135,7 @@ const ViewCrime = () => {
 
   //     }
   // }, [hidden])
-  const various_choices = ["I believe this crime to be drug-related","Crime occurred at ATM","Does not apply","I believe this crime to be gang-related" ,"Arson was involved","Vandalism was involved" ,"Social an unrest","Bombs were involved"]
+  const various_choices = ["Drug related","ATM incident","Does not apply","⁠Gang related" ,"⁠Arson","⁠Vandalism" ,"Social unrest","⁠Bombs"]
   // const mappedChoices = cleanedArray.map(index => various_choices[index]);
   // const resultString = mappedChoices.join('<br />');
 

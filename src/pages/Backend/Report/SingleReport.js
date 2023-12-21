@@ -94,6 +94,13 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
         // }
         
     };
+    const various_choices = ["Drug related","ATM incident","Does not apply","⁠Gang related" ,"⁠Arson","⁠Vandalism" ,"Social unrest","⁠Bombs"]
+    
+    const cleanedString = report.various.replace(/[\[\]"]/g, '');
+    const cleanedArray = cleanedString.split(',').map(Number);
+    const mappedChoices = cleanedArray.map(index1 => various_choices[index1]);
+    const resultString = mappedChoices.join('<br />');
+
     useEffect(()=>{
         dispatch(getReports())
     },[toggle,show])
@@ -121,6 +128,9 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
             {report.kidnapping != 0 ? (<>Kidnapping,<br /></>) : null}
             {report.rape != 0 ? (<>Rape,<br /></>) : null}
             {report.weapons != 0 ? (<>Weapons,<br /></>) : null}
+            {cleanedString != '' && cleanedString != [2] ? 
+                <div dangerouslySetInnerHTML={{ __html: resultString }} />:''
+            }
             </TableCell>
             <TableCell align="left">{report.user.phone}</TableCell>
             <TableCell align="left">{report.user.username} ({report.user.report_count})</TableCell>
