@@ -63,7 +63,7 @@ export default function NotificationsModal(props) {
                 <div style={{display:"flex",justifyContent:"flex-end",marginTop:"6px"}}>
                 <Button size="small" style={{textTransform:"lowercase"}} onClick={()=>{
                     props.handler()
-                    navigate('/crimedetails?id=' + item.report_id+'&show=false')
+                    navigate('/crimedetails?id=' + item.report_id+'&show=false&type='+item.location_name)
                 }}>View on map</Button>
                 </div>
             </p>

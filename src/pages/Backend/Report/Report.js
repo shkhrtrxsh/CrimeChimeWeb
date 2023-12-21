@@ -91,8 +91,7 @@ export default function Report() {
       const f1 = param.split("&")
       const f2 = f1[0].split("=")
       // dispatch(getReports({ param }));
-      dispatch(getNearbyCrimes({ paginate:1,page:f2[1],latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
-
+      dispatch(getNearbyCrimes({ paginate:1,page:f2[1],latitude:null, longitude:null, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
     }
   }, [searchParams,hidden])
 
@@ -112,7 +111,7 @@ export default function Report() {
     // if (!crimeIndex.viewCrime) {
     //   dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
     // }else{
-      dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()),paginate:1 }));
+      // dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()),paginate:1 }));
     // }
   }, [])
   // useEffect(() => {

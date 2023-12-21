@@ -46,7 +46,7 @@ const ActionOptionsTwo = (props) => {
     props.deleteAction(openDialog)
     setIsOpen(false)
 
-    getPermissionHandler();
+    // getPermissionHandler();
   }, [openDialog])
   const navigate = useNavigate();
   return(

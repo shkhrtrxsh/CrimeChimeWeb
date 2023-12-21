@@ -11,7 +11,7 @@ import Legend from 'src/assets/images/legend.png'
 import Legend2 from 'src/assets/images/legend2.png'
 import Legend3 from 'src/assets/images/legend3.png'
 import Home from 'src/assets/images/Home.png'
-import Office from 'src/assets/images/office.png'
+import Office from 'src/assets/images/OfficeIcon.png'
 import Favorite from 'src/assets/images/favorite.png'
 
 import SearchFilter from '../ViewReport/SearchFilter';
@@ -84,6 +84,30 @@ export default function CrimeDetail() {
             anchor: new window.google.maps.Point(25, 50)
         }
       };
+      const markerOptionsHome = {
+        icon: {
+          url: Home,
+          scaledSize: new window.google.maps.Size(30, 75),
+          origin: new window.google.maps.Point(0, 0),
+          anchor: new window.google.maps.Point(25, 50)
+        }
+      };
+      const markerOptionsOffice = {
+        icon: {
+          url: Office,
+          scaledSize: new window.google.maps.Size(30, 75),
+          origin: new window.google.maps.Point(0, 0),
+          anchor: new window.google.maps.Point(25, 50)
+        }
+      };
+      const markerOptionsFavorite = {
+        icon: {
+          url: Favorite,
+          scaledSize: new window.google.maps.Size(30, 75),
+          origin: new window.google.maps.Point(0, 0),
+          anchor: new window.google.maps.Point(25, 50)
+        }
+      };
       const dispatch = useDispatch();
       const map = useRef(null);
       const navigate = useNavigate();
@@ -132,8 +156,9 @@ export default function CrimeDetail() {
       const [hasMount,setHasMount] = useState(false)
       useEffect(() => {
         dispatch(getNearbyCrimes({ id:queryParams.get('id')}));
+        
         if(queryParams.get('show') == "true"){
-            dispatch(setCrimeIndex({ index:queryParams.get('id'),viewCrime: true }))
+          dispatch(setCrimeIndex({ index:queryParams.get('id'),viewCrime: true }))
         }
         toast.info("fetching details",{
             toastId:'skjdjd'
@@ -173,13 +198,22 @@ export default function CrimeDetail() {
                       };
                       return (
                         <>
-                          {user_count == '1' && user?.corporat_id == null &&  <Marker key={ind} position={position} options={markerOptions}
+                          {queryParams.get('type') == "all" && user_count == '1' && user?.corporat_id == null &&  <Marker key={ind} position={position} options={markerOptions}
                             onClick={() => onMarkerClick(ind)} zIndex={0}
                           />}
-                          {user_count != '1' && user?.corporat_id == null && <Marker key={ind} position={position} options={markerOptions}
+                          {queryParams.get('type') == "all" && user_count != '1' && user?.corporat_id == null && <Marker key={ind} position={position} options={markerOptions}
                             onClick={() => onMarkerClick(ind)} label={{ text: `${user_count}`, fontWeight: "bold", className: "map-label", color: "red" }} zIndex={0}
                           />}
-                          {user?.corporat_id != null &&  <Marker key={ind} position={position} options={markerOptions1}
+                          {queryParams.get('type') == "all" && user?.corporat_id != null &&  <Marker key={ind} position={position} options={markerOptions1}
+                            onClick={() => onMarkerClick(ind)} zIndex={0}
+                          />}
+                          {queryParams.get('type') == "Home" &&   <Marker key={ind} position={position} options={markerOptionsHome}
+                            onClick={() => onMarkerClick(ind)} zIndex={0}
+                          />}
+                          {queryParams.get('type') == "Office" &&  <Marker key={ind} position={position} options={markerOptionsOffice}
+                            onClick={() => onMarkerClick(ind)} zIndex={0}
+                          />}
+                          {queryParams.get('type') == "Favorite" && <Marker key={ind} position={position} options={markerOptionsFavorite}
                             onClick={() => onMarkerClick(ind)} zIndex={0}
                           />}
     

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Drawer, useMediaQuery, useTheme,Typography } from '@mui/material';
 import { getLocationCoords, isWithinSAfrica } from 'src/utils/googleMap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -100,9 +100,9 @@ const ViewCrime = () => {
       const f1 = param.split("&")
       const f2 = f1[0].split("=")
       // dispatch(getReports({ param }));
-      dispatch(getNearbyCrimes({ paginate:1,page:f2[1],fromDate: null, toDate: null }));
+      dispatch(getNearbyCrimes({ paginate:1,perPage:nearbyData.per_page,currentPage:f2[1],fromDate: null, toDate: null }));
     }
-  }, [searchParams,hidden])
+  }, [searchParams])
 
   const setSearchByParam = (param) => {
     navigate(`/?${param}`)
@@ -116,9 +116,16 @@ const ViewCrime = () => {
     let param = setSearchQueryParams(searchParams, 0, event.target.value)
     navigate(`/?${param}`)
   }
+  const [showList,setShowList] = useState(false)
   useEffect(() => {
     if (!crimeIndex.viewCrime) {
       dispatch(getNearbyCrimes({ fromDate: null, toDate: null,paginate:0 }));
+      toast.info("Fetching details",{
+        toastId:'ssjshshsh'
+      })
+      setTimeout(()=>{
+        setShowList(true)
+      },[2500])
     }
   }, [])
   // useEffect(() => {
@@ -255,8 +262,8 @@ const ViewCrime = () => {
                                                     index={index}
                                                     delete_id={report.id}
                                                     edit_url={'/add_not/' + report.id}
-                                                    show_url={'/crimedetails?id=' + report.id+'&show=true'}
-                                                    map_url={'/crimedetails?id=' + report.id+'&show=false'}
+                                                    show_url={'/crimedetails?id=' + report.id+'&show=true&type=all'}
+                                                    map_url={'/crimedetails?id=' + report.id+'&show=false&type=all'}
                                                     // add_note={'/add_not/' + report.id}
                                                     deleteAction={(event) => {
                                                         setOpenDialog((prevState) => ({
@@ -304,7 +311,7 @@ const ViewCrime = () => {
               onLoad={onLoad}
               onZoomChanged={handleZoomChanged}>
                 <Marker id="mark" zIndex={100} draggable={true} position={position} onDragEnd={markerDragEnd} />
-                {nearbyData && nearbyData?.map(({ latitude = null, longitude = null, user_count,user }, ind) => {
+                {showList && nearbyData && nearbyData?.map(({ latitude = null, longitude = null, user_count,user }, ind) => {
                   const position = {
                     lat: Number(latitude),
                     lng: Number(longitude)
@@ -369,7 +376,11 @@ const ViewCrime = () => {
               {<Typography component='h6'>Map View</Typography>}
               <LocationOnIcon />
           </TransparentFab> : <TransparentFab
-              onClick={() => setHidden(s => !s)}
+              onClick={() => {
+                setHidden(s => !s)
+                dispatch(getNearbyCrimes({ paginate:1,perPage:nearbyData.per_page,currentPage:1,fromDate: null, toDate: null }));
+
+              }}
               size="medium"
               color="primary"
               aria-label="view report"

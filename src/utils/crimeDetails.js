@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { WeaponChoices } from "src/constants/weapons";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import AK from '../assets/images/ak.png'
@@ -5,7 +6,6 @@ import Knife from '../assets/images/knife2.png'
 import Others from '../assets/images/others.png'
 import Pistol from '../assets/images/pistol.png'
 import API from "src/config/api";
-import { useEffect, useState } from "react";
 import {
   FormControl,
   MenuItem,
@@ -142,7 +142,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     }
     useEffect(()=>{
       getReport();
-    },[reportType])
+    },[])
 
     if(!data){
       return [

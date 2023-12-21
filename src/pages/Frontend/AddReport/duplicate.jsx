@@ -57,6 +57,8 @@ export const SuccessDialog = ({open,handleClose})=>{
 }
 
 function Duplicate({mapRef,viewCrime=false,setSelectActive}) {
+  const theme = useTheme();
+  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {nearbyData:values=[],data:regData,loading,duplicate} = useSelector(state=>state.reportRegister);
@@ -64,11 +66,9 @@ function Duplicate({mapRef,viewCrime=false,setSelectActive}) {
   const {latitude:lat,longitude:long} = regData;
   const {latitude,longitude,report_images}=values[index]||{};
   const mediaData = (report_images&&report_images[0])?report_images[0].path:"No media available";
-const theme = useTheme();
-const doFunc=()=>{
-  setSelectActive(4);
-}
-  
+  const doFunc=()=>{
+    setSelectActive(4);
+  }
   useEffect(()=>{
     dispatch(setMarker({latitude,longitude}));
   },[latitude,longitude,index])
@@ -100,7 +100,7 @@ const doFunc=()=>{
                   lat:Number(latitude) },
                 map: mapElement.map,
                 title: "Crime Location Marker 2",
-                icon:duplicate,
+                // icon:duplicate,
               });
               //if (mapElement.marker) mapElement.marker.setMap(null);
               mapElement.marker = marker;
@@ -113,7 +113,6 @@ const doFunc=()=>{
 
   const data = values[index]&& CrimeDetails(values,index,vehicle_theft_choices,various_choices,mediaData);
   
-  const isMdBreakpoint = useMediaQuery(theme.breakpoints.up('md'));
   
   function isImage(url) {
     const imageExtensions = ['.apng', '.bmp', '.gif', '.ico', '.cur', '.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png', '.svg', '.tif', '.tiff', '.webp'];

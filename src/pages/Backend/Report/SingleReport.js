@@ -23,7 +23,7 @@ import API from 'src/config/api';
 import { fDateTime } from 'src/utils/formatTime';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { ActiveInactiveButton } from 'src/components/Button';
-import ActionOptions from 'src/components/ActionOptions'
+import ActionOptionsTwo from 'src/components/ActionOptionsTwo';
 import ConfirmDeleteDialog from 'src/components/ConfirmDeleteDialog'
 import ChangeStatusDialog from 'src/components/ChangeStatusDialog';
 import { toast } from 'react-toastify';
@@ -94,13 +94,6 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
         // }
         
     };
-    const various_choices = ["Drug related","ATM incident","Does not apply","⁠Gang related" ,"⁠Arson","⁠Vandalism" ,"Social unrest","⁠Bombs"]
-    
-    const cleanedString = report.various.replace(/[\[\]"]/g, '');
-    const cleanedArray = cleanedString.split(',').map(Number);
-    const mappedChoices = cleanedArray.map(index1 => various_choices[index1]);
-    const resultString = mappedChoices.join('<br />');
-
     useEffect(()=>{
         dispatch(getReports())
     },[toggle,show])
@@ -128,26 +121,24 @@ export default function SingleReport({report,formattedLatitude,formattedLongitud
             {report.kidnapping != 0 ? (<>Kidnapping,<br /></>) : null}
             {report.rape != 0 ? (<>Rape,<br /></>) : null}
             {report.weapons != 0 ? (<>Weapons,<br /></>) : null}
-            {cleanedString != '' && cleanedString != [2] ? 
-                <div dangerouslySetInnerHTML={{ __html: resultString }} />:''
-            }
             </TableCell>
             <TableCell align="left">{report.user.phone}</TableCell>
             <TableCell align="left">{report.user.username} ({report.user.report_count})</TableCell>
             <TableCell align="left"><div>{report.user.corporate ? report.user.corporate.name : '' }{report.user.corporate ? report.user.corporate.is_verify==1 ? <CheckBoxIcon style={{ color: "#29C250",position: "absolute" }} /> : '' : ''}</div></TableCell> 
             <TableCell align="right">
-                <ActionOptions
+                <ActionOptionsTwo
                     index={index}
                     delete_id={report.id}
-                    show_url={'/report?target=single&id=' + report.id}
-                    add_note={'/add_not/' + report.id}
+                    edit_url={'/add_not/' + report.id}
+                    show_url={'/crimedetails?id=' + report.id+'&show=true&type=all'}
+                    map_url={'/crimedetails?id=' + report.id+'&show=false&type=all'}
+                    // add_note={'/add_not/' + report.id}
                     deleteAction={(event) => {
-                        // handler(event.status,event.id)
-                        setOpenDialog((prevState) => ({
-                            ...prevState,
-                            status: event.status,
-                            id: event.id
-                        }));
+                    setOpenDialog((prevState) => ({
+                    ...prevState,
+                    status: event.status,
+                    id: event.id
+                    }));
                     }}
                 />
             </TableCell> 

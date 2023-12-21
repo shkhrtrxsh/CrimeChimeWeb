@@ -200,6 +200,8 @@ const ReportWrapper = () => {
   const beforeNext = async () => {
     switch (selectActive) {
       case 3:
+        console.log(index)
+        console.log(duplicate)
         const { index, open } = duplicate || {};
         if (!nearbyData[index + 1]) {
           setSelectActive(4);
