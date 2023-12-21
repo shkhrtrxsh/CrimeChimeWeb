@@ -133,6 +133,9 @@ export default function CorporateList() {
           value={industryTypeId}
           onChange={(e) => { setSearchByParam(e.target.value) }}
           displayEmpty
+          // label="Corp/Group type"
+          // labelId="Corp/Group type"
+          // id="Corp/Group type"
           inputProps={{ 'aria-label': 'Without label' }}
           style={{maxHeight:"250px",overflowX:"auto"}}
         >

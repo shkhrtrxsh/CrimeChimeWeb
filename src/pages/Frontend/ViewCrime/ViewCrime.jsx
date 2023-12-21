@@ -100,7 +100,7 @@ const ViewCrime = () => {
       const f1 = param.split("&")
       const f2 = f1[0].split("=")
       // dispatch(getReports({ param }));
-      dispatch(getNearbyCrimes({ paginate:1,page:f2[1],latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
+      dispatch(getNearbyCrimes({ paginate:1,page:f2[1],fromDate: null, toDate: null }));
     }
   }, [searchParams,hidden])
 
@@ -118,7 +118,7 @@ const ViewCrime = () => {
   }
   useEffect(() => {
     if (!crimeIndex.viewCrime) {
-      dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()),paginate:0 }));
+      dispatch(getNearbyCrimes({ fromDate: null, toDate: null,paginate:0 }));
     }
   }, [])
   // useEffect(() => {
@@ -143,7 +143,7 @@ const ViewCrime = () => {
     if (!crimeIndex.viewCrime) {
       (async () => {
         const { latitude, longitude } = await getLocationCoords();
-        dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now()) }));
+        dispatch(getNearbyCrimes({fromDate: null, toDate: null}));
         setPage(latitude, longitude);
       })()
     }
@@ -257,7 +257,7 @@ const ViewCrime = () => {
                                                     edit_url={'/add_not/' + report.id}
                                                     show_url={'/crimedetails?id=' + report.id+'&show=true'}
                                                     map_url={'/crimedetails?id=' + report.id+'&show=false'}
-                                                    add_note={'/add_not/' + report.id}
+                                                    // add_note={'/add_not/' + report.id}
                                                     deleteAction={(event) => {
                                                         setOpenDialog((prevState) => ({
                                                             ...prevState,
@@ -357,7 +357,7 @@ const ViewCrime = () => {
               aria-label="view report"
               variant='extended'
               onClick={() => {
-                dispatch(getNearbyCrimes({ latitude, longitude, fromDate: new Date(Date.now() - 365 * 24 * 3600 * 1000), toDate: new Date(Date.now())}));
+                dispatch(getNearbyCrimes({ latitude, longitude, fromDate: null, toDate: null}));
                 toast.info("Fetching details",{
                   toastId:"skkskks"
                 })

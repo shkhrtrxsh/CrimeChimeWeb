@@ -21,6 +21,8 @@ export const addCorporate = createAsyncThunk(
         formdata.append("corp_group_branch", formValue.corp_group_branch);
         formdata.append("corp_group_branch_phone",formValue.corp_group_branch_phone)
         formdata.append("logo", formValue.logo);
+        formdata.append("is_verify", formValue.is_verify);
+
         const response = await API.post("/addCorAdmin", formdata, {
           headers: {
             'Content-Type': 'multipart/form-data'

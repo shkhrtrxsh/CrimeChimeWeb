@@ -164,13 +164,13 @@ export default function EditCorporate() {
   
   const corporateData = useSelector((state) => state?.corporate?.data);
 
-  useEffect(() => {
-    dispatch(showCorporate({}));
-  }, []);
-  useEffect(()=>{
-    const id = params.id
-    dispatch(showCorporate())
-  }, [params])
+  // useEffect(() => {
+  //   dispatch(showCorporate({}));
+  // }, []);
+  // useEffect(()=>{
+  //   const id = params.id
+  //   dispatch(showCorporate())
+  // }, [params])
   useEffect(()=>{
     corporateData?.map((item)=>{
       if(item.id == params.id){

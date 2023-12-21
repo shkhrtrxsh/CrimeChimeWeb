@@ -10,6 +10,10 @@ import Image1 from 'src/assets/images/corporateCrime.png'
 import Legend from 'src/assets/images/legend.png'
 import Legend2 from 'src/assets/images/legend2.png'
 import Legend3 from 'src/assets/images/legend3.png'
+import Home from 'src/assets/images/Home.png'
+import Office from 'src/assets/images/office.png'
+import Favorite from 'src/assets/images/favorite.png'
+
 import SearchFilter from '../ViewReport/SearchFilter';
 import CrimeDialog from "./CrimeDialog2";
 import { getNearbyCrimes } from 'src/store/api/registerReport';
