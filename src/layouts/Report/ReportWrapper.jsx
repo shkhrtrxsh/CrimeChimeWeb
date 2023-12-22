@@ -231,6 +231,7 @@ const ReportWrapper = () => {
               ...data,
               various: `[${String(data.various)}]`,
             });
+            
             if (fileSet) {
               const blob = await response.blob();
               const files = new File([blob], data.fileName);

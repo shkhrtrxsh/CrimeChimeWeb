@@ -350,7 +350,7 @@ const HomeMap = () => {
                                                         {report.burglary !=0 ? (<>Burglary<br /></>) : null}
                                                         {report.kidnapping != 0 ? (<>Kidnapping<br /></>) : null}
                                                         {report.rape != 0 ? (<>Rape<br /></>) : null}
-                                                        {report.weapons != 0 ? (<>Weapons<br /></>) : null}
+                                                        {/* {report.weapons != 0 ? (<>Weapons<br /></>) : null} */}
                                                         </TableCell>
                                                         <TableCell align="left">{report.user.phone}</TableCell>
                                                         <TableCell align="left">{report.user.username}</TableCell>

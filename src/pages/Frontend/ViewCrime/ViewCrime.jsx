@@ -249,7 +249,7 @@ const ViewCrime = () => {
                                             {report.burglary !=0 ? (<>Burglary<br /></>) : null}
                                             {report.kidnapping != 0 ? (<>Kidnapping<br /></>) : null}
                                             {report.rape != 0 ? (<>Rape<br /></>) : null}
-                                            {report.weapons != 0 ? (<>Weapons<br /></>) : null}
+                                            {/* {report.weapons != 0 ? (<>Weapons<br /></>) : null} */}
                                             {cleanedString != '' && cleanedString != [2] ? 
                                               <div dangerouslySetInnerHTML={{ __html: resultString }} />:''
                                             }

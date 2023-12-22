@@ -112,6 +112,11 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
       setdescription(data.description)
 
     }
+    const [profile,setProfile] = useState(null)
+    const getProfile = async () => {
+      const response = await API.get(`/getProfile`)
+      setProfile(response.data.data)
+    }
     const [wholeData,setWholeData] = useState(null)
     const getReport = async () => {
       const response = await API.get(`/reportDetails/${temp.id}`);
@@ -142,6 +147,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
     }
     useEffect(()=>{
       getReport();
+      getProfile();
     },[])
 
     if(!data){
@@ -197,7 +203,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
               </div>
             ); 
           })() },
-          { firstCol: 'Description:', secondCol: roleID==1 ? <p>{description||"No description available"}</p> : "" },
+          {firstCol: 'Description:', secondCol: parseInt(profile?.role_id) ==1 ? <p>{description||"No description available"}</p> : "" },
           // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
           { firstCol: 'Perpetrators:', secondCol: perpetrators?[`${parseInt(perpetrators) >= 0 ? (perpetrators) : "Preperator(s) detail not available"}`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
           { firstCol: 'Weapons:', secondCol: (()=>{
@@ -409,7 +415,7 @@ export const CrimeDetails=(values,index,vehicle_theft_choices,various_choices,me
             </div>
           ); 
         })() },
-        { firstCol: 'Description:', secondCol: roleID==1 ? <p>{description||"No description available"}</p> : '' },
+        { firstCol: 'Description:', secondCol: parseInt(profile?.role_id) ==1 ? <p>{description||"No description available"}</p> : '' },
         // { firstCol: 'Description of Perpetrators:', secondCol: [null,-1].includes(perpetrators)?perpetrators:"" },
         { firstCol: 'Perpetrators:', secondCol: perpetrators?[`${parseInt(perpetrators) >= 0 ? (perpetrators) : "Preperator(s) detail not available" }`,roleID==1 ? ",".perpetrators_des :'']:"Preperator(s) detail not available" },
         
