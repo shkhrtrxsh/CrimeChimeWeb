@@ -21,7 +21,7 @@ export default function App() {
 
   const [libraries] = useState(['places'])
 
-  const { isLoaded } = useJsApiLoader({
+  const { isLoaded } = useJsApiLoader({ 
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries: libraries,
   })
