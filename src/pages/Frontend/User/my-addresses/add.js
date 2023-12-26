@@ -20,7 +20,7 @@ import { isWithinSAfrica } from 'src/utils/googleMap';
 import ReactGoogleAutocomplete from 'react-google-autocomplete';
 import { SatelliteZoom } from "src/constants/googleMap";
 import home from 'src/assets/images/Home1.png';
-import office from 'src/assets/images/Office.png';
+import office from 'src/assets/images/office.png';
 import favorite from 'src/assets/images/Favourite.png';
 
 import {Typography} from '@mui/material';const containerStyle = {

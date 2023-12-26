@@ -134,57 +134,57 @@ export default function CorporateList() {
         </Select>
       </FormControl>
         {/* <SearchInTable searchByParam={setSearchByParam}/> */}
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell size="small">Corp./Group Name</TableCell>
-                <TableCell align="left" size="small">Address</TableCell>
-                <TableCell align="left" size="small">Corp./Group Admin</TableCell>
-                <TableCell align="left" size="small">Mobile Number</TableCell>
-                <TableCell align="left" size="small">Email</TableCell>
-                <TableCell align="left" size="small">Industry Types</TableCell>
-                <TableCell align="left" size="small">Logo</TableCell>
-                <TableCell align="left" size="small">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {corporateData &&
-                corporateData.map((cor) => (
-                  <TableRow key={cor.id}>
-                    <TableCell component="th" scope="row" size="small">
-                      {cor.name}
-                    </TableCell>
-                    <TableCell align="left" size="small">{cor.address}</TableCell>
-                    <TableCell align="left" size="small">{cor.cor_admin?.name}</TableCell>
-                    <TableCell align="left" size="small">{cor.cor_admin?.phone}</TableCell>
-                    <TableCell align="left" size="small" >{cor.cor_admin?.email}</TableCell>
-                    <TableCell align="left" size="small">{cor.industry?.name}</TableCell>
-                    <TableCell align="left">
-                      <img
-                        src={cor.logo}
-                        style={{
-                          height: "30px",
-                          width: "30px",
-                          border: "2px solid #333",
-                          borderRadius: "50%",
-                          float: "right",
-                        }}
-                        alt="No Data Available"
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <ActionOptions
-                        // delete_id={cor.id}
-                        edit_url={"/Corporate/" + cor.id}
-                        deleteAction={deleteOptionAction}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <TableContainer component={Paper} style={{}}>
+  <Table aria-label="simple table">
+    <TableHead>
+      <TableRow>
+        <TableCell size="small" style={{ padding: '8px' }}>Corp./Group Name</TableCell>
+        <TableCell align="left" size="small" style={{ padding: '8px' }}>Address</TableCell>
+        <TableCell align="left" size="small" style={{ padding: '8px' }}>Corp./Group Admin</TableCell>
+        <TableCell align="left" size="small" style={{ padding: '8px' }}>Mobile Number</TableCell>
+        <TableCell align="left" size="small" style={{ padding: '8px' }}>Email</TableCell>
+        <TableCell align="left" size="small" style={{ padding: '8px' }}>Industry Types</TableCell>
+        <TableCell align="left" size="small" style={{ padding: '8px' }}>Logo</TableCell>
+        <TableCell align="left" size="small" style={{ padding: '8px' }}>Action</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {corporateData &&
+        corporateData.map((cor) => (
+          <TableRow key={cor.id}>
+            <TableCell component="th" scope="row" size="small" style={{ padding: '8px' }}>
+              {cor.name}
+            </TableCell>
+            <TableCell align="left" size="small" style={{ padding: '8px' }}>{cor.address}</TableCell>
+            <TableCell align="left" size="small" style={{ padding: '8px' }}>{cor.cor_admin?.name}</TableCell>
+            <TableCell align="left" size="small" style={{ padding: '8px' }}>{cor.cor_admin?.phone}</TableCell>
+            <TableCell align="left" size="small" style={{ padding: '8px' }}>{cor.cor_admin?.email}</TableCell>
+            <TableCell align="left" size="small" style={{ padding: '8px' }}>{cor.industry?.name}</TableCell>
+            <TableCell align="left" style={{ padding: '8px' }}>
+              <img
+                src={cor.logo}
+                style={{
+                  height: "30px",
+                  width: "30px",
+                  border: "2px solid #333",
+                  borderRadius: "50%",
+                  float: "right",
+                }}
+                alt="No Data Available"
+              />
+            </TableCell>
+            <TableCell align="right" style={{ padding: '8px' }}>
+              <ActionOptions
+                edit_url={"/Corporate/" + cor.id}
+                deleteAction={deleteOptionAction}
+              />
+            </TableCell>
+          </TableRow>
+        ))}
+    </TableBody>
+  </Table>
+</TableContainer>
+
         {/* <TablePagination
           rowsPerPageOptions={recordPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
